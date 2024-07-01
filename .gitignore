@@ -38,3 +38,4 @@ next-env.d.ts
 .env
 *.db
 *.db-journal
+*storybook.log
