@@ -9,12 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^5.16.1",
     "@tailwindcss/forms": "^0.5.7",
+    "bcrypt": "^5.1.1",
+    "iron-session": "^8.0.2",
     "next": "14.2.4",
+    "prisma": "^5.16.1",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
