@@ -1,20 +1,20 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import Footer from '@/components/common/footer';
-import HeaderBar from '@/components/common/header-bar';
-import getSession from './lib/session';
-import db from './lib/db';
-import { notFound } from 'next/navigation';
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import Footer from "@/components/common/footer";
+import HeaderBar from "@/components/common/header-bar";
+import getSession from "./lib/session";
+import db from "./lib/db";
+import { notFound } from "next/navigation";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | title',
-    default: 'description',
+    template: "%s | title",
+    default: "description",
   },
-  description: 'description',
+  description: "description",
 };
 
 async function getUser() {

@@ -1,15 +1,15 @@
-'use server';
+"use server";
 import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEX,
   PASSWORD_REGEX_ERROR,
-} from '@/app/lib/constants';
+} from "@/app/lib/constants";
 
-import { z } from 'zod';
-import bcrypt from 'bcrypt';
-import { redirect } from 'next/navigation';
-import getSession from '@/app/lib/session';
-import db from '@/app/lib/db';
+import { z } from "zod";
+import bcrypt from "bcrypt";
+import { redirect } from "next/navigation";
+import getSession from "@/app/lib/session";
+import db from "@/app/lib/db";
 
 const checkPassword = ({
   password,
@@ -23,7 +23,7 @@ const formSchema = z
   .object({
     email: z
       .string()
-      .email('사용할 수 없는 이메일입니다.')
+      .email("사용할 수 없는 이메일입니다.")
       .trim()
       .toLowerCase(),
     password: z
@@ -51,24 +51,24 @@ const formSchema = z
     });
     if (user) {
       ctx.addIssue({
-        code: 'custom',
-        message: '사용할 수 없는 이메일입니다.',
-        path: ['email'],
+        code: "custom",
+        message: "사용할 수 없는 이메일입니다.",
+        path: ["email"],
         fatal: true,
       });
       return z.NEVER;
     }
   })
   .refine(checkPassword, {
-    message: '비밀번호를 다시 확인해주세요.',
-    path: ['passwordConfirm'],
+    message: "비밀번호를 다시 확인해주세요.",
+    path: ["passwordConfirm"],
   });
 export async function signUp(prevState: any, formData: FormData) {
   // formData 가져오기
   const data = {
-    email: formData.get('email'),
-    password: formData.get('password'),
-    passwordConfirm: formData.get('passwordConfirm'),
+    email: formData.get("email"),
+    password: formData.get("password"),
+    passwordConfirm: formData.get("passwordConfirm"),
   };
 
   const result = await formSchema.spa(data);
@@ -93,6 +93,6 @@ export async function signUp(prevState: any, formData: FormData) {
     await session.save();
 
     // 유저 로그인 시 /로 redirect
-    redirect('/');
+    redirect("/");
   }
 }
