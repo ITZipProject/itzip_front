@@ -1,3 +1,5 @@
+'use server';
+
 import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEX,
@@ -5,7 +7,7 @@ import {
 } from '@/app/lib/constants';
 import db from '@/app/lib/db';
 import { z } from 'zod';
-import bcrypt, { hash } from 'bcrypt';
+import bcrypt from 'bcrypt';
 import getSession from '@/app/lib/session';
 import { redirect } from 'next/navigation';
 
@@ -37,7 +39,7 @@ const formSchema = z.object({
 export const login = async (prevState: any, formData: FormData) => {
   const data = {
     email: formData.get('email'),
-    password: formData.get('passwrod'),
+    password: formData.get('password'),
   };
   const result = await formSchema.spa(data);
   if (!result.success) {
