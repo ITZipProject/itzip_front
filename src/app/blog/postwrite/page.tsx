@@ -10,6 +10,11 @@ const BlogPostWritePage = () => {
 	const [markdownContent, setMarkdownContent] = useState<string>("");
 	const editorRef = useRef<HTMLTextAreaElement>(null);
 	const previewRef = useRef<HTMLDivElement>(null);
+	const [isEditorScrolling, setIsEditorScrolling] = useState(false);
+	const [isPreviewScrolling, setIsPreviewScrolling] = useState(false);
+	const lastEditorScrollTop = useRef(0);
+	const lastPreviewScrollTop = useRef(0);
+	const scrollThreshold = 10; // 스크롤 변화 감지를 위한 최소 픽셀 수
 
 	const handleCategoryChange = (selectedCategory: string) => {
 		setCategory(selectedCategory);
@@ -75,22 +80,47 @@ const BlogPostWritePage = () => {
 	};
 
 	useEffect(() => {
+		let editorScrollTimer: number | null = null;
+		let previewScrollTimer: number | null = null;
+
 		const handleEditorScroll = () => {
-			if (editorRef.current && previewRef.current) {
-				const editorScrollPercentage =
-					editorRef.current.scrollTop / (editorRef.current.scrollHeight - editorRef.current.clientHeight);
-				previewRef.current.scrollTop =
-					editorScrollPercentage * (previewRef.current.scrollHeight - previewRef.current.clientHeight);
-			}
+			if (isPreviewScrolling) return;
+			if (editorScrollTimer) cancelAnimationFrame(editorScrollTimer);
+
+			editorScrollTimer = requestAnimationFrame(() => {
+				if (editorRef.current && previewRef.current) {
+					const currentScrollTop = editorRef.current.scrollTop;
+					if (Math.abs(currentScrollTop - lastEditorScrollTop.current) > scrollThreshold) {
+						setIsEditorScrolling(true);
+						const editorScrollPercentage =
+							currentScrollTop / (editorRef.current.scrollHeight - editorRef.current.clientHeight);
+						previewRef.current.scrollTop =
+							editorScrollPercentage * (previewRef.current.scrollHeight - previewRef.current.clientHeight);
+						lastEditorScrollTop.current = currentScrollTop;
+						setTimeout(() => setIsEditorScrolling(false), 50);
+					}
+				}
+			});
 		};
 
 		const handlePreviewScroll = () => {
-			if (editorRef.current && previewRef.current) {
-				const previewScrollPercentage =
-					previewRef.current.scrollTop / (previewRef.current.scrollHeight - previewRef.current.clientHeight);
-				editorRef.current.scrollTop =
-					previewScrollPercentage * (editorRef.current.scrollHeight - editorRef.current.clientHeight);
-			}
+			if (isEditorScrolling) return;
+			if (previewScrollTimer) cancelAnimationFrame(previewScrollTimer);
+
+			previewScrollTimer = requestAnimationFrame(() => {
+				if (editorRef.current && previewRef.current) {
+					const currentScrollTop = previewRef.current.scrollTop;
+					if (Math.abs(currentScrollTop - lastPreviewScrollTop.current) > scrollThreshold) {
+						setIsPreviewScrolling(true);
+						const previewScrollPercentage =
+							currentScrollTop / (previewRef.current.scrollHeight - previewRef.current.clientHeight);
+						editorRef.current.scrollTop =
+							previewScrollPercentage * (editorRef.current.scrollHeight - editorRef.current.clientHeight);
+						lastPreviewScrollTop.current = currentScrollTop;
+						setTimeout(() => setIsPreviewScrolling(false), 50);
+					}
+				}
+			});
 		};
 
 		editorRef.current?.addEventListener("scroll", handleEditorScroll);
@@ -99,8 +129,10 @@ const BlogPostWritePage = () => {
 		return () => {
 			editorRef.current?.removeEventListener("scroll", handleEditorScroll);
 			previewRef.current?.removeEventListener("scroll", handlePreviewScroll);
+			if (editorScrollTimer) cancelAnimationFrame(editorScrollTimer);
+			if (previewScrollTimer) cancelAnimationFrame(previewScrollTimer);
 		};
-	}, []);
+	}, [isEditorScrolling, isPreviewScrolling]);
 
 	return (
 		<div className="container mx-auto p-4">
@@ -113,8 +145,8 @@ const BlogPostWritePage = () => {
 				<div className="w-1/2">
 					<MarkdownEditor content={markdownContent} onContentChange={handleContentChange} ref={editorRef} />
 				</div>
-				<div className="w-1/2" ref={previewRef}>
-					<MarkdownPreview content={markdownContent} />
+				<div className="w-1/2">
+					<MarkdownPreview content={markdownContent} ref={previewRef} />
 				</div>
 			</div>
 			<button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={handleSubmit}>

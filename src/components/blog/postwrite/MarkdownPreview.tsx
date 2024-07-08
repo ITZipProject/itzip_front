@@ -106,6 +106,7 @@ const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewProps>((
 		},
 		blockquote: ({ ...props }) => <blockquote className="border-l-4 border-gray-300 pl-4 my-2 italic" {...props} />,
 	};
+
 	return (
 		<div
 			ref={ref}
