@@ -14,9 +14,13 @@
   },
   "dependencies": {
     "@sentry/nextjs": "^8.13.0",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "next": "14.2.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-markdown": "^9.0.1",
+    "react-syntax-highlighter": "^15.5.0",
+    "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.6.0",
