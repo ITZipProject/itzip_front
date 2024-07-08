@@ -1,4 +1,3 @@
-// src\components\blog\postwrite\MarkdownPreview.tsx
 import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
