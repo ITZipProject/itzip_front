@@ -14,6 +14,7 @@ const BlogPostWritePage = () => {
 	const [isPreviewScrolling, setIsPreviewScrolling] = useState(false);
 	const lastEditorScrollTop = useRef(0);
 	const lastPreviewScrollTop = useRef(0);
+	const [isSyncEnabled, setIsSyncEnabled] = useState(false);
 	const scrollThreshold = 5; // 스크롤 변화 감지를 위한 최소 픽셀 수
 
 	const handleCategoryChange = (selectedCategory: string) => {
@@ -78,8 +79,9 @@ const BlogPostWritePage = () => {
 		console.log("Category:", category);
 		console.log("Content:", markdownContent);
 	};
-
 	useEffect(() => {
+		if (!isSyncEnabled) return;
+
 		let editorScrollTimer: number | null = null;
 		let previewScrollTimer: number | null = null;
 
@@ -132,7 +134,7 @@ const BlogPostWritePage = () => {
 			if (editorScrollTimer) cancelAnimationFrame(editorScrollTimer);
 			if (previewScrollTimer) cancelAnimationFrame(previewScrollTimer);
 		};
-	}, [isEditorScrolling, isPreviewScrolling]);
+	}, [isEditorScrolling, isPreviewScrolling, isSyncEnabled]);
 
 	return (
 		<div className="container mx-auto p-4">
@@ -149,9 +151,23 @@ const BlogPostWritePage = () => {
 					<MarkdownPreview content={markdownContent} ref={previewRef} />
 				</div>
 			</div>
-			<button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={handleSubmit}>
-				글 작성 완료
-			</button>
+			<div className="mt-4 flex justify-between items-center">
+				<button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={handleSubmit}>
+					글 작성 완료
+				</button>
+				<div className="flex items-center">
+					<label className="inline-flex items-center cursor-pointer">
+						<input
+							type="checkbox"
+							className="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 transition duration-150 ease-in-out"
+							checked={isSyncEnabled}
+							onChange={(e) => setIsSyncEnabled(e.target.checked)}
+						/>
+						<span className="ml-2 text-sm text-gray-700">스크롤 동기화</span>
+					</label>
+					<span className="ml-1 px-1.5 py-0.5 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full">Beta</span>
+				</div>
+			</div>
 		</div>
 	);
 };
