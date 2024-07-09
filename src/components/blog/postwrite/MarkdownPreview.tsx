@@ -110,7 +110,7 @@ const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewProps>((
 	return (
 		<div
 			ref={ref}
-			className="w-full h-96 p-2 border rounded overflow-auto prose prose-sm max-w-none"
+			className="w-full h-96 p-2 border rounded overflow-auto prose prose-sm max-w-none pb-24"
 			id="preview-container"
 		>
 			<ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>

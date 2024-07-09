@@ -14,7 +14,7 @@ const BlogPostWritePage = () => {
 	const [isPreviewScrolling, setIsPreviewScrolling] = useState(false);
 	const lastEditorScrollTop = useRef(0);
 	const lastPreviewScrollTop = useRef(0);
-	const scrollThreshold = 10; // 스크롤 변화 감지를 위한 최소 픽셀 수
+	const scrollThreshold = 5; // 스크롤 변화 감지를 위한 최소 픽셀 수
 
 	const handleCategoryChange = (selectedCategory: string) => {
 		setCategory(selectedCategory);
