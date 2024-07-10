@@ -93,6 +93,6 @@ export async function signUp(prevState: any, formData: FormData) {
     await session.save();
 
     // 유저 로그인 시 /로 redirect
-    redirect('/profile');
+    redirect('/');
   }
 }

@@ -14,15 +14,15 @@ export async function middleware(request: NextRequest) {
   const session = await getSession();
   const exists = publicOnlyUrls[request.nextUrl.pathname];
 
-  // 로그인 아닌 경우 header navigation bar에 sign up/in이 보여짐
+  // 로그인 아닌 경우
   if (!session.id) {
     if (!exists) {
-      return NextResponse.redirect(new URL('/sign-up', request.url));
+      return NextResponse.redirect(new URL('/', request.url));
     }
   } else {
-    // 로그인 한 경우 header navigation bar에 profile이 보여짐
+    // 로그인 한 경우
     if (exists) {
-      return NextResponse.redirect(new URL('/', request.url));
+      return NextResponse.redirect(new URL('/profile', request.url));
     }
   }
 }

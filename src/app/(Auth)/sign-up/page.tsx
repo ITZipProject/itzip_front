@@ -2,7 +2,7 @@
 
 import Button from '@/components/common/button';
 import Input from '@/components/common/input';
-import SocialLogin from '@/components/social-login';
+import SocialLogin from '@/components/auth/social-login';
 import React from 'react';
 import { useFormState } from 'react-dom';
 import { signUp } from './actions';
@@ -41,24 +41,25 @@ export default function SignUp() {
           minLength={PASSWORD_MIN_LENGTH}
           errors={state?.fieldErrors.passwordConfirm}
         />
-        <div className="flex gap-8">
-          <div className="flex items-center gap-2">
+        <div className="flex gap-8 items-center my-2">
+          <div className="flex items-center gap-2 ">
             <span>[필수] OOO 이용약관</span>
             <input type="checkbox" />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 ">
             <span>[필수] 개인정보 수집 및 이용</span>
             <input type="checkbox" />
           </div>
         </div>
-        <div className="flex gap-2">
-          <span>이미 계정이 있어요!</span>
-          <Link href="/login" className="hover:underline underline-offset-4">
-            로그인
-          </Link>
-        </div>
+
         <Button text="회원가입" />
       </form>
+      <div className="flex gap-2 my-2">
+        <span>이미 계정이 있어요!</span>
+        <Link href="/sign-in" className="hover:underline underline-offset-4">
+          로그인
+        </Link>
+      </div>
       <SocialLogin />
     </div>
   );
