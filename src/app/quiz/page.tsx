@@ -1,5 +1,5 @@
-import Quiz from "../../components/quiz/Quiz";
-import Filter from "../../components/quiz/Filter";
+import Quiz from "@/components/quiz/Quiz";
+import Filter from "@/components/quiz/Filter";
 
 export default function QuizPage() {
   return (
