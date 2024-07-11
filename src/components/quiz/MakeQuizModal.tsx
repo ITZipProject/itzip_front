@@ -57,8 +57,7 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) => {
           <select
             className="px-3 py-1 bg-gray-200 rounded text-sm"
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
+            onChange={(e) => setCategory(e.target.value)}>
             <option value="">목록</option>
             <option value="category1">Category 1</option>
             <option value="category2">Category 2</option>
@@ -83,8 +82,7 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) => {
               onClick={() => {
                 setLevel("Lv.1");
                 setSelectedLevel("Lv.1");
-              }}
-            >
+              }}>
               <h3>레벨1</h3>
             </button>
             <button
@@ -94,8 +92,7 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) => {
               onClick={() => {
                 setLevel("Lv.2");
                 setSelectedLevel("Lv.2");
-              }}
-            >
+              }}>
               <h3>레벨2</h3>
             </button>
             <button
@@ -105,8 +102,7 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) => {
               onClick={() => {
                 setLevel("Lv.3");
                 setSelectedLevel("Lv.3");
-              }}
-            >
+              }}>
               <h3>레벨3</h3>
             </button>
           </div>
@@ -117,8 +113,7 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) => {
             {options.map((option, index) => (
               <div
                 key={index}
-                className="flex items-center justify-center gap-3"
-              >
+                className="flex items-center justify-center gap-3">
                 <h3>{index + 1}번</h3>
                 <input
                   type="text"

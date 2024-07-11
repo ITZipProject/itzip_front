@@ -6,7 +6,7 @@ import SocialLogin from "@/components/auth/social-login";
 import React from "react";
 import { useFormState } from "react-dom";
 import { signUp } from "./actions";
-import { PASSWORD_MIN_LENGTH } from "@/app/lib/constants";
+import { PASSWORD_MIN_LENGTH } from "@/lib/constants";
 import Link from "next/link";
 
 export default function SignUp() {

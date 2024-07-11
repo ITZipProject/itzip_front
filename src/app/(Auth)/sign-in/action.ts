@@ -4,11 +4,11 @@ import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEX,
   PASSWORD_REGEX_ERROR,
-} from "@/app/lib/constants";
-import db from "@/app/lib/db";
+} from "@/lib/constants";
+import db from "@/lib/db";
 import { z } from "zod";
 import bcrypt from "bcrypt";
-import getSession from "@/app/lib/session";
+import getSession from "@/lib/session";
 import { redirect } from "next/navigation";
 
 // 중복 이메일 체크

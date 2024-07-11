@@ -28,8 +28,7 @@ const QuizCard: React.FC<QuizCardProps> = ({
     <div className="w-full">
       <div
         className="w-full h-32 border-2 border-gray-300 rounded-md p-4 shadow-md flex flex-col justify-center items-center cursor-pointer"
-        onClick={openModal}
-      >
+        onClick={openModal}>
         <div>
           <h3 className="font-bold">{question}</h3>
         </div>

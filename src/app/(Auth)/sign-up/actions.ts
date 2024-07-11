@@ -3,13 +3,13 @@ import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEX,
   PASSWORD_REGEX_ERROR,
-} from "@/app/lib/constants";
+} from "@/lib/constants";
 
 import { z } from "zod";
 import bcrypt from "bcrypt";
 import { redirect } from "next/navigation";
-import getSession from "@/app/lib/session";
-import db from "@/app/lib/db";
+import getSession from "@/lib/session";
+import db from "@/lib/db";
 
 const checkPassword = ({
   password,
