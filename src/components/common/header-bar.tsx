@@ -20,9 +20,7 @@ export default function HeaderBar({ exists }: HeaderBarProps) {
         <Link href={'/blog'}>기술정보</Link>
         <Link href={'/quiz'}>학습하기</Link>
       </div>
-      <Link href={!exists ? '/sign-up' : '/profile'}>
-        {!exists ? '회원가입' : '마이프로필'}
-      </Link>
+      <Link href={'/profile'}>{!exists ? '로그인' : '마이프로필'}</Link>
     </div>
   );
 }
