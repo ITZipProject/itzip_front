@@ -1,7 +1,6 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from 'react';
-import Modal from 'react-modal';
+import React, { useState } from 'react';
 
 interface Job {
   id: string;
@@ -91,40 +90,43 @@ const RecruitPage: React.FC = () => {
     search: '',
     sort: 'latest',
   });
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
   const applyFilters = () => {
     let tempJobs: Job[] = [...jobs];
-  
+
     if (filters.category) {
-      tempJobs = tempJobs.filter(job => job.jobMidCode.code === filters.category);
+      tempJobs = tempJobs.filter(job => job.jobMidCode.code.includes(filters.category));
     }
     if (filters.technology) {
       tempJobs = tempJobs.filter(job => job.jobCode.code.includes(filters.technology));
     }
     if (filters.location) {
-      tempJobs = tempJobs.filter(job => job.location.code === filters.location);
+      tempJobs = tempJobs.filter(job => job.location.code.includes(filters.location));
     }
     if (filters.education) {
-      tempJobs = tempJobs.filter(job => job.requiredEducationLevel.code === filters.education);
+      tempJobs = tempJobs.filter(job => job.requiredEducationLevel.code.includes(filters.education));
     }
     if (filters.experience) {
-      tempJobs = tempJobs.filter(job => job.experienceLevel.code === parseInt(filters.experience));
+      tempJobs = tempJobs.filter(job => job.experienceLevel.code.toString().includes(filters.experience));
     }
     if (filters.search) {
-      const searchString = filters.search.toLowerCase();
       tempJobs = tempJobs.filter(
         job =>
-          job.industry.name.toLowerCase().includes(searchString) ||
-          job.title.toLowerCase().includes(searchString)
+          job.industry.name.includes(filters.search) || job.title.includes(filters.search)
       );
     }
-  
-    // 정렬 로직은 그대로 유지됩니다
-  
+
+    if (filters.sort === 'latest') {
+      tempJobs.sort((a, b) => new Date(b.postedDate).getTime() - new Date(a.postedDate).getTime());
+    } else if (filters.sort === 'recommendation') {
+      tempJobs.sort((a, b) => b.recommendations - a.recommendations);
+    } else if (filters.sort === 'views') {
+      tempJobs.sort((a, b) => b.views - a.views);
+    }
+
     setFilteredJobs(tempJobs);
   };
-  
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFilters({
@@ -133,118 +135,128 @@ const RecruitPage: React.FC = () => {
     });
   };
 
-  const toggleFilterModal = () => {
-    setIsFilterModalOpen(!isFilterModalOpen);
-  };
-
   const handleBookmark = (jobId: string) => {
     // Bookmark functionality
+  };
+
+  const toggleFilter = (filterName: string) => {
+    if (activeFilter === filterName) {
+      setActiveFilter(null);
+    } else {
+      setActiveFilter(filterName);
+    }
   };
 
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-center text-3xl font-bold mb-6">채용 정보 목록</h1>
-      <button
-        className="block mx-auto mb-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        onClick={toggleFilterModal}
-      >
-        필터링
-      </button>
-      <Modal isOpen={isFilterModalOpen} onRequestClose={toggleFilterModal}>
-        <div className="p-6 bg-white rounded-lg shadow-lg">
-          <h2 className="text-xl font-bold mb-4">필터링</h2>
-          <label className="block mb-2">
-            카테고리:
+      <div className="flex justify-center space-x-4 mb-6">
+        <button
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={() => toggleFilter('category')}
+        >
+          카테고리
+        </button>
+        <button
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={() => toggleFilter('technology')}
+        >
+          기술
+        </button>
+        <button
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={() => toggleFilter('location')}
+        >
+          지역
+        </button>
+        <button
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={() => toggleFilter('education')}
+        >
+          학력
+        </button>
+        <button
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={() => toggleFilter('experience')}
+        >
+          경력
+        </button>
+      </div>
+      <div className="mb-6">
+        {activeFilter === 'category' && (
+          <div className="flex justify-center mb-2">
             <input
               type="text"
               name="category"
               value={filters.category}
               onChange={handleFilterChange}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
+              className="w-1/3 p-2 border border-gray-300 rounded"
+              placeholder="카테고리 입력"
             />
-          </label>
-          <label className="block mb-2">
-            기술:
+          </div>
+        )}
+        {activeFilter === 'technology' && (
+          <div className="flex justify-center mb-2">
             <input
               type="text"
               name="technology"
               value={filters.technology}
               onChange={handleFilterChange}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
+              className="w-1/3 p-2 border border-gray-300 rounded"
+              placeholder="기술 입력"
             />
-          </label>
-          <label className="block mb-2">
-            지역:
+          </div>
+        )}
+        {activeFilter === 'location' && (
+          <div className="flex justify-center mb-2">
             <input
               type="text"
               name="location"
               value={filters.location}
               onChange={handleFilterChange}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
+              className="w-1/3 p-2 border border-gray-300 rounded"
+              placeholder="지역 입력"
             />
-          </label>
-          <label className="block mb-2">
-            학력:
-            <input
-              type="text"
+          </div>
+        )}
+        {activeFilter === 'education' && (
+          <div className="flex justify-center mb-2">
+            <select
               name="education"
               value={filters.education}
               onChange={handleFilterChange}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
-            />
-          </label>
-          <label className="block mb-2">
-            경력:
+              className="w-1/3 p-2 border border-gray-300 rounded"
+            >
+              <option value="">학력 선택</option>
+              <option value="highschool">고졸</option>
+              <option value="college">대졸</option>
+              <option value="graduate">대학원</option>
+            </select>
+          </div>
+        )}
+        {activeFilter === 'experience' && (
+          <div className="flex justify-center mb-2">
             <input
               type="text"
               name="experience"
               value={filters.experience}
               onChange={handleFilterChange}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
+              className="w-1/3 p-2 border border-gray-300 rounded"
+              placeholder="경력 입력"
             />
-          </label>
-          <label className="block mb-2">
-            검색:
-            <input
-              type="text"
-              name="search"
-              value={filters.search}
-              onChange={handleFilterChange}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
-            />
-          </label>
-          <label className="block mb-2">
-            정렬:
-            <select
-              name="sort"
-              value={filters.sort}
-              onChange={handleFilterChange}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
-            >
-              <option value="applys">지원자 순</option>
-              <option value="views">조회수 순</option>
-            </select>
-          </label>
-          <div className="flex justify-between mt-4">
-            <button
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              onClick={applyFilters}
-            >
-              적용
-            </button>
-            <button
-              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-              onClick={toggleFilterModal}
-            >
-              닫기
-            </button>
           </div>
-        </div>
-      </Modal>
+        )}
+      </div>
+      <button
+        className="block mx-auto mb-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        onClick={applyFilters}
+      >
+        필터 적용
+      </button>
       <div className="text-center text-lg mb-6">필터링된 공고 개수: {filteredJobs.length}</div>
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-4 gap-6">
         {filteredJobs.map((job) => (
-          <div key={job.id} className="p-6 border border-gray-300 rounded-lg shadow-lg">
+          <div key={job.id} className="p-6 border border-gray-500 rounded-lg shadow-lg">
             <img src={job.companyImage} alt={job.industry.name} className="w-24 h-24 mx-auto rounded-full mb-4" />
             <h3 className="text-xl font-bold text-center mb-2">{job.title}</h3>
             <p className="text-center text-gray-600 mb-4">{job.industry.name}</p>
