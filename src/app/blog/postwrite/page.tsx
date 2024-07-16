@@ -8,6 +8,7 @@ import ToolbarButtons from "@/components/blog/postwrite/ToolbarButtons";
 const BlogPostWritePage = () => {
 	const [category, setCategory] = useState<string>("");
 	const [markdownContent, setMarkdownContent] = useState<string>("");
+	const [title, setTitle] = useState<string>("");
 	const editorRef = useRef<HTMLTextAreaElement>(null);
 	const previewRef = useRef<HTMLDivElement>(null);
 	const [isEditorScrolling, setIsEditorScrolling] = useState(false);
@@ -23,6 +24,10 @@ const BlogPostWritePage = () => {
 
 	const handleContentChange = (content: string) => {
 		setMarkdownContent(content);
+	};
+
+	const handleTitleChange = (newTitle: string) => {
+		setTitle(newTitle);
 	};
 
 	const handleToolbarAction = (action: string, value?: string) => {
@@ -79,6 +84,7 @@ const BlogPostWritePage = () => {
 		console.log("Category:", category);
 		console.log("Content:", markdownContent);
 	};
+	
 	useEffect(() => {
 		if (!isSyncEnabled) return;
 
@@ -140,6 +146,13 @@ const BlogPostWritePage = () => {
 		<div className="container mx-auto p-4">
 			<h1 className="text-2xl font-bold mb-4">블로그 글 작성/수정</h1>
 			<CategorySelector onCategoryChange={handleCategoryChange} />
+			<input
+				type="text"
+				className="w-full p-2 text-3xl font-bold border-b mb-4"
+				value={title}
+				onChange={(e) => setTitle(e.target.value)}
+				placeholder="제목을 입력하세요..."
+			/>
 			<div className="mb-4">
 				<ToolbarButtons onAction={handleToolbarAction} />
 			</div>
