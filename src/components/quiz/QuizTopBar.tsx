@@ -4,15 +4,16 @@ import React from "react";
 
 interface QuizTopBarProps {
   onAddQuiz: () => void;
+  setSortOrder: (order: "latest" | "oldest" | "recommended") => void;
 }
 
-const QuizTopBar: React.FC<QuizTopBarProps> = ({ onAddQuiz }) => {
+const QuizTopBar: React.FC<QuizTopBarProps> = ({ onAddQuiz, setSortOrder }) => {
   return (
     <div className="flex flex-row justify-between items-center h-16 gap-8">
       <div className="flex flex-row gap-2">
-        <button>최신순</button>
-        <button>오래된 순</button>
-        <button>추천순</button>
+        <button onClick={() => setSortOrder("latest")}>최신순</button>
+        <button onClick={() => setSortOrder("oldest")}>오래된 순</button>
+        <button onClick={() => setSortOrder("recommended")}>추천순</button>
       </div>
       <div>
         <button
