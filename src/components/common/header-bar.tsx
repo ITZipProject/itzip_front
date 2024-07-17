@@ -18,7 +18,7 @@ export default function HeaderBar({ exists }: HeaderBarProps) {
           {pathname === "" ? <span>채용공고</span> : <span>채용공고</span>}
         </Link>
         <Link href={"/#"}>기술정보</Link>
-        <Link href={"/#"}>학습하기</Link>
+        <Link href={"/quiz"}>학습하기</Link>
       </div>
       <Link href={!exists ? "/sign-up" : "/profile"}>
         {!exists ? "회원가입" : "마이프로필"}

@@ -2,17 +2,16 @@ import React, { useState } from "react";
 import QuizShowModal from "./QuizShowModal";
 import { QuizData } from "../../types/quiz/quiz";
 
-interface QuizCardProps extends Omit<QuizData, "answer"> {
-  role: string;
-}
-
-const QuizCard: React.FC<QuizCardProps> = ({
+const QuizCard: React.FC<QuizData> = ({
   question,
-  username,
-  level,
-  correctRate,
   category,
+  answer,
+  level,
   options,
+  username,
+  correctRate,
+  timestamp,
+  likes,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -28,7 +27,8 @@ const QuizCard: React.FC<QuizCardProps> = ({
     <div className="w-full">
       <div
         className="w-full h-32 border-2 border-gray-300 rounded-md p-4 shadow-md flex flex-col justify-center items-center cursor-pointer"
-        onClick={openModal}>
+        onClick={openModal}
+      >
         <div>
           <h3 className="font-bold">{question}</h3>
         </div>
@@ -54,6 +54,12 @@ const QuizCard: React.FC<QuizCardProps> = ({
         question={question}
         category={category}
         options={options}
+        answer={answer}
+        level={level}
+        username={username}
+        correctRate={correctRate}
+        timestamp={timestamp}
+        likes={likes}
       />
     </div>
   );
