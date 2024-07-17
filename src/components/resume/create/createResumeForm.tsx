@@ -6,11 +6,17 @@ import {
   createResumeSchema,
   createResumeSchemaType,
 } from "@/utils/createResumeSchema";
-interface ICreateResumeFormProps {}
+import SchoolSearch, { schoolNameAtom } from "./schoolSearch";
+import { useAtomValue } from "jotai";
+import CreateResumeApi from "@/api/resume/createResume";
+import { useRouter } from "next/navigation";
+import { RESUME_FORMDATA } from "@/lib/constants";
 
-const CreateResumeForm: React.FunctionComponent<ICreateResumeFormProps> = (
-  props
-) => {
+const CreateResumeForm: React.FunctionComponent = (props) => {
+  const [searchModalOpen, setSearchModalOpen] = React.useState(false);
+
+  const schoolName = useAtomValue(schoolNameAtom);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -19,31 +25,48 @@ const CreateResumeForm: React.FunctionComponent<ICreateResumeFormProps> = (
     resolver: zodResolver(createResumeSchema),
   });
 
-  const onSubmit = (data: createResumeSchemaType) => {
-    console.log(data);
+  const onSubmit = async (resumeData: createResumeSchemaType) => {
+    try {
+      const data = await CreateResumeApi({ resumeData, schoolName });
+      router.push(`/resume/${data.resumeId}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const openModal = () => {
+    setSearchModalOpen(true);
+  };
+  const closeModal = () => {
+    setSearchModalOpen(false);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {RESUME_FORMDATA.map((resumeDataName) => (
+        <div key={resumeDataName}>
+          <label>{resumeDataName}:</label>
+          <input
+            {...register(resumeDataName as keyof createResumeSchemaType)}
+          />
+          {errors[resumeDataName as keyof createResumeSchemaType] && (
+            <p>
+              {errors[resumeDataName as keyof createResumeSchemaType]?.message}
+            </p>
+          )}
+        </div>
+      ))}
+
       <div>
-        <label>Resume Title:</label>
-        <input {...register("resume_title")}></input>
-        {errors.resume_title && <p>{errors.resume_title.message}</p>}
-      </div>
-      <div>
-        <label>Email:</label>
-        <input {...register("email")}></input>
-        {errors.email && <p>{errors.email.message}</p>}
-      </div>
-      <div>
-        <label>Phone:</label>
-        <input {...register("phone")}></input>
-        {errors.phone && <p>{errors.phone.message}</p>}
-      </div>
-      <div>
-        <label>Introduction:</label>
-        <textarea {...register("introduction")}></textarea>
-        {errors.introduction && <p>{errors.introduction.message}</p>}
+        <button type="button" onClick={openModal}>
+          학력 추가하기
+        </button>
+        <SchoolSearch isOpen={searchModalOpen} onRequestClose={closeModal} />
+        {schoolName && (
+          <div>
+            <span>{schoolName}</span>
+          </div>
+        )}
       </div>
       <button type="submit">Submit</button>
     </form>

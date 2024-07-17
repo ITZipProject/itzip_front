@@ -7,3 +7,10 @@ export const PASSWORD_REGEX_ERROR =
 
 export const PHONE_REGEX = /^010-\d{4}-\d{4}$|^010\d{8}$/;
 export const PHONE_REGEX_ERROR = "전화번호 형식이 올바르지 않습니다.";
+
+export const RESUME_FORMDATA = [
+  "resume_title",
+  "email",
+  "phone",
+  "introduction",
+];
