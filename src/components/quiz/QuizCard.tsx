@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Image from "next/image";
 import QuizShowModal from "./QuizShowModal";
 import { QuizData } from "../../types/quiz/quiz";
 
@@ -34,10 +35,11 @@ const QuizCard: React.FC<QuizData> = ({
         </div>
         <div className="flex flex-col justify-center items-center">
           <div className="flex">
-            <img
+            <Image
               src="/userImage.png"
               alt="유저이미지"
-              className="w-4 h-4 mr-2"
+              width={16}
+              height={16}
             />
             <h3 className="mx-2">{username}</h3>
           </div>

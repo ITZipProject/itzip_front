@@ -6,13 +6,19 @@ import Filter from "../../components/quiz/Filter";
 import axios from "axios";
 import { QuizData } from "../../types/quiz/quiz";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Home() {
   const [quizzes, setQuizzes] = useState<QuizData[]>([]);
   const [filteredQuizzes, setFilteredQuizzes] = useState<QuizData[]>([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get();
+        if (!apiUrl) {
+          throw new Error("API URL is not defined");
+        }
+        const response = await axios.get(apiUrl);
         setQuizzes(response.data);
         setFilteredQuizzes(response.data);
       } catch (error) {

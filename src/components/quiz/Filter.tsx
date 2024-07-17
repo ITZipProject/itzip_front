@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
+
 import { QuizData } from "../../types/quiz/quiz";
 
 interface FilterProps {
@@ -46,11 +48,7 @@ const Filter: React.FC<FilterProps> = ({ quizzes, setFilteredQuizzes }) => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <img
-            src={"./search.png"}
-            alt="돋보기 아이콘"
-            className="w-4 h-4 mr-2"
-          />
+          <Image src="/search.png" alt="돋보기 아이콘" width={16} height={16} />
         </div>
       </div>
 
