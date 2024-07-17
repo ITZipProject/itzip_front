@@ -1,25 +1,16 @@
 import React, { useState } from "react";
 
 type CategoryType = {
-	[key: string]: {
-		[key: string]: string[];
-	};
+	[key: string]: string[];
 };
 
 const categories: CategoryType = {
-	"웹 개발": {
-		"프로그래밍 언어와 기술": ["Java", "Python", "JavaScript", "C/C++", "Ruby", "Swift", "Kotlin"],
-		"HTML/CSS": [],
-		"프론트엔드 개발": ["React", "Angular", "Vue.js"],
-		"백엔드 개발": ["Node.js", "Django", "Flask"],
-		"웹 호스팅 및 서버 관리": [],
-		"웹 개발 툴과 에디터 소개": [],
-	},
-	"모바일 앱 개발": {
-		"iOS 개발": ["Swift", "Objective-C"],
-		"안드로이드 개발": ["Kotlin", "Java"],
-		"크로스 플랫폼 개발": ["Flutter", "React Native"],
-	},
+	"소프트웨어 개발": ["프로그래밍 언어", "웹 개발", "모바일 개발", "게임 개발"],
+	"시스템 & 인프라": ["DevOps", "데이터베이스", "클라우드", "보안 & 네트워크"],
+	테크: ["인공지능", "데이터 사이언스", "블록체인", "VR/AR", "하드웨어"],
+	"디자인 & 아트": ["UI/UX", "그래픽스", "3D 모델링", "사운드"],
+	비즈니스: ["오피스", "기획 & PM", "자동화", "마케팅"],
+	기타: ["기타"],
 };
 
 interface CategorySelectorProps {
@@ -29,22 +20,15 @@ interface CategorySelectorProps {
 const CategorySelector: React.FC<CategorySelectorProps> = ({ onCategoryChange }) => {
 	const [mainCategory, setMainCategory] = useState("");
 	const [subCategory, setSubCategory] = useState("");
-	const [leafCategory, setLeafCategory] = useState("");
 
 	const handleMainCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		setMainCategory(e.target.value);
 		setSubCategory("");
-		setLeafCategory("");
 	};
 
 	const handleSubCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		setSubCategory(e.target.value);
-		setLeafCategory("");
-	};
-
-	const handleLeafCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setLeafCategory(e.target.value);
-		onCategoryChange(`${mainCategory} > ${subCategory} > ${e.target.value}`);
+		onCategoryChange(`${mainCategory} > ${e.target.value}`);
 	};
 
 	return (
@@ -57,22 +41,10 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ onCategoryChange })
 					</option>
 				))}
 			</select>
-
 			{mainCategory && (
-				<select className="mr-2 p-2 border rounded" value={subCategory} onChange={handleSubCategoryChange}>
-					<option value="">중위 카테고리 선택</option>
-					{Object.keys(categories[mainCategory]).map((cat) => (
-						<option key={cat} value={cat}>
-							{cat}
-						</option>
-					))}
-				</select>
-			)}
-
-			{subCategory && categories[mainCategory][subCategory].length > 0 && (
-				<select className="p-2 border rounded" value={leafCategory} onChange={handleLeafCategoryChange}>
+				<select className="p-2 border rounded" value={subCategory} onChange={handleSubCategoryChange}>
 					<option value="">하위 카테고리 선택</option>
-					{categories[mainCategory][subCategory].map((cat) => (
+					{categories[mainCategory].map((cat) => (
 						<option key={cat} value={cat}>
 							{cat}
 						</option>
