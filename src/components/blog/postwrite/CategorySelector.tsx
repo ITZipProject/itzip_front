@@ -13,7 +13,6 @@ const categories: CategoryType = {
 	기타: ["기타"],
 };
 
-
 interface CategorySelectorProps {
 	onCategoryChange: (category: string) => void;
 }

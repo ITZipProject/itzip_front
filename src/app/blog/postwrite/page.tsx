@@ -5,6 +5,22 @@ import MarkdownEditor from "@/components/blog/postwrite/MarkdownEditor";
 import MarkdownPreview from "@/components/blog/postwrite/MarkdownPreview";
 import ToolbarButtons from "@/components/blog/postwrite/ToolbarButtons";
 
+// 카테고리 ID 매핑
+const categoryIdMap: { [key: string]: number } = {
+	"소프트웨어 개발": 1,
+	"시스템 & 인프라": 2,
+	테크: 3,
+	"디자인 & 아트": 4,
+	비즈니스: 5,
+	기타: 6,
+};
+
+// 카테고리 ID를 가져오는 함수
+function getCategoryId(category: string): number {
+	const [mainCategory] = category.split(" > ");
+	return categoryIdMap[mainCategory] || 0;
+}
+
 const BlogPostWritePage = () => {
 	const [category, setCategory] = useState<string>("");
 	const [markdownContent, setMarkdownContent] = useState<string>("");
@@ -79,12 +95,43 @@ const BlogPostWritePage = () => {
 		}
 	};
 
-	const handleSubmit = () => {
-		//글 작성시 완료 로직
-		console.log("Category:", category);
-		console.log("Content:", markdownContent);
+	const handleSubmit = async () => {
+		const blogId = Math.floor(Math.random() * 1000000);
+		const categoryId = getCategoryId(category);
+
+		const articleData = {
+			categoryId,
+			blogId,
+			title,
+			content: markdownContent,
+		};
+
+		console.log("Sending article data:", articleData);
+
+		try {
+			const response = await fetch("/api/blog/posts/create", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(articleData),
+			});
+
+			if (response.ok) {
+				const result = await response.json();
+				console.log("Server response:", result);
+				// 성공 처리 (예: 알림 표시, 페이지 이동 등)
+			} else {
+				const errorText = await response.text();
+				console.error("Failed to create article:", errorText);
+				// 오류 처리 (예: 오류 메시지 표시)
+			}
+		} catch (error) {
+			console.error("Network error:", error);
+			// 네트워크 오류 처리
+		}
 	};
-	
+
 	useEffect(() => {
 		if (!isSyncEnabled) return;
 
