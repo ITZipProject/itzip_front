@@ -13,16 +13,14 @@ export default function HeaderBar({ exists }: HeaderBarProps) {
     <div className="h-10 bg-main flex justify-between w-screen px-10 items-center">
       <Link href={"/"}>logo</Link>
       <div className="flex gap-6">
-        <Link href={"/asd"}>이력서</Link>
-        <Link href={"/#"}>
+        <Link href={"/recruit"}>이력서</Link>
+        <Link href={"/recruit"}>
           {pathname === "" ? <span>채용공고</span> : <span>채용공고</span>}
         </Link>
-        <Link href={"/#"}>기술정보</Link>
-        <Link href={"/#"}>학습하기</Link>
+        <Link href={"/blog"}>기술정보</Link>
+        <Link href={"/quiz"}>학습하기</Link>
       </div>
-      <Link href={!exists ? "/sign-up" : "/profile"}>
-        {!exists ? "회원가입" : "마이프로필"}
-      </Link>
+      <Link href={"/profile"}>{!exists ? "로그인" : "마이프로필"}</Link>
     </div>
   );
 }

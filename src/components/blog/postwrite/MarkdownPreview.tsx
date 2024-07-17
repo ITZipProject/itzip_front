@@ -69,13 +69,13 @@ const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewProps>((
 			</ul>
 		),
 		ol: ({ children, className, ...props }) => (
-			<ol className={`list-decimal pl-4 my-2 ${className || ""}`} {...props}>
+			<ol className={`pl-8 my-2 ${className || ""} list-decimal`} {...props}>
 				{children}
 			</ol>
 		),
 		li: ({ children, ...props }) => {
 			return (
-				<li className="my-1" {...props}>
+				<li className="my-1 pl-1" {...props}>
 					{React.Children.map(children, (child) => {
 						if (React.isValidElement(child) && (child.type === "ul" || child.type === "ol")) {
 							return React.cloneElement(child, { ...child.props, className: "mt-2 ml-4" });
@@ -110,7 +110,7 @@ const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewProps>((
 	return (
 		<div
 			ref={ref}
-			className="w-full h-96 p-2 border rounded overflow-auto prose prose-sm max-w-none pb-24"
+			className="w-full h-96 p-2 border rounded overflow-auto prose prose-sm max-w-none pb-24 bg-white"
 			id="preview-container"
 		>
 			<ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>

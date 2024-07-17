@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import Button from "@/components/common/button";
-import Input from "@/components/common/input";
-import SocialLogin from "@/components/auth/social-login";
-import React from "react";
-import { useFormState } from "react-dom";
-import { signUp } from "./actions";
-import { PASSWORD_MIN_LENGTH } from "@/lib/constants";
-import Link from "next/link";
+import Button from '@/components/common/button';
+import Input from '@/components/common/input';
+import SocialLogin from '@/components/auth/social-login';
+import React from 'react';
+import { useFormState } from 'react-dom';
+import { signUp } from './actions';
+import { PASSWORD_MIN_LENGTH } from '@/lib/constants';
+import Link from 'next/link';
 
 export default function SignUp() {
   const [state, dispatch] = useFormState(signUp, null);
@@ -16,7 +16,16 @@ export default function SignUp() {
       <h1 className="font-bold text-lg pb-4">회원가입</h1>
       <form
         action={dispatch}
-        className="w-full flex flex-col justify-center items-center gap-2 pb-4">
+        className="w-full flex flex-col justify-center items-center gap-2 pb-4"
+      >
+        <Input
+          name="nickname"
+          type="text"
+          placeholder="닉네임"
+          required
+          errors={state?.fieldErrors.nickname}
+          minLength={2}
+        />
         <Input
           name="email"
           type="email"
