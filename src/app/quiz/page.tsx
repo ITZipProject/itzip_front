@@ -1,3 +1,7 @@
+
+import Quiz from "@/components/quiz/Quiz";
+import Filter from "@/components/quiz/Filter";
+
 "use client";
 
 import React from "react";
