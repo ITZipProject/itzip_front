@@ -6,10 +6,30 @@ import { redirect } from 'next/navigation';
 import getSession from '@/lib/session';
 import db from '@/lib/db';
 
-const profileSchema = z.object({
-  photo: z.string().optional(),
-  nickname: z.string(),
-});
+const profileSchema = z
+  .object({
+    photo: z.string().optional(),
+    nickname: z.string(),
+  })
+  .superRefine(async ({ nickname }, ctx) => {
+    const user = await db.user.findUnique({
+      where: {
+        nickname,
+      },
+      select: {
+        id: true,
+      },
+    });
+    if (user) {
+      ctx.addIssue({
+        code: 'custom',
+        message: '이미 사용중인 이름입니다.',
+        path: ['nickname'],
+        fatal: true,
+      });
+      return z.NEVER;
+    }
+  });
 
 export async function editProfile(_: any, formData: FormData) {
   const data: { photo?: string; nickname: string } = {
