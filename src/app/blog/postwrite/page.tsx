@@ -96,12 +96,10 @@ const BlogPostWritePage = () => {
 	};
 
 	const handleSubmit = async () => {
-		const blogId = Math.floor(Math.random() * 1000000);
 		const categoryId = getCategoryId(category);
 
 		const articleData = {
 			categoryId,
-			blogId,
 			title,
 			content: markdownContent,
 		};
@@ -109,7 +107,8 @@ const BlogPostWritePage = () => {
 		console.log("Sending article data:", articleData);
 
 		try {
-			const response = await fetch("/api/blog/posts/create", {
+			// response를 백엔드 API 엔드포인트로 추후 변경
+			const response = await fetch("/api/articles", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -121,14 +120,16 @@ const BlogPostWritePage = () => {
 				const result = await response.json();
 				console.log("Server response:", result);
 				// 성공 처리 (예: 알림 표시, 페이지 이동 등)
+				alert("글이 성공적으로 작성되었습니다.");
+				// 필요하다면 여기에 페이지 이동 로직을 추가할 수 있습니다.
 			} else {
 				const errorText = await response.text();
 				console.error("Failed to create article:", errorText);
-				// 오류 처리 (예: 오류 메시지 표시)
+				alert("글 작성에 실패했습니다. 다시 시도해 주세요.");
 			}
 		} catch (error) {
 			console.error("Network error:", error);
-			// 네트워크 오류 처리
+			alert("네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.");
 		}
 	};
 
