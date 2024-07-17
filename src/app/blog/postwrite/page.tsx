@@ -34,9 +34,9 @@ const BlogPostWritePage = () => {
 	const [isSyncEnabled, setIsSyncEnabled] = useState(false);
 	const scrollThreshold = 5; // 스크롤 변화 감지를 위한 최소 픽셀 수
 
-	const handleCategoryChange = (selectedCategory: string) => {
-		setCategory(selectedCategory);
-	};
+  const handleCategoryChange = (selectedCategory: string) => {
+    setCategory(selectedCategory);
+  };
 
 	const handleContentChange = (content: string) => {
 		setMarkdownContent(content);
@@ -46,54 +46,59 @@ const BlogPostWritePage = () => {
 		setTitle(newTitle);
 	};
 
-	const handleToolbarAction = (action: string, value?: string) => {
-		const textarea = document.querySelector("textarea") as HTMLTextAreaElement;
-		if (!textarea) return;
-		const start = textarea.selectionStart;
-		const end = textarea.selectionEnd;
-		const text = textarea.value;
-		let newText = "";
-		let insertedText = "";
-		const selectedText = text.substring(start, end);
+  const handleToolbarAction = (action: string, value?: string) => {
+    const textarea = document.querySelector("textarea") as HTMLTextAreaElement;
+    if (!textarea) return;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    let newText = "";
+    let insertedText = "";
+    const selectedText = text.substring(start, end);
 
-		switch (action) {
-			case "heading":
-				insertedText = `${value}${selectedText}`;
-				newText = text.substring(0, start) + insertedText + text.substring(end);
-				break;
-			case "list":
-				insertedText = selectedText
-					.split("\n")
-					.map((line) => `${value}${line}`)
-					.join("\n");
-				newText = text.substring(0, start) + insertedText + text.substring(end);
-				break;
-			case "hr":
-				insertedText = `\n${value}\n`;
-				newText = text.substring(0, start) + insertedText + text.substring(end);
-				break;
-			case "quote":
-				insertedText = selectedText
-					.split("\n")
-					.map((line) => `> ${line}`)
-					.join("\n");
-				newText = text.substring(0, start) + insertedText + text.substring(end);
-				break;
-			case "code":
-				insertedText = `\`\`\`\n${selectedText}\n\`\`\``;
-				newText = text.substring(0, start) + insertedText + text.substring(end);
-				break;
-			default:
-				insertedText = value ? value.replace(/텍스트|대체 텍스트/, selectedText || "텍스트") : "";
-				newText = text.substring(0, start) + insertedText + text.substring(end);
-		}
+    switch (action) {
+      case "heading":
+        insertedText = `${value}${selectedText}`;
+        newText = text.substring(0, start) + insertedText + text.substring(end);
+        break;
+      case "list":
+        insertedText = selectedText
+          .split("\n")
+          .map((line) => `${value}${line}`)
+          .join("\n");
+        newText = text.substring(0, start) + insertedText + text.substring(end);
+        break;
+      case "hr":
+        insertedText = `\n${value}\n`;
+        newText = text.substring(0, start) + insertedText + text.substring(end);
+        break;
+      case "quote":
+        insertedText = selectedText
+          .split("\n")
+          .map((line) => `> ${line}`)
+          .join("\n");
+        newText = text.substring(0, start) + insertedText + text.substring(end);
+        break;
+      case "code":
+        insertedText = `\`\`\`\n${selectedText}\n\`\`\``;
+        newText = text.substring(0, start) + insertedText + text.substring(end);
+        break;
+      default:
+        insertedText = value
+          ? value.replace(/텍스트|대체 텍스트/, selectedText || "텍스트")
+          : "";
+        newText = text.substring(0, start) + insertedText + text.substring(end);
+    }
 
-		setMarkdownContent(newText);
-		textarea.focus();
-		if (insertedText) {
-			textarea.setSelectionRange(start + insertedText.length, start + insertedText.length);
-		}
-	};
+    setMarkdownContent(newText);
+    textarea.focus();
+    if (insertedText) {
+      textarea.setSelectionRange(
+        start + insertedText.length,
+        start + insertedText.length
+      );
+    }
+  };
 
 	const handleSubmit = async () => {
 		const categoryId = getCategoryId(category);
@@ -136,59 +141,71 @@ const BlogPostWritePage = () => {
 	useEffect(() => {
 		if (!isSyncEnabled) return;
 
-		let editorScrollTimer: number | null = null;
-		let previewScrollTimer: number | null = null;
+    let editorScrollTimer: number | null = null;
+    let previewScrollTimer: number | null = null;
 
-		const handleEditorScroll = () => {
-			if (isPreviewScrolling) return;
-			if (editorScrollTimer) cancelAnimationFrame(editorScrollTimer);
+    const handleEditorScroll = () => {
+      if (isPreviewScrolling) return;
+      if (editorScrollTimer) cancelAnimationFrame(editorScrollTimer);
 
-			editorScrollTimer = requestAnimationFrame(() => {
-				if (editorRef.current && previewRef.current) {
-					const currentScrollTop = editorRef.current.scrollTop;
-					if (Math.abs(currentScrollTop - lastEditorScrollTop.current) > scrollThreshold) {
-						setIsEditorScrolling(true);
-						const editorScrollPercentage =
-							currentScrollTop / (editorRef.current.scrollHeight - editorRef.current.clientHeight);
-						previewRef.current.scrollTop =
-							editorScrollPercentage * (previewRef.current.scrollHeight - previewRef.current.clientHeight);
-						lastEditorScrollTop.current = currentScrollTop;
-						setTimeout(() => setIsEditorScrolling(false), 50);
-					}
-				}
-			});
-		};
+      editorScrollTimer = requestAnimationFrame(() => {
+        if (editorRef.current && previewRef.current) {
+          const currentScrollTop = editorRef.current.scrollTop;
+          if (
+            Math.abs(currentScrollTop - lastEditorScrollTop.current) >
+            scrollThreshold
+          ) {
+            setIsEditorScrolling(true);
+            const editorScrollPercentage =
+              currentScrollTop /
+              (editorRef.current.scrollHeight - editorRef.current.clientHeight);
+            previewRef.current.scrollTop =
+              editorScrollPercentage *
+              (previewRef.current.scrollHeight -
+                previewRef.current.clientHeight);
+            lastEditorScrollTop.current = currentScrollTop;
+            setTimeout(() => setIsEditorScrolling(false), 50);
+          }
+        }
+      });
+    };
 
-		const handlePreviewScroll = () => {
-			if (isEditorScrolling) return;
-			if (previewScrollTimer) cancelAnimationFrame(previewScrollTimer);
+    const handlePreviewScroll = () => {
+      if (isEditorScrolling) return;
+      if (previewScrollTimer) cancelAnimationFrame(previewScrollTimer);
 
-			previewScrollTimer = requestAnimationFrame(() => {
-				if (editorRef.current && previewRef.current) {
-					const currentScrollTop = previewRef.current.scrollTop;
-					if (Math.abs(currentScrollTop - lastPreviewScrollTop.current) > scrollThreshold) {
-						setIsPreviewScrolling(true);
-						const previewScrollPercentage =
-							currentScrollTop / (previewRef.current.scrollHeight - previewRef.current.clientHeight);
-						editorRef.current.scrollTop =
-							previewScrollPercentage * (editorRef.current.scrollHeight - editorRef.current.clientHeight);
-						lastPreviewScrollTop.current = currentScrollTop;
-						setTimeout(() => setIsPreviewScrolling(false), 50);
-					}
-				}
-			});
-		};
+      previewScrollTimer = requestAnimationFrame(() => {
+        if (editorRef.current && previewRef.current) {
+          const currentScrollTop = previewRef.current.scrollTop;
+          if (
+            Math.abs(currentScrollTop - lastPreviewScrollTop.current) >
+            scrollThreshold
+          ) {
+            setIsPreviewScrolling(true);
+            const previewScrollPercentage =
+              currentScrollTop /
+              (previewRef.current.scrollHeight -
+                previewRef.current.clientHeight);
+            editorRef.current.scrollTop =
+              previewScrollPercentage *
+              (editorRef.current.scrollHeight - editorRef.current.clientHeight);
+            lastPreviewScrollTop.current = currentScrollTop;
+            setTimeout(() => setIsPreviewScrolling(false), 50);
+          }
+        }
+      });
+    };
 
-		editorRef.current?.addEventListener("scroll", handleEditorScroll);
-		previewRef.current?.addEventListener("scroll", handlePreviewScroll);
+    editorRef.current?.addEventListener("scroll", handleEditorScroll);
+    previewRef.current?.addEventListener("scroll", handlePreviewScroll);
 
-		return () => {
-			editorRef.current?.removeEventListener("scroll", handleEditorScroll);
-			previewRef.current?.removeEventListener("scroll", handlePreviewScroll);
-			if (editorScrollTimer) cancelAnimationFrame(editorScrollTimer);
-			if (previewScrollTimer) cancelAnimationFrame(previewScrollTimer);
-		};
-	}, [isEditorScrolling, isPreviewScrolling, isSyncEnabled]);
+    return () => {
+      editorRef.current?.removeEventListener("scroll", handleEditorScroll);
+      previewRef.current?.removeEventListener("scroll", handlePreviewScroll);
+      if (editorScrollTimer) cancelAnimationFrame(editorScrollTimer);
+      if (previewScrollTimer) cancelAnimationFrame(previewScrollTimer);
+    };
+  }, [isEditorScrolling, isPreviewScrolling, isSyncEnabled]);
 
 	return (
 		<div className="container mx-auto p-4">

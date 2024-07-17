@@ -12,7 +12,7 @@ interface ModalProps {
 const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) => {
   const [question, setQuestion] = useState("");
   const [category, setCategory] = useState("");
-  const [answer, setAnswer] = useState("");
+  const [answer, setAnswer] = useState<string>("");
   const [level, setLevel] = useState("");
   const [options, setOptions] = useState(["", "", "", ""]);
   const [username, setUsername] = useState("아이언맨1");
@@ -20,15 +20,28 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) => {
   const [selectedLevel, setSelectedLevel] = useState("");
 
   const handleSave = () => {
+    const emptyOptionsCount = options.filter((option) => option === "").length;
+
+    if (!question || !category || !answer || !level || emptyOptionsCount > 2) {
+      alert(
+        "모든 필드를 올바르게 입력하고, 선택지를 최소 2개 이상 입력하세요."
+      );
+      return;
+    }
+
+    const timestamp = new Date().toISOString();
     const quizData: QuizData = {
       question,
       category,
-      answer,
+      answer: answer ? Number(answer) : 0,
       level,
       options,
       username,
       correctRate,
+      timestamp,
+      likes: 0,
     };
+
     onSave(quizData);
     onClose();
   };
@@ -47,7 +60,9 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) => {
           <h3>문제</h3>
           <input
             type="text"
-            className="flex-grow h-full border border-gray-300 outline-none box-border px-2"
+            className={`flex-grow h-full border border-gray-300 outline-none box-border px-2 ${
+              !question ? "border-red-500" : ""
+            }`}
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
           />
@@ -55,20 +70,24 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) => {
         <div className="flex gap-7">
           <h3>카테고리</h3>
           <select
-            className="px-3 py-1 bg-gray-200 rounded text-sm"
+            className={`px-3 py-1 bg-gray-200 rounded text-sm ${
+              !category ? "border-red-500" : ""
+            }`}
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
             <option value="">목록</option>
-            <option value="category1">Category 1</option>
-            <option value="category2">Category 2</option>
+            <option value="프론트엔드">프론트엔드</option>
+            <option value="백엔드">백엔드</option>
           </select>
         </div>
         <div className="w-full flex items-center space-x-4">
           <h3>정답</h3>
           <input
-            type="text"
-            className="flex-grow h-full border border-gray-300 outline-none box-border px-2"
+            type="number"
+            className={`flex-grow h-full border border-gray-300 outline-none box-border px-2 ${
+              !answer ? "border-red-500" : ""
+            }`}
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
           />
@@ -76,39 +95,20 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) => {
         <div className="flex gap-4 items-center">
           <h3>난이도</h3>
           <div className="flex gap-5">
-            <button
-              className={`border-2 p-2 ${
-                selectedLevel === "Lv.1" ? "bg-blue-500 text-white" : ""
-              }`}
-              onClick={() => {
-                setLevel("Lv.1");
-                setSelectedLevel("Lv.1");
-              }}
-            >
-              <h3>레벨1</h3>
-            </button>
-            <button
-              className={`border-2 p-2 ${
-                selectedLevel === "Lv.2" ? "bg-blue-500 text-white" : ""
-              }`}
-              onClick={() => {
-                setLevel("Lv.2");
-                setSelectedLevel("Lv.2");
-              }}
-            >
-              <h3>레벨2</h3>
-            </button>
-            <button
-              className={`border-2 p-2 ${
-                selectedLevel === "Lv.3" ? "bg-blue-500 text-white" : ""
-              }`}
-              onClick={() => {
-                setLevel("Lv.3");
-                setSelectedLevel("Lv.3");
-              }}
-            >
-              <h3>레벨3</h3>
-            </button>
+            {["Lv.1", "Lv.2", "Lv.3"].map((lvl, index) => (
+              <button
+                key={index}
+                className={`border-2 p-2 ${
+                  selectedLevel === lvl ? "bg-blue-500 text-white" : ""
+                }`}
+                onClick={() => {
+                  setLevel(`레벨${index + 1}`);
+                  setSelectedLevel(lvl);
+                }}
+              >
+                <h3>{lvl}</h3>
+              </button>
+            ))}
           </div>
         </div>
         <div className="flex gap-4">
@@ -122,7 +122,9 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) => {
                 <h3>{index + 1}번</h3>
                 <input
                   type="text"
-                  className="flex-grow h-full border border-gray-300 outline-none box-border px-2"
+                  className={`flex-grow h-full border border-gray-300 outline-none box-border px-2 ${
+                    option === "" ? "border-red-500" : ""
+                  }`}
                   value={option}
                   onChange={(e) =>
                     setOptions((prevOptions) => {
