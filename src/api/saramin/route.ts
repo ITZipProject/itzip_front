@@ -1,17 +1,68 @@
-// src/api/saramin/route.ts
-import { NextRequest, NextResponse } from 'next/server';
+import axios from 'axios';
 
-export async function GET(req: NextRequest) {
-  const url = 'https://oapi.saramin.co.kr/job-search?access-key=NBaazikxSG5w1HfnfMTecD9RzGIEdtkoJNKGD8vIRusIfik&ind_cd=3&job_mid_cd=2&start=0&count=110';
+const baseUrl = 'https://00f935c6-42a5-448a-8871-ff95c8a2f12a.mock.pstmn.io';
 
+export interface Job {
+  id: string;
+  title: string;
+  industry: {
+    code: string;
+    name: string;
+  };
+  location: {
+    code: string;
+    name: string;
+  };
+  jobType: {
+    code: string;
+    name: string;
+  };
+  jobMidCode: {
+    code: string;
+    name: string;
+  };
+  jobCode: {
+    code: string;
+    name: string;
+  };
+  experienceLevel: {
+    code: number;
+    min: number;
+    max: number;
+    name: string;
+  };
+  requiredEducationLevel: {
+    code: string;
+    name: string;
+  };
+  postedDate: string;
+  recommendations: number;
+  views: number;
+  companyImage: string;
+  url: string;
+}
+
+export async function fetchJobs(): Promise<Job[]> {
   try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error('네트워크 응답이 실패했습니다.');
-    }
-    const data = await response.json();
-    return NextResponse.json(data);
+    const response = await axios.get(`${baseUrl}/job-search`);
+    return response.data.jobs.job.map((job: any) => ({
+      id: job.id,
+      title: job.position.title,
+      industry: job.position.industry,
+      location: job.position.location,
+      jobType: job.position['job-type'],
+      jobMidCode: job.position['job-mid-code'],
+      jobCode: job.position['job-code'],
+      experienceLevel: job.position['experience-level'],
+      requiredEducationLevel: job.position['required-education-level'],
+      // postedDate: moment.unix(job.posting-timestamp).format('YYYY-MM-DD'),
+      recommendations: 0, // Recommendation 정보가 없어서 0으로 임시 설정
+      views: 0, // Views 정보가 없어서 0으로 임시 설정
+      companyImage: '', // 회사 이미지 정보가 없어서 빈 문자열로 임시 설정
+      url: job.url,
+    }));
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error('Error fetching jobs:', error);
+    return [];
   }
 }
