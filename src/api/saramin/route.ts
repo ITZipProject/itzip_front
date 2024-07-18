@@ -40,6 +40,7 @@ export interface Job {
   views: number;
   companyImage: string;
   url: string;
+  company: string;
 }
 
 export async function fetchJobs(): Promise<Job[]> {
@@ -47,6 +48,7 @@ export async function fetchJobs(): Promise<Job[]> {
     const response = await axios.get(`${baseUrl}/job-search`);
     return response.data.jobs.job.map((job: any) => ({
       id: job.id,
+      company: job.company.detail.name,
       title: job.position.title,
       industry: job.position.industry,
       location: job.position.location,

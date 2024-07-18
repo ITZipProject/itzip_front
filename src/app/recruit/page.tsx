@@ -116,8 +116,18 @@ const RecruitPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-center text-3xl font-bold mb-6">채용 정보 목록</h1>
+    <div className="max-w-6xl mx-auto p-6">
+      <h1 className="text-center text-2xl font-bold mb-6">채용 정보 목록</h1>
+      <div className="flex justify-center mb-6">
+        <input
+          type="text"
+          name="search"
+          value={filters.search}
+          onChange={handleFilterChange}
+          className="w-1/3 p-2 border border-gray-300 rounded"
+          placeholder="검색어 입력"
+        />
+      </div>
       <div className="flex justify-center space-x-4 mb-6">
         <button
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -204,16 +214,16 @@ const RecruitPage: React.FC = () => {
         필터 적용
       </button>
       <div className="text-center text-lg mb-6">필터링된 공고 개수: {filteredJobs.length}</div>
-      <div className="grid grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredJobs.map((job) => (
           <div key={job.id} className="p-6 border border-gray-500 rounded-lg shadow-lg">
-            <img src={job.companyImage} alt={job.industry.name} className="w-24 h-24 mx-auto rounded-full mb-4" />
-            <h3 className="text-xl font-bold text-center mb-2">{job.title}</h3>
+            <h3 className="text-lg font-semibold text-center mb-2">{job.company}</h3>
+            <p className="text-lg text-center mb-2">{job.title}</p>
             <p className="text-center text-gray-600 mb-4">{job.industry.name}</p>
             <div className="flex justify-center space-x-4">
               <button
                 className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                onClick={() => window.location.href = job.url}
+                onClick={() => window.open(job.url, '_blank')}
               >
                 이동
               </button>
