@@ -1,7 +1,5 @@
 "use client";
 
-// src/app/saramin/page.tsx
-
 import { useEffect, useState } from 'react';
 import { fetchJobs, Job } from '../../api/saramin/route';
 
@@ -27,6 +25,7 @@ const SaraminPage = () => {
             <h2>{job.title}</h2>
             <p>{job.industry.name}</p>
             <p>{job.location.name}</p>
+            <p>{job.jobType.name}</p>
             <p>{job.experienceLevel.name}</p>
             <a href={job.url} target="_blank" rel="noopener noreferrer" style={{ color: 'blue' }}>자세히 보기</a>
             <br />

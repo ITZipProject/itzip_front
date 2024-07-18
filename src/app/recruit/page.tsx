@@ -1,88 +1,49 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { fetchJobs, Job } from '../../api/saramin/route';
 
-interface Job {
-  id: string;
-  title: string;
-  industry: {
-    code: string;
-    name: string;
-  };
-  location: {
-    code: string;
-    name: string;
-  };
-  jobType: {
-    code: string;
-    name: string;
-  };
-  jobMidCode: {
-    code: string;
-    name: string;
-  };
-  jobCode: {
-    code: string;
-    name: string;
-  };
-  experienceLevel: {
-    code: number;
-    min: number;
-    max: number;
-    name: string;
-  };
-  requiredEducationLevel: {
-    code: string;
-    name: string;
-  };
-  postedDate: string;
-  recommendations: number;
-  views: number;
-  companyImage: string;
-  url: string;
-}
 
-const dummyJobs: Job[] = [
-  {
-    id: '1',
-    title: '[글로벌 AI SaaS][스타트업] 백엔드 서버개발자 채용',
-    industry: { code: '301', name: '솔루션·SI·ERP·CRM' },
-    location: { code: '101240', name: '서울 > 중구' },
-    jobType: { code: '1,10,2', name: '정규직,계약직 (정규직 전환가능),계약직' },
-    jobMidCode: { code: '2', name: 'IT개발·데이터' },
-    jobCode: { code: '201,236,258,302,89,92,118,127,136,142,201,202,221,258,284,284', name: '소프트웨어개발,AWS,Javascript,Node.js,TypeScript,유지보수,프론트엔드,솔루션,인프라,클라우드,API,Azure,GCP,SaaS' },
-    experienceLevel: { code: 3, min: 3, max: 0, name: '신입/경력' },
-    requiredEducationLevel: { code: '8', name: '대학교졸업(4년)이상' },
-    postedDate: '2023-07-01',
-    recommendations: 5,
-    views: 150,
-    companyImage: 'https://via.placeholder.com/100',
-    url: 'https://example.com/job/1',
-  },
-  {
-    id: '2',
-    title: '[글로벌 AI SaaS][스타트업] 프론트엔드 개발자 채용',
-    industry: { code: '301', name: '솔루션·SI·ERP·CRM' },
-    location: { code: '101240', name: '서울 > 중구' },
-    jobType: { code: '1,10,2', name: '정규직,계약직 (정규직 전환가능),계약직' },
-    jobMidCode: { code: '2', name: 'IT개발·데이터' },
-    jobCode: { code: '201,236,258,302,89,92,118,127,136,142,201,202,221,258,284,284', name: '소프트웨어개발,AWS,Javascript,Node.js,TypeScript,유지보수,프론트엔드,솔루션,인프라,클라우드,API,Azure,GCP,SaaS' },
-    experienceLevel: { code: 3, min: 3, max: 0, name: '신입/경력' },
-    requiredEducationLevel: { code: '8', name: '대학교졸업(4년)이상' },
-    postedDate: '2023-06-25',
-    recommendations: 8,
-    views: 200,
-    companyImage: 'https://via.placeholder.com/100',
-    url: 'https://example.com/job/2',
-  },
-  // 추가적인 더미 데이터...
-];
+// const dummyJobs: Job[] = [
+//   {
+//     id: '1',
+//     title: '[글로벌 AI SaaS][스타트업] 백엔드 서버개발자 채용',
+//     industry: { code: '301', name: '솔루션·SI·ERP·CRM' },
+//     location: { code: '101240', name: '서울 > 중구' },
+//     jobType: { code: '1,10,2', name: '정규직,계약직 (정규직 전환가능),계약직' },
+//     jobMidCode: { code: '2', name: 'IT개발·데이터' },
+//     jobCode: { code: '201,236,258,302,89,92,118,127,136,142,201,202,221,258,284,284', name: '소프트웨어개발,AWS,Javascript,Node.js,TypeScript,유지보수,프론트엔드,솔루션,인프라,클라우드,API,Azure,GCP,SaaS' },
+//     experienceLevel: { code: 3, min: 3, max: 0, name: '신입/경력' },
+//     requiredEducationLevel: { code: '8', name: '대학교졸업(4년)이상' },
+//     postedDate: '2023-07-01',
+//     recommendations: 5,
+//     views: 150,
+//     companyImage: 'https://via.placeholder.com/100',
+//     url: 'https://example.com/job/1',
+//   },
+//   {
+//     id: '2',
+//     title: '[글로벌 AI SaaS][스타트업] 프론트엔드 개발자 채용',
+//     industry: { code: '301', name: '솔루션·SI·ERP·CRM' },
+//     location: { code: '101240', name: '서울 > 중구' },
+//     jobType: { code: '1,10,2', name: '정규직,계약직 (정규직 전환가능),계약직' },
+//     jobMidCode: { code: '2', name: 'IT개발·데이터' },
+//     jobCode: { code: '201,236,258,302,89,92,118,127,136,142,201,202,221,258,284,284', name: '소프트웨어개발,AWS,Javascript,Node.js,TypeScript,유지보수,프론트엔드,솔루션,인프라,클라우드,API,Azure,GCP,SaaS' },
+//     experienceLevel: { code: 3, min: 3, max: 0, name: '신입/경력' },
+//     requiredEducationLevel: { code: '8', name: '대학교졸업(4년)이상' },
+//     postedDate: '2023-06-25',
+//     recommendations: 8,
+//     views: 200,
+//     companyImage: 'https://via.placeholder.com/100',
+//     url: 'https://example.com/job/2',
+//   },
+//   // 추가적인 더미 데이터...
+// ];
 
 const RecruitPage: React.FC = () => {
-  const [jobs, setJobs] = useState<Job[]>(dummyJobs);
-  const [filteredJobs, setFilteredJobs] = useState<Job[]>(dummyJobs);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
   const [filters, setFilters] = useState({
-    category: '',
     technology: '',
     location: '',
     education: '',
@@ -92,12 +53,19 @@ const RecruitPage: React.FC = () => {
   });
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const jobsData = await fetchJobs();
+      setJobs(jobsData);
+      setFilteredJobs(jobsData);
+    };
+
+    fetchData();
+  }, []);
+
   const applyFilters = () => {
     let tempJobs: Job[] = [...jobs];
 
-    if (filters.category) {
-      tempJobs = tempJobs.filter(job => job.jobMidCode.code.includes(filters.category));
-    }
     if (filters.technology) {
       tempJobs = tempJobs.filter(job => job.jobCode.code.includes(filters.technology));
     }
@@ -153,12 +121,6 @@ const RecruitPage: React.FC = () => {
       <div className="flex justify-center space-x-4 mb-6">
         <button
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          onClick={() => toggleFilter('category')}
-        >
-          카테고리
-        </button>
-        <button
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           onClick={() => toggleFilter('technology')}
         >
           기술
@@ -183,18 +145,6 @@ const RecruitPage: React.FC = () => {
         </button>
       </div>
       <div className="mb-6">
-        {activeFilter === 'category' && (
-          <div className="flex justify-center mb-2">
-            <input
-              type="text"
-              name="category"
-              value={filters.category}
-              onChange={handleFilterChange}
-              className="w-1/3 p-2 border border-gray-300 rounded"
-              placeholder="카테고리 입력"
-            />
-          </div>
-        )}
         {activeFilter === 'technology' && (
           <div className="flex justify-center mb-2">
             <input
