@@ -217,8 +217,8 @@ const RecruitPage: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredJobs.map((job) => (
           <div key={job.id} className="p-6 border border-gray-500 rounded-lg shadow-lg">
-            <h3 className="text-lg font-semibold text-center mb-2">{job.company}</h3>
-            <p className="text-lg text-center mb-2">{job.title}</p>
+            <h3 className="text-lg font-semibold text-center mb-2">{job.title}</h3>
+            <p className="text-lg text-center mb-2">{job.company}</p>
             <p className="text-center text-gray-600 mb-4">{job.industry.name}</p>
             <div className="flex justify-center space-x-4">
               <button
