@@ -1,26 +1,27 @@
-"use client";
-import { User } from "@prisma/client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+'use client';
+import { User } from '@prisma/client';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface HeaderBarProps {
-  exists?: boolean;
+    exists?: boolean;
 }
 
 export default function HeaderBar({ exists }: HeaderBarProps) {
-  const pathname = usePathname();
-  return (
-    <div className="h-10 bg-main flex justify-between w-screen px-10 items-center">
-      <Link href={"/"}>logo</Link>
-      <div className="flex gap-6">
-        <Link href={"/recruit"}>이력서</Link>
-        <Link href={"/recruit"}>
-          {pathname === "" ? <span>채용공고</span> : <span>채용공고</span>}
-        </Link>
-        <Link href={"/blog"}>기술정보</Link>
-        <Link href={"/quiz"}>학습하기</Link>
-      </div>
-      <Link href={"/profile"}>{!exists ? "로그인" : "마이프로필"}</Link>
-    </div>
-  );
+    const pathname = usePathname();
+    return (
+        <div className="h-10 bg-main flex justify-between w-screen px-10 items-center">
+            <Link href={'/'}>logo</Link>
+            <div className="flex gap-6">
+                <Link href={'/recruit'}>이력서</Link>
+                <Link href={'/recruit'}>
+                    {pathname === '' ? <span>채용공고</span> : <span>채용공고</span>}
+                </Link>
+                <Link href={'/blog'}>기술정보</Link>
+                <Link href={'/quiz'}>학습하기</Link>
+                <Link href={'/algorithm'}>알고리즘</Link>
+            </div>
+            <Link href={'/profile'}>{!exists ? '로그인' : '마이프로필'}</Link>
+        </div>
+    );
 }
