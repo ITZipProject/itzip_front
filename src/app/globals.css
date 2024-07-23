@@ -4,6 +4,6 @@
 
 @layer components {
     .primary-btn {
-        @apply w-full font-medium rounded-[16px] text-center hover:bg-cyan-400 transition-colors;
+        @apply w-full font-medium rounded-[16px] text-center hover:bg-black transition-colors;
     }
 }

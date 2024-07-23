@@ -21,6 +21,9 @@ const config: Config = {
                 headerSize: '16px',
             },
         },
+        screens: {
+            ms: '500px',
+        },
     },
     plugins: [require('@tailwindcss/forms')],
 };
