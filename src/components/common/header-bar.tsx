@@ -1,8 +1,10 @@
 'use client';
-import { User } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useModal } from '@/lib/context/ModalContext';
+import LoginModal from '../auth/loginModal';
+import EmailLoginModal from '../auth/emailLoginModal';
 
 interface HeaderBarProps {
     exists?: boolean;
@@ -11,12 +13,14 @@ interface HeaderBarProps {
 
 export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
     const pathname = usePathname();
+    const { openModal } = useModal();
+
     return (
         <div className="h-[70px] border border-white bg-white flex justify-between w-screen px-10 items-center">
             <Link className="text-logo font-extrabold text-logoSize" href={'/'}>
                 ITZIP
             </Link>
-            <div className="flex gap-[56px] *:text-headerSize *:text-headerText ">
+            <div className="flex gap-[56px] text-headerSize text-headerText">
                 <Link href={'/recruit'}>이력서</Link>
                 <Link href={'/recruit'}>
                     {pathname === '' ? <span>채용공고</span> : <span>채용공고</span>}
@@ -26,11 +30,14 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
             </div>
             <div className="gap-[24px] items-center flex">
                 <Link href={''}>고객센터</Link>
-                <Link href={'/profile'}>
+                <div>
                     {!exists ? (
-                        <div className="border px-[20px] py-[10px] rounded-[16px] border-opacity-10">
+                        <button
+                            onClick={() => openModal('signupModal')}
+                            className="border px-[20px] py-[10px] rounded-[16px] border-opacity-10"
+                        >
                             로그인
-                        </div>
+                        </button>
                     ) : (
                         <Image
                             src={profileImage || ''}
@@ -40,8 +47,10 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
                             alt={'profileImage'}
                         />
                     )}
-                </Link>
+                </div>
             </div>
+            <LoginModal modalId="signupModal" />
+            <EmailLoginModal modalId="signinModal" />
         </div>
     );
 }
