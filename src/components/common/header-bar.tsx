@@ -21,12 +21,20 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
                 ITZIP
             </Link>
             <div className="flex gap-[56px] text-headerSize text-headerText">
-                <Link href={'/recruit'}>이력서</Link>
+                {!exists ? (
+                    <button onClick={() => openModal('signupModal')}>이력서</button>
+                ) : (
+                    <Link href={'/resume'}>이력서</Link>
+                )}
                 <Link href={'/recruit'}>
                     {pathname === '' ? <span>채용공고</span> : <span>채용공고</span>}
                 </Link>
                 <Link href={'/blog'}>기술정보</Link>
-                <Link href={'/quiz'}>학습하기</Link>
+                {!exists ? (
+                    <button onClick={() => openModal('signupModal')}>학습하기</button>
+                ) : (
+                    <Link href={'/quiz'}>학습하기</Link>
+                )}
             </div>
             <div className="gap-[24px] items-center flex">
                 <Link href={''}>고객센터</Link>
@@ -39,13 +47,15 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
                             로그인
                         </button>
                     ) : (
-                        <Image
-                            src={profileImage || ''}
-                            width={40}
-                            height={40}
-                            className="rounded-lg size-[40px]"
-                            alt={'profileImage'}
-                        />
+                        <Link href={'/profile'}>
+                            <Image
+                                src={profileImage || ''}
+                                width={40}
+                                height={40}
+                                className="rounded-lg size-[40px]"
+                                alt={'profileImage'}
+                            />
+                        </Link>
                     )}
                 </div>
             </div>

@@ -13,7 +13,7 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const [openModals, setOpenModals] = useState<string[]>([]);
 
     const openModal = (modalId: string) => {
-        setOpenModals((prevModals) => [...prevModals, modalId]);
+        setOpenModals([modalId]);
     };
     const closeModal = (modalId: string) => {
         setOpenModals((prevModals) => prevModals.filter((id) => id !== modalId));
