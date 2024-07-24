@@ -2,10 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer components {
-  .primary-btn {
-    @apply w-full bg-main text-white font-medium rounded-md text-center hover:bg-cyan-400 transition-colors;
-  }
+    .primary-btn {
+        @apply w-full font-medium rounded-[16px] text-center hover:bg-black transition-colors;
+    }
 }
-
