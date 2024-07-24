@@ -33,7 +33,7 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
         {!exists ? (
           <button onClick={() => openModal('signupModal')}>학습하기</button>
         ) : (
-          <Link href={'/algorithm'}>알고리즘</Link>
+          <Link href={'/algorithm'}>학습하기</Link>
         )}
       </div>
       <div className="gap-[24px] items-center flex">
