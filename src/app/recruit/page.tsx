@@ -2,43 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { fetchJobs, Job } from '../../api/saramin/route';
-
-
-// const dummyJobs: Job[] = [
-//   {
-//     id: '1',
-//     title: '[글로벌 AI SaaS][스타트업] 백엔드 서버개발자 채용',
-//     industry: { code: '301', name: '솔루션·SI·ERP·CRM' },
-//     location: { code: '101240', name: '서울 > 중구' },
-//     jobType: { code: '1,10,2', name: '정규직,계약직 (정규직 전환가능),계약직' },
-//     jobMidCode: { code: '2', name: 'IT개발·데이터' },
-//     jobCode: { code: '201,236,258,302,89,92,118,127,136,142,201,202,221,258,284,284', name: '소프트웨어개발,AWS,Javascript,Node.js,TypeScript,유지보수,프론트엔드,솔루션,인프라,클라우드,API,Azure,GCP,SaaS' },
-//     experienceLevel: { code: 3, min: 3, max: 0, name: '신입/경력' },
-//     requiredEducationLevel: { code: '8', name: '대학교졸업(4년)이상' },
-//     postedDate: '2023-07-01',
-//     recommendations: 5,
-//     views: 150,
-//     companyImage: 'https://via.placeholder.com/100',
-//     url: 'https://example.com/job/1',
-//   },
-//   {
-//     id: '2',
-//     title: '[글로벌 AI SaaS][스타트업] 프론트엔드 개발자 채용',
-//     industry: { code: '301', name: '솔루션·SI·ERP·CRM' },
-//     location: { code: '101240', name: '서울 > 중구' },
-//     jobType: { code: '1,10,2', name: '정규직,계약직 (정규직 전환가능),계약직' },
-//     jobMidCode: { code: '2', name: 'IT개발·데이터' },
-//     jobCode: { code: '201,236,258,302,89,92,118,127,136,142,201,202,221,258,284,284', name: '소프트웨어개발,AWS,Javascript,Node.js,TypeScript,유지보수,프론트엔드,솔루션,인프라,클라우드,API,Azure,GCP,SaaS' },
-//     experienceLevel: { code: 3, min: 3, max: 0, name: '신입/경력' },
-//     requiredEducationLevel: { code: '8', name: '대학교졸업(4년)이상' },
-//     postedDate: '2023-06-25',
-//     recommendations: 8,
-//     views: 200,
-//     companyImage: 'https://via.placeholder.com/100',
-//     url: 'https://example.com/job/2',
-//   },
-//   // 추가적인 더미 데이터...
-// ];
+import RegionCheckboxes from '@/components/recruit/page';
 
 const RecruitPage: React.FC = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -70,7 +34,7 @@ const RecruitPage: React.FC = () => {
       tempJobs = tempJobs.filter(job => job.jobCode.code.includes(filters.technology));
     }
     if (filters.location) {
-      tempJobs = tempJobs.filter(job => job.location.code.includes(filters.location));
+      tempJobs = tempJobs.filter(job => job.location.name.split(' &gt; ')[0].includes(filters.location));
     }
     if (filters.education) {
       tempJobs = tempJobs.filter(job => job.requiredEducationLevel.code.includes(filters.education));
@@ -169,13 +133,9 @@ const RecruitPage: React.FC = () => {
         )}
         {activeFilter === 'location' && (
           <div className="flex justify-center mb-2">
-            <input
-              type="text"
-              name="location"
-              value={filters.location}
-              onChange={handleFilterChange}
-              className="w-1/3 p-2 border border-gray-300 rounded"
-              placeholder="지역 입력"
+            <RegionCheckboxes
+              selectedRegion={filters.location}
+              setSelectedRegion={(region: string) => setFilters({ ...filters, location: region })}
             />
           </div>
         )}
@@ -220,6 +180,7 @@ const RecruitPage: React.FC = () => {
             <h3 className="text-lg font-semibold text-center mb-2">{job.title}</h3>
             <p className="text-lg text-center mb-2">{job.company}</p>
             <p className="text-center text-gray-600 mb-4">{job.industry.name}</p>
+            <p className="text-center text-gray-600 mb-4">{job.location.name.split(' &gt;')}</p>
             <div className="flex justify-center space-x-4">
               <button
                 className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
