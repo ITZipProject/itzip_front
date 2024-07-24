@@ -42,13 +42,7 @@ export default function EditProfile() {
             </>
           ) : null}
         </label>
-        <input
-          onChange={onImageChange}
-          type="file"
-          id="photo"
-          name="photo"
-          className="hidden"
-        />
+        <input onChange={onImageChange} type="file" id="photo" name="photo" className="hidden" />
         <Input
           name="nickname"
           required

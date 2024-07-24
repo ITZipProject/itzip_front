@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { QuizData } from "../../types/quiz/quiz";
-import CorrectModal from "../quiz/CorrectModal";
-import IncorrectModal from "../quiz/IncorrectModal";
+import React, { useState } from 'react';
+import { QuizData } from '../../types/quiz/quiz';
+import CorrectModal from '../quiz/CorrectModal';
+import IncorrectModal from '../quiz/IncorrectModal';
 
 interface ModalProps {
   isOpen: boolean;
@@ -60,9 +60,7 @@ const QuizShowModal: React.FC<ModalProps & QuizData> = ({
             <button
               key={index}
               className={`flex justify-center items-center w-2/3 text-center text-xl py-2 ${
-                selectedOption === index
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200"
+                selectedOption === index ? 'bg-blue-500 text-white' : 'bg-gray-200'
               }`}
               onClick={() => handleOptionClick(index)}
             >
@@ -79,9 +77,7 @@ const QuizShowModal: React.FC<ModalProps & QuizData> = ({
       </div>
 
       {isCorrectModalOpen && <CorrectModal onClose={closeCorrectModal} />}
-      {isIncorrectModalOpen && (
-        <IncorrectModal onClose={closeIncorrectModal} answer={answer} />
-      )}
+      {isIncorrectModalOpen && <IncorrectModal onClose={closeIncorrectModal} answer={answer} />}
     </div>
   );
 };

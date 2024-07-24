@@ -6,31 +6,31 @@ import { createResumeSchemaType } from '@/utils/createResumeSchema';
 interface IDetailResumeProps {}
 
 const DetailResumeLayout: React.FunctionComponent<IDetailResumeProps> = (props) => {
-    const ResumeId = parseInt(usePathname().split('/')[2]);
-    const [ResumeData, setResumeData] = React.useState<createResumeSchemaType>();
-    React.useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await DetailResumeApi(ResumeId);
-                setResumeData(data?.resume);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+  const ResumeId = parseInt(usePathname().split('/')[2]);
+  const [ResumeData, setResumeData] = React.useState<createResumeSchemaType>();
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await DetailResumeApi(ResumeId);
+        setResumeData(data?.resume);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-        fetchData();
-    }, []);
+    fetchData();
+  }, []);
 
-    return (
-        ResumeData && (
-            <div>
-                <p>{ResumeData.email}</p>
-                <p>{ResumeData.phone}</p>
-                <p>{ResumeData.resume_title}</p>
-                <p>{ResumeData.introduction}</p>
-            </div>
-        )
-    );
+  return (
+    ResumeData && (
+      <div>
+        <p>{ResumeData.email}</p>
+        <p>{ResumeData.phone}</p>
+        <p>{ResumeData.resume_title}</p>
+        <p>{ResumeData.introduction}</p>
+      </div>
+    )
+  );
 };
 
 export default DetailResumeLayout;

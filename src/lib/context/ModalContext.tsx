@@ -2,34 +2,34 @@
 import { FC, ReactNode, createContext, useContext, useState } from 'react';
 
 interface ModalContextType {
-    openModals: string[];
-    openModal: (modalId: string) => void;
-    closeModal: (modalId: string) => void;
+  openModals: string[];
+  openModal: (modalId: string) => void;
+  closeModal: (modalId: string) => void;
 }
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
 export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
-    const [openModals, setOpenModals] = useState<string[]>([]);
+  const [openModals, setOpenModals] = useState<string[]>([]);
 
-    const openModal = (modalId: string) => {
-        setOpenModals([modalId]);
-    };
-    const closeModal = (modalId: string) => {
-        setOpenModals((prevModals) => prevModals.filter((id) => id !== modalId));
-    };
+  const openModal = (modalId: string) => {
+    setOpenModals([modalId]);
+  };
+  const closeModal = (modalId: string) => {
+    setOpenModals((prevModals) => prevModals.filter((id) => id !== modalId));
+  };
 
-    return (
-        <ModalContext.Provider value={{ openModals, openModal, closeModal }}>
-            {children}
-        </ModalContext.Provider>
-    );
+  return (
+    <ModalContext.Provider value={{ openModals, openModal, closeModal }}>
+      {children}
+    </ModalContext.Provider>
+  );
 };
 
 export const useModal = (): ModalContextType => {
-    const context = useContext(ModalContext);
-    if (!context) {
-        throw new Error('useModal must be used within a ModalProvider');
-    }
-    return context;
+  const context = useContext(ModalContext);
+  if (!context) {
+    throw new Error('useModal must be used within a ModalProvider');
+  }
+  return context;
 };

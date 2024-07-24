@@ -4,11 +4,7 @@ import { z } from 'zod';
 import bcrypt from 'bcrypt';
 
 import { redirect } from 'next/navigation';
-import {
-  PASSWORD_MIN_LENGTH,
-  PASSWORD_REGEX,
-  PASSWORD_REGEX_ERROR,
-} from '@/lib/constants';
+import { PASSWORD_MIN_LENGTH, PASSWORD_REGEX, PASSWORD_REGEX_ERROR } from '@/lib/constants';
 import db from '@/lib/db';
 import getSession from '@/lib/session';
 
@@ -34,9 +30,7 @@ const formSchema = z
       .string()
       .min(PASSWORD_MIN_LENGTH, '비밀번호는 최소 4자 입니다.')
       .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
-    passwordConfirm: z
-      .string()
-      .min(PASSWORD_MIN_LENGTH, '비밀번호는 최소 4자 입니다.'),
+    passwordConfirm: z.string().min(PASSWORD_MIN_LENGTH, '비밀번호는 최소 4자 입니다.'),
   })
   .superRefine(async ({ nickname }, ctx) => {
     const user = await db.user.findUnique({

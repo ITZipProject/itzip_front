@@ -31,7 +31,7 @@ interface Props {
 const RegionCheckboxes: React.FC<Props> = ({ selectedRegion, setSelectedRegion }) => {
   return (
     <div className="container flex flex-col w-64">
-      {regions.map(region => (
+      {regions.map((region) => (
         <div className="region mb-2" key={region.id}>
           <input
             type="radio"

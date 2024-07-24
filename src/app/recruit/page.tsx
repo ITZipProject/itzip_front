@@ -31,21 +31,26 @@ const RecruitPage: React.FC = () => {
     let tempJobs: Job[] = [...jobs];
 
     if (filters.technology) {
-      tempJobs = tempJobs.filter(job => job.jobCode.code.includes(filters.technology));
+      tempJobs = tempJobs.filter((job) => job.jobCode.code.includes(filters.technology));
     }
     if (filters.location) {
-      tempJobs = tempJobs.filter(job => job.location.name.split(' &gt; ')[0].includes(filters.location));
+      tempJobs = tempJobs.filter((job) =>
+        job.location.name.split(' &gt; ')[0].includes(filters.location),
+      );
     }
     if (filters.education) {
-      tempJobs = tempJobs.filter(job => job.requiredEducationLevel.code.includes(filters.education));
+      tempJobs = tempJobs.filter((job) =>
+        job.requiredEducationLevel.code.includes(filters.education),
+      );
     }
     if (filters.experience) {
-      tempJobs = tempJobs.filter(job => job.experienceLevel.code.toString().includes(filters.experience));
+      tempJobs = tempJobs.filter((job) =>
+        job.experienceLevel.code.toString().includes(filters.experience),
+      );
     }
     if (filters.search) {
       tempJobs = tempJobs.filter(
-        job =>
-          job.industry.name.includes(filters.search) || job.title.includes(filters.search)
+        (job) => job.industry.name.includes(filters.search) || job.title.includes(filters.search),
       );
     }
 

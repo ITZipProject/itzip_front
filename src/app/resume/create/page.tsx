@@ -1,5 +1,5 @@
-import CreateResumeLayout from "@/components/layout/createResumeLayout";
-import * as React from "react";
+import CreateResumeLayout from '@/components/layout/createResumeLayout';
+import * as React from 'react';
 
 interface IAppProps {}
 
