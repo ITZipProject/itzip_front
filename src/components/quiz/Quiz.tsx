@@ -61,11 +61,7 @@ const Quiz: React.FC<QuizProps> = ({ quizzes, onAddQuiz }) => {
                 ))}
             </div>
             {isModalOpen && (
-                <MakeQuizModal
-                    isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    onSave={handleAddQuiz}
-                />
+                <MakeQuizModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
             )}
         </div>
     );
