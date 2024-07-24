@@ -1,12 +1,11 @@
-"use client";
-import Button from "@/components/common/button";
-import Input from "@/components/common/input";
-import SocialLogin from "@/components/auth/social-login";
-import React from "react";
-import { useFormState } from "react-dom";
-import { login } from "./action";
-import { PASSWORD_MIN_LENGTH } from "@/lib/constants";
-import Link from "next/link";
+'use client';
+import Button from '@/components/common/button';
+import Input from '@/components/common/input';
+import React from 'react';
+import { useFormState } from 'react-dom';
+import { login } from './action';
+import { PASSWORD_MIN_LENGTH } from '@/lib/constants';
+import Link from 'next/link';
 
 export default function SignIn() {
   const [state, dispatch] = useFormState(login, null);
@@ -15,7 +14,8 @@ export default function SignIn() {
       <h1 className="font-bold text-lg pb-4">로그인</h1>
       <form
         action={dispatch}
-        className="w-full flex flex-col justify-center items-center gap-2 pb-4">
+        className="w-full flex flex-col justify-center items-center gap-2 pb-4"
+      >
         <Input
           name="email"
           type="email"
@@ -34,7 +34,7 @@ export default function SignIn() {
 
         <div className="flex justify-end w-full">비밀번호 찾기</div>
 
-        <Button text="로그인" />
+        <Button modalId="" text="로그인" />
       </form>
       <div className="flex gap-2 my-4">
         <span>계정이 없어요! </span>
@@ -42,7 +42,6 @@ export default function SignIn() {
           회원가입
         </Link>
       </div>
-      <SocialLogin />
     </div>
   );
 }
