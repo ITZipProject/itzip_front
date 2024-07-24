@@ -1,7 +1,7 @@
 {
     "root": true,
     "parser": "@typescript-eslint/parser",
-    "plugins": ["@typescript-eslint", "prettier", "import"],
+    "plugins": ["@typescript-eslint", "prettier", "import", "tailwindcss"],
     "parserOptions": {
         "project": "./tsconfig.json",
         "createDefaultProgram": true
@@ -13,26 +13,21 @@
     },
     "ignorePatterns": ["node_modules/", "next.config.mjs"],
     "extends": [
-        "airbnb",
-        "airbnb-typescript",
-        "airbnb/hooks",
         "next/core-web-vitals",
-        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-type-checked",
         "plugin:prettier/recommended",
-        "prettier",
-        "eslint-config-prettier",
         "plugin:import/recommended",
         "plugin:import/typescript",
-        "eslint:recommended",
         "plugin:react/recommended",
         "plugin:react-hooks/recommended",
+        "plugin:tailwindcss/recommended",
         "plugin:storybook/recommended"
     ],
     "settings": {
         "import/resolver": {
             "typescript": {}
         },
-        "import/parsers": { "@typescript-eslint/parser": [".ts"] }
+        "import/parsers": { "@typescript-eslint/parser": [".ts", ".tsx"] }
     },
     "rules": {
         "@typescript-eslint/no-explicit-any": "off",
@@ -42,36 +37,15 @@
             2,
             { "namedComponents": ["arrow-function", "function-declaration"] }
         ],
-        "sort-imports": [
-            "error",
-            {
-                "ignoreCase": false,
-                "ignoreDeclarationSort": false,
-                "ignoreMemberSort": false,
-                "memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
-                "allowSeparatedGroups": false
-            }
-        ],
         "import/order": [
             "error",
             {
                 "groups": [
                     ["builtin", "external"],
                     "internal",
-                    ["parent", "sibling"],
-                    "index",
+                    ["parent", "sibling", "index"],
                     "object"
                 ],
-                "pathGroups": [
-                    {
-                        "pattern": "~/**",
-                        "group": "external",
-                        "position": "before"
-                    },
-                    { "pattern": "@*", "group": "external", "position": "after" },
-                    { "pattern": "@*/**", "group": "external", "position": "after" }
-                ],
-                "pathGroupsExcludedImportTypes": ["react"],
                 "newlines-between": "always",
                 "alphabetize": {
                     "order": "asc",
