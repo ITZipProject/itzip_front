@@ -1,6 +1,10 @@
 import React from 'react';
 
-const Main = () => {
+interface MainProps {
+    searchTerm: string;
+}
+
+const Main: React.FC<MainProps> = ({ searchTerm }) => {
     const quizData = [
         { id: '1918', title: '후위 표기식', solvedCount: '1,044명이 푼 문제' },
         { id: '1919', title: '중위 표기식', solvedCount: '945명이 푼 문제' },
@@ -19,6 +23,10 @@ const Main = () => {
         { id: '1922', title: '이진 탐색', solvedCount: '750명이 푼 문제' },
     ];
 
+    const filteredQuizData = quizData.filter(
+        (quiz) => quiz.title.includes(searchTerm) || quiz.id.includes(searchTerm),
+    );
+
     return (
         <div className="flex flex-col gap-3 h-full p-4 bg-white border-2 rounded-md shadow-md overflow-auto">
             <div className="flex justify-end gap-8 mb-4">
@@ -35,7 +43,7 @@ const Main = () => {
                     <h3>제목</h3>
                     <h3>푼 사람 수</h3>
                 </div>
-                {quizData.map((quiz, index) => (
+                {filteredQuizData.map((quiz, index) => (
                     <div key={index} className="flex justify-between p-5 border-b-2">
                         <h3>{quiz.id}</h3>
                         <h3>{quiz.title}</h3>

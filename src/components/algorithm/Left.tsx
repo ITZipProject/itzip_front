@@ -1,10 +1,22 @@
 import React from 'react';
 
-const Left = () => {
+interface LeftProps {
+    onSearchChange: (term: string) => void;
+}
+
+const Left: React.FC<LeftProps> = ({ onSearchChange }) => {
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        onSearchChange(event.target.value);
+    };
+
     return (
         <div className="flex flex-col gap-4 p-4 border-2 rounded-md shadow-md bg-white h-full">
             <div className="mb-4">
-                <input className="w-full px-3 py-2 border rounded-md" placeholder="Search..." />
+                <input
+                    className="w-full px-3 py-2 border rounded-md"
+                    placeholder="Search..."
+                    onChange={handleSearchChange}
+                />
             </div>
             <div>
                 <h3 className="text-lg font-semibold mb-2">태그 순위</h3>
