@@ -1,12 +1,15 @@
 'use client';
 
 import React from 'react';
-import Quiz from '../../components/quiz/Quiz';
-import Filter from '../../components/quiz/Filter';
-import useQuizzes from '../../hooks/quiz/useQuizzes';
+import Quiz from '../../../components/quiz/Quiz';
+import Filter from '../../../components/quiz/Filter';
+import useQuizzes from '../../../hooks/quiz/useQuizzes';
+import { useAtom } from 'jotai';
+import { difficultyAtom } from '../../../lib/atoms/atoms';
 
 export default function Home() {
   const { quizzes, filteredQuizzes, setFilteredQuizzes, handleAddQuiz } = useQuizzes();
+  const [difficulty] = useAtom(difficultyAtom);
 
   return (
     <div className="flex w-full h-screen overflow-y-auto">

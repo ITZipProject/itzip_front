@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-
+import { useAtom } from 'jotai';
+import { difficultyAtom } from '../../lib/atoms/atoms';
 import { QuizData } from '../../types/quiz/quiz';
 
 interface FilterProps {
@@ -17,15 +18,19 @@ const ratings = [
 ];
 
 const Filter: React.FC<FilterProps> = ({ quizzes, setFilteredQuizzes }) => {
-  const [difficulty, setDifficulty] = useState<string | null>(null);
+  const [difficulty, setDifficulty] = useAtom(difficultyAtom);
   const [category, setCategory] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    applyFilter();
+  }, [difficulty, category, searchTerm]);
 
   const applyFilter = () => {
     const filtered = quizzes.filter((item) => {
       const matchesSearchTerm = searchTerm ? item.question.includes(searchTerm) : true;
       const matchesCategory = category ? item.category === category : true;
-      const matchesRating = difficulty !== null ? item.level === difficulty : true;
+      const matchesRating = difficulty ? item.level === difficulty : true;
 
       return matchesSearchTerm && matchesCategory && matchesRating;
     });
@@ -55,10 +60,8 @@ const Filter: React.FC<FilterProps> = ({ quizzes, setFilteredQuizzes }) => {
           {ratings.map((rating) => (
             <button
               key={rating.value}
-              className={`border-2 p-2 ${
-                difficulty === rating.value ? 'bg-blue-500 text-white' : ''
-              }`}
-              onClick={() => setDifficulty(difficulty === rating.value ? null : rating.value)}
+              className={`border-2 p-2 ${difficulty === rating.value ? 'bg-blue-500 text-white' : ''}`}
+              onClick={() => setDifficulty(difficulty === rating.value ? '' : rating.value)}
             >
               <h3>{rating.label}</h3>
             </button>
@@ -76,14 +79,6 @@ const Filter: React.FC<FilterProps> = ({ quizzes, setFilteredQuizzes }) => {
           <option value="프론트엔드">프론트엔드</option>
           <option value="백엔드">백엔드</option>
         </select>
-      </div>
-      <div>
-        <button
-          className="border border-gray-400 bg-blue-500 text-white py-2 px-3 rounded"
-          onClick={applyFilter}
-        >
-          문제 찾기
-        </button>
       </div>
     </div>
   );

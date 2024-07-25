@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Left from '../../components/algorithm/Left';
-import Main from '../../components/algorithm/Main';
-import Top from '../../components/algorithm/Top';
+import Left from '../../../components/algorithm/Left';
+import Main from '../../../components/algorithm/Main';
+import Top from '../../../components/algorithm/Top';
 import { fetchAlgorithmData } from '@/api/algorithm/fetchAlgorithmData';
 
 interface AlgorithmData {
