@@ -22,7 +22,7 @@ const Tooltip: React.FC<TooltipProps> = ({ weekStart, count, position }) => {
 
   return (
     <div
-      className="absolute z-10 bg-white border border-gray-200 p-3 rounded-lg shadow-lg text-sm whitespace-nowrap tooltip text-center"
+      className="tooltip absolute z-10 whitespace-nowrap rounded-lg border border-gray-200 bg-white p-3 text-center text-sm shadow-lg"
       style={{
         left: `${position.x}px`,
         top: `${position.y - 15}px`,
@@ -31,7 +31,7 @@ const Tooltip: React.FC<TooltipProps> = ({ weekStart, count, position }) => {
     >
       <div className="relative">
         <div className="font-semibold text-gray-800">{dateString}</div>
-        <div className="text-blue-600 mt-1">{`${count}개의 글 등록`}</div>
+        <div className="mt-1 text-blue-600">{`${count}개의 글 등록`}</div>
       </div>
       <style jsx>{`
         .tooltip::after {
