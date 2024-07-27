@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { Children, isValidElement, cloneElement } from 'react';
+import ReactMarkdown, { Components } from 'react-markdown';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
-import { Components } from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface MarkdownPreviewProps {
   content: string;
@@ -27,9 +27,9 @@ const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewProps>(
     }, [formattedContent]);
 
     const components: Partial<Components> = {
-      code({ node, inline, className, children, ...props }: any) {
+      code({ className, children, ...props }) {
         const match = /language-(\w+)/.exec(className || '');
-        return !inline && match ? (
+        return match ? (
           <SyntaxHighlighter style={vscDarkPlus as any} language={match[1]} PreTag="div" {...props}>
             {String(children).replace(/\n$/, '')}
           </SyntaxHighlighter>
@@ -39,50 +39,76 @@ const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewProps>(
           </code>
         );
       },
-      h1: ({ node, children, ...props }) => {
+      h1: ({ children, ...props }) => {
         const isFirstHeader = Array.isArray(children) && children[0] === '<!-- first-header -->';
-        const className = `text-2xl font-bold my-4 ${isFirstHeader ? '' : 'pt-10'}`;
+        const className = `text-4xl font-bold my-2 ${isFirstHeader ? '' : 'pt-12'}`;
         return (
           <h1 className={className} {...props}>
             {isFirstHeader && Array.isArray(children) ? children.slice(1) : children}
           </h1>
         );
       },
-      h2: ({ node, children, ...props }) => {
+      h2: ({ children, ...props }) => {
         const isFirstHeader = Array.isArray(children) && children[0] === '<!-- first-header -->';
-        const className = `text-xl font-bold my-3 ${isFirstHeader ? '' : 'pt-6'}`;
+        const className = `text-3xl font-bold my-2 ${isFirstHeader ? '' : 'pt-9'}`;
         return (
           <h2 className={className} {...props}>
             {isFirstHeader && Array.isArray(children) ? children.slice(1) : children}
           </h2>
         );
       },
-      h3: ({ node, children, ...props }) => {
+      h3: ({ children, ...props }) => {
         const isFirstHeader = Array.isArray(children) && children[0] === '<!-- first-header -->';
-        const className = `text-lg font-bold my-2 ${isFirstHeader ? '' : 'pt-4'}`;
+        const className = `text-2xl font-bold my-2 ${isFirstHeader ? '' : 'pt-6'}`;
         return (
           <h3 className={className} {...props}>
             {isFirstHeader && Array.isArray(children) ? children.slice(1) : children}
           </h3>
         );
       },
-
+      h4: ({ children, ...props }) => {
+        const isFirstHeader = Array.isArray(children) && children[0] === '<!-- first-header -->';
+        const className = `text-xl font-bold my-2 ${isFirstHeader ? '' : 'pt-4'}`;
+        return (
+          <h3 className={className} {...props}>
+            {isFirstHeader && Array.isArray(children) ? children.slice(1) : children}
+          </h3>
+        );
+      },
+      h5: ({ children, ...props }) => {
+        const isFirstHeader = Array.isArray(children) && children[0] === '<!-- first-header -->';
+        const className = `text-lg font-bold my-2 ${isFirstHeader ? '' : 'pt-2'}`;
+        return (
+          <h3 className={className} {...props}>
+            {isFirstHeader && Array.isArray(children) ? children.slice(1) : children}
+          </h3>
+        );
+      },
+      h6: ({ children, ...props }) => {
+        const isFirstHeader = Array.isArray(children) && children[0] === '<!-- first-header -->';
+        const className = `font-bold my-2 ${isFirstHeader ? '' : 'pt-1'}`;
+        return (
+          <h3 className={className} {...props}>
+            {isFirstHeader && Array.isArray(children) ? children.slice(1) : children}
+          </h3>
+        );
+      },
       ul: ({ children, className, ...props }) => (
-        <ul className={`list-disc pl-4 my-2 ${className || ''}`} {...props}>
+        <ul className={`my-2 list-disc pl-4 ${className || ''}`} {...props}>
           {children}
         </ul>
       ),
       ol: ({ children, className, ...props }) => (
-        <ol className={`pl-8 my-2 ${className || ''} list-decimal`} {...props}>
+        <ol className={`my-2 pl-8 ${className || ''} list-decimal`} {...props}>
           {children}
         </ol>
       ),
       li: ({ children, ...props }) => {
         return (
           <li className="my-1 pl-1" {...props}>
-            {React.Children.map(children, (child) => {
-              if (React.isValidElement(child) && (child.type === 'ul' || child.type === 'ol')) {
-                return React.cloneElement(child, { ...child.props, className: 'mt-2 ml-4' });
+            {Children.map(children, (child) => {
+              if (isValidElement(child) && (child.type === 'ul' || child.type === 'ol')) {
+                return cloneElement(child, { ...child.props, className: 'mt-2 ml-4' });
               }
               return child;
             })}
@@ -109,14 +135,14 @@ const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewProps>(
         );
       },
       blockquote: ({ ...props }) => (
-        <blockquote className="border-l-4 border-gray-300 pl-4 my-2 italic" {...props} />
+        <blockquote className="my-2 border-l-4 border-gray-300 pl-4 italic" {...props} />
       ),
     };
 
     return (
       <div
         ref={ref}
-        className="w-full h-96 p-2 border rounded overflow-auto prose prose-sm max-w-none pb-24 bg-white"
+        className="prose prose-sm h-96 w-full max-w-none overflow-auto rounded border bg-white p-2 pb-24"
         id="preview-container"
       >
         <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>

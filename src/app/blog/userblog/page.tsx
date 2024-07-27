@@ -1,4 +1,5 @@
 import React from 'react';
+
 import WeeklyContributionGraph from '@/components/blog/userblog/WeeklyContributionGraph';
 
 const generateContributionData = () => {
@@ -22,8 +23,8 @@ const UserBlogPage = () => {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">User Blog</h1>
-      <div className="max-w-lg mx-auto">
+      <h1 className="mb-6 text-3xl font-bold">User Blog</h1>
+      <div className="mx-auto max-w-lg">
         <WeeklyContributionGraph data={contributionData} />
       </div>
     </div>

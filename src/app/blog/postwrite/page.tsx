@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
+
 import CategorySelector from '@/components/blog/postwrite/CategorySelector';
 import MarkdownEditor from '@/components/blog/postwrite/MarkdownEditor';
 import MarkdownPreview from '@/components/blog/postwrite/MarkdownPreview';
@@ -42,9 +43,9 @@ const BlogPostWritePage = () => {
     setMarkdownContent(content);
   };
 
-  const handleTitleChange = (newTitle: string) => {
-    setTitle(newTitle);
-  };
+  // const handleTitleChange = (newTitle: string) => {
+  //   setTitle(newTitle);
+  // };
 
   const handleToolbarAction = (action: string, value?: string) => {
     const textarea = document.querySelector('textarea') as HTMLTextAreaElement;
@@ -105,9 +106,7 @@ const BlogPostWritePage = () => {
     };
 
     console.log('Sending article data:', articleData);
-
     try {
-      // response를 백엔드 API 엔드포인트로 추후 변경
       const response = await fetch('/api/articles', {
         method: 'POST',
         headers: {
@@ -117,11 +116,9 @@ const BlogPostWritePage = () => {
       });
 
       if (response.ok) {
-        const result = await response.json();
+        const result = (await response.json()) as { message: string };
         console.log('Server response:', result);
-        // 성공 처리 (예: 알림 표시, 페이지 이동 등)
         alert('글이 성공적으로 작성되었습니다.');
-        // 필요하다면 여기에 페이지 이동 로직을 추가할 수 있습니다.
       } else {
         const errorText = await response.text();
         console.error('Failed to create article:', errorText);
@@ -195,11 +192,11 @@ const BlogPostWritePage = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">블로그 글 작성/수정</h1>
+      <h1 className="mb-4 text-2xl font-bold">블로그 글 작성/수정</h1>
       <CategorySelector onCategoryChange={handleCategoryChange} />
       <input
         type="text"
-        className="w-full p-2 text-3xl font-bold border-b mb-4"
+        className="mb-4 w-full border-b p-2 text-3xl font-bold"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="제목을 입력하세요..."
@@ -219,24 +216,24 @@ const BlogPostWritePage = () => {
           <MarkdownPreview content={markdownContent} ref={previewRef} />
         </div>
       </div>
-      <div className="mt-4 flex justify-between items-center">
+      <div className="mt-4 flex items-center justify-between">
         <button
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          onClick={handleSubmit}
+          className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+          onClick={() => void handleSubmit()}
         >
           글 작성 완료
         </button>
         <div className="flex items-center">
-          <label className="inline-flex items-center cursor-pointer">
+          <label className="inline-flex cursor-pointer items-center">
             <input
               type="checkbox"
-              className="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 transition duration-150 ease-in-out"
+              className="form-checkbox size-4 rounded border-gray-300 text-blue-600 transition duration-150 ease-in-out focus:ring-blue-500"
               checked={isSyncEnabled}
               onChange={(e) => setIsSyncEnabled(e.target.checked)}
             />
             <span className="ml-2 text-sm text-gray-700">스크롤 동기화</span>
           </label>
-          <span className="ml-1 px-1.5 py-0.5 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full">
+          <span className="ml-1 rounded-full bg-blue-100 px-1.5 py-0.5 text-xs font-semibold text-blue-800">
             Beta
           </span>
         </div>
