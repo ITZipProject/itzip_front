@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useSpring, animated } from 'react-spring';
+
+import DigitRoller from './DigitRoller';
 
 interface RollingCounterProps {
   endValue: number;
@@ -11,25 +9,57 @@ interface RollingCounterProps {
 }
 
 const RollingCounter: React.FC<RollingCounterProps> = ({ endValue, duration = 2000 }) => {
-  const [key, setKey] = useState(0);
+  const [currentValue, setCurrentValue] = useState(endValue);
 
   useEffect(() => {
-    setKey((prev) => prev + 1);
-  }, []);
+    const startValue = Math.max(0, endValue - Math.floor(endValue * 0.1));
+    let startTime: number;
 
-  const { number } = useSpring({
-    reset: true,
-    from: { number: 0 },
-    number: endValue,
-    delay: 5,
-    config: { mass: 1, tension: 20, friction: 10, duration: duration },
-    key: key,
-  });
+    const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
+
+    const animateCount = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = (timestamp - startTime) / duration;
+      const easeProgress = easeOutCubic(progress);
+
+      const nextValue = Math.round(startValue + (endValue - startValue) * easeProgress);
+      setCurrentValue(nextValue);
+
+      if (progress < 1) {
+        requestAnimationFrame(animateCount);
+      }
+    };
+
+    // 약간의 지연 후 애니메이션 시작
+    const timeoutId = setTimeout(() => requestAnimationFrame(animateCount), 100);
+
+    return () => clearTimeout(timeoutId);
+  }, [endValue, duration]);
+
+  const formatNumber = (num: number): (string | number)[] => {
+    const digits = num.toString().padStart(endValue.toString().length, '0').split('').map(Number);
+    const result: (string | number)[] = [];
+    digits.reverse().forEach((digit, index) => {
+      if (index > 0 && index % 3 === 0) {
+        result.unshift(',');
+      }
+      result.unshift(digit);
+    });
+    return result;
+  };
+
+  const formattedDigits = formatNumber(currentValue);
 
   return (
-    <animated.span className="inline-block font-mono font-bold text-blue-600">
-      {number.to((n: number) => Math.floor(n).toLocaleString('en-US'))}
-    </animated.span>
+    <span className="inline-block font-mono font-bold text-blue-600">
+      {formattedDigits.map((item, index) =>
+        typeof item === 'number' ? (
+          <DigitRoller key={index} digit={item} />
+        ) : (
+          <span key={index}>{item}</span>
+        ),
+      )}
+    </span>
   );
 };
 
