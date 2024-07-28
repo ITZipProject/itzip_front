@@ -27,7 +27,7 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({
   return (
     <div className="flex h-[400px] w-full max-w-[300px] flex-col overflow-hidden">
       <div className="relative h-[180px]">
-        <Image src={imageUrl} className="rounded-xl" alt={title} layout="fill" objectFit="cover" />
+        <Image src={imageUrl} className="rounded-lg" alt={title} layout="fill" objectFit="cover" />
       </div>
       <div className="flex flex-wrap items-start gap-4 py-4 text-sm">
         <span className="text-blue-600">{category}</span>
