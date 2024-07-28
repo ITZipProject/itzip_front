@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+
 import './globals.css';
 import Footer from '@/components/common/footer';
 import HeaderBar from '@/components/common/header-bar';
-import getSession from '../lib/session';
-import db from '../lib/db';
 import { ModalProvider } from '@/lib/context/ModalContext';
+
+import db from '../lib/db';
+import getSession from '../lib/session';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -50,10 +52,9 @@ async function getUserProfile() {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const user = await getUser();
   const profileImage = await getUserProfile();
-
   return (
     <html lang="ko">
-      <body className={`${inter.className} bg-white text-black mx-auto`}>
+      <body className={`${inter.className} mx-auto overflow-x-hidden bg-white text-black`}>
         <ModalProvider>
           <HeaderBar profileImage={profileImage} exists={user} />
           {children}
