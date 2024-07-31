@@ -15,29 +15,11 @@ type Data = {
   schoolName: string;
 };
 
-async function createResumeApi({ resumeData, schoolName }: createResumeApiProps) {
+async function createResumeApi({ resumeData, schoolName }: any) {
   try {
     const response = await axios.post<Data>(
       `https://00f935c6-42a5-448a-8871-ff95c8a2f12a.mock.pstmn.io/resume/generation`,
-      {
-        resume: {
-          resume_title: resumeData.resume_title,
-          phone: resumeData.phone,
-          email: resumeData.email,
-          introduction: resumeData.introduction,
-          link_list: [
-            { link: 'https://djndasdnjdasn.com' },
-            { link: 'https://dfjdsgfjnksfdgjnksdf.com' },
-          ],
-        },
-        education: {
-          school_name: schoolName,
-          status: 'GRADUATION',
-          major: '소프트웨어학과',
-          start_date: '2019-03-02',
-          end_date: '2023-03-08',
-        },
-      },
+      {},
     );
 
     const data = response.data;

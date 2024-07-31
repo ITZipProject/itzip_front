@@ -58,7 +58,6 @@ export default function SignUp() {
             <input type="checkbox" />
           </div>
         </div>
-
         <Button modalId="" text="회원가입" />
       </form>
       <div className="flex gap-2 my-2">
