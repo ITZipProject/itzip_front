@@ -2,7 +2,7 @@
 
 import Button from '@/components/common/button';
 import Input from '@/components/common/input';
-import SocialLogin from '@/components/auth/social-login';
+
 import React from 'react';
 import { useFormState } from 'react-dom';
 import { signUp } from './actions';
@@ -60,7 +60,7 @@ export default function SignUp() {
           </div>
         </div>
 
-        <Button text="회원가입" />
+        <Button text="회원가입" modalId={''} />
       </form>
       <div className="flex gap-2 my-2">
         <span>이미 계정이 있어요!</span>
@@ -68,7 +68,6 @@ export default function SignUp() {
           로그인
         </Link>
       </div>
-      <SocialLogin />
     </div>
   );
 }
