@@ -10,56 +10,56 @@ import { ModalProvider } from '@/lib/context/ModalContext';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-    title: {
-        template: '%s | title',
-        default: 'description',
-    },
-    description: 'description',
+  title: {
+    template: '%s | title',
+    default: 'description',
+  },
+  description: 'description',
 };
 
 async function getUser() {
-    const session = await getSession();
-    if (session?.id) {
-        const user = await db.user.findUnique({
-            where: {
-                id: session.id,
-            },
-        });
-        if (user) {
-            return Boolean(user);
-        }
+  const session = await getSession();
+  if (session?.id) {
+    const user = await db.user.findUnique({
+      where: {
+        id: session.id,
+      },
+    });
+    if (user) {
+      return Boolean(user);
     }
-    return false;
+  }
+  return false;
 }
 
 async function getUserProfile() {
-    const session = await getSession();
-    if (session.id) {
-        const user = await db.user.findUnique({
-            where: {
-                id: session.id,
-            },
-        });
-        if (user) {
-            return user.avatar ?? undefined;
-        }
+  const session = await getSession();
+  if (session.id) {
+    const user = await db.user.findUnique({
+      where: {
+        id: session.id,
+      },
+    });
+    if (user) {
+      return user.avatar ?? undefined;
     }
-    return undefined;
+  }
+  return undefined;
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-    const user = await getUser();
-    const profileImage = await getUserProfile();
+  const user = await getUser();
+  const profileImage = await getUserProfile();
 
-    return (
-        <html lang="ko">
-            <body className={`${inter.className} bg-white text-black mx-auto`}>
-                <ModalProvider>
-                    <HeaderBar profileImage={profileImage} exists={user} />
-                    {children}
-                    <Footer />
-                </ModalProvider>
-            </body>
-        </html>
-    );
+  return (
+    <html lang="ko">
+      <body className={`${inter.className} bg-white text-black mx-auto`}>
+        <ModalProvider>
+          <HeaderBar profileImage={profileImage} exists={user} />
+          {children}
+          <Footer />
+        </ModalProvider>
+      </body>
+    </html>
+  );
 }

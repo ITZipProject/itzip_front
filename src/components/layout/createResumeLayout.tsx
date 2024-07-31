@@ -1,10 +1,10 @@
 import * as React from 'react';
-import CreateResumeF from '../resume/create/createResumeF';
+import CreateResumeForm from '../resume/create/createResumeForm';
 
 interface ICreateResumeLayoutProps {}
 
 const CreateResumeLayout: React.FunctionComponent<ICreateResumeLayoutProps> = (props) => {
-  return <CreateResumeF />;
+  return <CreateResumeForm />;
 };
 
 export default CreateResumeLayout;

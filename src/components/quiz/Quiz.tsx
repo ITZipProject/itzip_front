@@ -1,70 +1,61 @@
-'use client';
-
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAtom } from 'jotai';
+import { filteredQuizzesAtom } from '../../lib/atoms/atoms';
 import QuizCard from './QuizCard';
 import QuizTopBar from './QuizTopBar';
 import MakeQuizModal from './MakeQuizModal';
+import QuizShowModal from './QuizShowModal';
 import { QuizData } from '../../types/quiz/quiz';
 
-interface QuizProps {
-    quizzes: QuizData[];
-    onAddQuiz: (quizData: QuizData) => void;
-}
+const Quiz: React.FC = () => {
+  const [filteredQuizzes] = useAtom(filteredQuizzesAtom);
+  const [sortOrder, setSortOrder] = useState<'latest' | 'oldest' | 'recommended'>('latest');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedQuiz, setSelectedQuiz] = useState<QuizData | null>(null);
+  const [sortedQuizzes, setSortedQuizzes] = useState<QuizData[]>([]);
 
-const Quiz: React.FC<QuizProps> = ({ quizzes, onAddQuiz }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [sortedQuizzes, setSortedQuizzes] = useState<QuizData[]>([]);
-    const [sortOrder, setSortOrder] = useState<'latest' | 'oldest' | 'recommended'>('latest');
+  useEffect(() => {
+    const sorted = filteredQuizzes.slice().sort((a, b) => {
+      if (sortOrder === 'recommended') {
+        return b.accepted_user_count - a.accepted_user_count;
+      }
+      const dateA = new Date(a.create_date).getTime();
+      const dateB = new Date(b.create_date).getTime();
+      return sortOrder === 'oldest' ? dateA - dateB : dateB - dateA;
+    });
+    setSortedQuizzes(sorted);
+  }, [filteredQuizzes, sortOrder]);
 
-    useEffect(() => {
-        setSortedQuizzes(sortQuizzes(quizzes, sortOrder));
-    }, [quizzes, sortOrder]);
+  const handleAddQuiz = () => {
+    setIsModalOpen(true);
+  };
 
-    const handleAddQuiz = (quizData: QuizData) => {
-        onAddQuiz(quizData);
-        setSortedQuizzes(sortQuizzes([...sortedQuizzes, quizData], sortOrder));
-    };
+  const handleCardClick = (quiz: QuizData) => {
+    setSelectedQuiz(quiz);
+    setIsModalOpen(true);
+  };
 
-    const sortQuizzes = (
-        quizzes: QuizData[],
-        order: 'latest' | 'oldest' | 'recommended',
-    ): QuizData[] => {
-        return quizzes.slice().sort((a, b) => {
-            if (order === 'recommended') {
-                return b.likes - a.likes;
-            }
-            const dateA = new Date(a.timestamp).getTime();
-            const dateB = new Date(b.timestamp).getTime();
-            return order === 'oldest' ? dateA - dateB : dateB - dateA;
-        });
-    };
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedQuiz(null);
+  };
 
-    return (
-        <div className="flex flex-col gap-4 w-full h-full px-6">
-            <div className="flex justify-end w-full">
-                <QuizTopBar onAddQuiz={() => setIsModalOpen(true)} setSortOrder={setSortOrder} />
-            </div>
-            <div className="grid grid-cols-2 gap-4 w-full">
-                {sortedQuizzes.map((quiz, index) => (
-                    <QuizCard
-                        key={index}
-                        question={quiz.question}
-                        username={quiz.username}
-                        level={quiz.level}
-                        correctRate={quiz.correctRate}
-                        category={quiz.category}
-                        options={quiz.options}
-                        answer={quiz.answer}
-                        timestamp={quiz.timestamp}
-                        likes={quiz.likes}
-                    />
-                ))}
-            </div>
-            {isModalOpen && (
-                <MakeQuizModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-            )}
-        </div>
-    );
+  return (
+    <div className="flex flex-col gap-4 w-full h-full px-6">
+      <div className="flex justify-end w-full">
+        <QuizTopBar onAddQuiz={handleAddQuiz} sortOrder={sortOrder} setSortOrder={setSortOrder} />
+      </div>
+      <div className="grid grid-cols-2 gap-4 w-full">
+        {sortedQuizzes.map((quiz) => (
+          <QuizCard key={quiz._id} quiz={quiz} onClick={() => handleCardClick(quiz)} />
+        ))}
+      </div>
+      {isModalOpen && selectedQuiz && (
+        <QuizShowModal isOpen={isModalOpen} onClose={closeModal} {...selectedQuiz} />
+      )}
+      {isModalOpen && !selectedQuiz && <MakeQuizModal isOpen={isModalOpen} onClose={closeModal} />}
+    </div>
+  );
 };
 
 export default Quiz;
