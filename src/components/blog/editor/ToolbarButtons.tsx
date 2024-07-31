@@ -19,6 +19,9 @@ const ToolbarButtons: React.FC<ToolbarButtonsProps> = ({ onAction }) => {
     { label: 'H1', action: 'heading', value: '# ' },
     { label: 'H2', action: 'heading', value: '## ' },
     { label: 'H3', action: 'heading', value: '### ' },
+    { label: 'H4', action: 'heading', value: '#### ' },
+    { label: 'H5', action: 'heading', value: '##### ' },
+    { label: 'H6', action: 'heading', value: '###### ' },
   ];
 
   const lists = [
@@ -31,14 +34,14 @@ const ToolbarButtons: React.FC<ToolbarButtonsProps> = ({ onAction }) => {
       {buttons.map((button) => (
         <button
           key={button.action}
-          className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm"
+          className="bg-gray-200 hover:bg-gray-300 rounded px-3 py-1 text-sm"
           onClick={() => onAction(button.action, button.value)}
         >
           {button.label}
         </button>
       ))}
       <select
-        className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm"
+        className="bg-gray-200 hover:bg-gray-300 rounded px-3 py-1 text-sm"
         onChange={(e) => onAction('heading', e.target.value)}
       >
         <option value="">제목</option>
@@ -49,7 +52,7 @@ const ToolbarButtons: React.FC<ToolbarButtonsProps> = ({ onAction }) => {
         ))}
       </select>
       <select
-        className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm"
+        className="bg-gray-200 hover:bg-gray-300 rounded px-3 py-1 text-sm"
         onChange={(e) => onAction('list', e.target.value)}
       >
         <option value="">목록</option>

@@ -1,7 +1,7 @@
-// src/components/blog/userblog/WeeklyContributionGraph.tsx
 'use client';
 
 import React, { useState, useRef } from 'react';
+
 import Tooltip from './Tooltip';
 
 interface ContributionData {
@@ -19,11 +19,17 @@ const WeeklyContributionGraph: React.FC<WeeklyContributionGraphProps> = ({ data 
   const graphRef = useRef<HTMLDivElement>(null);
 
   const getColor = (count: number): string => {
-    if (count === 0) return 'bg-gray-100';
-    if (count <= 2) return 'bg-green-100';
-    if (count <= 4) return 'bg-green-200';
-    if (count <= 6) return 'bg-green-300';
-    return 'bg-green-400';
+    if (count === 0) return 'bg-blue-50';
+    if (count <= 1) return 'bg-blue-100';
+    if (count <= 2) return 'bg-blue-200';
+    if (count <= 3) return 'bg-blue-300';
+    if (count <= 4) return 'bg-blue-400';
+    if (count <= 5) return 'bg-blue-500';
+    if (count <= 6) return 'bg-blue-600';
+    if (count <= 7) return 'bg-blue-700';
+    if (count <= 8) return 'bg-blue-800';
+    if (count <= 9) return 'bg-blue-900';
+    return 'bg-blue-950';
   };
 
   const generateWeeks = () => {
@@ -68,13 +74,13 @@ const WeeklyContributionGraph: React.FC<WeeklyContributionGraphProps> = ({ data 
   };
 
   return (
-    <div className="mx-auto relative" ref={graphRef}>
-      <div className="flex flex-wrap justify-start items-end">
+    <div className="relative mx-auto" ref={graphRef}>
+      <div className="flex flex-wrap items-end justify-start">
         {weeks.map((week, index) => (
-          <div key={index} className="flex flex-col items-center mb-3">
-            {week.isMonthStart && <div className="text-xs text-gray-500 mb-1">{week.month}</div>}
+          <div key={index} className="mb-3 flex flex-col items-center">
+            {week.isMonthStart && <div className="mb-1 text-xs text-gray-500">{week.month}</div>}
             <div
-              className={`w-5 h-5 m-0.5 ${getColor(week.count)}`}
+              className={`m-0.5 size-5 ${getColor(week.count)}`}
               onMouseEnter={(e) => handleMouseEnter(week, e)}
               onMouseLeave={handleMouseLeave}
             />

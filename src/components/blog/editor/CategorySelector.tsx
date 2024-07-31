@@ -34,7 +34,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ onCategoryChange })
   return (
     <div className="mb-4">
       <select
-        className="mr-2 p-2 border rounded"
+        className="mr-2 rounded border p-2"
         value={mainCategory}
         onChange={handleMainCategoryChange}
       >
@@ -47,7 +47,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ onCategoryChange })
       </select>
       {mainCategory && (
         <select
-          className="p-2 border rounded"
+          className="rounded border p-2"
           value={subCategory}
           onChange={handleSubCategoryChange}
         >
