@@ -1,42 +1,37 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useAtom } from 'jotai';
-import { difficultyAtom } from '../../lib/atoms/atoms';
+import { quizzesAtom, filteredQuizzesAtom } from '../../lib/atoms/atoms';
 import { QuizData } from '../../types/quiz/quiz';
 
-interface FilterProps {
-  quizzes: QuizData[];
-  setFilteredQuizzes: React.Dispatch<React.SetStateAction<QuizData[]>>;
-}
-
 const ratings = [
-  { value: '레벨1', label: 'Lv.1' },
-  { value: '레벨2', label: 'Lv.2' },
-  { value: '레벨3', label: 'Lv.3' },
+  { value: 1, label: 'Lv.1' },
+  { value: 2, label: 'Lv.2' },
+  { value: 3, label: 'Lv.3' },
 ];
 
-const Filter: React.FC<FilterProps> = ({ quizzes, setFilteredQuizzes }) => {
-  const [difficulty, setDifficulty] = useAtom(difficultyAtom);
+const Filter: React.FC = () => {
+  const [quizzes] = useAtom(quizzesAtom);
+  const [, setFilteredQuizzes] = useAtom(filteredQuizzesAtom);
+  const [difficulty, setDifficulty] = useState<number | null>(null);
   const [category, setCategory] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
+    const applyFilter = () => {
+      const filtered = quizzes.filter((item) => {
+        const matchesSearchTerm = searchTerm ? item.question_text.includes(searchTerm) : true;
+        const matchesCategory = category ? item.category === category : true;
+        const matchesDifficulty = difficulty !== null ? item.difficulty === difficulty : true;
+
+        return matchesSearchTerm && matchesCategory && matchesDifficulty;
+      });
+
+      setFilteredQuizzes(filtered);
+    };
+
     applyFilter();
-  }, [difficulty, category, searchTerm]);
-
-  const applyFilter = () => {
-    const filtered = quizzes.filter((item) => {
-      const matchesSearchTerm = searchTerm ? item.question.includes(searchTerm) : true;
-      const matchesCategory = category ? item.category === category : true;
-      const matchesRating = difficulty ? item.level === difficulty : true;
-
-      return matchesSearchTerm && matchesCategory && matchesRating;
-    });
-
-    setFilteredQuizzes(filtered);
-  };
+  }, [searchTerm, category, difficulty, quizzes, setFilteredQuizzes]);
 
   return (
     <div className="w-64 h-96 gap-8 border-2 border-gray-300 rounded-md p-4 shadow-md flex flex-col justify-center items-center">
@@ -61,7 +56,7 @@ const Filter: React.FC<FilterProps> = ({ quizzes, setFilteredQuizzes }) => {
             <button
               key={rating.value}
               className={`border-2 p-2 ${difficulty === rating.value ? 'bg-blue-500 text-white' : ''}`}
-              onClick={() => setDifficulty(difficulty === rating.value ? '' : rating.value)}
+              onClick={() => setDifficulty(difficulty === rating.value ? null : rating.value)}
             >
               <h3>{rating.label}</h3>
             </button>
@@ -76,8 +71,11 @@ const Filter: React.FC<FilterProps> = ({ quizzes, setFilteredQuizzes }) => {
           onChange={(e) => setCategory(e.target.value)}
         >
           <option value="">전체</option>
-          <option value="프론트엔드">프론트엔드</option>
-          <option value="백엔드">백엔드</option>
+          <option value="네트워크">네트워크</option>
+          <option value="컴퓨터 과학">컴퓨터 과학</option>
+          <option value="프로그래밍">프로그래밍</option>
+          <option value="소프트웨어 공학">소프트웨어 공학</option>
+          <option value="데이터베이스">데이터베이스</option>
         </select>
       </div>
     </div>

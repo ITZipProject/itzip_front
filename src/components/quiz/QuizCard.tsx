@@ -1,63 +1,28 @@
-import React, { useState } from 'react';
-import Image from 'next/image';
-import QuizShowModal from './QuizShowModal';
+import React from 'react';
 import { QuizData } from '../../types/quiz/quiz';
 
-const QuizCard: React.FC<QuizData> = ({
-  question,
-  category,
-  answer,
-  level,
-  options,
-  username,
-  correctRate,
-  timestamp,
-  likes,
-}) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+interface QuizCardProps {
+  quiz: QuizData;
+  onClick: () => void;
+}
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+const QuizCard: React.FC<QuizCardProps> = ({ quiz, onClick }) => {
+  const correctRate = quiz.tried_user_count
+    ? (quiz.accepted_user_count / quiz.tried_user_count) * 100
+    : 0;
 
   return (
     <div className="w-full">
-      <div
-        className="w-full h-32 border-2 border-gray-300 rounded-md p-4 shadow-md flex flex-col justify-center items-center cursor-pointer"
-        onClick={openModal}
-      >
-        <div>
-          <h3 className="font-bold">{question}</h3>
+      <div className="flex  w-full   justify-between items-center cursor-pointer" onClick={onClick}>
+        <div className="w-1/2">
+          <h3 className=" font-bold text-slate-300">{quiz.question_text}</h3>
         </div>
-        <div className="flex flex-col justify-center items-center">
-          <div className="flex">
-            <Image src="/userImage.png" alt="유저이미지" width={16} height={16} />
-            <h3 className="mx-2">{username}</h3>
-          </div>
-          <div className="flex">
-            <h3 className="mx-2">{level}</h3>
-            <h3 className="mx-2">{`${correctRate}%`}</h3>
-          </div>
+        <div className="flex w-1/3 gap-5 justify-between items-center">
+          <h3 className="w-1/3 text-slate-400 text-center text-lg">{quiz.category}</h3>
+          <h3 className="w-1/3 text-slate-400 text-center text-lg"> {quiz.difficulty}</h3>
+          <h3 className="w-1/3 text-slate-400 text-center text-lg">{correctRate.toFixed(2)}%</h3>
         </div>
       </div>
-
-      <QuizShowModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        question={question}
-        category={category}
-        options={options}
-        answer={answer}
-        level={level}
-        username={username}
-        correctRate={correctRate}
-        timestamp={timestamp}
-        likes={likes}
-      />
     </div>
   );
 };
