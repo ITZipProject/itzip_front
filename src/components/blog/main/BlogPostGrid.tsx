@@ -18,6 +18,8 @@ const generateRandomPosts = (count: number) => {
     saves: Math.floor(Math.random() * 50),
     author: authors[Math.floor(Math.random() * authors.length)],
     timeAgo: timeAgo[Math.floor(Math.random() * timeAgo.length)],
+    imageUrl: `https://picsum.photos/seed/${i + 1}/600/400`,
+    profileImageUrl: `https://picsum.photos/seed/${i + 1}-profile/40/40`,
   }));
 };
 

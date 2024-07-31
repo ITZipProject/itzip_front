@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import React from 'react';
 
 import BlogControls from '@/components/blog/main/BlogControls';
@@ -11,12 +10,6 @@ const BlogPage = () => {
       <BlogHeader />
       <BlogControls />
       <BlogPostGrid />
-      <div className="mx-auto max-w-7xl px-4 mt-8">
-        <Link href={'/blog/userblog'} className="mr-4">
-          개인 블로그 가기
-        </Link>
-        <Link href={'/blog/postwrite'}>블로그 작성하기</Link>
-      </div>
     </div>
   );
 };

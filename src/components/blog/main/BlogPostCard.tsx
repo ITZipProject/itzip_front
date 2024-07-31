@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
 interface BlogPostCardProps {
@@ -10,6 +11,8 @@ interface BlogPostCardProps {
   saves: number;
   author: string;
   timeAgo: string;
+  imageUrl: string;
+  profileImageUrl: string;
 }
 
 const BlogPostCard: React.FC<BlogPostCardProps> = ({
@@ -21,16 +24,18 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({
   saves,
   author,
   timeAgo,
+  imageUrl,
+  profileImageUrl,
 }) => {
-  const imageUrl = `https://picsum.photos/seed/${id}/600/400`;
-  const profileImageUrl = `https://picsum.photos/seed/${id}-profile/40/40`;
   return (
     <div className="flex h-[400px] w-full max-w-[300px] flex-col overflow-hidden">
-      <div className="relative h-[180px]">
+      <Link href={`/blog/post/${id}`} passHref className="relative h-[180px]">
         <Image src={imageUrl} className="rounded-lg" alt={title} layout="fill" objectFit="cover" />
-      </div>
+      </Link>
       <div className="flex flex-wrap items-start gap-4 py-4 text-sm">
-        <span className="text-blue-600">{category}</span>
+        <Link href={`/blog/category/${encodeURIComponent(category)}`} passHref>
+          <span className="cursor-pointer text-blue-600">{category}</span>
+        </Link>
         <span className="text-gray-600">
           좋아요 <span className="text-blue-400">{likes}</span>
         </span>
@@ -39,13 +44,27 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({
         </span>
       </div>
       <div className="grow">
-        <h3 className="mb-2 text-base font-medium">{title}</h3>
-        <p className="line-clamp-3 text-sm text-gray-600">{content}</p>
+        <Link href={`/blog/post/${id}`} passHref>
+          <h3 className="mb-2 cursor-pointer text-base font-medium">{title}</h3>
+        </Link>
+        <Link href={`/blog/post/${id}`} passHref>
+          <p className="line-clamp-3 cursor-pointer text-sm text-gray-600">{content}</p>
+        </Link>
       </div>
       <div className="flex items-center py-4">
-        <Image src={profileImageUrl} alt={author} width={32} height={32} className="rounded-full" />
+        <Link href={`/blog/user/${encodeURIComponent(author)}`} passHref>
+          <Image
+            src={profileImageUrl}
+            alt={author}
+            width={32}
+            height={32}
+            className="cursor-pointer rounded-full"
+          />
+        </Link>
         <div className="ml-3">
-          <p className="text-sm text-gray-600">{author}</p>
+          <Link href={`/blog/user/${encodeURIComponent(author)}`} passHref>
+            <p className="cursor-pointer text-sm text-gray-600">{author}</p>
+          </Link>
           <p className="text-xs text-gray-400">{timeAgo}</p>
         </div>
       </div>

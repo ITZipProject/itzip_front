@@ -1,10 +1,10 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 
-import CategorySelector from '@/components/blog/postwrite/CategorySelector';
-import MarkdownEditor from '@/components/blog/postwrite/MarkdownEditor';
-import MarkdownPreview from '@/components/blog/postwrite/MarkdownPreview';
-import ToolbarButtons from '@/components/blog/postwrite/ToolbarButtons';
+import CategorySelector from '@/components/blog/editor/CategorySelector';
+import MarkdownEditor from '@/components/blog/editor/MarkdownEditor';
+import MarkdownPreview from '@/components/blog/editor/MarkdownPreview';
+import ToolbarButtons from '@/components/blog/editor/ToolbarButtons';
 
 // 카테고리 ID 매핑
 const categoryIdMap: { [key: string]: number } = {
@@ -22,7 +22,7 @@ function getCategoryId(category: string): number {
   return categoryIdMap[mainCategory] || 0;
 }
 
-const BlogPostWritePage = () => {
+const BlogEditorPage = () => {
   const [category, setCategory] = useState<string>('');
   const [markdownContent, setMarkdownContent] = useState<string>('');
   const [title, setTitle] = useState<string>('');
@@ -242,4 +242,4 @@ const BlogPostWritePage = () => {
   );
 };
 
-export default BlogPostWritePage;
+export default BlogEditorPage;
