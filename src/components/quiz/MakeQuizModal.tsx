@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { postQuiz } from '../../api/quiz/postQuizzes';
-import { QuizData } from '../../types/quiz/quiz';
+import { useAtom } from 'jotai';
+import { quizzesAtom } from '../../lib/atoms/atoms';
 
 interface ModalProps {
   isOpen: boolean;
@@ -8,70 +8,75 @@ interface ModalProps {
 }
 
 const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
+  const [quizzes, setQuizzes] = useAtom(quizzesAtom);
   const [question, setQuestion] = useState('');
   const [category, setCategory] = useState('');
   const [answer, setAnswer] = useState<string>('');
   const [level, setLevel] = useState('');
-  const [options, setOptions] = useState(['', '', '', '']);
+  const [options, setOptions] = useState(['', '']);
   const [selectedLevel, setSelectedLevel] = useState('');
-
-  const handleSave = async () => {
-    const emptyOptionsCount = options.filter((option) => option === '').length;
-
-    if (!question || !category || !answer || !level || emptyOptionsCount > 2) {
-      alert('모든 필드를 올바르게 입력하고, 선택지를 최소 2개 이상 입력하세요.');
-      return;
-    }
-
-    const timestamp = new Date().toISOString();
-
-    const quizData: QuizData = {
-      question,
-      category,
-      answer: answer ? Number(answer) : 0,
-      level,
-      options,
-      username: '아이언맨1',
-      correctRate: 18,
-      timestamp,
-      likes: 0,
-    };
-
-    try {
-      await postQuiz(quizData);
-
-      onClose();
-    } catch (error) {
-      alert('문제 생성 중 오류가 발생했습니다.');
-      console.error('문제 생성 에러:', error);
-    }
-  };
 
   if (!isOpen) return null;
 
+  const addOption = () => {
+    if (options.length < 4) {
+      setOptions([...options, '']);
+    }
+  };
+
+  const removeOption = (index: number) => {
+    if (options.length > 2) {
+      setOptions((prevOptions) => {
+        const newOptions = [...prevOptions];
+        newOptions.splice(index, 1);
+        if (answer === prevOptions[index]) {
+          setAnswer('');
+        }
+        return newOptions;
+      });
+    }
+  };
+
+  const handleCreateQuiz = () => {
+    const newQuiz = {
+      _id: Math.random().toString(36).substr(2, 9),
+      question_text: question,
+      difficulty: parseInt(level.replace('레벨', '')),
+      category,
+      answer: options.indexOf(answer) + 1,
+      create_date: new Date().toISOString(),
+      modify_date: new Date().toISOString(),
+      accepted_user_count: 0,
+      tried_user_count: 0,
+      points: 0,
+      create_user_id: '1234567890123456789',
+      choices: options.map((option, index) => ({ id: index + 1, choice_text: option })),
+    };
+    setQuizzes([...quizzes, newQuiz]);
+    onClose();
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-4 rounded shadow-lg relative w-3/4 h-3/4 max-w-5xl max-h-screen overflow-auto space-y-8">
+      <div className="bg-white px-8 rounded shadow-lg relative w-1/2 h-5/6 max-w-5xl max-h-screen overflow-auto space-y-8">
         <div className="flex justify-end">
           <button className="m-2" onClick={onClose}>
             X
           </button>
         </div>
-        <div className="w-full flex items-center space-x-4">
+        <div className="flex flex-col gap-4 w-full space-x-4">
           <h3>문제</h3>
           <input
             type="text"
-            className={`flex-grow h-full border border-gray-300 outline-none box-border px-2 ${
-              !question ? 'border-red-500' : ''
-            }`}
+            className={'flex-grow h-full border border-gray-300 outline-none box-border px-2'}
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
           />
         </div>
-        <div className="flex gap-7">
+        <div className="flex flex-col gap-7">
           <h3>카테고리</h3>
           <select
-            className={`px-3 py-1 bg-gray-200 rounded text-sm ${!category ? 'border-red-500' : ''}`}
+            className={'px-3 py-1 bg-gray-200 rounded text-sm'}
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
@@ -80,24 +85,13 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
             <option value="백엔드">백엔드</option>
           </select>
         </div>
-        <div className="w-full flex items-center space-x-4">
-          <h3>정답</h3>
-          <input
-            type="number"
-            className={`flex-grow h-full border border-gray-300 outline-none box-border px-2 ${
-              !answer ? 'border-red-500' : ''
-            }`}
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-          />
-        </div>
-        <div className="flex gap-4 items-center">
+        <div className="flex flex-col w-3/4 gap-4 ">
           <h3>난이도</h3>
-          <div className="flex gap-5">
+          <div className="flex gap-5 justify-between">
             {['Lv.1', 'Lv.2', 'Lv.3'].map((lvl, index) => (
               <button
                 key={index}
-                className={`border-2 p-2 ${selectedLevel === lvl ? 'bg-blue-500 text-white' : ''}`}
+                className={`border-2 px-12 py-2 rounded-md ${selectedLevel === lvl ? 'bg-blue-500 text-white' : ''}`}
                 onClick={() => {
                   setLevel(`레벨${index + 1}`);
                   setSelectedLevel(lvl);
@@ -108,17 +102,31 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
             ))}
           </div>
         </div>
-        <div className="flex gap-4">
-          <h3>선택지</h3>
+
+        <div className="flex flex-col gap-4">
+          <div className="flex justify-between items-center">
+            <h3>선택지</h3>
+            {options.length < 4 && (
+              <button
+                className="py-1 px-3 bg-slate-500 text-white rounded hover:bg-slate-500 f "
+                onClick={addOption}
+              >
+                선택지 추가
+              </button>
+            )}
+          </div>
           <div className="flex flex-col gap-4">
             {options.map((option, index) => (
-              <div key={index} className="flex items-center justify-center gap-3">
-                <h3>{index + 1}번</h3>
+              <div key={index} className="flex items-center gap-3">
+                <input
+                  type="radio"
+                  name="answer"
+                  checked={answer === option}
+                  onChange={() => setAnswer(option)}
+                />
                 <input
                   type="text"
-                  className={`flex-grow h-full border border-gray-300 outline-none box-border px-2 ${
-                    option === '' ? 'border-red-500' : ''
-                  }`}
+                  className={'flex-grow h-full border border-gray-300 outline-none box-border px-2'}
                   value={option}
                   onChange={(e) =>
                     setOptions((prevOptions) => {
@@ -128,12 +136,22 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                     })
                   }
                 />
+                {options.length > 2 && <button onClick={() => removeOption(index)}>X</button>}
               </div>
             ))}
           </div>
         </div>
-        <div className="flex items-center justify-center mx-40 border-2">
-          <button onClick={handleSave}>문제 생성</button>
+
+        <div className="flex items-center justify-center mx-40 ">
+          <button
+            className={`py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600  disabled:bg-gray-400`}
+            onClick={handleCreateQuiz}
+            disabled={
+              !question || !category || !answer || !level || options.some((option) => option === '')
+            }
+          >
+            문제 생성
+          </button>
         </div>
       </div>
     </div>
