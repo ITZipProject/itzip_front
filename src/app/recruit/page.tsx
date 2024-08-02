@@ -179,7 +179,7 @@ const RecruitPage: React.FC = () => {
         필터 적용
       </button>
       <div className="text-center text-lg mb-6">필터링된 공고 개수: {filteredJobs.length}</div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredJobs.map((job) => (
           <div key={job.id} className="p-6 border border-gray-500 rounded-lg shadow-lg">
             <h3 className="text-lg font-semibold text-center mb-2">{job.title}</h3>
