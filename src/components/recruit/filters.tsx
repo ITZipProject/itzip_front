@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import RegionCheckboxes from '@/components/recruit/region';
+import RegionCheckboxes from './category/region';
 
 interface FiltersProps {
   filters: {

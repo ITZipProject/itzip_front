@@ -88,15 +88,21 @@ const RecruitPage: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto p-6">
       <h1 className="text-center text-2xl font-bold mb-6">채용 정보 목록</h1>
-      <Filters
-        filters={filters}
-        activeFilter={activeFilter}
-        setFilters={setFilters}
-        toggleFilter={toggleFilter}
-        handleFilterChange={handleFilterChange}
-        applyFilters={applyFilters}
-      />
-      <JobList filteredJobs={filteredJobs} handleBookmark={handleBookmark} />
+      <div className="flex space-x-4">
+        <div className="w-1/4">
+          <Filters
+            filters={filters}
+            activeFilter={activeFilter}
+            setFilters={setFilters}
+            toggleFilter={toggleFilter}
+            handleFilterChange={handleFilterChange}
+            applyFilters={applyFilters}
+          />
+        </div>
+        <div className="w-3/4">
+          <JobList filteredJobs={filteredJobs} handleBookmark={handleBookmark} />
+        </div>
+      </div>
     </div>
   );
 };
