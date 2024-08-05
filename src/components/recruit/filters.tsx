@@ -47,7 +47,7 @@ const Filters: React.FC<FiltersProps> = ({
           초기화
         </button>
       </div>
-      <Search search={filters.search} handleFilterChange={handleFilterChange} applyFilters={applyFilters} /> {/* applyFilters 함수 전달 */}
+      <Search search={filters.search} handleFilterChange={handleFilterChange} applyFilters={applyFilters} />
       <div className="mb-4 p-4 border border-gray-300 rounded-lg">
         <h3 className="font-semibold mb-2">기술 스택</h3>
         <input
