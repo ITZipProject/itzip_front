@@ -2,12 +2,12 @@
 
 import React from 'react';
 import RegionCheckboxes from './category/region';
+import Search from './category/search';
 
 interface FiltersProps {
   filters: {
     technology: string;
     location: string;
-    education: string;
     experience: string;
     search: string;
     sort: string;
@@ -28,92 +28,78 @@ const Filters: React.FC<FiltersProps> = ({
   applyFilters,
 }) => {
   return (
-    <div className="mb-6">
-      <div className="flex justify-center mb-6">
+    <div className="">
+      <div className="flex justify-between mb-4">
+        <h2 className="font-bold">필터</h2>
+        <button
+          className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+          onClick={() => {
+            setFilters({
+              technology: '',
+              location: '',
+              experience: '',
+              search: '',
+              sort: 'latest',
+            });
+            applyFilters();
+          }}
+        >
+          초기화
+        </button>
+      </div>
+      <Search search={filters.search} handleFilterChange={handleFilterChange} applyFilters={applyFilters} /> {/* applyFilters 함수 전달 */}
+      <div className="mb-4 p-4 border border-gray-300 rounded-lg">
+        <h3 className="font-semibold mb-2">기술 스택</h3>
         <input
           type="text"
-          name="search"
-          value={filters.search}
+          name="technology"
+          value={filters.technology}
           onChange={handleFilterChange}
-          className="w-1/3 p-2 border border-gray-300 rounded"
-          placeholder="검색어 입력"
+          className="w-full p-2 border border-gray-300 rounded"
+          placeholder="기술을 입력하세요"
+        />
+        <div className="mt-2">
+          <label className="block mb-1">
+            <input
+              type="checkbox"
+              name="label1"
+              checked={filters.technology.includes('label1')}
+              onChange={handleFilterChange}
+            />
+            label1
+          </label>
+          <label className="block mb-1">
+            <input
+              type="checkbox"
+              name="label2"
+              checked={filters.technology.includes('label2')}
+              onChange={handleFilterChange}
+            />
+            label2
+          </label>
+          {/* Add more labels as needed */}
+        </div>
+      </div>
+      <div className="mb-4 p-4 border border-gray-300 rounded-lg">
+        <h3 className="font-semibold mb-2">지역</h3>
+        <RegionCheckboxes
+          selectedRegion={filters.location}
+          setSelectedRegion={(region: string) => setFilters({ ...filters, location: region })}
         />
       </div>
-      <div className="flex justify-center space-x-4 mb-6">
-        <button
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          onClick={() => toggleFilter('technology')}
-        >
-          기술
-        </button>
-        <button
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          onClick={() => toggleFilter('location')}
-        >
-          지역
-        </button>
-        <button
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          onClick={() => toggleFilter('education')}
-        >
-          학력
-        </button>
-        <button
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          onClick={() => toggleFilter('experience')}
-        >
-          경력
-        </button>
+      <div className="mb-4 p-4 border border-gray-300 rounded-lg">
+        <h3 className="font-semibold mb-2">경력</h3>
+        <input
+          type="text"
+          name="experience"
+          value={filters.experience}
+          onChange={handleFilterChange}
+          className="w-full p-2 border border-gray-300 rounded"
+          placeholder="경력을 입력하세요"
+        />
       </div>
-      {activeFilter === 'technology' && (
-        <div className="flex justify-center mb-2">
-          <input
-            type="text"
-            name="technology"
-            value={filters.technology}
-            onChange={handleFilterChange}
-            className="w-1/3 p-2 border border-gray-300 rounded"
-            placeholder="기술 입력"
-          />
-        </div>
-      )}
-      {activeFilter === 'location' && (
-        <div className="flex justify-center mb-2">
-          <RegionCheckboxes
-            selectedRegion={filters.location}
-            setSelectedRegion={(region: string) => setFilters({ ...filters, location: region })}
-          />
-        </div>
-      )}
-      {activeFilter === 'education' && (
-        <div className="flex justify-center mb-2">
-          <select
-            name="education"
-            value={filters.education}
-            onChange={handleFilterChange}
-            className="w-1/3 p-2 border border-gray-300 rounded"
-          >
-            <option value="">학력 선택</option>
-            <option value="highschool">고졸</option>
-            <option value="college">대졸</option>
-            <option value="graduate">대학원</option>
-          </select>
-        </div>
-      )}
-      {activeFilter === 'experience' && (
-        <div className="flex justify-center mb-2">
-          <input
-            type="text"
-            name="experience"
-            value={filters.experience}
-            onChange={handleFilterChange}
-            className="w-1/3 p-2 border border-gray-300 rounded"
-            placeholder="경력 입력"
-          />
-        </div>
-      )}
       <button
-        className="block mx-auto mb-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
         onClick={applyFilters}
       >
         필터 적용
