@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Job } from '../../api/saramin/route';
+import { Job } from './job';
 
 interface JobListProps {
   filteredJobs: Job[];

@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { fetchJobs, Job } from '../../api/saramin/route';
+import { fetchJobs } from '../../api/saramin/route';
+import { Job } from '@/components/recruit/job';
 import Filters from '@/components/recruit/filters';
 import JobList from '@/components/recruit/joblist';
 
