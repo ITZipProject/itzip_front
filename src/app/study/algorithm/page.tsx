@@ -32,7 +32,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col gap-11 w-full h-screen overflow-auto">
+    <div className="flex flex-col gap-11 w-full h-screen overflow-auto text-white bg-neutral-900">
       <div className="m-10">
         <Top algorithmData={algorithmData} />
       </div>
