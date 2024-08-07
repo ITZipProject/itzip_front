@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default function QuizTop() {
+export default function QuizPart() {
   return (
     <div className="flex flex-col  gap-20">
       <div className="flex">

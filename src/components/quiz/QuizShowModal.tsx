@@ -52,7 +52,7 @@ const QuizShowModal: React.FC<ModalProps & QuizData> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white px-8 rounded-lg shadow-lg relative w-1/2 h-5/6 max-w-5xl max-h-screen overflow-auto flex flex-col justify-start items-center gap-10">
+      <div className="bg-zinc-900 px-8 rounded-lg shadow-lg relative w-1/2 h-5/6 max-w-5xl max-h-screen overflow-auto flex flex-col justify-start items-center gap-10">
         <button className="absolute top-0 right-0 m-2" onClick={onClose}>
           X
         </button>

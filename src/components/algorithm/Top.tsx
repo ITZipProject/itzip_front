@@ -15,7 +15,7 @@ const Top: React.FC<TopProps> = ({ algorithmData }) => {
   }
 
   return (
-    <div className="flex w-1/3 justify-between border-2 p-4 bg-white shadow-md">
+    <div className="flex w-1/3 justify-between border-2 p-4 text-white bg-neutral-900 shadow-md">
       <div>
         <Image
           src="/userImage.png"

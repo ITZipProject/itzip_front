@@ -58,7 +58,7 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white px-8 rounded shadow-lg relative w-1/2 h-5/6 max-w-5xl max-h-screen overflow-auto space-y-8">
+      <div className="bg-zinc-800 px-8 rounded shadow-lg relative w-1/2 h-5/6 max-w-5xl max-h-screen overflow-auto space-y-8">
         <div className="flex justify-end">
           <button className="m-2" onClick={onClose}>
             X
@@ -68,7 +68,7 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           <h3>문제</h3>
           <input
             type="text"
-            className={'flex-grow h-full border border-gray-300 outline-none box-border px-2'}
+            className={'flex bg-slate-900 rounded-md'}
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
           />
@@ -76,7 +76,7 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         <div className="flex flex-col gap-7">
           <h3>카테고리</h3>
           <select
-            className={'px-3 py-1 bg-gray-200 rounded text-sm'}
+            className={'px-3 py-1 bg-slate-900 rounded-md'}
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
@@ -91,7 +91,7 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
             {['Lv.1', 'Lv.2', 'Lv.3'].map((lvl, index) => (
               <button
                 key={index}
-                className={`border-2 px-12 py-2 rounded-md ${selectedLevel === lvl ? 'bg-blue-500 text-white' : ''}`}
+                className={`border px-12 py-2 rounded-md ${selectedLevel === lvl ? 'bg-slate-900 text-white' : ''}`}
                 onClick={() => {
                   setLevel(`레벨${index + 1}`);
                   setSelectedLevel(lvl);
@@ -108,7 +108,7 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
             <h3>선택지</h3>
             {options.length < 4 && (
               <button
-                className="py-1 px-3 bg-slate-500 text-white rounded hover:bg-slate-500 f "
+                className="py-1 px-3 border bg-slate-900 text-white rounded hover:bg-slate-500 f "
                 onClick={addOption}
               >
                 선택지 추가
@@ -126,7 +126,9 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                 />
                 <input
                   type="text"
-                  className={'flex-grow h-full border border-gray-300 outline-none box-border px-2'}
+                  className={
+                    'flex-grow h-full border bg-slate-900 outline-none box-border px-2 rounded-md'
+                  }
                   value={option}
                   onChange={(e) =>
                     setOptions((prevOptions) => {
