@@ -29,10 +29,10 @@ const Filters: React.FC<FiltersProps> = ({
 }) => {
   return (
     <div className="">
-      <div className="flex justify-between mb-4">
+      <div className="px-2 flex justify-between mb-4">
         <h2 className="font-bold">필터</h2>
         <button
-          className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+          className="bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
           onClick={() => {
             setFilters({
               technology: '',
@@ -99,7 +99,7 @@ const Filters: React.FC<FiltersProps> = ({
         />
       </div>
       <button
-        className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        className="w-full px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" // Modified button color
         onClick={applyFilters}
       >
         필터 적용

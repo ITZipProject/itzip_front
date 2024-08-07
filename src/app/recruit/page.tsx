@@ -86,10 +86,14 @@ const RecruitPage: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto max-w-7xl overflow -x-hidden px-4">
-      <h1 className="text-center text-2xl font-bold mb-6">채용 정보 둘러보기</h1>
+    <div className="mx-auto max-w-7xl px-4">
+      <div className="flex justify-center">
+        <h1 className="text-center text-2xl font-bold mb-6 text-blue-500">채용정보</h1>
+        <h1 className="text-center text-2xl font-bold mb-6">&nbsp;둘러보기</h1>
+        <br />
+      </div>
       <div className="flex space-x-4">
-        <div className="w-1/4">
+        <div className="w-1/5">
           <Filters
             filters={filters}
             activeFilter={activeFilter}
@@ -99,7 +103,7 @@ const RecruitPage: React.FC = () => {
             applyFilters={applyFilters}
           />
         </div>
-        <div className="w-3/4">
+        <div className="w-4/5">
           <JobList filteredJobs={filteredJobs} handleBookmark={handleBookmark} />
         </div>
       </div>
