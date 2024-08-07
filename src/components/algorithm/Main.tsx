@@ -28,7 +28,7 @@ const Main: React.FC<MainProps> = ({ searchTerm }) => {
   );
 
   return (
-    <div className="flex flex-col gap-3 h-full p-4 bg-white border-2 rounded-md shadow-md overflow-auto">
+    <div className="flex flex-col gap-3 h-full p-4 text-white bg-neutral-900 border-2 rounded-md shadow-md overflow-auto">
       <div className="flex justify-end gap-8 mb-4">
         <button className="border border-gray-400 bg-blue-500 text-white py-2 px-3 rounded">
           문제 랜덤

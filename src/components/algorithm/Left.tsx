@@ -10,7 +10,7 @@ const Left: React.FC<LeftProps> = ({ onSearchChange }) => {
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4 border-2 rounded-md shadow-md bg-white h-full">
+    <div className="flex flex-col gap-4 p-4 border-2 rounded-md shadow-md  h-full text-white bg-neutral-900">
       <div className="mb-4">
         <input
           className="w-full px-3 py-2 border rounded-md"
