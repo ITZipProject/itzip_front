@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import Modal from './commonModal';
-import Input from '../common/input';
-import Button from '../common/button';
+import Modal from '../authModal';
+import Input from '../../common/input';
+import Button from '../authButton';
 import { useModal } from '@/lib/context/ModalContext';
 import { useFormState } from 'react-dom';
 import { login } from '@/app/(Auth)/sign-in/action';
@@ -12,7 +12,7 @@ interface SignInModalProps {
   modalId: string;
 }
 
-const SignInModal: React.FC<SignInModalProps> = ({ modalId }) => {
+const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
   const { openModals, closeModal } = useModal();
   const [state, action] = useFormState(login, null);
 
@@ -20,7 +20,7 @@ const SignInModal: React.FC<SignInModalProps> = ({ modalId }) => {
   if (!openModals.includes(modalId)) return null;
 
   return (
-    <Modal isOpen={true} onClose={() => closeModal(modalId)} title="이메일로 로그인할까요?">
+    <Modal isOpen={true} onClose={() => closeModal(modalId)} title="">
       <form action={action} className="w-full px-[60px] space-y-4">
         <Input
           name="email"
@@ -60,4 +60,4 @@ const SignInModal: React.FC<SignInModalProps> = ({ modalId }) => {
   );
 };
 
-export default SignInModal;
+export default EmailLoginModal;
