@@ -1,8 +1,8 @@
 import React from 'react';
-import './Checkbox.css';  // CSS 파일은 따로 작성하거나, 스타일링 방법에 따라 다르게 처리할 수 있습니다.
+import './Checkbox.css';  // CSS 파일을 불러옵니다.
 
 export interface CheckboxProps {
-  label: string;
+  label?: string; // label을 선택적으로 사용할 수 있도록 수정
   checked: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -16,7 +16,20 @@ const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange }) => {
         onChange={onChange}
       />
       <span className="checkmark"></span>
-      {label}
+      {label && <span className="checkbox-label">{label}</span>} {/* label이 있을 때만 렌더링 */}
+    </label>
+  );
+};
+
+export const CheckOnly: React.FC<CheckboxProps> = ({ checked, onChange }) => {
+  return (
+    <label className="check-container">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={onChange}
+      />
+      <span className="checkmark-only"></span>
     </label>
   );
 };
