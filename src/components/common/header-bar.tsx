@@ -3,8 +3,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useModal } from '@/lib/context/ModalContext';
-import LoginModal from '../auth/loginModal';
-import EmailLoginModal from '../auth/emailLoginModal';
+import LoginModal from '../auth/login/loginModal';
+import EmailLoginModal from '../auth/email/emailLoginModal';
+import SignUpModal from '../auth/signup/signUpModal';
+import SignUpEmailModal from '../auth/signup/signupEmailModal';
+import VerifyModal from '../auth/signup/verifyModal';
 
 interface HeaderBarProps {
   exists?: boolean;
@@ -28,7 +31,7 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
       </Link>
       <div className={`flex gap-[56px] ${textColor} text-headerSize`}>
         {!exists ? (
-          <button onClick={() => openModal('signupModal')}>이력서</button>
+          <button onClick={() => openModal('LoginModal')}>이력서</button>
         ) : (
           <Link href={'/resume'}>이력서</Link>
         )}
@@ -37,7 +40,7 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
         </Link>
         <Link href={'/blog'}>기술정보</Link>
         {!exists ? (
-          <button onClick={() => openModal('signupModal')}>학습하기</button>
+          <button onClick={() => openModal('LoginModal')}>학습하기</button>
         ) : (
           <Link href={'/study'}>학습하기</Link>
         )}
@@ -47,7 +50,7 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
         <div>
           {!exists ? (
             <button
-              onClick={() => openModal('signupModal')}
+              onClick={() => openModal('LoginModal')}
               className="border px-[20px] py-[10px] rounded-[16px] border-opacity-10"
             >
               로그인
@@ -65,8 +68,11 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
           )}
         </div>
       </div>
-      <LoginModal modalId="signupModal" />
-      <EmailLoginModal modalId="signinModal" />
+      <LoginModal modalId="LoginModal" />
+      <EmailLoginModal modalId="EmailLoginModal" />
+      <SignUpModal modalId="signUpModal" />
+      <SignUpEmailModal modalId="signUpEmailModal" />
+      <VerifyModal modalId="verifyModal" />
     </div>
   );
 }
