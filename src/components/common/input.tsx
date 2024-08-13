@@ -11,9 +11,9 @@ export default function Input({
   ...rest
 }: InputProps & InputHTMLAttributes<HTMLInputElement>) {
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div className="flex flex-col w-full gap-2">
       <input
-        className="rounded-[16px]  h-10 focus:outline-none ring-1 focus:ring-2 transition ring-neutral-200 focus:ring-black border-none placeholder:text-neutral-400"
+        className="rounded-[12px] px-[18px] py-[16px] focus:outline-none ring-1 focus:ring-2 transition ring-[#AEAEAE] focus:ring-[#3733ED] border-none placeholder:text-[#767676]"
         name={name}
         {...rest}
       />
