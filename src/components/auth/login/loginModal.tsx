@@ -4,7 +4,7 @@ import Image from 'next/image';
 import googleIcon from '../../../../public/Google.png';
 import githubIcon from '../../../../public/github.png';
 import { useModal } from '@/lib/context/ModalContext';
-import Modal from '../authModal';
+import AuthModal from '../authModal';
 import { Margin } from '@/components/common/margin';
 
 interface SignUpModalProps {
@@ -17,7 +17,11 @@ const LoginModal: React.FC<SignUpModalProps> = ({ modalId }) => {
   if (!openModals.includes(modalId)) return null;
 
   return (
-    <Modal isOpen={true} onClose={() => closeModal(modalId)} title="로그인이 필요해요!">
+    <AuthModal isOpen={true} onClose={() => closeModal(modalId)}>
+      <div>
+        <h2 className="text-[#6C6C6C] font-[500] text-[16px]">ITZIP을 다채롭게 즐기기 위해서는</h2>
+        <h2 className="text-[#171717] font-[700] text-[24px]">로그인이 필요해요!</h2>
+      </div>
       <div className="*:flex *:justify-center space-y-[16px]">
         <Margin height={'48px'} />
         <button onClick={() => openModal('EmailLoginModal')} className="primary-btn">
@@ -44,7 +48,7 @@ const LoginModal: React.FC<SignUpModalProps> = ({ modalId }) => {
           <h1 className="font-[400] text-[#0500E8] text-[13px] ">아직 계정이 없으신가요?</h1>
         </button>
       </div>
-    </Modal>
+    </AuthModal>
   );
 };
 
