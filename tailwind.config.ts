@@ -1,4 +1,13 @@
 import type { Config } from 'tailwindcss';
+import plugin from 'tailwindcss/plugin';
+
+import {
+  typographyStyles,
+  fontSize,
+  lineHeight,
+  letterSpacing,
+  fontWeight,
+} from './src/styles/typography';
 
 const config: Config = {
   content: [
@@ -8,6 +17,29 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: [
+          'var(--font-pretendard)',
+          'ui-sans-serif',
+          'system-ui',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'Segoe UI',
+          'Roboto',
+          'Helvetica Neue',
+          'Arial',
+          'Noto Sans',
+          'sans-serif',
+          'Apple Color Emoji',
+          'Segoe UI Emoji',
+          'Segoe UI Symbol',
+          'Noto Color Emoji',
+        ],
+      },
+      fontSize,
+      lineHeight,
+      letterSpacing,
+      fontWeight,
       backgroundColor: {
         main: 'rgb(6, 182, 212)',
         primary: '#3733ED',
@@ -22,15 +54,13 @@ const config: Config = {
       colors: {
         bc: '#A4A3A4',
       },
-      fontSize: {
-        logoSize: '28px',
-        headerSize: '16px',
-      },
     },
     screens: {
-      ms: '500px',
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
     },
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [plugin(typographyStyles), require('@tailwindcss/forms')],
 };
 export default config;
