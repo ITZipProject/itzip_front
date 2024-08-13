@@ -1,3 +1,4 @@
+import { XCircleIcon } from '@heroicons/react/16/solid';
 import { InputHTMLAttributes } from 'react';
 
 interface InputProps {
@@ -18,8 +19,11 @@ export default function Input({
         {...rest}
       />
       {errors.map((error, index) => (
-        <span key={index} className="text-red-500 font-medium">
-          {error}
+        <span key={index} className="text-[#E46969] text-[12px] font-[500]">
+          <div className="flex items-center gap-[4.5px]">
+            <XCircleIcon className="size-[19px]" />
+            {error}
+          </div>
         </span>
       ))}
     </div>
