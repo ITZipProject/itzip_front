@@ -15,19 +15,25 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
   const pathname = usePathname();
   const { openModal } = useModal();
 
+  const isStudyPage = pathname.startsWith('/study');
+  const headerBackgroundColor = isStudyPage ? 'bg-neutral-900' : 'bg-white';
+  const textColor = isStudyPage ? 'text-gray-200' : 'text-headerText';
+
   return (
-    <div className="h-[70px] border border-white bg-white flex justify-between w-screen px-10 items-center">
-      <Link className="text-logo font-extrabold text-logoSize" href={'/'}>
+    <div
+      className={`h-[70px] ${headerBackgroundColor} flex justify-between w-screen px-10 items-center`}
+    >
+      <Link className={`text-logo font-extrabold text-logoSize ${textColor}`} href={'/'}>
         ITZIP
       </Link>
-      <div className="flex gap-[56px] text-headerSize text-headerText">
+      <div className={`flex gap-[56px] ${textColor} text-headerSize`}>
         {!exists ? (
           <button onClick={() => openModal('signupModal')}>이력서</button>
         ) : (
           <Link href={'/resume'}>이력서</Link>
         )}
         <Link href={'/recruit'}>
-          {pathname === '' ? <span>채용공고</span> : <span>채용공고</span>}
+          <span>채용공고</span>
         </Link>
         <Link href={'/blog'}>기술정보</Link>
         {!exists ? (
@@ -36,7 +42,7 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
           <Link href={'/study'}>학습하기</Link>
         )}
       </div>
-      <div className="gap-[24px] items-center flex">
+      <div className={`gap-[24px] ${textColor} items-center flex`}>
         <Link href={''}>고객센터</Link>
         <div>
           {!exists ? (

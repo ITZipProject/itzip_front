@@ -1,12 +1,7 @@
 'use client';
-
 import React from 'react';
-import QuizFilterAndTopBar from '../../../components/quiz/QuizFilterAndTopBar';
+import QuizPageLayout from '../../../components/layout/quiz/QuizPageLayout';
 
 export default function Home() {
-  return (
-    <div className="flex flex-col min-h-screen px-6">
-      <QuizFilterAndTopBar />
-    </div>
-  );
+  return <QuizPageLayout />;
 }
