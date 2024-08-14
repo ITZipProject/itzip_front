@@ -56,9 +56,12 @@ const config: Config = {
       },
     },
     screens: {
-      sm: '640px',
-      md: '768px',
-      lg: '1024px',
+      base: '0px',
+      sm: '480px', //BP
+      md: '768px', //BP
+      lg: '992px', //BP
+      xl: '1280px',
+      '2xl': '1440px',
     },
   },
   plugins: [plugin(typographyStyles), require('@tailwindcss/forms')],
