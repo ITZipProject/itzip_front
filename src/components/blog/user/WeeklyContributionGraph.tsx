@@ -1,8 +1,7 @@
 'use client';
-
 import React, { useState, useRef } from 'react';
 
-import Tooltip from './Tooltip';
+import ContributionTooltip from './ContributionTooltip';
 
 interface ContributionData {
   weekStart: string;
@@ -38,7 +37,6 @@ const WeeklyContributionGraph: React.FC<WeeklyContributionGraphProps> = ({ data 
     const oneYearAgo = new Date(currentWeekStart);
     oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
     const weeks = [];
-
     for (let d = new Date(oneYearAgo); d <= currentWeekStart; d.setDate(d.getDate() + 7)) {
       const weekStart = new Date(d);
       const weekStartString = weekStart.toISOString().split('T')[0];
@@ -50,7 +48,6 @@ const WeeklyContributionGraph: React.FC<WeeklyContributionGraphProps> = ({ data 
         month: weekStart.toLocaleString('default', { month: 'short' }),
       });
     }
-
     return weeks;
   };
 
@@ -59,7 +56,6 @@ const WeeklyContributionGraph: React.FC<WeeklyContributionGraphProps> = ({ data 
   const handleMouseEnter = (week: ContributionData, event: React.MouseEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     const graphRect = graphRef.current?.getBoundingClientRect();
-
     if (graphRect) {
       setTooltipData(week);
       setTooltipPosition({
@@ -74,13 +70,15 @@ const WeeklyContributionGraph: React.FC<WeeklyContributionGraphProps> = ({ data 
   };
 
   return (
-    <div className="relative mx-auto" ref={graphRef}>
+    <div className="relative mx-auto w-full" ref={graphRef}>
       <div className="flex flex-wrap items-end justify-start">
         {weeks.map((week, index) => (
           <div key={index} className="mb-3 flex flex-col items-center">
-            {week.isMonthStart && <div className="mb-1 text-xs text-gray-500">{week.month}</div>}
+            {week.isMonthStart && (
+              <div className="mb-1 text-xs font-semibold text-gray-500">{week.month}</div>
+            )}
             <div
-              className={`m-0.5 size-5 ${getColor(week.count)}`}
+              className={`m-px size-4 ${getColor(week.count)}`}
               onMouseEnter={(e) => handleMouseEnter(week, e)}
               onMouseLeave={handleMouseLeave}
             />
@@ -88,7 +86,7 @@ const WeeklyContributionGraph: React.FC<WeeklyContributionGraphProps> = ({ data 
         ))}
       </div>
       {tooltipData && (
-        <Tooltip
+        <ContributionTooltip
           weekStart={tooltipData.weekStart}
           count={tooltipData.count}
           position={tooltipPosition}

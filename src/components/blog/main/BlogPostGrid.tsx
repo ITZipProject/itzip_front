@@ -28,7 +28,7 @@ const BlogPostGrid: React.FC = () => {
 
   return (
     <div className="mx-auto max-w-7xl overflow-x-hidden px-4">
-      <div className="sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid grid-cols-4 justify-items-center gap-6">
+      <div className="sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid justify-items-center gap-6">
         {posts.map((post) => (
           <BlogPostCard key={post.id} {...post} />
         ))}
