@@ -30,6 +30,7 @@
     "import/parsers": { "@typescript-eslint/parser": [".ts", ".tsx"] }
   },
   "rules": {
+    "tailwindcss/no-custom-classname": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": ["warn", { "extensions": [".ts", ".tsx"] }],
