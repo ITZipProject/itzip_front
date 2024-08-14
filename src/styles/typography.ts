@@ -13,36 +13,59 @@ const createFontStyle = (
 });
 
 const fontStyles = {
-  //extrabold
+  // extrabold
+  'pre/100/extrabold': createFontStyle('100', '150', 'extrabold', 'tighter'),
+  'pre/90/extrabold': createFontStyle('90', '150', 'extrabold', 'tighter'),
   'pre/80/extrabold': createFontStyle('80', '150', 'extrabold', 'tighter'),
   'pre/72/extrabold': createFontStyle('72', '150', 'extrabold', 'tighter'),
   'pre/64/extrabold': createFontStyle('64', '150', 'extrabold', 'tighter'),
   'pre/56/extrabold': createFontStyle('56', '150', 'extrabold', 'tighter'),
   'pre/48/extrabold': createFontStyle('48', '150', 'extrabold', 'tighter'),
+  'pre/44/extrabold': createFontStyle('44', '150', 'extrabold', 'tighter'),
   'pre/40/extrabold': createFontStyle('40', '150', 'extrabold', 'tighter'),
   'pre/36/extrabold': createFontStyle('36', '150', 'extrabold', 'tighter'),
   'pre/32/extrabold': createFontStyle('32', '150', 'extrabold', 'tighter'),
   'pre/28/extrabold': createFontStyle('28', '150', 'extrabold', 'tighter'),
+  'pre/24/extrabold': createFontStyle('24', '150', 'extrabold', 'tighter'),
+  'pre/20/extrabold': createFontStyle('20', '150', 'extrabold', 'tighter'),
+  'pre/18/extrabold': createFontStyle('18', '170', 'extrabold', 'tighter'),
+  'pre/16/extrabold': createFontStyle('16', '170', 'extrabold', 'tighter'),
+  'pre/14/extrabold': createFontStyle('14', '170', 'extrabold', 'tighter'),
+  'pre/12/extrabold': createFontStyle('12', '170', 'extrabold', 'tighter'),
+  'pre/10/extrabold': createFontStyle('10', '170', 'extrabold', 'tighter'),
+  'pre/8/extrabold': createFontStyle('8', '170', 'extrabold', 'tighter'),
 
-  //bold
+  // bold
+  'pre/100/bold': createFontStyle('100', '150', 'bold', 'tighter'),
+  'pre/90/bold': createFontStyle('90', '150', 'bold', 'tighter'),
   'pre/80/bold': createFontStyle('80', '150', 'bold', 'tighter'),
   'pre/72/bold': createFontStyle('72', '150', 'bold', 'tighter'),
   'pre/64/bold': createFontStyle('64', '150', 'bold', 'tighter'),
   'pre/56/bold': createFontStyle('56', '150', 'bold', 'tighter'),
   'pre/48/bold': createFontStyle('48', '150', 'bold', 'tighter'),
+  'pre/44/bold': createFontStyle('44', '150', 'bold', 'tighter'),
   'pre/40/bold': createFontStyle('40', '150', 'bold', 'tighter'),
   'pre/36/bold': createFontStyle('36', '150', 'bold', 'tighter'),
   'pre/32/bold': createFontStyle('32', '150', 'bold', 'tighter'),
   'pre/28/bold': createFontStyle('28', '150', 'bold', 'tighter'),
   'pre/24/bold': createFontStyle('24', '150', 'bold', 'tighter'),
   'pre/20/bold': createFontStyle('20', '150', 'bold', 'tighter'),
+  'pre/18/bold': createFontStyle('18', '170', 'bold', 'tighter'),
+  'pre/16/bold': createFontStyle('16', '170', 'bold', 'tighter'),
+  'pre/14/bold': createFontStyle('14', '170', 'bold', 'tighter'),
+  'pre/12/bold': createFontStyle('12', '170', 'bold', 'tighter'),
+  'pre/10/bold': createFontStyle('10', '170', 'bold', 'tighter'),
+  'pre/8/bold': createFontStyle('8', '170', 'bold', 'tighter'),
 
   // semibold
+  'pre/100/semibold': createFontStyle('100', '150', 'semibold', 'tighter'),
+  'pre/90/semibold': createFontStyle('90', '150', 'semibold', 'tighter'),
   'pre/80/semibold': createFontStyle('80', '140', 'semibold', 'tighter'),
   'pre/72/semibold': createFontStyle('72', '140', 'semibold', 'tighter'),
   'pre/64/semibold': createFontStyle('64', '140', 'semibold', 'tighter'),
   'pre/56/semibold': createFontStyle('56', '150', 'semibold', 'tighter'),
   'pre/48/semibold': createFontStyle('48', '150', 'semibold', 'tighter'),
+  'pre/44/semibold': createFontStyle('44', '150', 'semibold', 'tighter'),
   'pre/40/semibold': createFontStyle('40', '150', 'semibold', 'tighter'),
   'pre/36/semibold': createFontStyle('36', '150', 'semibold', 'tighter'),
   'pre/32/semibold': createFontStyle('32', '150', 'semibold', 'tighter'),
@@ -54,8 +77,20 @@ const fontStyles = {
   'pre/14/semibold': createFontStyle('14', '170', 'semibold', 'tighter'),
   'pre/12/semibold': createFontStyle('12', '170', 'semibold', 'tighter'),
   'pre/10/semibold': createFontStyle('10', '170', 'semibold', 'tighter'),
+  'pre/8/semibold': createFontStyle('8', '170', 'semibold', 'tighter'),
 
   // medium
+  'pre/100/medium': createFontStyle('100', '150', 'medium', 'tighter'),
+  'pre/90/medium': createFontStyle('90', '150', 'medium', 'tighter'),
+  'pre/80/medium': createFontStyle('80', '150', 'medium', 'tighter'),
+  'pre/72/medium': createFontStyle('72', '150', 'medium', 'tighter'),
+  'pre/64/medium': createFontStyle('64', '150', 'medium', 'tighter'),
+  'pre/56/medium': createFontStyle('56', '150', 'medium', 'tighter'),
+  'pre/48/medium': createFontStyle('48', '150', 'medium', 'tighter'),
+  'pre/44/medium': createFontStyle('44', '150', 'medium', 'tighter'),
+  'pre/40/medium': createFontStyle('40', '150', 'medium', 'tighter'),
+  'pre/36/medium': createFontStyle('36', '150', 'medium', 'tighter'),
+  'pre/32/medium': createFontStyle('32', '150', 'medium', 'tighter'),
   'pre/28/medium': createFontStyle('28', '150', 'medium', 'tighter'),
   'pre/24/medium': createFontStyle('24', '150', 'medium', 'tighter'),
   'pre/20/medium': createFontStyle('20', '150', 'medium', 'tighter'),
@@ -64,8 +99,21 @@ const fontStyles = {
   'pre/14/medium': createFontStyle('14', '170', 'medium', 'tighter'),
   'pre/12/medium': createFontStyle('12', '170', 'medium', 'tighter'),
   'pre/10/medium': createFontStyle('10', '170', 'medium', 'tighter'),
+  'pre/8/medium': createFontStyle('8', '170', 'medium', 'tighter'),
 
   // regular
+  'pre/100/regular': createFontStyle('100', '150', 'regular', 'tighter'),
+  'pre/90/regular': createFontStyle('90', '150', 'regular', 'tighter'),
+  'pre/80/regular': createFontStyle('80', '150', 'regular', 'tighter'),
+  'pre/72/regular': createFontStyle('72', '150', 'regular', 'tighter'),
+  'pre/64/regular': createFontStyle('64', '150', 'regular', 'tighter'),
+  'pre/56/regular': createFontStyle('56', '150', 'regular', 'tighter'),
+  'pre/48/regular': createFontStyle('48', '150', 'regular', 'tighter'),
+  'pre/44/regular': createFontStyle('44', '150', 'regular', 'tighter'),
+  'pre/40/regular': createFontStyle('40', '150', 'regular', 'tighter'),
+  'pre/36/regular': createFontStyle('36', '150', 'regular', 'tighter'),
+  'pre/32/regular': createFontStyle('32', '150', 'regular', 'tighter'),
+  'pre/28/regular': createFontStyle('28', '150', 'regular', 'tighter'),
   'pre/24/regular': createFontStyle('24', '150', 'regular', 'tighter'),
   'pre/20/regular': createFontStyle('20', '150', 'regular', 'tighter'),
   'pre/18/regular': createFontStyle('18', '170', 'regular', 'tighter'),
@@ -73,10 +121,11 @@ const fontStyles = {
   'pre/14/regular': createFontStyle('14', '170', 'regular', 'tighter'),
   'pre/12/regular': createFontStyle('12', '170', 'regular', 'tighter'),
   'pre/10/regular': createFontStyle('10', '170', 'regular', 'tighter'),
+  'pre/8/regular': createFontStyle('8', '170', 'regular', 'tighter'),
 };
 
 export const typographyStyles = ({ addComponents }: PluginAPI) => {
-  const newComponents: { [key: string]: any } = {
+  const newTypography: { [key: string]: any } = {
     '.font-pre-display-01': {
       ...fontStyles['pre/48/extrabold'],
       '@screen sm': fontStyles['pre/48/extrabold'],
@@ -162,10 +211,11 @@ export const typographyStyles = ({ addComponents }: PluginAPI) => {
       '@screen lg': fontStyles['pre/10/regular'],
     },
   };
-  addComponents(newComponents);
+  addComponents(newTypography);
 };
 
 export const fontSize = {
+  '8': '8px',
   '10': '10px',
   '12': '12px',
   '14': '14px',
