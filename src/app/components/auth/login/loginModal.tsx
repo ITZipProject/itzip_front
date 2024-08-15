@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
-import googleIcon from '../../../../public/Google.png';
-import githubIcon from '../../../../public/github.png';
+import googleIcon from '../../../../../public/Google.png';
+import githubIcon from '../../../../../public/github.png';
 import { useModal } from '@/lib/context/ModalContext';
 import AuthModal from '../authModal';
 import { Margin } from '@/components/common/margin';

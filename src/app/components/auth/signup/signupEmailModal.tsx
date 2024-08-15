@@ -2,14 +2,13 @@
 
 import React, { useState } from 'react';
 import Modal from '../authModal';
-import Input from '../../common/input';
+import Input from '../../../../components/common/input';
 import Button from '../authButton';
 import { useModal } from '@/lib/context/ModalContext';
 import { useFormState } from 'react-dom';
-import { login } from '@/app/(Auth)/sign-in/action';
 import { ChevronLeftIcon } from '@heroicons/react/16/solid';
 import { Margin } from '@/components/common/margin';
-import { signUp } from '@/app/(Auth)/sign-up/actions';
+import { signUp } from './actions';
 
 interface SignInModalProps {
   modalId: string;
@@ -182,12 +181,14 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
           </div>
         </div>
 
-        <button
+        {/* <button
           onClick={() => openModal('verifyModal')}
           className="primary-btn bg-[#F5F5F5] h-[48px] disabled:bg-[#F5F5F5]disabled:text-white disabled:cursor-not-allowed rounded-[12px] text-white font-[600] text-[14px]"
         >
-          가입하기
-        </button>
+          이메일 인증하기
+        </button> */}
+        <Button text="가입하기" modalId="" />
+
         <div className="flex flex-col items-center">
           <h1 className="text-[12px] font-[500] text-[#818181]">이미 회원이신가요?</h1>
           <button
