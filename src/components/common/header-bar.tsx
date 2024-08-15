@@ -3,11 +3,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useModal } from '@/lib/context/ModalContext';
-import LoginModal from '../auth/login/loginModal';
-import EmailLoginModal from '../auth/email/emailLoginModal';
-import SignUpModal from '../auth/signup/signUpModal';
-import SignUpEmailModal from '../auth/signup/signupEmailModal';
-import VerifyModal from '../auth/signup/verifyModal';
+import LoginModal from '../../app/components/auth/login/loginModal';
+import EmailLoginModal from '../../app/components/auth/email/emailLoginModal';
+import SignUpModal from '../../app/components/auth/signup/signUpModal';
+import SignUpEmailModal from '../../app/components/auth/signup/signupEmailModal';
+import { Modals } from './Modals';
 
 interface HeaderBarProps {
   exists?: boolean;
@@ -46,7 +46,6 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
         )}
       </div>
       <div className={`gap-[24px] ${textColor} items-center flex`}>
-        <Link href={''}>고객센터</Link>
         <div>
           {!exists ? (
             <button
@@ -67,12 +66,9 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
             </Link>
           )}
         </div>
+        <Link href={''}>고객센터</Link>
       </div>
-      <LoginModal modalId="LoginModal" />
-      <EmailLoginModal modalId="EmailLoginModal" />
-      <SignUpModal modalId="signUpModal" />
-      <SignUpEmailModal modalId="signUpEmailModal" />
-      <VerifyModal modalId="verifyModal" />
+      <Modals />
     </div>
   );
 }
