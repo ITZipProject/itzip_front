@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import localFont from 'next/font/local';
 
 import './globals.css';
 import Footer from '@/components/common/footer';
@@ -9,7 +9,12 @@ import { ModalProvider } from '@/lib/context/ModalContext';
 import db from '../lib/db';
 import getSession from '../lib/session';
 
-const inter = Inter({ subsets: ['latin'] });
+const pretendard = localFont({
+  src: '../fonts/PretendardVariable.woff2',
+  display: 'swap',
+  weight: '45 920',
+  variable: '--font-pretendard',
+});
 
 export const metadata: Metadata = {
   title: {
@@ -53,8 +58,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const user = await getUser();
   const profileImage = await getUserProfile();
   return (
-    <html lang="ko">
-      <body className={`${inter.className} mx-auto overflow-x-hidden bg-white text-black`}>
+    <html lang="ko" className={pretendard.variable}>
+      <body className={`mx-auto overflow-x-hidden bg-white text-black ${pretendard.className}`}>
         <ModalProvider>
           <HeaderBar profileImage={profileImage} exists={user} />
           {children}
