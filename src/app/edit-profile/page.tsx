@@ -51,7 +51,7 @@ export default function EditProfile() {
           errors={state?.fieldErrors.nickname}
         />
 
-        <Button text="작성 완료" />
+        <Button text="작성 완료" modalId="" />
       </form>
     </div>
   );
