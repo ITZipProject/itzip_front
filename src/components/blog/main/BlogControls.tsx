@@ -43,6 +43,9 @@ const BlogControls: React.FC = () => {
           selectedOption={selectedMainCategory}
           onSelect={handleMainCategorySelect}
           iconSrc="/icons/blog/whiteMode_DownArrow.png"
+          textSize="text-lg"
+          textWeight="font-medium"
+          iconSize={16}
         />
         {selectedMainCategory !== '전체' && (
           <BlogControlsDropdown
@@ -50,6 +53,9 @@ const BlogControls: React.FC = () => {
             selectedOption={selectedSubCategory}
             onSelect={handleSubCategorySelect}
             iconSrc="/icons/blog/whiteMode_DownArrow.png"
+            textSize="text-lg"
+            textWeight="font-medium"
+            iconSize={16}
           />
         )}
       </div>
@@ -59,17 +65,20 @@ const BlogControls: React.FC = () => {
           selectedOption="최신순"
           onSelect={handleSortOptionSelect}
           iconSrc="/icons/blog/whiteMode_DownArrow.png"
+          textSize="text-md"
+          textWeight="font-normal"
+          iconSize={12}
         />
         <div className="ml-8 flex items-center space-x-3">
           <button className="rounded-full border border-gray-300 p-2">
             <Image
               src="/icons/blog/whiteMode_WritePen.png"
               alt="Write Post"
-              width={16}
-              height={16}
+              width={20}
+              height={20}
             />
           </button>
-          <button className="rounded-full bg-blue-600 px-4 py-1 font-medium text-white">
+          <button className="rounded-full bg-blue-600 px-4 py-1 text-sm font-medium text-white">
             내 블로그
           </button>
         </div>

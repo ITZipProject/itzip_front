@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    font-family: var(--font-pretendard), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  }
+}
+
 @layer components {
   .primary-btn {
     @apply py-[16px]  items-center w-full transition-colors rounded-[12px] bg-color-button-primary hover:bg-color-button-primary-hover active:bg-color-button-primary-pressed focus:bg-color-button-primary-focus disabled:bg-color-button-disabled *:text-white *:font-[600] text-[14px];
