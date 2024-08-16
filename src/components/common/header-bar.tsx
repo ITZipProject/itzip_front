@@ -3,8 +3,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useModal } from '@/lib/context/ModalContext';
-import LoginModal from '../auth/loginModal';
-import EmailLoginModal from '../auth/emailLoginModal';
+import LoginModal from '../../app/components/auth/login/loginModal';
+import EmailLoginModal from '../../app/components/auth/email/emailLoginModal';
+import SignUpModal from '../../app/components/auth/signup/signUpModal';
+import SignUpEmailModal from '../../app/components/auth/signup/signupEmailModal';
+import { Modals } from './Modals';
 
 interface HeaderBarProps {
   exists?: boolean;
@@ -28,7 +31,7 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
       </Link>
       <div className={`flex gap-[56px] ${textColor} text-headerSize`}>
         {!exists ? (
-          <button onClick={() => openModal('signupModal')}>이력서</button>
+          <button onClick={() => openModal('LoginModal')}>이력서</button>
         ) : (
           <Link href={'/resume'}>이력서</Link>
         )}
@@ -37,17 +40,16 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
         </Link>
         <Link href={'/blog'}>기술정보</Link>
         {!exists ? (
-          <button onClick={() => openModal('signupModal')}>학습하기</button>
+          <button onClick={() => openModal('LoginModal')}>학습하기</button>
         ) : (
           <Link href={'/study'}>학습하기</Link>
         )}
       </div>
       <div className={`gap-[24px] ${textColor} items-center flex`}>
-        <Link href={''}>고객센터</Link>
         <div>
           {!exists ? (
             <button
-              onClick={() => openModal('signupModal')}
+              onClick={() => openModal('LoginModal')}
               className="border px-[20px] py-[10px] rounded-[16px] border-opacity-10"
             >
               로그인
@@ -64,9 +66,9 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
             </Link>
           )}
         </div>
+        <Link href={''}>고객센터</Link>
       </div>
-      <LoginModal modalId="signupModal" />
-      <EmailLoginModal modalId="signinModal" />
+      <Modals />
     </div>
   );
 }
