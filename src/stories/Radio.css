@@ -20,8 +20,8 @@
 }
 
 .radio-container input:checked + .radiomark {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #3733ED;
+  border-color: #3733ED;
 }
 
 .radiomark::after {
