@@ -7,10 +7,7 @@ interface QuizCardProps {
 }
 
 const QuizCard: React.FC<QuizCardProps> = ({ quiz, onClick }) => {
-  const correctRate = quiz.tried_user_count
-    ? (quiz.accepted_user_count / quiz.tried_user_count) * 100
-    : 0;
-
+  console.log(quiz);
   const renderDifficultyLevel = (difficulty: number) => {
     switch (difficulty) {
       case 1:
@@ -26,18 +23,27 @@ const QuizCard: React.FC<QuizCardProps> = ({ quiz, onClick }) => {
 
   return (
     <div
-      className="flex flex-col w-full h-[400px] bg-neutral-800 items-center cursor-pointer rounded-lg gap-8 p-3"
+      className="flex flex-col w-full h-[450px] bg-neutral-800 items-center cursor-pointer rounded-lg gap-8 p-8"
       onClick={onClick}
     >
       <div className="w-full flex justify-between">
-        <h3 className=" text-slate-400 text-center">{renderDifficultyLevel(quiz.difficulty)}</h3>
-        <h3 className=" text-slate-400 text-center">{quiz.category}</h3>
+        <h3 className=" text-slate-400 text-center text-xs rounded-sm">{quiz.category}</h3>
       </div>
       <div className=" w-full h-3/5">
-        <h3 className=" font-bold text-slate-300 text-2xl text-center">{quiz.question_text}</h3>
+        <h3 className=" font-bold text-slate-300 text-2xl text-center">{quiz.questionText}</h3>
       </div>
-      <div className="flex gap-5 justify-between items-center">
-        <h3 className=" text-slate-400 text-center text-lg">{correctRate.toFixed(2)}%</h3>
+      <div className="w-full">
+        {quiz.choices.map((choices, index) => (
+          <h3 className="text-neutral-600">
+            {choices.id}. {choices.choiceText}
+          </h3>
+        ))}
+      </div>
+      <div className="w-full flex justify-between items-center">
+        <h3 className=" text-slate-400 text-center rounded-sm">
+          {renderDifficultyLevel(quiz.difficulty)}
+        </h3>
+        <h3 className=" text-slate-400 text-center text-lg">{quiz.triedUserCount}명이 푼 문제</h3>
       </div>
     </div>
   );

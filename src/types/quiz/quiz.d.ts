@@ -1,14 +1,22 @@
 export interface QuizData {
   _id: string;
-  question_text: string;
+  questionText: string;
   difficulty: number;
   category: string;
   answer: number;
   create_date: string;
   modify_date: string;
-  accepted_user_count: number;
-  tried_user_count: number;
+  acceptedUserCount: number;
+  triedUserCount: number;
   points: number;
   create_user_id: string;
-  choices: { id: number; choice_text: string }[];
+  choices: { id: number; choiceText: string }[];
+}
+
+export interface MakeQuizData {
+  category: string;
+  difficulty: string;
+  question: string;
+  options: string[];
+  answer: string;
 }

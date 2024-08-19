@@ -7,7 +7,7 @@ export const applyFilter = (
   difficulty: number | null,
 ) => {
   return quizzes.filter((item) => {
-    const matchesSearchTerm = searchTerm ? item.question_text.includes(searchTerm) : true;
+    const matchesSearchTerm = searchTerm ? item.questionText.includes(searchTerm) : true;
     const matchesCategory = category ? item.category === category : true;
     const matchesDifficulty = difficulty !== null ? item.difficulty === difficulty : true;
 
@@ -21,7 +21,7 @@ export const sortedFilteredQuizzes = (
 ) => {
   return filteredQuizzes.slice().sort((a, b) => {
     if (sortOrder === 'recommended') {
-      return b.accepted_user_count - a.accepted_user_count;
+      return b.acceptedUserCount - a.acceptedUserCount;
     }
     const dateA = new Date(a.create_date).getTime();
     const dateB = new Date(b.create_date).getTime();
