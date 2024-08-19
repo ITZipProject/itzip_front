@@ -17,7 +17,7 @@ const MakeQuizButton: React.FC = () => {
     <div>
       <div
         onClick={handleAddQuiz}
-        className="flex items-center justify-center  bg-neutral-800  bg-gray-800 rounded-lg cursor-pointer h-[400px] w-full"
+        className="flex items-center justify-center  bg-neutral-800  bg-gray-800 rounded-lg cursor-pointer w-[250px] h-[300px]"
       >
         <div className="flex flex-col gap-4 justify-center items-center">
           <Image

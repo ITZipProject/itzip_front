@@ -109,6 +109,9 @@ const config: Config = {
         'color-button-fourth': '#FFFFFF',
 
         gray: '#EBEBEB',
+        'color-field-solid': '#F5F5F5',
+        'color-field-line': '#FFFFFF',
+        'color-field-disabled': '#ECECEC',
       },
       borderColor: {
         'color-button-fourth-hover': '#8F8F8F',

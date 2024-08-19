@@ -11,7 +11,7 @@ interface ModalProps {
 const QuizShowModal: React.FC<ModalProps & QuizData> = ({
   isOpen,
   onClose,
-  question_text,
+  questionText,
   choices,
   answer,
   category,
@@ -57,12 +57,11 @@ const QuizShowModal: React.FC<ModalProps & QuizData> = ({
           X
         </button>
         <div className="w-full flex justify-between px-8">
-          <h3 className="text-center mt-8 text-sm">{difficultyLabel}</h3>
-          <h3 className="text-center mt-8 text-sm">{category}</h3>
+          <h3 className="text-center mt-8 text-xl">{difficultyLabel}</h3>
+          <h3 className="text-center mt-8 text-xl">{category}</h3>
         </div>
 
-        {/* 난이도 표시 */}
-        <h3 className=" mt-4 text-2xl">{question_text}</h3>
+        <h3 className=" mt-4 text-2xl">{questionText}</h3>
         <div className="flex flex-col w-full mt-9 justify-start items-start">
           {choices.map((choice, index) => (
             <button
@@ -72,7 +71,7 @@ const QuizShowModal: React.FC<ModalProps & QuizData> = ({
               }`}
               onClick={() => handleOptionClick(index)}
             >
-              {index + 1}. {choice.choice_text}
+              {index + 1}. {choice.choiceText}
             </button>
           ))}
         </div>
