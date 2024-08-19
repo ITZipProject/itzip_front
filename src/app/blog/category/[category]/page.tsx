@@ -56,6 +56,66 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ params }) => {
           Caption 04: 가장 작은 일반 텍스트입니다. 법적 고지나 매우 작은 정보에 사용합니다.
         </p>
       </section>
+      <section>
+        <h2 className="mb-4">그림자 스타일</h2>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="rounded bg-white p-4 shadow-card">
+            <p>Card 그림자</p>
+          </div>
+          <div className="rounded bg-white p-4 shadow-modal">
+            <p>Modal 그림자</p>
+          </div>
+          <div className="rounded-full bg-white p-4 shadow-fab">
+            <p>FAB 그림자</p>
+          </div>
+          <div className="bg-white p-4 shadow-nav">
+            <p>Nav 그림자</p>
+          </div>
+          <div className="bg-white p-4 shadow-bottomsheet">
+            <p>Bottom Sheet 그림자</p>
+          </div>
+          <div className="bg-white p-4 shadow-drawer">
+            <p>Drawer 그림자</p>
+          </div>
+          <div className="rounded bg-white p-4 shadow-dropdown">
+            <p>Dropdown 그림자</p>
+          </div>
+          <div className="rounded bg-white p-4 shadow-toast">
+            <p>Toast 그림자</p>
+          </div>
+          <div className="rounded bg-white p-4 shadow-tooltip">
+            <p>Tooltip 그림자</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 className="mb-4">테두리 너비 스타일</h2>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <div className="p-4 border-01">border-01 (0.5px)</div>
+          <div className="p-4 border-02">border-02 (1px)</div>
+          <div className="p-4 border-03">border-03 (1.5px)</div>
+          <div className="p-4 border-04">border-04 (2px)</div>
+          <div className="p-4 border-05">border-05 (3px)</div>
+          <div className="p-4 border-06">border-06 (4px)</div>
+          <div className="p-4 border-07">border-07 (8px)</div>
+          <div className="p-4 border-08">border-08 (12px)</div>
+        </div>
+      </section>
+
+      <section>
+        <h2 className="mb-4">코너 반경 스타일</h2>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <div className="p-4 border-08 radius-01">radius-01 (8px)</div>
+          <div className="p-4 border-07 radius-02">radius-02 (10px)</div>
+          <div className="p-4 border-06 radius-03">radius-03 (12px)</div>
+          <div className="p-4 border-05 radius-04">radius-04 (16px)</div>
+          <div className="p-4 border-04 radius-05">radius-05 (20px)</div>
+          <div className="p-4 border-03 radius-06">radius-06 (24px)</div>
+          <div className="p-4 border-02 radius-07">radius-07 (40px)</div>
+          <div className="p-4 border-01 radius-08">radius-08 (9999px)</div>
+        </div>
+      </section>
     </div>
   );
 };
