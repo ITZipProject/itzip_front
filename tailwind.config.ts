@@ -1,6 +1,8 @@
 import type { Config } from 'tailwindcss';
 import plugin from 'tailwindcss/plugin';
 
+import { borderWidths, borderRadii } from './src/styles/borders';
+import { shadows } from './src/styles/shadows';
 import {
   typographyStyles,
   fontSize,
@@ -64,6 +66,9 @@ const config: Config = {
     //   'White-alpha-90': 'rgba(225,225,225,0.9)',
     // },
     extend: {
+      boxShadow: shadows,
+      borderWidth: borderWidths,
+      borderRadius: borderRadii,
       fontFamily: {
         sans: [
           'var(--font-pretendard)',
@@ -141,6 +146,28 @@ const config: Config = {
       '2xl': '1440px',
     },
   },
-  plugins: [plugin(typographyStyles), require('@tailwindcss/forms')],
+  plugins: [
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        ...Object.entries(borderWidths).reduce(
+          (acc, [key, value]) => {
+            (acc as Record<string, { borderWidth: string }>)[`.${key}`] = { borderWidth: value };
+            return acc;
+          },
+          {} as Record<string, { borderWidth: string }>,
+        ),
+        ...Object.entries(borderRadii).reduce(
+          (acc, [key, value]) => {
+            (acc as Record<string, { borderRadius: string }>)[`.${key}`] = { borderRadius: value };
+            return acc;
+          },
+          {} as Record<string, { borderRadius: string }>,
+        ),
+      });
+    }),
+    plugin(typographyStyles),
+    require('@tailwindcss/forms'),
+  ],
 };
+
 export default config;

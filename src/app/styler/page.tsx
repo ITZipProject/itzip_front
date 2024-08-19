@@ -1,32 +1,31 @@
 import React from 'react';
 
-interface CategoryPageProps {
-  params: {
-    category: string;
-  };
-}
-
-const CategoryPage: React.FC<CategoryPageProps> = ({ params }) => {
+const StylerPage = () => {
   return (
-    <div className="space-y-8 p-4">
-      <h1 className="mb-8">카테고리: {params.category}</h1>
-
-      <section>
-        <h2 className="mb-4">Display 스타일</h2>
+    <div className="bg-gray-50 space-y-12 p-6">
+      <div className="font-pre-body-01">
+        Styler 페이지: 각종 스타일 예시가 포함된 예제 페이지입니다. 참고용으로 쓰세요.
+      </div>
+      <section className="border-gray-200 bg-white p-6 shadow-card border-06 radius-03">
+        <h2 className="font-pre-heading-01 mb-4 border-b pb-2 text-gray-700">
+          Display Text 스타일
+        </h2>
         <p className="font-pre-display-01">Display 01: 큰 제목 텍스트</p>
         <p className="font-pre-display-02">Display 02: 중간 크기 제목</p>
         <p className="font-pre-display-03">Display 03: 작은 제목</p>
       </section>
 
-      <section>
-        <h2 className="mb-4">Heading 스타일</h2>
+      <section className="border-gray-200 bg-white p-6 shadow-card border-06 radius-03">
+        <h2 className="font-pre-heading-01 mb-4 border-b pb-2 text-gray-700">
+          Heading Text 스타일
+        </h2>
         <h1 className="font-pre-heading-01">Heading 01: 주요 섹션 제목</h1>
         <h2 className="font-pre-heading-02">Heading 02: 부 섹션 제목</h2>
         <h3 className="font-pre-heading-03">Heading 03: 소 섹션 제목</h3>
       </section>
 
-      <section>
-        <h2 className="mb-4">Body 스타일</h2>
+      <section className="border-gray-200 bg-white p-6 shadow-card border-06 radius-03">
+        <h2 className="font-pre-heading-01 mb-4 border-b pb-2 text-gray-700">Body Text 스타일</h2>
         <p className="font-pre-body-01">
           Body 01: 강조된 본문 텍스트입니다. 중요한 정보를 표시할 때 사용합니다.
         </p>
@@ -41,8 +40,10 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ params }) => {
         </p>
       </section>
 
-      <section>
-        <h2 className="mb-4">Caption 스타일</h2>
+      <section className="border-gray-200 bg-white p-6 shadow-card border-06 radius-03">
+        <h2 className="font-pre-heading-01 mb-4 border-b pb-2 text-gray-700">
+          Caption Text 스타일
+        </h2>
         <p className="font-pre-caption-01">
           Caption 01: 강조된 작은 텍스트입니다. 라벨이나 짧은 설명에 사용합니다.
         </p>
@@ -56,8 +57,9 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ params }) => {
           Caption 04: 가장 작은 일반 텍스트입니다. 법적 고지나 매우 작은 정보에 사용합니다.
         </p>
       </section>
-      <section>
-        <h2 className="mb-4">그림자 스타일</h2>
+
+      <section className="border-gray-200 bg-white p-6 shadow-card border-06 radius-03">
+        <h2 className="font-pre-heading-01 mb-4 border-b pb-2 text-gray-700">그림자 스타일</h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           <div className="rounded bg-white p-4 shadow-card">
             <p>Card 그림자</p>
@@ -89,8 +91,8 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ params }) => {
         </div>
       </section>
 
-      <section>
-        <h2 className="mb-4">테두리 너비 스타일</h2>
+      <section className="border-gray-200 bg-white p-6 shadow-card border-06 radius-03">
+        <h2 className="font-pre-heading-01 mb-4 border-b pb-2 text-gray-700">테두리 너비 스타일</h2>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <div className="p-4 border-01">border-01 (0.5px)</div>
           <div className="p-4 border-02">border-02 (1px)</div>
@@ -103,8 +105,8 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ params }) => {
         </div>
       </section>
 
-      <section>
-        <h2 className="mb-4">코너 반경 스타일</h2>
+      <section className="border-gray-200 bg-white p-6 shadow-card border-06 radius-03">
+        <h2 className="font-pre-heading-01 mb-4 border-b pb-2 text-gray-700">코너 반경 스타일</h2>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <div className="p-4 border-08 radius-01">radius-01 (8px)</div>
           <div className="p-4 border-07 radius-02">radius-02 (10px)</div>
@@ -120,4 +122,4 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ params }) => {
   );
 };
 
-export default CategoryPage;
+export default StylerPage;
