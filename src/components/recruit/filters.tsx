@@ -99,7 +99,7 @@ const Filters: React.FC<FiltersProps> = ({
         />
       </div>
       <button
-        className="w-full px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" // Modified button color
+        className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" // Modified button color
         onClick={applyFilters}
       >
         필터 적용

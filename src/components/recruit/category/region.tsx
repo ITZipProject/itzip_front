@@ -26,9 +26,10 @@ const regions: Region[] = [
 interface Props {
   selectedRegion: string;
   setSelectedRegion: (region: string) => void;
+  groupName?: string; // Optional group name prop
 }
 
-const RegionCheckboxes: React.FC<Props> = ({ selectedRegion, setSelectedRegion }) => {
+const RegionCheckboxes: React.FC<Props> = ({ selectedRegion, setSelectedRegion, groupName = 'radioGroup2' }) => {
   return (
     <div className="container flex flex-col w-64">
       {regions.map((region) => (
@@ -36,7 +37,7 @@ const RegionCheckboxes: React.FC<Props> = ({ selectedRegion, setSelectedRegion }
           <input
             type="radio"
             id={region.id}
-            name="region"
+            name={groupName} // Dynamic group name
             value={region.name}
             checked={selectedRegion === region.name}
             onChange={() => setSelectedRegion(region.name)}
