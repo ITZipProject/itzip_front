@@ -30,9 +30,9 @@ const Filters: React.FC<FiltersProps> = ({
   return (
     <div className="">
       <div className="px-2 flex justify-between mb-4">
-        <h2 className="font-bold">필터</h2>
+        <h2 className="font-pre-heading-03">필터</h2>
         <button
-          className="bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+          className="font-pre-heading-03 text-gray-800 rounded hover:bg-blue-300"
           onClick={() => {
             setFilters({
               technology: '',
@@ -48,14 +48,14 @@ const Filters: React.FC<FiltersProps> = ({
         </button>
       </div>
       <Search search={filters.search} handleFilterChange={handleFilterChange} applyFilters={applyFilters} />
-      <div className="mb-4 p-4 border border-gray-300 rounded-lg">
-        <h3 className="font-semibold mb-2">기술 스택</h3>
+      <div className="mb-4 p-4 border-01 radius-01">
+        <h3 className="font-pre-body-01 mb-2">기술 스택</h3>
         <input
           type="text"
           name="technology"
           value={filters.technology}
           onChange={handleFilterChange}
-          className="w-full p-2 border border-gray-300 rounded"
+          className="font-pre-body-02 w-full p-2 border border-gray-300 rounded"
           placeholder="기술을 입력하세요"
         />
         <div className="mt-2">
@@ -80,15 +80,15 @@ const Filters: React.FC<FiltersProps> = ({
           {/* Add more labels as needed */}
         </div>
       </div>
-      <div className="mb-4 p-4 border border-gray-300 rounded-lg">
-        <h3 className="font-semibold mb-2">지역</h3>
+      <div className="mb-4 p-4 border-01 radius-01">
+        <h3 className="font-pre-body-01 mb-2">지역</h3>
         <RegionCheckboxes
           selectedRegion={filters.location}
           setSelectedRegion={(region: string) => setFilters({ ...filters, location: region })}
         />
       </div>
-      <div className="mb-4 p-4 border border-gray-300 rounded-lg">
-        <h3 className="font-semibold mb-2">경력</h3>
+      <div className="mb-4 p-4 border-01 radius-01">
+        <h3 className="font-pre-body-01 mb-2">경력</h3>
         <input
           type="text"
           name="experience"
