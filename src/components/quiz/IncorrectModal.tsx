@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 interface ModalProps {
   onClose: () => void;
-  answer: number;
 }
 
 const ratings = [
@@ -13,7 +12,7 @@ const ratings = [
   { value: 2, label: '문제를 추천합니다' },
 ];
 
-const IncorrectModal: React.FC<ModalProps> = ({ onClose, answer }) => {
+const IncorrectModal: React.FC<ModalProps> = ({ onClose }) => {
   const [selectedRate, setSelectedRate] = useState<number | null>(null);
 
   return (
@@ -29,7 +28,6 @@ const IncorrectModal: React.FC<ModalProps> = ({ onClose, answer }) => {
 
         <div>
           <h3 className="text-center text-7xl font-bold">-12점</h3>
-          <h3>정답: {answer}</h3>
         </div>
         <div>
           <div className="flex gap-5">

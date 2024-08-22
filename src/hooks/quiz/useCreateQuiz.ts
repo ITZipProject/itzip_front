@@ -1,43 +1,67 @@
+import { useState } from 'react';
+import axios from 'axios';
 import { useAtom } from 'jotai';
 import { quizzesAtom } from '@/lib/atoms/atoms';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { quizSchema } from '@/lib/quiz/QuizValidationSchema';
 import { z } from 'zod';
+import { fetchQuizzes } from '@/api/quiz/fetchQuizzes';
 
 type QuizFormValues = z.infer<typeof quizSchema>;
 
 const useCreateQuiz = () => {
   const [quizzes, setQuizzes] = useAtom(quizzesAtom);
+  const [loading, setLoading] = useState(false);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const methods = useForm<QuizFormValues>({
     resolver: zodResolver(quizSchema),
+    defaultValues: {
+      category: '',
+      difficulty: '',
+      question: '',
+      options: ['', ''],
+      answer: '',
+    },
   });
 
-  const handleCreateQuiz: SubmitHandler<QuizFormValues> = (values) => {
-    const newQuiz = {
-      _id: Math.random().toString(36).substr(2, 9),
-      question_text: values.question,
-      difficulty: parseInt(values.difficulty.replace('Lv.', '')),
-      category: values.category,
-      answer: values.options.indexOf(values.answer) + 1,
-      create_date: new Date().toISOString(),
-      modify_date: new Date().toISOString(),
-      accepted_user_count: 0,
-      tried_user_count: 0,
-      points: 0,
-      create_user_id: '1234567890123456789',
-      choices: values.options.map((option, index) => ({
-        id: index + 1,
-        choice_text: option,
-      })),
-    };
-    setQuizzes([...quizzes, newQuiz]);
+  const handleCreateQuiz: SubmitHandler<QuizFormValues> = async (values) => {
+    setLoading(true);
+    try {
+      await axios.post(
+        '/cs-quiz/',
+        {
+          questionText: values.question,
+          difficulty: parseInt(values.difficulty.replace('Lv.', '')),
+          answer: values.options.indexOf(values.answer) + 1,
+          userId: 10,
+          choices: values.options.map((option, index) => ({
+            id: index + 1,
+            choiceText: option,
+          })),
+          categoryId: values.category,
+        },
+        {
+          baseURL: apiUrl,
+        },
+      );
+
+      const quizzes = await fetchQuizzes();
+      setQuizzes(quizzes);
+
+      console.log('문제 생성 완료');
+    } catch (error) {
+      console.error('Failed to create or fetch quizzes:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return {
     methods,
     handleCreateQuiz,
+    loading,
   };
 };
 

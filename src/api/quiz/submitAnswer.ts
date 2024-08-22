@@ -1,22 +1,20 @@
 import axios from 'axios';
-import { QuizData } from '../../types/quiz/quiz';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export const fetchQuizzes = async (): Promise<QuizData[]> => {
+export const submitAnswer = async () => {
   if (!apiUrl) {
     throw new Error('API URL is not defined');
   }
 
   try {
-    const response = await axios.get('/cs-quizzes/search', {
+    const response = await axios.post('/cs-quizzes/search', {
       baseURL: apiUrl,
       params: {
-        userId: 8,
         sortBy: 'NEWEST',
         inUserSolved: false,
         page: 0,
-        size: 9,
+        size: 10,
       },
     });
     return response.data.data.content;

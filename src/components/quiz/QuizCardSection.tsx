@@ -13,6 +13,11 @@ const QuizCardSection: React.FC<QuizCardSectionProps> = ({ filteredAndSortedQuiz
   const [selectedQuiz, setSelectedQuiz] = useState<QuizData | null>(null);
 
   const handleCardClick = (quiz: QuizData) => {
+    if (quiz.userQuizStatus === 'SOLVED') {
+      alert('이미 푼 문제입니다.');
+      return;
+    }
+
     setSelectedQuiz(quiz);
     setIsModalOpen(true);
   };
@@ -26,7 +31,7 @@ const QuizCardSection: React.FC<QuizCardSectionProps> = ({ filteredAndSortedQuiz
     <div className="flex flex-col">
       <div className="grid grid-cols-3 gap-28">
         {filteredAndSortedQuizzes.map((quiz) => (
-          <QuizCard key={quiz._id} quiz={quiz} onClick={() => handleCardClick(quiz)} />
+          <QuizCard key={quiz.id} quiz={quiz} onClick={() => handleCardClick(quiz)} />
         ))}
       </div>
       {isModalOpen && selectedQuiz && (
