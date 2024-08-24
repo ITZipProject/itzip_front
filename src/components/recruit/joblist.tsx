@@ -23,6 +23,7 @@ const JobList: React.FC<JobListProps> = ({ filteredJobs, handleBookmark }) => {
             <h3 className="font-pre-body-01 text-center mb-2">{job.title}</h3>
             <p className="font-pre-body-02 text-center mb-2">{job.company}</p>
             <p className="font-pre-body-03 text-center text-gray-600 mb-4">{job.industry.name}</p>
+            <p className="font-pre-body-03 text-center text-gray-600 mb-4">{job.jobCode.name}</p>
             <p className="font-pre-body-04 text-center text-gray-600 mb-4">{job.location.name.split(' &gt;').join(' > ')}</p>
           </div>
         ))}

@@ -1,6 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
+import { Job } from './job'; // Job 인터페이스가 정의된 파일 경로
+import TechStack from './category/techStack';
 import RegionCheckboxes from './category/region';
 import Search from './category/search';
 
@@ -17,6 +19,7 @@ interface FiltersProps {
   toggleFilter: (filterName: string) => void;
   handleFilterChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   applyFilters: () => void;
+  jobCodes: Job['jobCode'][]; // jobCode 배열 추가
 }
 
 const Filters: React.FC<FiltersProps> = ({
@@ -26,9 +29,17 @@ const Filters: React.FC<FiltersProps> = ({
   toggleFilter,
   handleFilterChange,
   applyFilters,
+  jobCodes,
 }) => {
+  const [selectedTechStacks, setSelectedTechStacks] = useState<string[]>([]);
+
+  const handleTechStackChange = (selectedTechStacks: string[]) => {
+    setSelectedTechStacks(selectedTechStacks);
+    setFilters({ ...filters, technology: selectedTechStacks.join(',') });
+  };
+
   return (
-    <div className="">
+    <div>
       <div className="px-2 flex justify-between mb-4">
         <h2 className="font-pre-heading-03">필터</h2>
         <button
@@ -41,6 +52,7 @@ const Filters: React.FC<FiltersProps> = ({
               search: '',
               sort: 'latest',
             });
+            setSelectedTechStacks([]);
             applyFilters();
           }}
         >
@@ -50,35 +62,11 @@ const Filters: React.FC<FiltersProps> = ({
       <Search search={filters.search} handleFilterChange={handleFilterChange} applyFilters={applyFilters} />
       <div className="mb-4 p-4 border-01 radius-01">
         <h3 className="font-pre-body-01 mb-2">기술 스택</h3>
-        <input
-          type="text"
-          name="technology"
-          value={filters.technology}
-          onChange={handleFilterChange}
-          className="font-pre-body-02 w-full p-2 border border-gray-300 rounded"
-          placeholder="기술을 입력하세요"
+        <TechStack
+          jobCodes={jobCodes} // 'jobCodes'를 'jobCodes'로 전달
+          selectedTechStacks={selectedTechStacks}
+          onTechStackChange={handleTechStackChange}
         />
-        <div className="mt-2">
-          <label className="block mb-1">
-            <input
-              type="checkbox"
-              name="label1"
-              checked={filters.technology.includes('label1')}
-              onChange={handleFilterChange}
-            />
-            label1
-          </label>
-          <label className="block mb-1">
-            <input
-              type="checkbox"
-              name="label2"
-              checked={filters.technology.includes('label2')}
-              onChange={handleFilterChange}
-            />
-            label2
-          </label>
-          {/* Add more labels as needed */}
-        </div>
       </div>
       <div className="mb-4 p-4 border-01 radius-01">
         <h3 className="font-pre-body-01 mb-2">지역</h3>
@@ -99,7 +87,7 @@ const Filters: React.FC<FiltersProps> = ({
         />
       </div>
       <button
-        className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" // Modified button color
+        className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
         onClick={applyFilters}
       >
         필터 적용
