@@ -1,17 +1,13 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { useAtom } from 'jotai';
-import { quizzesAtom } from '@/lib/atoms/atoms';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { quizSchema } from '@/lib/quiz/QuizValidationSchema';
 import { z } from 'zod';
-import { fetchQuizzes } from '@/api/quiz/fetchQuizzes';
 
 type QuizFormValues = z.infer<typeof quizSchema>;
 
 const useCreateQuiz = () => {
-  const [quizzes, setQuizzes] = useAtom(quizzesAtom);
   const [loading, setLoading] = useState(false);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -46,9 +42,6 @@ const useCreateQuiz = () => {
           baseURL: apiUrl,
         },
       );
-
-      const quizzes = await fetchQuizzes();
-      setQuizzes(quizzes);
 
       console.log('문제 생성 완료');
     } catch (error) {

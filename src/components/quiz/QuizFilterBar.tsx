@@ -14,7 +14,7 @@ const QuizFilterBar = ({ handleFilteredQuizzes }: QuizFilterBarProps) => {
   const [difficulty, setDifficulty] = useState<number | null>(null);
   const [category, setCategory] = useState<number | ''>('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortOrder, setSortOrder] = useState<'NEWEST' | 'OLDEST' | 'recommended'>('NEWEST');
+  const [sortOrder, setSortOrder] = useState<'NEWEST' | 'OLDEST' | 'RECOMMENDED'>('NEWEST');
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -24,13 +24,14 @@ const QuizFilterBar = ({ handleFilteredQuizzes }: QuizFilterBarProps) => {
         const response = await axios.get('/cs-quizzes/search', {
           baseURL: apiUrl,
           params: {
+            difficulty: difficulty,
+            categoryId: category,
             sortBy: sortOrder,
-            inUserSolved: false,
+            userId: 7,
+            inUserSolved: true,
             page: page,
             size: 9,
             keyword: searchTerm,
-            category: category,
-            difficulty: difficulty,
           },
         });
         handleFilteredQuizzes(response.data.data.content);
@@ -43,6 +44,7 @@ const QuizFilterBar = ({ handleFilteredQuizzes }: QuizFilterBarProps) => {
   );
 
   useEffect(() => {
+    console.log('fetching quizzes');
     fetchFilteredQuizzes(searchTerm, category, difficulty, sortOrder, page);
   }, [searchTerm, category, difficulty, sortOrder, page, fetchFilteredQuizzes]);
 
@@ -150,9 +152,9 @@ const QuizFilterBar = ({ handleFilteredQuizzes }: QuizFilterBarProps) => {
                 오래된 순
               </button>
               <button
-                onClick={() => setSortOrder('recommended')}
-                disabled={sortOrder === 'recommended'}
-                className={`py-2 px-4 rounded text-slate-400 ${sortOrder === 'recommended' ? 'text-slate-200 font-bold' : ''}`}
+                onClick={() => setSortOrder('RECOMMENDED')}
+                disabled={sortOrder === 'RECOMMENDED'}
+                className={`py-2 px-4 rounded text-slate-400 ${sortOrder === 'RECOMMENDED' ? 'text-slate-200 font-bold' : ''}`}
               >
                 추천순
               </button>

@@ -2,16 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { QuizData } from '../../../types/quiz/quiz';
 import QuizFilterBar from '../../quiz/QuizFilterBar';
 import QuizCardSection from '../../quiz/QuizCardSection';
-import { useLoadQuizzes } from '../../../hooks/quiz/useLoadQuizzes';
 import MyQuizSection from '@/components/quiz/MyQuizSection';
 
 const QuizPageLayout: React.FC = () => {
-  const loadQuizzes = useLoadQuizzes();
   const [filteredQuizzes, setFilteredQuizzes] = useState<QuizData[]>([]);
-
-  useEffect(() => {
-    loadQuizzes();
-  }, []);
 
   const handleFilteredQuizzes = (filteredQuizzes: QuizData[]) => {
     setFilteredQuizzes(filteredQuizzes);

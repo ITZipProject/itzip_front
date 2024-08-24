@@ -1,27 +1,36 @@
 import axios from 'axios';
-import { QuizData } from '../../types/quiz/quiz';
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+// 매개변수 인터페이스 정의
+interface FetchQuizzesParams {
+  searchTerm: string;
+  category: string | number;
+  difficulty: number | null;
+  sortOrder: string;
+  page: number;
+}
 
-export const fetchQuizzes = async (): Promise<QuizData[]> => {
-  if (!apiUrl) {
-    throw new Error('API URL is not defined');
-  }
-
-  try {
-    const response = await axios.get('/cs-quizzes/search', {
-      baseURL: apiUrl,
-      params: {
-        userId: 8,
-        sortBy: 'NEWEST',
-        inUserSolved: false,
-        page: 0,
-        size: 9,
-      },
-    });
-    return response.data.data.content;
-  } catch (error) {
-    console.error('Error fetching quizzes:', error);
-    throw new Error('Failed to fetch quizzes');
-  }
+// API 호출 함수
+const fetchQuizzes = async ({
+  searchTerm,
+  category,
+  difficulty,
+  sortOrder,
+  page,
+}: FetchQuizzesParams) => {
+  const response = await axios.get('/cs-quizzes/search', {
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    params: {
+      difficulty: difficulty,
+      categoryId: category,
+      sortBy: sortOrder,
+      userId: 7,
+      inUserSolved: false,
+      page: page,
+      size: 9,
+      keyword: searchTerm,
+    },
+  });
+  return response.data.data.content;
 };
+
+export default fetchQuizzes;

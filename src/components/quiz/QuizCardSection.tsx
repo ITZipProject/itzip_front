@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import QuizCard from './QuizCard';
 import { QuizData } from '@/types/quiz/quiz';
 import QuizShowModal from '../../components/quiz/QuizShowModal';
-import MakeQuizButton from '../../components/quiz/MakeQuizButton';
 
 type QuizCardSectionProps = {
   filteredAndSortedQuizzes: QuizData[];
@@ -13,7 +12,7 @@ const QuizCardSection: React.FC<QuizCardSectionProps> = ({ filteredAndSortedQuiz
   const [selectedQuiz, setSelectedQuiz] = useState<QuizData | null>(null);
 
   const handleCardClick = (quiz: QuizData) => {
-    if (quiz.userQuizStatus === 'SOLVED') {
+    if (quiz.userQuizStatus === 'CORRECT') {
       alert('이미 푼 문제입니다.');
       return;
     }

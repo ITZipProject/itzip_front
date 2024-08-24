@@ -7,11 +7,6 @@ interface QuizCardProps {
 }
 
 const QuizCard: React.FC<QuizCardProps> = ({ quiz, onClick }) => {
-  if (quiz.userQuizStatus === 'SOLVED') {
-    alert('이미 푼 문제입니다.');
-    return null;
-  }
-
   const renderDifficultyLevel = (difficulty: number) => {
     switch (difficulty) {
       case 1:
