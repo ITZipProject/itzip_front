@@ -1,14 +1,14 @@
-import { useState } from 'react';
 import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { quizSchema } from '@/lib/quiz/QuizValidationSchema';
 import { z } from 'zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 type QuizFormValues = z.infer<typeof quizSchema>;
 
 const useCreateQuiz = () => {
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const methods = useForm<QuizFormValues>({
@@ -22,9 +22,8 @@ const useCreateQuiz = () => {
     },
   });
 
-  const handleCreateQuiz: SubmitHandler<QuizFormValues> = async (values) => {
-    setLoading(true);
-    try {
+  const mutation = useMutation({
+    mutationFn: async (values: QuizFormValues) => {
       await axios.post(
         '/cs-quiz/',
         {
@@ -42,19 +41,23 @@ const useCreateQuiz = () => {
           baseURL: apiUrl,
         },
       );
-
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries();
       console.log('문제 생성 완료');
-    } catch (error) {
+    },
+    onError: (error) => {
       console.error('Failed to create or fetch quizzes:', error);
-    } finally {
-      setLoading(false);
-    }
+    },
+  });
+
+  const handleCreateQuiz: SubmitHandler<QuizFormValues> = (values) => {
+    mutation.mutate(values);
   };
 
   return {
     methods,
     handleCreateQuiz,
-    loading,
   };
 };
 

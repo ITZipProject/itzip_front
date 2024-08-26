@@ -10,7 +10,6 @@ export function SecondStep({ errors }: StepProps) {
   const { register, setValue, watch } = useFormContext();
   const [options, setOptions] = useState(['', '']);
   const answer = watch('answer');
-  console.log('errors', errors);
 
   const updateOptions = (index: number, value: string) => {
     const newOptions = [...options];

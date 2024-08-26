@@ -15,11 +15,11 @@ const QuizPageLayout: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full h-full px-28 py-14 gap-12 overflow-y-auto text-white bg-neutral-900">
-      <MyQuizSection />
       <QueryClientProvider client={queryClient}>
+        <MyQuizSection />
         <QuizFilterBar handleFilteredQuizzes={handleFilteredQuizzes} />
+        <QuizCardSection filteredAndSortedQuizzes={filteredQuizzes} />
       </QueryClientProvider>
-      <QuizCardSection filteredAndSortedQuizzes={filteredQuizzes} />
     </div>
   );
 };
