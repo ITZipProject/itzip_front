@@ -16,7 +16,6 @@ const QuizCardSection: React.FC<QuizCardSectionProps> = ({ filteredAndSortedQuiz
       alert('이미 푼 문제입니다.');
       return;
     }
-
     setSelectedQuiz(quiz);
     setIsModalOpen(true);
   };

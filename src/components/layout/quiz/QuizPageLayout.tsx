@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { QuizData } from '../../../types/quiz/quiz';
 import QuizFilterBar from '../../quiz/QuizFilterBar';
 import QuizCardSection from '../../quiz/QuizCardSection';
 import MyQuizSection from '@/components/quiz/MyQuizSection';
+const queryClient = new QueryClient();
 
 const QuizPageLayout: React.FC = () => {
   const [filteredQuizzes, setFilteredQuizzes] = useState<QuizData[]>([]);
@@ -14,7 +16,9 @@ const QuizPageLayout: React.FC = () => {
   return (
     <div className="flex flex-col w-full h-full px-28 py-14 gap-12 overflow-y-auto text-white bg-neutral-900">
       <MyQuizSection />
-      <QuizFilterBar handleFilteredQuizzes={handleFilteredQuizzes} />
+      <QueryClientProvider client={queryClient}>
+        <QuizFilterBar handleFilteredQuizzes={handleFilteredQuizzes} />
+      </QueryClientProvider>
       <QuizCardSection filteredAndSortedQuizzes={filteredQuizzes} />
     </div>
   );

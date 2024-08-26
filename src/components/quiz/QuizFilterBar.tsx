@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 import { QuizData } from '@/types/quiz/quiz';
 import debounce from 'lodash/debounce';
 import { QuizCategories, QuizrRatings } from '@/data/QuizData';
@@ -18,35 +19,35 @@ const QuizFilterBar = ({ handleFilteredQuizzes }: QuizFilterBarProps) => {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
-  const fetchFilteredQuizzes = useCallback(
-    debounce(async (searchTerm, category, difficulty, sortOrder, page) => {
-      try {
-        const response = await axios.get('/cs-quizzes/search', {
-          baseURL: apiUrl,
-          params: {
-            difficulty: difficulty,
-            categoryId: category,
-            sortBy: sortOrder,
-            userId: 7,
-            inUserSolved: true,
-            page: page,
-            size: 9,
-            keyword: searchTerm,
-          },
-        });
-        handleFilteredQuizzes(response.data.data.content);
-        setTotalPages(response.data.data.page.totalPages);
-      } catch (error) {
-        console.error('Failed to fetch quizzes:', error);
-      }
-    }, 300),
-    [],
-  );
+  const fetchFilteredQuizzes = async () => {
+    console.log('fetchFilteredQuizzes');
+    const response = await axios.get('/cs-quizzes/search', {
+      baseURL: apiUrl,
+      params: {
+        difficulty: difficulty,
+        categoryId: category,
+        sortBy: sortOrder,
+        userId: 7,
+        inUserSolved: true,
+        page: page,
+        size: 9,
+        keyword: searchTerm,
+      },
+    });
+    return response.data.data;
+  };
+
+  const { data } = useQuery({
+    queryKey: ['filteredQuizzes', searchTerm, category, difficulty, sortOrder, page],
+    queryFn: fetchFilteredQuizzes,
+  });
 
   useEffect(() => {
-    console.log('fetching quizzes');
-    fetchFilteredQuizzes(searchTerm, category, difficulty, sortOrder, page);
-  }, [searchTerm, category, difficulty, sortOrder, page, fetchFilteredQuizzes]);
+    if (data) {
+      handleFilteredQuizzes(data.content);
+      setTotalPages(data.page.totalPages);
+    }
+  }, [data]);
 
   const resetFilters = () => {
     setSearchTerm('');
