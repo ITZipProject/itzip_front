@@ -1,14 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import Modal from '../authModal';
-import Input from '../../../../components/common/input';
-import Button from '../authButton';
+import Modal from '../auth/authModal';
+import Input from '../../../components/common/input';
+import Button from '../auth/authButton';
 import { useModal } from '@/lib/context/ModalContext';
 import { useFormState } from 'react-dom';
 import { ChevronLeftIcon } from '@heroicons/react/16/solid';
 import { Margin } from '@/components/common/margin';
-import { signUp } from './actions';
 
 interface SignInModalProps {
   modalId: string;
@@ -16,7 +15,7 @@ interface SignInModalProps {
 
 const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
   const { openModals, closeModal, openModal } = useModal();
-  const [state, action] = useFormState(signUp, null);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -77,6 +76,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
       );
     }
   };
+
   return (
     <Modal isOpen={true} onClose={() => closeModal(modalId)}>
       <button onClick={() => openModal('signUpModal')} className="flex items-center">
@@ -84,7 +84,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
         <h1 className="font-[700] text-[24px]">이메일로 회원가입하기</h1>
       </button>
       <Margin height={'48px'} />
-      <form action={action} className="w-full space-y-4">
+      <form className="w-full space-y-4">
         <div className="flex items-center">
           <label htmlFor="email">이메일</label>
           <span className="text-[#E46969] ml-[2px]">*</span>
@@ -99,8 +99,9 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
           required
           minLength={2}
           onClick={() => handleReset('email')}
-          errors={state?.fieldErrors.email}
         />
+        <Button text="이메일 인증하기" modalId="" />
+
         <div className="flex items-center">
           <label htmlFor="password">비밀번호</label>
           <span className="text-[#E46969] ml-[2px]">*</span>
@@ -115,7 +116,6 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
           required
           minLength={2}
           onClick={() => handleReset('password')}
-          errors={state?.fieldErrors.password}
         />
         <div className="flex items-center">
           <label htmlFor="confirmPassword">비밀번호 확인</label>
@@ -131,9 +131,8 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
           required
           minLength={2}
           onClick={() => handleReset('confirmPassword')}
-          errors={state?.fieldErrors.passwordConfirm}
         />
-        {/* todo input 로그인 상태 유지 배경색 조정 - token */}
+        {/* 약관 동의 체크박스 */}
         <div className="*:p-[12px]">
           <div>
             <input
@@ -181,12 +180,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
           </div>
         </div>
 
-        {/* <button
-          onClick={() => openModal('verifyModal')}
-          className="primary-btn bg-[#F5F5F5] h-[48px] disabled:bg-[#F5F5F5]disabled:text-white disabled:cursor-not-allowed rounded-[12px] text-white font-[600] text-[14px]"
-        >
-          이메일 인증하기
-        </button> */}
+        {/* 가입하기 버튼 */}
         <Button text="가입하기" modalId="" />
 
         <div className="flex flex-col items-center">

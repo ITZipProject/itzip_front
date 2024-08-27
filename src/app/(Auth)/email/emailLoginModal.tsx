@@ -1,14 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import Modal from '../authModal';
-import Input from '../../../../components/common/input';
-import Button from '../authButton';
+import Modal from '../auth/authModal';
+import Input from '../../../components/common/input';
+import Button from '../auth/authButton';
 import { useModal } from '@/lib/context/ModalContext';
 import { useFormState } from 'react-dom';
 import { ChevronLeftIcon } from '@heroicons/react/16/solid';
 import { Margin } from '@/components/common/margin';
-import { login } from './action';
 
 interface SignInModalProps {
   modalId: string;
@@ -16,7 +15,6 @@ interface SignInModalProps {
 
 const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
   const { openModals, closeModal, openModal } = useModal();
-  const [state, action] = useFormState(login, null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -45,10 +43,6 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const result = await login(null, formData);
-    if (!result?.fieldErrors) {
-      closeModal(modalId);
-    }
   };
 
   return (
@@ -58,7 +52,7 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
         <h1 className="font-[700] text-[24px]">이메일로 로그인하기</h1>
       </button>
       <Margin height={'48px'} />
-      <form onSubmit={handleLogin} className="w-full space-y-4">
+      <form className="w-full space-y-4">
         <div className="flex items-center">
           <label htmlFor="email">이메일</label>
           <span className="text-[#E46969] ml-[2px]">*</span>
@@ -72,7 +66,6 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
           required
           minLength={2}
           onClick={() => handleReset('email')}
-          errors={state?.fieldErrors.email}
         />
         <div className="flex items-center">
           <label htmlFor="email">비밀번호</label>
@@ -87,7 +80,6 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
           required
           minLength={2}
           onClick={() => handleReset('password')}
-          errors={state?.fieldErrors.password}
         />
         <div className="flex items-center bg-[#EDECFC] p-[12px]">
           <input
