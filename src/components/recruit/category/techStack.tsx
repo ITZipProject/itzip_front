@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from 'react';
+'use client';
+
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { TechStack, loadTechStacks } from '../../../utils/techStacksLoader';
 
 interface TechStackFilterProps {
-  onSelectionChange?: (selected: string[]) => void;  // 옵셔널로 변경
+  onSelectionChange?: (selected: string[]) => void;
 }
 
-const TechStackFilter: React.FC<TechStackFilterProps> = ({ onSelectionChange }) => {
+export interface TechStackFilterRef {
+  resetSelections: (newSelection: string[]) => void;
+}
+
+const TechStackFilter = forwardRef<TechStackFilterRef, TechStackFilterProps>(({ onSelectionChange }, ref) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [techStacks, setTechStacks] = useState<TechStack[]>([]);
   const [filteredTechStacks, setFilteredTechStacks] = useState<TechStack[]>([]);
@@ -26,17 +32,23 @@ const TechStackFilter: React.FC<TechStackFilterProps> = ({ onSelectionChange }) 
     }
   }, [searchTerm, techStacks]);
 
+  useImperativeHandle(ref, () => ({
+    resetSelections: (newSelection: string[]) => {
+      setSelectedTechStacks(newSelection);
+    }
+  }));
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleSelect = (techId: string) => {
-    const updatedSelection = selectedTechStacks.includes(techId)
-      ? selectedTechStacks.filter(id => id !== techId)
-      : [...selectedTechStacks, techId];
+  const handleSelect = (techName: string) => {
+    const updatedSelection = selectedTechStacks.includes(techName)
+      ? selectedTechStacks.filter(name => name !== techName)
+      : [...selectedTechStacks, techName];
     
     setSelectedTechStacks(updatedSelection);
-    if (onSelectionChange) {  // 함수가 존재하는 경우에만 호출
+    if (onSelectionChange) {
       onSelectionChange(updatedSelection);
     }
   };
@@ -48,19 +60,20 @@ const TechStackFilter: React.FC<TechStackFilterProps> = ({ onSelectionChange }) 
         value={searchTerm}
         onChange={handleSearch}
         placeholder="기술을 입력하세요"
-        className="search-input"
+        className="search-input w-full p-2 border border-gray-300 rounded mb-2"
       />
       <div className="tech-list">
         {searchTerm.trim() === '' ? (
           <p>기술 스택을 검색해 보세요</p>
         ) : filteredTechStacks.length > 0 ? (
           filteredTechStacks.map(tech => (
-            <div key={tech.id} className="tech-item">
-              <label>
+            <div key={tech.id} className="tech-item mb-2">
+              <label className="flex items-center">
                 <input
                   type="checkbox"
-                  checked={selectedTechStacks.includes(tech.id)}
-                  onChange={() => handleSelect(tech.id)}
+                  checked={selectedTechStacks.includes(tech.name)}
+                  onChange={() => handleSelect(tech.name)}
+                  className="mr-2"
                 />
                 {tech.name}
               </label>
@@ -72,6 +85,8 @@ const TechStackFilter: React.FC<TechStackFilterProps> = ({ onSelectionChange }) 
       </div>
     </div>
   );
-};
+});
+
+TechStackFilter.displayName = 'TechStackFilter';
 
 export default TechStackFilter;
