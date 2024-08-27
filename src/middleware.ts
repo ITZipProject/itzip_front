@@ -33,5 +33,5 @@ export async function middleware(request: NextRequest) {
 
 // middleware를 실행시키고 싶은 경로 - 아래는 해당되는 경로는 제외 시킨다.
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!_next/static|_next).*)'],
 };
