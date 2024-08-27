@@ -12,11 +12,11 @@ const AuthModal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
   return ReactDOM.createPortal(
     <div
-      className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-80 flex justify-center items-center"
+      className="fixed top-0 left-0 right-0 bottom-0   flex justify-center bg-Grey-1000 bg-opacity-Grey-alpha-80 items-center "
       onClick={onClose}
     >
       <div
-        className="bg-white w-[435px] rounded-[24px] py-[50px] px-[40px]"
+        className="bg-white w-[435px] rounded-[24px] py-[50px] px-[40px] shadow-Shadow-modal"
         onClick={(e) => e.stopPropagation()}
       >
         {children}
