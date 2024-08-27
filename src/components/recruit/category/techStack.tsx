@@ -1,43 +1,43 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
-import { Job } from '../job'; // Job 인터페이스가 정의된 파일 경로
+import { TechStack, loadTechStacks } from '../../../utils/techStacksLoader';
 
-interface TechStackProps {
-  jobCodes: Job['jobCode'][]; // Job 인터페이스의 jobCode 배열
-  selectedTechStacks: string[]; // 선택된 기술 스택 IDs
-  onTechStackChange: (selectedTechStacks: string[]) => void; // 기술 스택 변경 핸들러
+interface TechStackFilterProps {
+  onSelectionChange?: (selected: string[]) => void;  // 옵셔널로 변경
 }
 
-const TechStack: React.FC<TechStackProps> = ({ jobCodes, selectedTechStacks, onTechStackChange }) => {
+const TechStackFilter: React.FC<TechStackFilterProps> = ({ onSelectionChange }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredTechStacks, setFilteredTechStacks] = useState<Job['jobCode'][]>([]);
+  const [techStacks, setTechStacks] = useState<TechStack[]>([]);
+  const [filteredTechStacks, setFilteredTechStacks] = useState<TechStack[]>([]);
+  const [selectedTechStacks, setSelectedTechStacks] = useState<string[]>([]);
 
   useEffect(() => {
-    // jobCodes가 정의되어 있는지 확인하고 필터링합니다.
-    if (jobCodes) {
-      const filtered = jobCodes.filter((techStack) =>
-        techStack.name.toLowerCase().includes(searchTerm.toLowerCase())
+    setTechStacks(loadTechStacks());
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm.trim() === '') {
+      setFilteredTechStacks([]);
+    } else {
+      const filtered = techStacks.filter(tech =>
+        tech.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredTechStacks(filtered);
     }
-  }, [searchTerm, jobCodes]);
+  }, [searchTerm, techStacks]);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      // Enter 키를 눌렀을 때 추가적인 동작을 원하면 여기에 코드를 추가합니다.
-    }
-  };
-
-  const handleCheckboxChange = (techStackCode: string) => {
-    if (selectedTechStacks.includes(techStackCode)) {
-      onTechStackChange(selectedTechStacks.filter(code => code !== techStackCode));
-    } else {
-      onTechStackChange([...selectedTechStacks, techStackCode]);
+  const handleSelect = (techId: string) => {
+    const updatedSelection = selectedTechStacks.includes(techId)
+      ? selectedTechStacks.filter(id => id !== techId)
+      : [...selectedTechStacks, techId];
+    
+    setSelectedTechStacks(updatedSelection);
+    if (onSelectionChange) {  // 함수가 존재하는 경우에만 호출
+      onSelectionChange(updatedSelection);
     }
   };
 
@@ -46,29 +46,32 @@ const TechStack: React.FC<TechStackProps> = ({ jobCodes, selectedTechStacks, onT
       <input
         type="text"
         value={searchTerm}
-        onChange={handleSearchChange}
-        onKeyDown={handleKeyDown}
-        placeholder="기술 스택 검색"
-        className="w-full p-2 border border-gray-300 rounded mb-2"
+        onChange={handleSearch}
+        placeholder="기술을 입력하세요"
+        className="search-input"
       />
-      <div>
-        {filteredTechStacks.length > 0 ? (
-          filteredTechStacks.map((techStack) => (
-            <label key={techStack.code} className="block mb-1">
-              <input
-                type="checkbox"
-                checked={selectedTechStacks.includes(techStack.code)}
-                onChange={() => handleCheckboxChange(techStack.code)}
-              />
-              {techStack.name}
-            </label>
+      <div className="tech-list">
+        {searchTerm.trim() === '' ? (
+          <p>기술 스택을 검색해 보세요</p>
+        ) : filteredTechStacks.length > 0 ? (
+          filteredTechStacks.map(tech => (
+            <div key={tech.id} className="tech-item">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={selectedTechStacks.includes(tech.id)}
+                  onChange={() => handleSelect(tech.id)}
+                />
+                {tech.name}
+              </label>
+            </div>
           ))
         ) : (
-          <p>검색 결과가 없습니다.</p>
+          <p>검색 결과가 없습니다</p>
         )}
       </div>
     </div>
   );
 };
 
-export default TechStack;
+export default TechStackFilter;

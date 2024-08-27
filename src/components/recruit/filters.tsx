@@ -19,7 +19,7 @@ interface FiltersProps {
   toggleFilter: (filterName: string) => void;
   handleFilterChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   applyFilters: () => void;
-  jobCodes: Job['jobCode'][]; // jobCode 배열 추가
+  // jobCodes prop 제거
 }
 
 const Filters: React.FC<FiltersProps> = ({
@@ -29,7 +29,6 @@ const Filters: React.FC<FiltersProps> = ({
   toggleFilter,
   handleFilterChange,
   applyFilters,
-  jobCodes,
 }) => {
   const [selectedTechStacks, setSelectedTechStacks] = useState<string[]>([]);
 
@@ -63,9 +62,7 @@ const Filters: React.FC<FiltersProps> = ({
       <div className="mb-4 p-4 border-01 radius-01">
         <h3 className="font-pre-body-01 mb-2">기술 스택</h3>
         <TechStack
-          jobCodes={jobCodes} // 'jobCodes'를 'jobCodes'로 전달
-          selectedTechStacks={selectedTechStacks}
-          onTechStackChange={handleTechStackChange}
+          onSelectionChange={handleTechStackChange}
         />
       </div>
       <div className="mb-4 p-4 border-01 radius-01">
