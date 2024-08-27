@@ -1,8 +1,31 @@
 import React, { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 
-interface ModalProps {
-  onClose: (selectedRate: number | null) => void;
+interface CorrectModalProps {
+  onClose: () => void;
+  quizId: string;
 }
+
+const submitPoint = async ({
+  quizId,
+  point,
+  userId,
+}: {
+  quizId: string;
+  point: number;
+  userId: number;
+}) => {
+  await axios.post(
+    '/cs-quiz/point',
+    {
+      userId: 7,
+      quizId: quizId,
+      points: point,
+    },
+    { baseURL: process.env.NEXT_PUBLIC_API_URL },
+  );
+};
 
 const ratings = [
   { value: -2, label: '문제가 이상해요' },
@@ -12,11 +35,25 @@ const ratings = [
   { value: 2, label: '문제를 추천합니다' },
 ];
 
-const CorrectModal: React.FC<ModalProps> = ({ onClose }) => {
+const CorrectModal: React.FC<CorrectModalProps> = ({ onClose, quizId }) => {
   const [selectedRate, setSelectedRate] = useState<number | null>(null);
 
+  const pointMutation = useMutation({
+    mutationFn: submitPoint,
+    onError: (error: any) => {
+      console.error('Failed to submit point:', error);
+    },
+  });
+
   const handleSubmit = () => {
-    onClose(selectedRate);
+    if (selectedRate !== null) {
+      pointMutation.mutate({
+        quizId,
+        point: selectedRate,
+        userId: 7,
+      });
+    }
+    onClose();
   };
 
   return (

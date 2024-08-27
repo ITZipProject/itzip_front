@@ -1,36 +1,52 @@
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-// 매개변수 인터페이스 정의
-interface FetchQuizzesParams {
-  searchTerm: string;
-  category: string | number;
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+interface UseFilteredQuizzesProps {
   difficulty: number | null;
-  sortOrder: string;
+  category: number | '';
+  sortOrder: 'NEWEST' | 'OLDEST' | 'RECOMMENDED';
   page: number;
+  keyword: string;
 }
 
-// API 호출 함수
-const fetchQuizzes = async ({
-  searchTerm,
-  category,
+const fetchFilteredQuizzes = async ({
   difficulty,
+  category,
   sortOrder,
   page,
-}: FetchQuizzesParams) => {
+  keyword,
+}: UseFilteredQuizzesProps) => {
+  console.log('fetchFilteredQuizzes');
   const response = await axios.get('/cs-quizzes/search', {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    baseURL: apiUrl,
     params: {
-      difficulty: difficulty,
+      difficulty,
       categoryId: category,
       sortBy: sortOrder,
       userId: 7,
-      inUserSolved: false,
-      page: page,
+      inUserSolved: true,
+      page,
       size: 9,
-      keyword: searchTerm,
+      keyword,
     },
   });
-  return response.data.data.content;
+
+  return response.data.data;
 };
 
-export default fetchQuizzes;
+export const useFilteredQuizzes = ({
+  difficulty,
+  category,
+  sortOrder,
+  page,
+  keyword,
+}: UseFilteredQuizzesProps) => {
+  return useQuery({
+    queryKey: ['filteredQuizzes', category, difficulty, sortOrder, page, keyword],
+    queryFn: () => fetchFilteredQuizzes({ difficulty, category, sortOrder, page, keyword }),
+    // keepPreviousData: true,
+    staleTime: 1000,
+  });
+};
