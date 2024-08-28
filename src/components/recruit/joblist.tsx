@@ -17,13 +17,14 @@ const JobList: React.FC<JobListProps> = ({ filteredJobs, handleBookmark }) => {
         {filteredJobs.map((job) => (
           <div 
             key={job.id} 
-            className="p-6 border border-gray-300 rounded-lg cursor-pointer"
+            className="p-6 border-01 radius-01 cursor-pointer"
             onClick={() => window.open(job.url, '_blank')}
           >
-            <h3 className="text-lg font-semibold text-center mb-2">{job.title}</h3>
-            <p className="text-lg text-center mb-2">{job.company}</p>
-            <p className="text-center text-gray-600 mb-4">{job.industry.name}</p>
-            <p className="text-center text-gray-600 mb-4">{job.location.name.split(' &gt;').join(' > ')}</p>
+            <h3 className="font-pre-body-01 text-center mb-2">{job.title}</h3>
+            <p className="font-pre-body-02 text-center mb-2">{job.company}</p>
+            <p className="font-pre-body-03 text-center text-gray-600 mb-4">{job.industry.name}</p>
+            {/* <p className="font-pre-body-03 text-center text-gray-600 mb-4">{job.jobCode.name}</p> */}
+            <p className="font-pre-body-04 text-center text-gray-600 mb-4">{job.location.name.split(' &gt;').join(' > ')}</p>
           </div>
         ))}
       </div>

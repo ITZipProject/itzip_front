@@ -10,7 +10,6 @@ const publicOnlyUrls: Routes = {
   '/': true,
   '/sign-in': true,
   '/sign-up': true,
-  '/recruit': true,
 };
 // 세션이 유효한지
 export async function middleware(request: NextRequest) {
