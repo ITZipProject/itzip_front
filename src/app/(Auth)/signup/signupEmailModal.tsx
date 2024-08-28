@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import Modal from '../auth/authModal';
 import Input from '../../../components/common/input';
 import Button from '../auth/authButton';
 import { useModal } from '@/lib/context/ModalContext';
-import { useFormState } from 'react-dom';
 import { ChevronLeftIcon } from '@heroicons/react/16/solid';
 import { Margin } from '@/components/common/margin';
 
@@ -13,67 +13,58 @@ interface SignInModalProps {
   modalId: string;
 }
 
+interface FormValues {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  private: boolean;
+  service: boolean;
+}
+
 const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
   const { openModals, closeModal, openModal } = useModal();
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [allChecked, setAllChecked] = useState(false);
-  const [isChecked, setIsChecked] = useState({
-    private: false,
-    service: false,
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+      private: false,
+      service: false,
+    },
   });
+
+  const [allChecked, setAllChecked] = useState(false);
 
   // 모달이 열려 있는 경우에만 렌더링
   if (!openModals.includes(modalId)) return null;
 
-  const handleReset = (field: 'email' | 'password' | 'confirmPassword') => {
-    if (field === 'email') {
-      setEmail('');
-    } else if (field === 'password') {
-      setPassword('');
-    } else if (field === 'confirmPassword') {
-      setConfirmPassword('');
-    }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    if (name === 'email') {
-      setEmail(value);
-    } else if (name === 'password') {
-      setPassword(value);
-    } else if (name === 'confirmPassword') {
-      setConfirmPassword(value);
-    }
+  const onSubmit = (data: FormValues) => {
+    console.log(data);
+    
+    // TODO: 회원가입 로직 추가
+    closeModal(modalId);
   };
 
   const handleAllCheckedChange = () => {
     const newCheckedStatus = !allChecked;
     setAllChecked(newCheckedStatus);
-    setIsChecked({
-      service: newCheckedStatus,
-      private: newCheckedStatus,
-    });
+    setValue('private', newCheckedStatus);
+    setValue('service', newCheckedStatus);
   };
 
   const handleAgreeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
-    setIsChecked((prev) => ({
-      ...prev,
-      [name]: checked,
-    }));
+    setValue(name as keyof FormValues, checked);
     if (!checked) {
       setAllChecked(false);
     } else {
-      setAllChecked(
-        Object.values({
-          ...isChecked,
-          [name]: checked,
-        }).every(Boolean),
-      );
+      setAllChecked(['private', 'service'].every((key) => watch(key as any)));
     }
   };
 
@@ -84,21 +75,31 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
         <h1 className="font-[700] text-[24px]">이메일로 회원가입하기</h1>
       </button>
       <Margin height={'48px'} />
-      <form className="w-full space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
         <div className="flex items-center">
           <label htmlFor="email">이메일</label>
           <span className="text-[#E46969] ml-[2px]">*</span>
         </div>
-        <Input
-          id="email"
+        <Controller
           name="email"
-          type="email"
-          value={email}
-          onChange={handleInputChange}
-          placeholder="ID@example.com"
-          required
-          minLength={2}
-          onClick={() => handleReset('email')}
+          control={control}
+          rules={{
+            required: '이메일은 필수입니다.',
+            pattern: {
+              value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
+              message: '유효한 이메일 주소를 입력하세요.',
+            },
+          }}
+          render={({ field }) => (
+            <Input
+              id="email"
+              type="email"
+              placeholder="ID@example.com"
+              {...field}
+              onClick={() => setValue('email', '')}
+              errors={errors.email?.message}
+            />
+          )}
         />
         <Button text="이메일 인증하기" modalId="" />
 
@@ -106,31 +107,48 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
           <label htmlFor="password">비밀번호</label>
           <span className="text-[#E46969] ml-[2px]">*</span>
         </div>
-        <Input
-          id="password"
+        <Controller
           name="password"
-          type="password"
-          placeholder="비밀번호를 입력해주세요."
-          value={password}
-          onChange={handleInputChange}
-          required
-          minLength={2}
-          onClick={() => handleReset('password')}
+          control={control}
+          rules={{
+            required: '비밀번호는 필수입니다.',
+            minLength: {
+              value: 6,
+              message: '비밀번호는 최소 6자 이상이어야 합니다.',
+            },
+          }}
+          render={({ field }) => (
+            <Input
+              id="password"
+              type="password"
+              placeholder="비밀번호를 입력해주세요."
+              {...field}
+              onClick={() => setValue('password', '')}
+              errors={errors.password?.message}
+            />
+          )}
         />
         <div className="flex items-center">
           <label htmlFor="confirmPassword">비밀번호 확인</label>
           <span className="text-[#E46969] ml-[2px]">*</span>
         </div>
-        <Input
-          id="confirmPassword"
+        <Controller
           name="confirmPassword"
-          type="password"
-          placeholder="비밀번호를 입력해주세요."
-          value={confirmPassword}
-          onChange={handleInputChange}
-          required
-          minLength={2}
-          onClick={() => handleReset('confirmPassword')}
+          control={control}
+          rules={{
+            required: '비밀번호 확인은 필수입니다.',
+            validate: (value) => value === watch('password') || '비밀번호가 일치하지 않습니다.',
+          }}
+          render={({ field }) => (
+            <Input
+              id="confirmPassword"
+              type="password"
+              placeholder="비밀번호를 입력해주세요."
+              {...field}
+              onClick={() => setValue('confirmPassword', '')}
+              errors={errors.confirmPassword?.message}
+            />
+          )}
         />
         {/* 약관 동의 체크박스 */}
         <div className="*:p-[12px]">
@@ -151,7 +169,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
               id="service"
               type="checkbox"
               name="service"
-              checked={isChecked.service}
+              checked={watch('service')}
               onChange={handleAgreeChange}
               required
               className="size-[16px] border border-[##C6C6C6] outline-none ring-0"
@@ -167,7 +185,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
               id="private"
               type="checkbox"
               name="private"
-              checked={isChecked.private}
+              checked={watch('private')}
               onChange={handleAgreeChange}
               required
               className="size-[16px] border border-[##C6C6C6] outline-none ring-0 "
