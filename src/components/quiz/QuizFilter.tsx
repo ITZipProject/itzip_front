@@ -56,7 +56,7 @@ const QuizFilter: React.FC = () => {
   };
 
   const resetFilters = () => {
-    setSearchTerm('');
+    setDebouncedSearchTerm('');
     setCategory(null);
     setDifficulty(null);
 
