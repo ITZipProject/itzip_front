@@ -1,10 +1,10 @@
 import React from 'react';
 
-interface LeftProps {
+interface TagRankProps {
   onSearchChange: (term: string) => void;
 }
 
-const Left: React.FC<LeftProps> = ({ onSearchChange }) => {
+const TagRank: React.FC<TagRankProps> = ({ onSearchChange }) => {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onSearchChange(event.target.value);
   };
@@ -34,4 +34,4 @@ const Left: React.FC<LeftProps> = ({ onSearchChange }) => {
   );
 };
 
-export default Left;
+export default TagRank;

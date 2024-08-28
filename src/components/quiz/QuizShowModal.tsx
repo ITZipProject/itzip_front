@@ -1,41 +1,69 @@
 import React, { useState } from 'react';
-import { QuizData } from '../../types/quiz/quiz';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import CorrectModal from '../quiz/CorrectModal';
 import IncorrectModal from '../quiz/IncorrectModal';
+import { QuizData, ModalProps, SubmitAnswerParams } from '@/types/quiz/quiz';
 
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+const submitAnswer = async ({ quizId, answer, userId }: SubmitAnswerParams) => {
+  const response = await axios.post(
+    '/cs-quiz/answer',
+    {
+      quizId,
+      answer,
+      userId,
+    },
+    { baseURL: process.env.NEXT_PUBLIC_API_URL },
+  );
+  return response.data.data;
+};
 
 const QuizShowModal: React.FC<ModalProps & QuizData> = ({
   isOpen,
   onClose,
   questionText,
   choices,
-  answer,
   category,
   difficulty,
+  id,
 }) => {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isCorrectModalOpen, setIsCorrectModalOpen] = useState(false);
   const [isIncorrectModalOpen, setIsIncorrectModalOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   if (!isOpen) return null;
+
+  const answerMutation = useMutation({
+    mutationFn: submitAnswer,
+    onSuccess: (result: string) => {
+      queryClient.invalidateQueries();
+      if (result === 'CORRECT') {
+        setIsCorrectModalOpen(true);
+      } else {
+        setIsIncorrectModalOpen(true);
+      }
+    },
+    onError: (error: any) => {
+      console.error('Failed to submit answer:', error);
+    },
+  });
 
   const handleOptionClick = (index: number) => {
     setSelectedOption(index);
   };
 
-  const handleSubmit = () => {
-    if (selectedOption !== null) {
-      if (selectedOption + 1 === answer) {
-        setIsCorrectModalOpen(true);
-      } else {
-        setIsIncorrectModalOpen(true);
-      }
-      setSelectedOption(null);
+  const handleSubmitAnswer = () => {
+    if (selectedOption === null) {
+      alert('선택지를 선택해주세요.');
+      return;
     }
+
+    answerMutation.mutate({
+      quizId: id,
+      answer: selectedOption + 1,
+      userId: 7,
+    });
   };
 
   const closeCorrectModal = () => {
@@ -77,14 +105,14 @@ const QuizShowModal: React.FC<ModalProps & QuizData> = ({
         </div>
         <button
           className="flex justify-center items-center bg-gray-300 rounded-md px-24 py-5"
-          onClick={handleSubmit}
+          onClick={handleSubmitAnswer}
         >
           <h3>제출하기</h3>
         </button>
       </div>
 
-      {isCorrectModalOpen && <CorrectModal onClose={closeCorrectModal} />}
-      {isIncorrectModalOpen && <IncorrectModal onClose={closeIncorrectModal} answer={answer} />}
+      {isCorrectModalOpen && <CorrectModal onClose={closeCorrectModal} quizId={id} />}
+      {isIncorrectModalOpen && <IncorrectModal onClose={closeIncorrectModal} />}
     </div>
   );
 };
