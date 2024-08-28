@@ -35,9 +35,11 @@
     "react-hook-form": "^7.52.1",
     "react-markdown": "^9.0.1",
     "react-modal": "^3.16.1",
+    "react-slick": "^0.30.2",
     "react-spring": "^9.7.4",
     "react-syntax-highlighter": "^15.5.0",
     "remark-gfm": "^4.0.0",
+    "slick-carousel": "^1.8.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -55,6 +57,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-slick": "^0.23.13",
     "@typescript-eslint/eslint-plugin": "^7.17.0",
     "@typescript-eslint/parser": "^7.17.0",
     "eslint": "^8",

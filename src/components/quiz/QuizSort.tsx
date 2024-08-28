@@ -3,18 +3,20 @@ import { QuizData } from '@/types/quiz/quiz';
 import { useFilteredQuizzes } from '@/api/quiz/fetchQuizzes';
 import PaginationButtons from './PaginationButtons';
 import { useRouter, useSearchParams } from 'next/navigation';
+import MakeQuizModal from './MakeQuizModal';
 
 interface QuizSortProps {
   handleFilteredQuizzes: (filteredQuizzes: QuizData[]) => void;
 }
 
 const QuizSort = ({ handleFilteredQuizzes }: QuizSortProps) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
   const [sortOrder, setSortOrder] = useState<'NEWEST' | 'OLDEST' | 'RECOMMENDED'>('NEWEST');
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const sortOrderParam = searchParams.get('sortOrder');
@@ -51,9 +53,28 @@ const QuizSort = ({ handleFilteredQuizzes }: QuizSortProps) => {
     }
   }, [data]);
 
+  const handleAddQuiz = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="w-full flex flex-col gap-10 mb-10">
-      <h3 className="text-3xl font-bold">기술퀴즈 둘러보기</h3>
+      <div className="flex justify-between items-center">
+        <h3 className="text-3xl font-bold">기술퀴즈 둘러보기</h3>
+        <div className="flex justify-center items-center">
+          <div
+            onClick={handleAddQuiz}
+            className="flex items-center justify-center  bg-color-button-primary  rounded-lg cursor-pointer p-3"
+          >
+            <h3 className=" text-white justify-center items-center">+ 문제 생성하기</h3>
+          </div>
+          {isModalOpen && <MakeQuizModal isOpen={isModalOpen} onClose={closeModal} />}
+        </div>
+      </div>
       <div className="border-b"></div>
 
       <div className="w-full flex justify-between border-gray-600">

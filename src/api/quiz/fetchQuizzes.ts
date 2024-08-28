@@ -28,7 +28,7 @@ const fetchFilteredQuizzes = async ({
       categoryId: category,
       sortBy: sortOrder,
       userId: 7,
-      inUserSolved: false,
+      inUserSolved: true,
       page,
       size: 9,
       keyword,

@@ -60,7 +60,6 @@ const QuizFilter: React.FC = () => {
     setCategory(null);
     setDifficulty(null);
 
-    // URL 쿼리 파라미터 초기화
     const queryParams = new URLSearchParams();
     router.push(`?${queryParams.toString()}`);
   };
