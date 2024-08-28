@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import debounce from 'lodash/debounce';
-import { QuizCategories, QuizrRatings } from '@/data/QuizData';
+import { QuizCategories, QuizRatings } from '@/data/QuizData';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 const QuizFilter: React.FC = () => {
@@ -75,7 +75,7 @@ const QuizFilter: React.FC = () => {
           초기화
         </button>
       </div>
-      <div className="w-full flex flex-col border rounded-lg p-6">
+      <div className="w-full flex flex-col border-2 border-gray-700 rounded-lg p-6">
         <div className="flex flex-col justify-center items-center gap-4">
           <div className="w-full flex flex-col gap-8">
             <h3 className="text-xl font-semibold text-gray-500">퀴즈 검색</h3>
@@ -91,7 +91,7 @@ const QuizFilter: React.FC = () => {
 
           <div className="w-full flex flex-col gap-4">
             <h3 className="text-xl font-semibold text-gray-500">난이도</h3>
-            {QuizrRatings.map((rating) => (
+            {QuizRatings.map((rating) => (
               <label key={rating.value} className="flex items-center gap-2">
                 <input
                   type="radio"

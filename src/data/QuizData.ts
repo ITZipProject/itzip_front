@@ -1,4 +1,4 @@
-export const QuizrRatings = [
+export const QuizRatings = [
   { value: 1, label: 'Lv.1' },
   { value: 2, label: 'Lv.2' },
   { value: 3, label: 'Lv.3' },
@@ -27,4 +27,12 @@ export const QuizCategories = [
   { id: 20, categoryname: 'Vue.js' },
   { id: 21, categoryname: 'React' },
   { id: 22, categoryname: 'DevOps' },
+];
+
+export const ratings = [
+  { value: -2, label: '문제가 이상해요' },
+  { value: -1, label: '문제가 별로입니다' },
+  { value: 0, label: '보통입니다' },
+  { value: 1, label: '좋은 문제입니다' },
+  { value: 2, label: '문제를 추천합니다' },
 ];

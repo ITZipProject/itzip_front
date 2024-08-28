@@ -1,5 +1,5 @@
 import React from 'react';
-import { QuizrRatings, QuizCategories } from '@/data/QuizData';
+import { QuizRatings, QuizCategories } from '@/data/QuizData';
 import { useFormContext } from 'react-hook-form';
 import StepIndicator from './StepIndicator';
 
@@ -34,7 +34,7 @@ export function FirstStep({ errors }: StepProps) {
       <div className="flex flex-col gap-3">
         <h3>난이도</h3>
         <div className="flex gap-5">
-          {QuizrRatings.map((rating) => (
+          {QuizRatings.map((rating) => (
             <button
               key={rating.value}
               type="button"

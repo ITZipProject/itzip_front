@@ -1,39 +1,12 @@
 import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
+import { ratings } from '@/data/QuizData';
+import { submitPoint } from '@/api/quiz/submitPoint';
 
 interface CorrectModalProps {
   onClose: () => void;
   quizId: string;
 }
-
-const submitPoint = async ({
-  quizId,
-  point,
-  userId,
-}: {
-  quizId: string;
-  point: number;
-  userId: number;
-}) => {
-  await axios.post(
-    '/cs-quiz/point',
-    {
-      userId: 7,
-      quizId: quizId,
-      points: point,
-    },
-    { baseURL: process.env.NEXT_PUBLIC_API_URL },
-  );
-};
-
-const ratings = [
-  { value: -2, label: '문제가 이상해요' },
-  { value: -1, label: '문제가 별로입니다' },
-  { value: 0, label: '보통입니다' },
-  { value: 1, label: '좋은 문제입니다' },
-  { value: 2, label: '문제를 추천합니다' },
-];
 
 const CorrectModal: React.FC<CorrectModalProps> = ({ onClose, quizId }) => {
   const [selectedRate, setSelectedRate] = useState<number | null>(null);
