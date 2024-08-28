@@ -23,15 +23,6 @@ const MyQuizSection: React.FC = () => {
     slidesToScroll: 3,
   };
 
-  const handleCardClick = (quiz: QuizData) => {
-    if (quiz.userQuizStatus === 'CORRECT') {
-      alert('이미 푼 문제입니다.');
-      return;
-    }
-    setSelectedQuiz(quiz);
-    setIsModalOpen(true);
-  };
-
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedQuiz(null);
@@ -49,7 +40,7 @@ const MyQuizSection: React.FC = () => {
             {quizzes &&
               quizzes.map((quiz: QuizData) => (
                 <div key={quiz.id} className="px-2">
-                  <MyQuizCard quiz={quiz} onClick={() => handleCardClick(quiz)} />
+                  <MyQuizCard quiz={quiz} />
                 </div>
               ))}
           </Slider>

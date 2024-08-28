@@ -3,10 +3,9 @@ import { QuizData } from '../../types/quiz/quiz';
 
 interface MyQuizCardProps {
   quiz: QuizData;
-  onClick: () => void;
 }
 
-const MyQuizCard: React.FC<MyQuizCardProps> = ({ quiz, onClick }) => {
+const MyQuizCard: React.FC<MyQuizCardProps> = ({ quiz }) => {
   const renderDifficultyLevel = (difficulty: number) => {
     switch (difficulty) {
       case 1:
@@ -21,10 +20,7 @@ const MyQuizCard: React.FC<MyQuizCardProps> = ({ quiz, onClick }) => {
   };
 
   return (
-    <div
-      className="flex flex-col w-96 h-64 bg-neutral-800 items-center cursor-pointer rounded-lg gap-4 p-4"
-      onClick={onClick}
-    >
+    <div className="flex flex-col w-96 h-64 bg-neutral-800 items-center cursor-pointer rounded-lg gap-4 p-4">
       <div className="w-full h-1/6 flex justify-between">
         <h3 className="text-slate-400 text-center text-xs rounded-sm">{quiz.category}</h3>
       </div>
