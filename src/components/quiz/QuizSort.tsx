@@ -82,27 +82,29 @@ const QuizSort = ({ handleFilteredQuizzes }: QuizSortProps) => {
         <div className="w-1/3 flex justify-center gap-2 items-center">
           <PaginationButtons totalPages={totalPages} />
         </div>
-        <button
-          onClick={() => setSortOrder('NEWEST')}
-          disabled={sortOrder === 'NEWEST'}
-          className={`py-2 px-4 rounded text-slate-400 ${sortOrder === 'NEWEST' ? 'text-slate-200 font-bold' : ''}`}
-        >
-          최신순
-        </button>
-        <button
-          onClick={() => setSortOrder('OLDEST')}
-          disabled={sortOrder === 'OLDEST'}
-          className={`py-2 px-4 rounded text-slate-400 ${sortOrder === 'OLDEST' ? 'text-slate-200 font-bold' : ''}`}
-        >
-          오래된 순
-        </button>
-        <button
-          onClick={() => setSortOrder('RECOMMENDED')}
-          disabled={sortOrder === 'RECOMMENDED'}
-          className={`py-2 px-4 rounded text-slate-400 ${sortOrder === 'RECOMMENDED' ? 'text-slate-200 font-bold' : ''}`}
-        >
-          추천순
-        </button>
+        <div className="w-1/3 flex justify-center items-center">
+          <button
+            onClick={() => setSortOrder('NEWEST')}
+            disabled={sortOrder === 'NEWEST'}
+            className={`py-2 px-4 rounded text-slate-400 ${sortOrder === 'NEWEST' ? 'text-slate-200 font-bold' : ''}`}
+          >
+            최신순
+          </button>
+          <button
+            onClick={() => setSortOrder('OLDEST')}
+            disabled={sortOrder === 'OLDEST'}
+            className={`py-2 px-4 rounded text-slate-400 ${sortOrder === 'OLDEST' ? 'text-slate-200 font-bold' : ''}`}
+          >
+            오래된 순
+          </button>
+          <button
+            onClick={() => setSortOrder('RECOMMENDED')}
+            disabled={sortOrder === 'RECOMMENDED'}
+            className={`py-2 px-4 rounded text-slate-400 ${sortOrder === 'RECOMMENDED' ? 'text-slate-200 font-bold' : ''}`}
+          >
+            추천순
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ const QuizPageLayout: React.FC = () => {
     <div className="flex flex-col w-full h-full px-20 py-14 gap-12 overflow-y-auto text-white bg-neutral-900">
       <QueryClientProvider client={queryClient}>
         <MyQuizSection />
-        <div className="w-full flex justify-center items-start gap-20">
+        <div className="w-full flex justify-center items-start mt-10 gap-20">
           <div className="w-1/4">
             <QuizFilter />
           </div>
