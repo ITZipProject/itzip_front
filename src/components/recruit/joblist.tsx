@@ -43,7 +43,6 @@ const JobList: React.FC<JobListProps> = ({ filteredJobs, handleBookmark }) => {
         </button>
       </div>
       <hr className="my-6 border-blue-700"/>
-      {/* <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6"> */}
       <div className="grid grid-cols-2 gap-6">
         {sortedJobs.map((job) => (
           <div 
