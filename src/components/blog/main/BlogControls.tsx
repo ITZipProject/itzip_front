@@ -1,5 +1,6 @@
 'use client';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 
 import { blogCategories } from '@/data/BlogCategories';
@@ -70,14 +71,16 @@ const BlogControls: React.FC = () => {
           iconSize={12}
         />
         <div className="ml-8 flex items-center space-x-3">
-          <button className="rounded-full border border-gray-300 p-2">
-            <Image
-              src="/icons/blog/whiteMode_WritePen.png"
-              alt="Write Post"
-              width={20}
-              height={20}
-            />
-          </button>
+          <Link href="/blog/editor">
+            <button className="rounded-full border border-gray-300 p-2">
+              <Image
+                src="/icons/blog/whiteMode_WritePen.png"
+                alt="Write Post"
+                width={20}
+                height={20}
+              />
+            </button>
+          </Link>
           <button className="rounded-full bg-blue-600 px-4 py-1 text-sm font-medium text-white">
             내 블로그
           </button>
