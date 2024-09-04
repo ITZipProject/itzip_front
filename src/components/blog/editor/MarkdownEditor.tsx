@@ -1,20 +1,58 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect, useRef } from 'react';
+
 interface MarkdownEditorProps {
   content: string;
+  title: string;
   onContentChange: (content: string) => void;
+  onTitleChange: (title: string) => void;
 }
+
 const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(
-  ({ content, onContentChange }, ref) => {
+  ({ content, title, onContentChange, onTitleChange }, ref) => {
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+    useEffect(() => {
+      const textarea = textareaRef.current;
+      if (textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      }
+    }, [content]);
+
+    const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      onContentChange(e.target.value);
+    };
+
     return (
-      <textarea
-        ref={ref}
-        className="h-96 w-full rounded border p-2"
-        value={content}
-        onChange={(e) => onContentChange(e.target.value)}
-        placeholder="Markdown 문법으로 글을 작성하세요..."
-      />
+      <div className="flex h-full flex-col">
+        <div className="mb-8 mt-2 border-b border-color-disabled pb-8">
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => onTitleChange(e.target.value)}
+            placeholder="제목"
+            className="w-full border-none bg-transparent text-4xl font-normal text-[#A5A5A5] outline-none focus:outline-none focus:ring-0"
+          />
+        </div>
+        <textarea
+          ref={(el) => {
+            if (typeof ref === 'function') {
+              ref(el);
+            } else if (ref) {
+              ref.current = el;
+            }
+            textareaRef.current = el;
+          }}
+          value={content}
+          onChange={handleContentChange}
+          placeholder="내용을 입력해주세요."
+          className="grow resize-none border-none bg-transparent outline-none focus:outline-none focus:ring-0"
+          style={{ overflow: 'hidden' }}
+        />
+      </div>
     );
   },
 );
+
 MarkdownEditor.displayName = 'MarkdownEditor';
 export default MarkdownEditor;
