@@ -17,10 +17,12 @@ const TechStackFilter = forwardRef<TechStackFilterRef, TechStackFilterProps>(({ 
   const [filteredTechStacks, setFilteredTechStacks] = useState<TechStack[]>([]);
   const [selectedTechStacks, setSelectedTechStacks] = useState<string[]>([]);
 
+  // 컴포넌트가 마운트될 때 기술 스택 데이터를 로드합니다.
   useEffect(() => {
     setTechStacks(loadTechStacks());
   }, []);
 
+  // 검색어가 변경될 때마다 기술 스택을 필터링합니다.
   useEffect(() => {
     if (searchTerm.trim() === '') {
       setFilteredTechStacks([]);
@@ -32,16 +34,19 @@ const TechStackFilter = forwardRef<TechStackFilterRef, TechStackFilterProps>(({ 
     }
   }, [searchTerm, techStacks]);
 
+  // 부모 컴포넌트에서 선택을 리셋할 수 있도록 합니다.
   useImperativeHandle(ref, () => ({
     resetSelections: (newSelection: string[]) => {
       setSelectedTechStacks(newSelection);
     }
   }));
 
+  // 검색어 입력 처리 함수
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
+  // 기술 스택 선택/해제 처리 함수
   const handleSelect = (techName: string) => {
     const updatedSelection = selectedTechStacks.includes(techName)
       ? selectedTechStacks.filter(name => name !== techName)
