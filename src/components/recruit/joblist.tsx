@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Job } from './job';
-import { timeStamp } from 'console';
+import Pagination from '../common/multipage';
 
 interface JobListProps {
   filteredJobs: Job[];
@@ -11,6 +11,8 @@ interface JobListProps {
 
 const JobList: React.FC<JobListProps> = ({ filteredJobs, handleBookmark }) => {
   const [sortOrder, setSortOrder] = useState<'latest' | 'oldest' | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);  // 1부터 시작하도록 변경
+  const jobsPerPage = 10;
 
   const sortedJobs = [...filteredJobs].sort((a, b) => {
     if (sortOrder === null) return 0;
@@ -19,11 +21,20 @@ const JobList: React.FC<JobListProps> = ({ filteredJobs, handleBookmark }) => {
 
   const handleSort = (order: 'latest' | 'oldest') => {
     setSortOrder(order);
+    setCurrentPage(1);  // 정렬 시 첫 페이지로 이동
   };
 
   const formatDate = (timeStamp: number) => {
     const date = new Date(timeStamp * 1000);
     return date.toLocaleDateString('ko-KR', {year: 'numeric', month: 'long', day: 'numeric'});
+  };
+
+  const pageCount = Math.ceil(sortedJobs.length / jobsPerPage);
+  const offset = (currentPage - 1) * jobsPerPage;
+  const currentJobs = sortedJobs.slice(offset, offset + jobsPerPage);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -44,7 +55,7 @@ const JobList: React.FC<JobListProps> = ({ filteredJobs, handleBookmark }) => {
       </div>
       <hr className="my-6 border-blue-700"/>
       <div className="grid grid-cols-2 gap-6">
-        {sortedJobs.map((job) => (
+        {currentJobs.map((job) => (
           <div 
             key={job.id} 
             className="p-6 border-01 radius-01 cursor-pointer"
@@ -52,7 +63,6 @@ const JobList: React.FC<JobListProps> = ({ filteredJobs, handleBookmark }) => {
           >
             <h3 className="font-pre-body-01 text-center mb-2">{job.title}</h3>
             <p className="font-pre-body-02 text-center mb-2">{job.company}</p>
-            {/* <p className="font-pre-body-03 text-center text-gray-600 mb-4">{job.industry.name}</p> */}
             <p className="font-pre-body-03 text-center text-gray-600 mb-4">
               {job.jobCode.name.split(',').slice(0, 3).join(', ')}
             </p>
@@ -63,6 +73,11 @@ const JobList: React.FC<JobListProps> = ({ filteredJobs, handleBookmark }) => {
           </div>
         ))}
       </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={pageCount}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };
