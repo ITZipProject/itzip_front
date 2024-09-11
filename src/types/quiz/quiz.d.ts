@@ -1,15 +1,14 @@
 export interface QuizData {
-  _id: string;
+  id: string;
   questionText: string;
   difficulty: number;
+  categoryId: number;
   category: string;
-  answer: number;
-  create_date: string;
-  modify_date: string;
   acceptedUserCount: number;
   triedUserCount: number;
+  correctRate: number;
   points: number;
-  create_user_id: string;
+  userQuizStatus: string;
   choices: { id: number; choiceText: string }[];
 }
 
@@ -19,4 +18,15 @@ export interface MakeQuizData {
   question: string;
   options: string[];
   answer: string;
+}
+
+export interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export interface SubmitAnswerParams {
+  quizId: string;
+  answer: number;
+  userId: number;
 }

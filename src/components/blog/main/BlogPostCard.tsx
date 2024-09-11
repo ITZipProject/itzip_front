@@ -7,6 +7,7 @@ interface BlogPostCardProps {
   title: string;
   content: string;
   category: string;
+  subCategory: string;
   likes: number;
   saves: number;
   author: string;
@@ -20,8 +21,9 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({
   title,
   content,
   category,
+  subCategory,
   likes,
-  saves,
+  //saves,
   author,
   timeAgo,
   imageUrl,
@@ -32,15 +34,23 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({
       <Link href={`/blog/post/${id}`} passHref className="relative h-[180px]">
         <Image src={imageUrl} className="rounded-lg" alt={title} layout="fill" objectFit="cover" />
       </Link>
-      <div className="flex flex-wrap items-start gap-4 py-4 text-sm">
-        <Link href={`/blog/category/${encodeURIComponent(category)}`} passHref>
-          <span className="cursor-pointer text-blue-600">{category}</span>
-        </Link>
-        <span className="text-gray-600">
+      <div className="flex items-center justify-between py-4 text-sm">
+        <div className="flex items-center">
+          <Link href={`/blog/category/${encodeURIComponent(category + subCategory)}`} passHref>
+            <div className="flex items-center gap-2 pr-1">
+              <span className="text-gray-600">{category}</span>
+              <Image
+                src="/icons/common/sub_icon/navigate_next_1.4px.svg"
+                alt="Category Separator"
+                width={16}
+                height={16}
+              />
+              <span className="text-blue-600">{subCategory}</span>
+            </div>
+          </Link>
+        </div>
+        <span className="ml-auto pr-1 text-gray-600">
           좋아요 <span className="text-blue-400">{likes}</span>
-        </span>
-        <span className="text-gray-600">
-          저장 <span className="text-blue-400">{saves}</span>
         </span>
       </div>
       <div className="grow">

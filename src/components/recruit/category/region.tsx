@@ -41,7 +41,7 @@ const RegionCheckboxes: React.FC<Props> = ({ selectedRegion, setSelectedRegion, 
             value={region.name}
             checked={selectedRegion === region.name}
             onChange={() => setSelectedRegion(region.name)}
-            className="mr-2"
+            className="mr-2 cursor-pointer"
           />
           <label htmlFor={region.id} className="inline-block">
             {region.name}

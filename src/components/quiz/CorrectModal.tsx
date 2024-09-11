@@ -1,36 +1,42 @@
-'use client';
-
 import React, { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { ratings } from '@/data/QuizData';
+import { submitPoint } from '@/api/quiz/submitPoint';
 
-interface ModalProps {
+interface CorrectModalProps {
   onClose: () => void;
+  quizId: string;
 }
 
-const ratings = [
-  { value: -2, label: '문제가 이상해요' },
-  { value: -1, label: '문제가 별로입니다' },
-  { value: 0, label: '보통입니다' },
-  { value: 1, label: '좋은 문제입니다' },
-  { value: 2, label: '문제를 추천합니다' },
-];
-
-const CorrectModal: React.FC<ModalProps> = ({ onClose }) => {
+const CorrectModal: React.FC<CorrectModalProps> = ({ onClose, quizId }) => {
   const [selectedRate, setSelectedRate] = useState<number | null>(null);
+
+  const pointMutation = useMutation({
+    mutationFn: submitPoint,
+    onError: (error: any) => {
+      console.error('Failed to submit point:', error);
+    },
+  });
+
+  const handleSubmit = () => {
+    if (selectedRate !== null) {
+      pointMutation.mutate({
+        quizId,
+        point: selectedRate,
+        userId: 7,
+      });
+    }
+    onClose();
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="flex flex-col justify-center items-center w-3/4 h-3/4 gap-40 bg-white p-7 rounded shadow-lg">
+      <div className="flex flex-col justify-center items-center w-1/2 h-3/4 gap-40 bg-zinc-900 p-7 rounded-3xl shadow-lg">
         <div className="flex items-center justify-between">
           <div></div>
-          <h3 className="text-2xl">정답을 맞추셨네요. 축하드립니다!</h3>
-          <button onClick={onClose} className="px-2 py-1 bg-blue-500 text-white rounded">
-            닫기
-          </button>
+          <h3 className="text-4xl font-bold">정답을 맞추셨네요. 축하드립니다!</h3>
         </div>
-
-        <h3 className="text-center text-7xl font-bold">+29점 획득!</h3>
-
-        <div>
+        <div className="flex justify-center items-center">
           <div className="flex gap-5">
             {ratings.map((rating) => (
               <button
@@ -44,6 +50,9 @@ const CorrectModal: React.FC<ModalProps> = ({ onClose }) => {
               </button>
             ))}
           </div>
+          <button onClick={handleSubmit} className="px-2 py-1 bg-blue-500 text-white rounded">
+            제출
+          </button>
         </div>
       </div>
     </div>
