@@ -2,15 +2,16 @@ import { XCircleIcon } from '@heroicons/react/16/solid';
 import { InputHTMLAttributes } from 'react';
 import resetBtn from '../../../public/icons/common/Ic/vector.png';
 import Image from 'next/image';
+import { Margin } from './margin';
 interface InputProps {
   name: string;
-  errors?: string[];
+  errors?: string;
   onClick?: () => void;
 }
 
 export default function Input({
   name,
-  errors = [],
+  errors,
   onClick,
   ...rest
 }: InputProps & InputHTMLAttributes<HTMLInputElement>) {
@@ -32,14 +33,17 @@ export default function Input({
           />
         </button>
       </div>
-      {errors.map((error, index) => (
-        <span key={index} className="text-[#E46969] text-[12px] font-[500]">
-          <div className="flex items-center gap-[4.5px]">
+      <Margin height={'9px'} />
+      {errors ? (
+        <span className="text-color-text-warning text-[12px] font-[500]">
+          <div className="flex items-center gap-[4.5px] mt-2">
             <XCircleIcon className="size-[19px]" />
-            {error}
+            {errors}
           </div>
         </span>
-      ))}
+      ) : (
+        ''
+      )}
     </div>
   );
 }

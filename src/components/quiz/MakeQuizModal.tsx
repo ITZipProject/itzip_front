@@ -42,7 +42,7 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
       <FormProvider {...formMethods}>
-        <div className="bg-zinc-800 p-6 rounded-lg shadow-md relative space-y-4 w-full max-w-lg mx-4">
+        <div className="w-[500px] h-[600px] bg-zinc-800 p-6 rounded-lg shadow-md relative space-y-4 max-w-lg mx-4">
           <button
             className="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
             onClick={onClose}
@@ -52,30 +52,21 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
           {stepComponent}
 
-          <div className="flex justify-between mt-4">
+          <div className="absolute bottom-4 right-6 flex justify-end">
             {!isFirstStep && (
               <button
                 onClick={back}
-                className="py-2 px-4 bg-gray-700 text-white rounded-lg hover:bg-gray-600"
+                className="py-2 px-4 bg-gray-700 text-white rounded-lg hover:bg-gray-600 mr-2"
               >
                 이전
               </button>
             )}
-            {isLastStep ? (
-              <button
-                onClick={handleSubmit(onSubmit)}
-                className="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
-              >
-                완료
-              </button>
-            ) : (
-              <button
-                onClick={next}
-                className="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-              >
-                다음
-              </button>
-            )}
+            <button
+              onClick={isLastStep ? handleSubmit(onSubmit) : next}
+              className="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              {isLastStep ? '완료' : '다음'}
+            </button>
           </div>
         </div>
       </FormProvider>

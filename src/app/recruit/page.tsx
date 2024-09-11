@@ -89,8 +89,8 @@ const RecruitPage: React.FC = () => {
   return (
     <div className="mx-auto max-w-7xl px-4">
       <div className="flex justify-center">
-        <h1 className="text-center text-2xl font-bold mb-6 text-blue-500">채용정보</h1>
-        <h1 className="text-center text-2xl font-bold mb-6">&nbsp;둘러보기</h1>
+        <h1 className="font-pre-heading-01 text-blue-500">채용정보</h1>
+        <h1 className="font-pre-heading-01">&nbsp;둘러보기</h1>
         <br />
       </div>
       <div className="flex space-x-4">

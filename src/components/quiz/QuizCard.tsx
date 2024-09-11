@@ -7,7 +7,6 @@ interface QuizCardProps {
 }
 
 const QuizCard: React.FC<QuizCardProps> = ({ quiz, onClick }) => {
-  console.log(quiz);
   const renderDifficultyLevel = (difficulty: number) => {
     switch (difficulty) {
       case 1:
@@ -23,7 +22,7 @@ const QuizCard: React.FC<QuizCardProps> = ({ quiz, onClick }) => {
 
   return (
     <div
-      className="flex flex-col w-full h-[450px] bg-neutral-800 items-center cursor-pointer rounded-lg gap-8 p-8"
+      className="flex flex-col w-full bg-neutral-800 items-center cursor-pointer rounded-lg gap-8 p-8"
       onClick={onClick}
     >
       <div className="w-full flex justify-between">
@@ -33,9 +32,9 @@ const QuizCard: React.FC<QuizCardProps> = ({ quiz, onClick }) => {
         <h3 className=" font-bold text-slate-300 text-2xl text-center">{quiz.questionText}</h3>
       </div>
       <div className="w-full">
-        {quiz.choices.map((choices, index) => (
-          <h3 className="text-neutral-600">
-            {choices.id}. {choices.choiceText}
+        {quiz.choices.map((choice, index) => (
+          <h3 key={choice.id} className="text-neutral-600">
+            {choice.id}. {choice.choiceText}
           </h3>
         ))}
       </div>

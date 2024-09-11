@@ -1,48 +1,56 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Left from '../../../components/algorithm/Left';
+import TagRank from '../../../components/algorithm/TagRank';
 import Main from '../../../components/algorithm/Main';
-import Top from '../../../components/algorithm/Top';
-import { fetchAlgorithmData } from '@/api/algorithm/fetchAlgorithmData';
+import MyData from '../../../components/algorithm/MyData';
 
-interface AlgorithmData {
-  username: string;
-}
+const algorithmData = [
+  { id: 1918, title: '후위 표기식', solvedCount: 1044 },
+  { id: 1919, title: '중위 표기식', solvedCount: 945 },
+  { id: 1920, title: '전위 표기식', solvedCount: 876 },
+  { id: 1921, title: '재귀 함수', solvedCount: 800 },
+  { id: 1922, title: '이진 탐색', solvedCount: 750 },
+  { id: 1918, title: '후위 표기식', solvedCount: 1044 },
+  { id: 1919, title: '중위 표기식', solvedCount: 945 },
+  { id: 1920, title: '전위 표기식', solvedCount: 876 },
+  { id: 1921, title: '재귀 함수', solvedCount: 800 },
+  { id: 1922, title: '이진 탐색', solvedCount: 750 },
+  { id: 1918, title: '후위 표기식', solvedCount: 1044 },
+  { id: 1919, title: '중위 표기식', solvedCount: 945 },
+  { id: 1920, title: '전위 표기식', solvedCount: 876 },
+  { id: 1921, title: '재귀 함수', solvedCount: 800 },
+  { id: 1922, title: '이진 탐색', solvedCount: 750 },
+];
+
+const profileImage = '/userImage.png';
+
+const userData = {
+  username: '선구',
+  rating: 5,
+  solvedCount: 100,
+  solvedCountRank: 1,
+};
 
 export default function Home() {
-  const [algorithmData, setAlgorithmData] = useState<AlgorithmData[] | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchAlgorithmData();
-        setAlgorithmData(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const handleSearchTermChange = (term: string) => {
     setSearchTerm(term);
   };
 
   return (
-    <div className="flex flex-col gap-11 w-full h-screen overflow-auto text-white bg-neutral-900">
-      <div className="m-10">
-        <Top algorithmData={algorithmData} />
+    <div className="flex gap-11 w-full h-screen overflow-auto text-white bg-neutral-900">
+      <div className="w-1/3 flex flex-col justify-center items-center">
+        <div className="w-full m-10">
+          <MyData userData={userData} profileImage={profileImage} />
+        </div>
+        <div className="w-full overflow-auto">
+          <TagRank onSearchChange={handleSearchTermChange} />
+        </div>
       </div>
-      <div className="flex mx-11 flex-1 overflow-hidden">
-        <div className="w-1/3 h-full overflow-auto">
-          <Left onSearchChange={handleSearchTermChange} />
-        </div>
-        <div className="w-2/3 h-full overflow-auto">
-          <Main searchTerm={searchTerm} />
-        </div>
+      <div className="w-2/3 h-full overflow-auto">
+        <Main algorithmData={algorithmData} />
       </div>
     </div>
   );

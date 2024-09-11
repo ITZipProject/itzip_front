@@ -3,10 +3,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useModal } from '@/lib/context/ModalContext';
-import LoginModal from '../../app/components/auth/login/loginModal';
-import EmailLoginModal from '../../app/components/auth/email/emailLoginModal';
-import SignUpModal from '../../app/components/auth/signup/signUpModal';
-import SignUpEmailModal from '../../app/components/auth/signup/signupEmailModal';
+import LoginModal from '../../app/(Auth)/login/loginModal';
+import EmailLoginModal from '../../app/(Auth)/email/emailLoginModal';
+import SignUpModal from '../../app/(Auth)/signup/signUpModal';
+import SignUpEmailModal from '../../app/(Auth)/signup/signupEmailModal';
 import { Modals } from './Modals';
 
 interface HeaderBarProps {

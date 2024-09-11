@@ -43,13 +43,7 @@ export default function EditProfile() {
           ) : null}
         </label>
         <input onChange={onImageChange} type="file" id="photo" name="photo" className="hidden" />
-        <Input
-          name="nickname"
-          required
-          placeholder="이름"
-          type="text"
-          errors={state?.fieldErrors.nickname}
-        />
+        <Input name="nickname" required placeholder="이름" type="text" />
 
         <Button text="작성 완료" modalId="" />
       </form>

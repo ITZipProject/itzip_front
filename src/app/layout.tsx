@@ -5,7 +5,6 @@ import './globals.css';
 import Footer from '@/components/common/footer';
 import HeaderBar from '@/components/common/header-bar';
 import { ModalProvider } from '@/lib/context/ModalContext';
-
 import db from '../lib/db';
 import getSession from '../lib/session';
 
@@ -18,9 +17,12 @@ const pretendard = localFont({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | title',
-    default: 'description',
+    template: 'ITZIP | %s ',
+    default: 'ITZIP',
   },
+  // icons: {
+  //   icon: '/favicon.png',
+  // },
   description: 'description',
 };
 
@@ -59,6 +61,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const profileImage = await getUserProfile();
   return (
     <html lang="ko" className={pretendard.variable}>
+      <link rel="icon" href="/favicon.png" sizes="any" />
       <body className={`mx-auto overflow-x-hidden bg-white text-black ${pretendard.className}`}>
         <ModalProvider>
           <HeaderBar profileImage={profileImage} exists={user} />

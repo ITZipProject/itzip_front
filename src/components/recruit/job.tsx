@@ -32,6 +32,7 @@ export interface Job {
     name: string;
   };
   postedDate: string;
+  timestamp: number; // 추가된 필드
   recommendations: number;
   views: number;
   companyImage: string;
