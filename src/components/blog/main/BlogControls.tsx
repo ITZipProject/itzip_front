@@ -38,25 +38,25 @@ const BlogControls: React.FC = () => {
 
   return (
     <div className="relative z-40 mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-8">
-      <div className="flex items-center space-x-6">
+      <div className="flex items-center space-x-10">
         <BlogControlsDropdown
           options={mainCategories}
           selectedOption={selectedMainCategory}
           onSelect={handleMainCategorySelect}
-          iconSrc="/icons/blog/whiteMode_DownArrow.png"
+          iconSrc="/icons/common/sub_icon/navigate_down_1.4px.svg"
           textSize="text-lg"
           textWeight="font-medium"
-          iconSize={16}
+          iconSize={24}
         />
         {selectedMainCategory !== '전체' && (
           <BlogControlsDropdown
             options={subCategories}
             selectedOption={selectedSubCategory}
             onSelect={handleSubCategorySelect}
-            iconSrc="/icons/blog/whiteMode_DownArrow.png"
+            iconSrc="/icons/common/sub_icon/navigate_down_1.4px.svg"
             textSize="text-lg"
             textWeight="font-medium"
-            iconSize={16}
+            iconSize={24}
           />
         )}
       </div>
@@ -65,14 +65,14 @@ const BlogControls: React.FC = () => {
           options={sortOptions}
           selectedOption="최신순"
           onSelect={handleSortOptionSelect}
-          iconSrc="/icons/blog/whiteMode_DownArrow.png"
+          iconSrc="/icons/common/sub_icon/navigate_down_1.4px.svg"
           textSize="text-md"
           textWeight="font-normal"
-          iconSize={12}
+          iconSize={20}
         />
         <div className="ml-8 flex items-center space-x-3">
           <Link href="/blog/editor">
-            <button className="rounded-full border border-gray-300 p-2">
+            <button className="rounded-xl border border-gray-300 p-2">
               <Image
                 src="/icons/blog/whiteMode_WritePen.png"
                 alt="Write Post"
@@ -81,7 +81,7 @@ const BlogControls: React.FC = () => {
               />
             </button>
           </Link>
-          <button className="rounded-full bg-blue-600 px-4 py-1 text-sm font-medium text-white">
+          <button className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white">
             내 블로그
           </button>
         </div>

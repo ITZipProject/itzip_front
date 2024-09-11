@@ -23,7 +23,7 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({
   category,
   subCategory,
   likes,
-  saves,
+  //saves,
   author,
   timeAgo,
   imageUrl,
@@ -40,11 +40,10 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({
             <div className="flex items-center gap-2 pr-1">
               <span className="text-gray-600">{category}</span>
               <Image
-                src="/icons/blog/whiteMode_DownArrow.png"
+                src="/icons/common/sub_icon/navigate_next_1.4px.svg"
                 alt="Category Separator"
-                width={8}
-                height={8}
-                className="-rotate-90"
+                width={16}
+                height={16}
               />
               <span className="text-blue-600">{subCategory}</span>
             </div>
