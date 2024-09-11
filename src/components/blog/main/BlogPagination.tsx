@@ -31,7 +31,7 @@ const BlogPagination: React.FC<BlogPaginationProps> = ({
   const pageNumbers = getPageNumbers();
 
   return (
-    <div className="flex w-full flex-row items-center justify-center gap-2 py-4">
+    <div className="flex w-full flex-row items-center justify-center gap-2 py-4 pt-8">
       <button
         onClick={() => onPageChange(1)}
         disabled={currentPage === 1}
