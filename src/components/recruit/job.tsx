@@ -1,41 +1,44 @@
 export interface Job {
-  id: string;
   title: string;
-  industry: {
-    code: string;
-    name: string;
+  industryName: string;
+  locationName: string[];
+  jobName: string[];
+  expirationDate: string;
+  experienceName: string;
+  experienceMin: number;
+  experienceMax: number;
+}
+
+export interface JobResponse {
+  status: string;
+  msg: string;
+  data: {
+    totalElements: number;
+    totalPages: number;
+    sort: {
+      sorted: boolean;
+      unsorted: boolean;
+      empty: boolean;
+    };
+    first: boolean;
+    last: boolean;
+    size: number;
+    content: Job[];
+    number: number;
+    numberOfElements: number;
+    pageable: {
+      sort: {
+        sorted: boolean;
+        unsorted: boolean;
+        empty: boolean;
+      };
+      offset: number;
+      paged: boolean;
+      pageNumber: number;
+      pageSize: number;
+      unpaged: boolean;
+    };
+    empty: boolean;
   };
-  location: {
-    code: string;
-    name: string;
-  };
-  jobType: {
-    code: string;
-    name: string;
-  };
-  jobMidCode: {
-    code: string;
-    name: string;
-  };
-  jobCode: {
-    code: string;
-    name: string;
-  };
-  experienceLevel: {
-    code: number;
-    min: number;
-    max: number;
-    name: string;
-  };
-  requiredEducationLevel: {
-    code: string;
-    name: string;
-  };
-  postedDate: string;
-  timestamp: number; // 추가된 필드
-  recommendations: number;
-  views: number;
-  companyImage: string;
-  url: string;
-  company: string;
+  code: string;
 }
