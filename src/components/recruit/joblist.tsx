@@ -6,17 +6,21 @@ import Pagination from '../common/multipage';
 
 interface JobListProps {
   filteredJobs: Job[];
-  // handleBookmark: (jobId: string) => void; // 주석 처리 (백엔드 응답에 없음)
 }
 
-const JobList: React.FC<JobListProps> = ({ filteredJobs /*, handleBookmark */ }) => {
+// 지역명을 정리하는 함수
+function cleanLocationNames(locationNames: string[]): string[] {
+  const uniqueLocations = new Set(locationNames.filter(name => name !== "&gt;"));
+  return Array.from(uniqueLocations);
+}
+
+const JobList: React.FC<JobListProps> = ({ filteredJobs }) => {
   const [sortOrder, setSortOrder] = useState<'latest' | 'oldest' | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 10;
 
   const sortedJobs = [...filteredJobs].sort((a, b) => {
     if (sortOrder === null) return 0;
-    // timestamp가 없으므로 expirationDate를 사용
     return sortOrder === 'latest' 
       ? new Date(b.expirationDate).getTime() - new Date(a.expirationDate).getTime() 
       : new Date(a.expirationDate).getTime() - new Date(b.expirationDate).getTime();
@@ -60,16 +64,18 @@ const JobList: React.FC<JobListProps> = ({ filteredJobs /*, handleBookmark */ })
       <div className="grid grid-cols-2 gap-6">
         {currentJobs.map((job) => (
           <div 
-            key={job.title} // id가 없으므로 title을 key로 사용 (주의: 중복 가능성 있음)
+            key={job.title} 
             className="p-6 border-01 radius-01 cursor-pointer"
-            // onClick={() => window.open(job.url, '_blank')} // url이 없으므로 주석 처리
+            // onClick={() => window.open(job.url, '_blank')}
           >
             <h3 className="font-pre-body-01 text-center mb-2">{job.title}</h3>
-            {/* <p className="font-pre-body-02 text-center mb-2">{job.company}</p> */}
+            {/* <p className="font-pre-body-02 text-center mb-2">{job.companyName}</p> */}
             <p className="font-pre-body-03 text-center text-gray-600 mb-4">
               {job.jobName.slice(0, 3).join(', ')}
             </p>
-            <p className="font-pre-body-04 text-center text-gray-600 mb-4">{job.locationName.join(', ')}</p>
+            <p className="font-pre-body-04 text-center text-gray-600 mb-4">
+              {cleanLocationNames(job.locationName).join(', ')}
+            </p>
             <p className="font-pre-body-04 text-center text-gray-600">
               만료일: {formatDate(job.expirationDate)}
             </p>

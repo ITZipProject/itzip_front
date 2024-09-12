@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Job, JobResponse } from '@/components/recruit/job';
 
-const baseUrl = 'http://3.39.78.0:8080/api';
+const baseUrl = 'http://3.39.78.0:8080/api/job-info?page=10&size=10&sort=%5B%22string%22%5D';
 
 export async function fetchJobs(params: {
   search?: string;
