@@ -1,4 +1,7 @@
+// job.tsx
+
 export interface Job {
+  id: number;
   title: string;
   industryName: string;
   locationName: string[];
@@ -7,6 +10,9 @@ export interface Job {
   experienceName: string;
   experienceMin: number;
   experienceMax: number;
+  scrapCount: number;
+  companyName: string;
+  url: string;
 }
 
 export interface JobResponse {
@@ -15,13 +21,13 @@ export interface JobResponse {
   data: {
     totalElements: number;
     totalPages: number;
+    first: boolean;
+    last: boolean;
     sort: {
       sorted: boolean;
       unsorted: boolean;
       empty: boolean;
     };
-    first: boolean;
-    last: boolean;
     size: number;
     content: Job[];
     number: number;
