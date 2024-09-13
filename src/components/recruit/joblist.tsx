@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Job } from './job';
+import { Job } from './job';  // Job 인터페이스의 정확한 경로를 확인하세요
 import Pagination from '../common/multipage';
 import { fetchJobs } from '@/api/saramin/route';
 
+// cleanLocationNames 함수 정의
 function cleanLocationNames(locationNames: string[]): string[] {
   const uniqueLocations = new Set(locationNames.filter(name => name !== "&gt;"));
   return Array.from(uniqueLocations);
@@ -21,17 +22,15 @@ const JobList: React.FC = () => {
   }, [currentPage, sortOrder]);
 
   const loadJobs = async () => {
-    const sortParam = sortOrder === 'latest' ? 'expirationDate,desc' : 
-                      sortOrder === 'oldest' ? 'expirationDate,asc' : 
-                      'string'; // 기본 정렬
-    const { jobs, totalPages, totalElements } = await fetchJobs({ 
-      page: currentPage - 1, // API는 0-based index를 사용하므로 1을 빼줍니다.
-      size: 20, 
-      sort: sortParam 
-    });
-    setJobs(jobs);
-    setTotalPages(totalPages);
-    console.log('Total elements:', totalElements); // 로깅을 위해 추가
+    const sortParam = sortOrder === 'latest' ? 'expirationDate,desc' : sortOrder === 'oldest' ? 'expirationDate,asc' : '';
+    try {
+      const result = await fetchJobs({ page: currentPage - 1, size: 20, sort: sortParam });
+      setJobs(result.jobs);
+      setTotalPages(result.totalPages);
+    } catch (error) {
+      console.error('Error loading jobs:', error);
+      // 에러 처리 로직 추가 (예: 사용자에게 에러 메시지 표시)
+    }
   };
 
   const handleSort = (order: 'latest' | 'oldest') => {
@@ -82,9 +81,6 @@ const JobList: React.FC = () => {
             </p>
             <p className="font-pre-body-04 text-center text-gray-600">
               만료일: {formatDate(job.expirationDate)}
-            </p>
-            <p className="font-pre-body-04 text-center text-gray-600">
-              스크랩 수: {job.scrapCount}
             </p>
           </div>
         ))}

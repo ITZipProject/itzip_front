@@ -1,5 +1,3 @@
-// job.tsx
-
 export interface Job {
   id: number;
   title: string;
