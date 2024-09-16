@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { CategoryType } from '@/data/BlogCategories';
 
@@ -26,32 +26,49 @@ const BlogCarousel: React.FC<CarouselProps> = ({ items }) => {
   const [startX, setStartX] = useState(0);
   const [translateX, setTranslateX] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  //const carouselRef = useRef<HTMLDivElement>(null);
   const extendedItems = [items[items.length - 1], ...items, items[0]];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (!isDragging) {
-        moveToNextSlide();
-      }
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [isDragging]);
+  const resetTimer = useCallback(() => {
+    // This function will be called to reset the timer
+  }, []);
 
-  const moveToNextSlide = () => {
+  const moveToNextSlide = useCallback(() => {
     setIsTransitioning(true);
     setCurrentIndex((prevIndex) => prevIndex + 1);
-  };
+    resetTimer();
+  }, [resetTimer]);
 
-  const moveToPrevSlide = () => {
+  const moveToPrevSlide = useCallback(() => {
     setIsTransitioning(true);
     setCurrentIndex((prevIndex) => prevIndex - 1);
-  };
+    resetTimer();
+  }, [resetTimer]);
 
-  const moveToSlide = (index: number) => {
-    setIsTransitioning(true);
-    setCurrentIndex(index + 1);
-  };
+  const moveToSlide = useCallback(
+    (index: number) => {
+      setIsTransitioning(true);
+      setCurrentIndex(index + 1);
+      resetTimer();
+    },
+    [resetTimer],
+  );
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    const startTimer = () => {
+      timer = setTimeout(() => {
+        if (!isDragging) {
+          moveToNextSlide();
+        }
+      }, 5000);
+    };
+
+    startTimer();
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [currentIndex, isDragging, moveToNextSlide]);
 
   useEffect(() => {
     if (currentIndex === 0) {
@@ -93,6 +110,7 @@ const BlogCarousel: React.FC<CarouselProps> = ({ items }) => {
       }
     }
     setTranslateX(0);
+    resetTimer();
   };
 
   return (
