@@ -20,7 +20,7 @@ export async function fetchJobs(params: {
   size?: number;
   sort?: string;
 } = {}): Promise<{ jobs: Job[]; totalPages: number }> {
-  const page = params.page ?? 0;
+  const page = params.page ?? 10;
   const size = params.size ?? 20;
   const sort = params.sort ? encodeURIComponent(`["${params.sort}"]`) : '%5B%22string%22%5D';
   

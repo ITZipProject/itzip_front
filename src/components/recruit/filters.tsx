@@ -8,16 +8,14 @@ import Experience from './category/Experience';
 
 interface FiltersProps {
   filters: {
-    technology: string;
-    location: string;
-    experience: string;
+    techName: string;
+    locationName: string;
+    experienceMin: number;
+    experienceMax: number;
     search: string;
     sort: string;
   };
-  activeFilter: string | null;
   setFilters: (filters: any) => void;
-  toggleFilter: (filterName: string) => void;
-  handleFilterChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   applyFilters: () => void;
 }
 
@@ -27,10 +25,7 @@ interface TechStackFilterRef {
 
 const Filters: React.FC<FiltersProps> = ({
   filters,
-  activeFilter,
   setFilters,
-  toggleFilter,
-  handleFilterChange,
   applyFilters,
 }) => {
   const [selectedTechStacks, setSelectedTechStacks] = useState<string[]>([]);
@@ -38,31 +33,35 @@ const Filters: React.FC<FiltersProps> = ({
 
   const handleTechStackChange = (selected: string[]) => {
     setSelectedTechStacks(selected);
-    setFilters({ ...filters, technology: selected.join(',') });
+    setFilters({ ...filters, techName: selected.join(',') });
   };
 
-  const handleExperienceChange = (code: number) => {
-    setFilters({ ...filters, experience: code.toString() });
+  const handleExperienceChange = (min: number, max: number) => {
+    setFilters({ ...filters, experienceMin: min, experienceMax: max });
   };
 
   const handleRemoveTechStack = (techName: string) => {
     const updatedTechStacks = selectedTechStacks.filter(tech => tech !== techName);
     setSelectedTechStacks(updatedTechStacks);
-    setFilters({ ...filters, technology: updatedTechStacks.join(',') });
+    setFilters({ ...filters, techName: updatedTechStacks.join(',') });
     techStackRef.current?.resetSelections(updatedTechStacks);
+  };
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilters({ ...filters, sort: e.target.value });
   };
 
   const resetFilters = () => {
     setFilters({
-      technology: '',
-      location: '',
-      experience: '',
+      techName: '',
+      locationName: '',
+      experienceMin: 0,
+      experienceMax: 0,
       search: '',
-      sort: 'latest',
+      sort: 'expirationDate,desc',
     });
     setSelectedTechStacks([]);
     techStackRef.current?.resetSelections([]);
-    applyFilters();
   };
 
   return (
@@ -76,7 +75,7 @@ const Filters: React.FC<FiltersProps> = ({
           초기화
         </button>
       </div>
-      <Search search={filters.search} handleFilterChange={handleFilterChange} applyFilters={applyFilters} />
+      <Search search={filters.search} handleFilterChange={(e) => setFilters({ ...filters, search: e.target.value })} applyFilters={applyFilters} />
       <div className="mb-4 p-4 border-01 radius-01">
         <h3 className="font-pre-body-01 mb-2">기술 스택</h3>
         {selectedTechStacks.length > 0 && (
@@ -102,13 +101,14 @@ const Filters: React.FC<FiltersProps> = ({
       <div className="mb-4 p-4 border-01 radius-01">
         <h3 className="font-pre-body-01 mb-2">지역</h3>
         <RegionCheckboxes
-          selectedRegion={filters.location}
-          setSelectedRegion={(region: string) => setFilters({ ...filters, location: region })}
+          selectedRegion={filters.locationName}
+          setSelectedRegion={(region: string) => setFilters({ ...filters, locationName: region })}
         />
       </div>
       <div className="mb-4 p-4 border-01 radius-01">
         <Experience
-          selectedExperience={parseInt(filters.experience) || 0}
+          selectedExperienceMin={filters.experienceMin}
+          selectedExperienceMax={filters.experienceMax}
           onExperienceChange={handleExperienceChange}
         />
       </div>
