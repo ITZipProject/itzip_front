@@ -1,19 +1,20 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import Modal from '../auth/authModal';
-import Input from '../../../components/common/input';
-import Button from '../auth/authButton';
-import { useModal } from '@/lib/context/ModalContext';
-import { ChevronLeftIcon } from '@heroicons/react/16/solid';
-import { Margin } from '@/components/common/margin';
-import axios from 'axios';
 import { redirect } from 'next/navigation';
-import { useFormStatus } from 'react-dom';
+
+import { ChevronLeftIcon } from '@heroicons/react/16/solid';
 import { z } from 'zod';
-import { PASSWORD_MIN_LENGTH, PASSWORD_REGEX, PASSWORD_REGEX_ERROR } from '@/lib/constants';
-import Ask from '@/components/auth/ask';
+
 import SmallAsk from '@/components/auth/smallAsk';
+import Input from '@/components/common/input';
+import { Margin } from '@/components/common/margin';
+import { PASSWORD_MIN_LENGTH, PASSWORD_REGEX, PASSWORD_REGEX_ERROR } from '@/lib/constants';
+import { useModal } from '@/lib/context/ModalContext';
+
+import Modal from '../auth/authModal';
+import { useState } from 'react';
+import axios from 'axios';
+import Ask from '@/components/auth/ask';
 
 interface SignInModalProps {
   modalId: string;
@@ -27,7 +28,6 @@ interface FormValues {
 
 const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
   const { openModals, closeModal, openModal } = useModal();
-  const { pending } = useFormStatus();
   const [formValues, setFormValues] = useState<FormValues>({
     email: '',
     password: '',
@@ -52,60 +52,16 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
     service: false,
   });
 
-  useEffect(() => {
-    console.log('code____', formValues.authCode);
-  }, [formValues.authCode]);
   // 모달이 열려 있는 경우에만 렌더링
   if (!openModals.includes(modalId)) return null;
 
-  const handleReset = (field: 'email' | 'password' | 'passwordConfirm' | 'authCode') => {
-    if (field === 'email') {
-      setFormValues((prev) => ({
-        ...prev,
-        email: '',
-      }));
-    } else if (field === 'password') {
-      setFormValues((prev) => ({
-        ...prev,
-        password: '',
-      }));
-    } else if (field === 'passwordConfirm') {
-      setFormValues((prev) => ({
-        ...prev,
-        passwordConfirm: '',
-      }));
-    } else if (field === 'authCode') {
-      setFormValues((prev) => ({
-        ...prev,
-        authCode: '',
-      }));
-    }
+  const handleReset = (field: keyof FormValues) => {
+    setFormValues((prev) => ({ ...prev, [field]: '' }));
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    if (name === 'email') {
-      setFormValues((prev) => ({
-        ...prev,
-        email: value,
-      }));
-    } else if (name === 'password') {
-      setFormValues((prev) => ({
-        ...prev,
-        password: value,
-      }));
-    } else if (name === 'passwordConfirm') {
-      setFormValues((prev) => ({
-        ...prev,
-        passwordConfirm: value,
-      }));
-    } else if (name === 'authCode') {
-      setFormValues((prev) => ({
-        ...prev,
-        authCode: value,
-      }));
-    }
+    setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleAllCheckedChange = () => {
@@ -149,110 +105,99 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
 
   const emailCheck = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/checkDuplicateEmail`, {
-        params: {
-          email: formValues.email,
-        },
+        params: { email: formValues.email },
       });
-      if (res.status === 200) {
-        setIsOk((prev) => ({
-          ...prev,
-          emailCheck: !isOk.emailCheck,
-        }));
-        alert('사용 가능한 이메일입니다.');
-      }
-      if (res.status === 400) {
-        setIsOk((prev) => ({
-          ...prev,
-          emailCheck: !isOk.emailCheck,
-        }));
-        alert('사용할 수 없는 이메일입니다.');
-      }
-    } catch (err: any) {
-      console.error(err);
+
+      setIsOk((prev) => ({
+        ...prev,
+        emailCheck: true,
+      }));
+
+      alert(res.status === 200 ? '사용 가능한 이메일입니다.' : '사용할 수 없는 이메일입니다.');
+    } catch (err) {
+      console.error('사용할 수 없는 이메일입니다.', err);
+      alert('사용할 수 없는 이메일입니다.');
     } finally {
       setIsLoading(false);
     }
   };
   const postCode = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
-      setIsLoading(true);
-
-      // api 배포 되면 재구성 인코딩 or 디코딩
-
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/authEmail`, {
         email: formValues.email,
       });
-      console.log(res.data);
+
       if (res.status === 200) {
         alert('인증 코드가 이메일로 전송되었습니다.');
-        setIsOk((prev) => ({
-          ...prev,
-          postCode: false,
-        }));
-        console.log('인증 코드가 이메일로 전송되었습니다.', isOk.codeCheck);
+        setIsOk((prev) => ({ ...prev, postCode: true }));
+      } else {
+        alert('인증 코드 전송에 실패했습니다. 다시 시도해주세요.');
+        setIsOk((prev) => ({ ...prev, codeCheck: false }));
       }
-      if (res.status === 400) {
-        alert('인증 코드 보내기 실패');
-        setIsOk((prev) => ({
-          ...prev,
-          codeCheck: !isOk.codeCheck,
-        }));
-        console.log('요청값이 올바르지 않습니다.');
-      }
-    } catch (err: any) {
+    } catch (err) {
+      console.error('인증 코드 전송 중 오류 발생:', err);
       setErrors((prev) => ({
         ...prev,
         authCode: '인증 코드 전송에 실패했습니다. 다시 시도해주세요.',
       }));
-      console.error(err);
     } finally {
       setIsLoading(false);
     }
   };
   const checkCode = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
-      setIsLoading(true);
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/authEmail`, {
-        params: {
-          email: formValues.email,
-          authCode: formValues.authCode,
-        },
-      });
+      const encodedEmail = encodeURIComponent(formValues.email);
+      const encodedAuthCode = encodeURIComponent(formValues.authCode);
+
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/authEmail?email=${encodedEmail}&authCode=${encodedAuthCode}`,
+      );
 
       if (res.status === 200) {
-        console.log('코드 인증 성공!');
-        localStorage.setItem('authCode', formValues.authCode);
+        // localStorage 사용을 재고해보세요
+        // localStorage.setItem('authCode', formValues.authCode);
         setIsOk((prev) => ({
           ...prev,
-          postCode: !isOk.postCode,
+          codeCheck: true,
+          postCode: false,
         }));
         alert('인증이 완료되었습니다.');
+      } else {
+        throw new Error('인증 실패');
       }
-      if (res.status === 400) {
-        console.log('코드 인증 실패');
-        setIsOk((prev) => ({
-          ...prev,
-          postCode: true,
-          codeCheck: true,
-        }));
-        alert('인증번호를 다시 한 번 확인해주세요.');
+    } catch (err) {
+      console.error('인증 코드 확인 중 오류 발생:', err);
+
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 400) {
+          alert('인증번호가 올바르지 않습니다. 다시 확인해주세요.');
+        } else {
+          alert('인증 과정에서 오류가 발생했습니다. 다시 시도해 주세요.');
+        }
+      } else {
+        alert('알 수 없는 오류가 발생했습니다. 다시 시도해 주세요.');
       }
-    } catch (err: any) {
-      console.error(err);
+
+      setIsOk((prev) => ({
+        ...prev,
+        codeCheck: false,
+      }));
     } finally {
       setIsLoading(false);
     }
   };
   const signUp = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/join`, {
         email: formValues.email,
         password: formValues.password,
@@ -260,33 +205,22 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
         authCode: formValues.authCode,
       });
       if (res.status === 201) {
-        console.log('회원가입 성공!');
-        setIsOk({
-          ...isOk,
-          codeCheck: !isOk.codeCheck,
-        });
+        alert('회원가입에 성공했습니다!');
+        setIsOk((prev) => ({ ...prev, codeCheck: true }));
+        redirect('/profile');
       }
-      if (res.status === 400) {
-        console.log('회원가입 실패');
-        setIsOk({
-          ...isOk,
-          codeCheck: false,
-        });
-      }
-    } catch (err: any) {
-      console.error(err);
+    } catch (err) {
+      console.error('회원가입 중 오류 발생:', err);
+      alert('회원가입에 실패했습니다. 다시 시도해 주세요.');
     } finally {
       setIsLoading(false);
-      redirect('/profile');
     }
   };
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-
     try {
       formSchema.parse(formValues);
-
       if (formValues.password !== formValues.passwordConfirm) {
         setErrors((prev) => ({
           ...prev,
@@ -295,7 +229,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
         return;
       }
       setErrors({ email: '', password: '', passwordConfirm: '', authCode: '' });
-      console.log('success');
+      signUp();
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors = { email: '', password: '', passwordConfirm: '', authCode: '' };
@@ -309,8 +243,8 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
   return (
     <Modal isOpen={true} onClose={() => closeModal(modalId)}>
       <button onClick={() => openModal('signUpModal')} className="flex items-center">
-        <ChevronLeftIcon className="size-1/6 -ml-4" />
-        <h1 className="font-[700] text-[24px]">이메일로 회원가입하기</h1>
+        <ChevronLeftIcon className="-ml-4 size-1/6" />
+        <h1 className="text-2xl font-bold">이메일로 회원가입하기</h1>
       </button>
       <Margin height={'48px'} />
       <form onSubmit={handleSubmit} className="w-full space-y-4">
@@ -330,14 +264,13 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
           onClick={() => handleReset('email')}
           errors={errors.email}
         />
-        {/* <Button text="이메일 인증하기" modalId="" /> */}
-        {!isOk.postCode ? (
+        {!isOk.emailCheck ? (
           <button
-            className="primary-btn bg-[#F5F5F5] h-[48px] disabled:bg-[#F5F5F5]disabled:text-white disabled:cursor-not-allowed rounded-[12px] text-white font-[600] text-[14px]"
+            className="primary-btn bg-Grey-100 h-spacing-12 disabled:bg-Grey-100 disabled:text-white disabled:cursor-not-allowed rounded-radius-03 text-white font-semibold text-14"
             disabled={isLoading}
-            onClick={postCode}
+            onClick={emailCheck}
           >
-            {isLoading ? '인증 코드 보내는 중..' : '인증 코드 보내기'}
+            {isLoading ? '중복확인 중..' : '중복 확인하기'}
           </button>
         ) : (
           <>
@@ -351,22 +284,20 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
             </div>
             {!isOk.postCode ? (
               <button
-                className="primary-btn bg-[#F5F5F5] h-[48px] disabled:bg-[#F5F5F5]disabled:text-white disabled:cursor-not-allowed rounded-[12px] text-white font-[600] text-[14px]"
+                className="primary-btn bg-Grey-100 h-spacing-12 disabled:bg-Grey-100 disabled:text-white disabled:cursor-not-allowed rounded-radius-03 text-white font-semibold text-14"
                 disabled={isLoading}
                 type="button"
                 onClick={postCode}
               >
                 인증 코드 보내기
               </button>
-            ) : !isOk.postCode ? (
+            ) : (
               <button
-                className="primary-btn bg-[#F5F5F5] h-[48px] disabled:bg-[#F5F5F5]disabled:text-white disabled:cursor-not-allowed rounded-[12px] text-white font-[600] text-[14px]"
+                className="primary-btn bg-Grey-100 h-spacing-12 disabled:bg-Grey-100 disabled:text-white disabled:cursor-not-allowed rounded-radius-03 text-white font-semibold text-14"
                 onClick={checkCode}
               >
                 이메일 인증하기
               </button>
-            ) : (
-              <span className="flex justify-center">이메일 인증완료</span>
             )}
           </>
         )}
@@ -451,9 +382,12 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
         </div>
 
         {/* 가입하기 버튼 */}
-        <span onClick={signUp}>
-          <Button text="가입하기" modalId="" />
-        </span>
+        <button
+          onClick={signUp}
+          className="primary-btn bg-Grey-100 h-spacing-12 disabled:bg-Grey-100 disabled:text-white disabled:cursor-not-allowed rounded-radius-03 text-white font-semibold text-14"
+        >
+          가입하기
+        </button>
         {/* <Button text="가입하기" modalId="" /> */}
 
         <div className="flex flex-col items-center">
