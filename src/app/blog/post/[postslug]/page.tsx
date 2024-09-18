@@ -21,6 +21,8 @@ interface BlogPostPageProps {
 }
 
 const BlogPostPage: React.FC<BlogPostPageProps> = ({ params }) => {
+  const postId = parseInt(params.postSlug, 10);
+
   const postData = {
     category: { primary: '디자인&아트', secondary: '3D 모델링' },
     title: '서류 합격률을 높인 단 한가지 비법 : 현직 인터뷰',
@@ -244,22 +246,6 @@ It converts "HTML", but keep intact partial entries like "xxxHTMLyyy" and so on.
 :::
     `,
     likes: 243,
-    comments: [
-      {
-        id: 1,
-        author: '짱구',
-        content: '빙글빙글 돌아가는 짱구의 하루',
-        date: '2024.06.07. 10:07',
-        profileImage: 'https://picsum.photos/seed/user1/48/48',
-      },
-      {
-        id: 2,
-        author: '짱구',
-        content: '빙글빙글 돌아가는 짱구의 하루',
-        date: '2024.06.07. 10:07',
-        profileImage: 'https://picsum.photos/seed/user2/48/48',
-      },
-    ],
   };
 
   const relatedPosts = [
@@ -283,7 +269,7 @@ It converts "HTML", but keep intact partial entries like "xxxHTMLyyy" and so on.
       <div className="mt-8">
         <BlogPostActions likes={postData.likes} />
       </div>
-      <BlogPostComments initialComments={postData.comments} />
+      <BlogPostComments postId={postId} />
       <RelatedPosts userName={userData.name} posts={relatedPosts} />
       <UserInfo {...userData} />
     </div>

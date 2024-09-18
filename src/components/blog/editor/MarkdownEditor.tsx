@@ -25,7 +25,7 @@ const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(
 
     return (
       <div className="flex h-full flex-col">
-        <div className="mb-8 mt-2 border-b border-color-disabled pb-8">
+        <div className="mb-6 mt-2 border-b border-color-disabled pb-4">
           <input
             type="text"
             value={title}

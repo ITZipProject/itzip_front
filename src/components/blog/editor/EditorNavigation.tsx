@@ -2,6 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
+import ImageUploadButton from './ImageUploadButton';
+
 interface EditorNavigationProps {
   onAction: (action: string, value?: string) => void;
   onComplete: () => void;
@@ -20,12 +22,6 @@ const EditorNavigation: React.FC<EditorNavigationProps> = ({ onAction, onComplet
       value: '~~텍스트~~',
     },
     { action: 'quote', icon: '/icons/blog/whiteMode_Quote.png', size: 20, value: '> 인용문' },
-    {
-      action: 'image',
-      icon: '/icons/blog/whiteMode_Image.png',
-      size: 20,
-      value: '![이미지 설명 텍스트](이미지_url)',
-    },
     { action: 'code', icon: '/icons/blog/whiteMode_Code.png', size: 26, value: '```\n코드\n```' },
     {
       action: 'link',
@@ -46,10 +42,15 @@ const EditorNavigation: React.FC<EditorNavigationProps> = ({ onAction, onComplet
 
   const Divider = () => <div className="mx-4 h-7 w-px bg-gray" />;
 
+  const handleImageUpload = (imageUrls: string[]) => {
+    const markdownImages = imageUrls.map((url) => `![이미지 설명](${url})`).join('\n');
+    onAction('image', markdownImages);
+  };
+
   return (
-    <nav className="flex items-center justify-between border-b border-gray-200 px-20 py-2.5">
+    <nav className="fixed inset-x-0 top-0 z-50 flex items-center justify-between bg-white px-20 py-2.5">
       <Link href="/" className="text-base">
-        로고
+        <Image src="/logo.svg" alt="logo" width={80} height={40} className="h-auto max-w-[100px]" />
       </Link>
       <div className="flex items-center space-x-7">
         <div className="relative">
@@ -102,6 +103,7 @@ const EditorNavigation: React.FC<EditorNavigationProps> = ({ onAction, onComplet
             {index === 2 && <Divider />}
           </React.Fragment>
         ))}
+        <ImageUploadButton onImageUpload={handleImageUpload} />
       </div>
       <button
         className="rounded-xl bg-[#4033ED] px-5 py-2 text-sm font-semibold text-white"
