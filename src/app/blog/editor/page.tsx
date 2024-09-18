@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useRef, useEffect } from 'react';
 
 import EditorNavigation from '@/components/blog/editor/EditorNavigation';
@@ -6,7 +7,7 @@ import MarkdownEditor from '@/components/blog/editor/MarkdownEditor';
 import MarkdownPreview from '@/components/blog/editor/MarkdownPreview';
 import PublishModal from '@/components/blog/editor/PublishModal';
 
-const BlogEditorPage = () => {
+const BlogEditorPage: React.FC = () => {
   const [markdownContent, setMarkdownContent] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const editorRef = useRef<HTMLTextAreaElement>(null);
@@ -171,7 +172,6 @@ const BlogEditorPage = () => {
   return (
     <div className="min-h-screen bg-white">
       <EditorNavigation onAction={handleToolbarAction} onComplete={() => setIsModalOpen(true)} />
-
       <div className="flex gap-20 px-20 py-4">
         <div className="flex flex-1 flex-col gap-8">
           <MarkdownEditor
@@ -192,9 +192,7 @@ const BlogEditorPage = () => {
       <PublishModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onPublish={async (categoryId, thumbnailUrl) => {
-          await handlePublish(categoryId, thumbnailUrl);
-        }}
+        onPublish={handlePublish}
       />
     </div>
   );

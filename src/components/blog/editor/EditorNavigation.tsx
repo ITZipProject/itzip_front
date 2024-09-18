@@ -48,9 +48,9 @@ const EditorNavigation: React.FC<EditorNavigationProps> = ({ onAction, onComplet
   };
 
   return (
-    <nav className="flex items-center justify-between border-b border-gray-200 px-20 py-2.5">
+    <nav className="fixed inset-x-0 top-0 z-50 flex items-center justify-between bg-white px-20 py-2.5">
       <Link href="/" className="text-base">
-        로고
+        <Image src="/logo.svg" alt="logo" width={80} height={40} className="h-auto max-w-[100px]" />
       </Link>
       <div className="flex items-center space-x-7">
         <div className="relative">
