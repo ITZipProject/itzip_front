@@ -23,7 +23,7 @@ interface FormValues {
   email: string;
   password: string;
   passwordConfirm: string;
-  authCode: string | null;
+  authCode: string;
 }
 
 const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
@@ -38,7 +38,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
     email: '',
     password: '',
     passwordConfirm: '',
-    authCode: '' || null,
+    authCode: '',
   });
   const [allChecked, setAllChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -197,20 +197,40 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
   const signUp = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/join`, {
+      // 이메일 중복 체크
+      const checkRes = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/checkDuplicateEmail`,
+        {
+          params: { email: formValues.email },
+        },
+      );
+
+      if (checkRes.status !== 200) {
+        throw new Error('이미 사용 중인 이메일입니다.');
+      }
+
+      // 회원가입 진행
+      const joinRes = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/join`, {
         email: formValues.email,
         password: formValues.password,
         password_check: formValues.passwordConfirm,
-        authCode: formValues.authCode || null,
+        authCode: formValues.authCode,
       });
-      if (res.status === 201) {
+
+      if (joinRes.status === 201) {
         alert('회원가입에 성공했습니다!');
         setIsOk((prev) => ({ ...prev, codeCheck: true }));
         redirect('/profile');
+      } else {
+        throw new Error('회원가입 처리 중 오류가 발생했습니다.');
       }
     } catch (err) {
       console.error('회원가입 중 오류 발생:', err);
-      alert('회원가입에 실패했습니다. 다시 시도해 주세요.');
+      if (err instanceof Error) {
+        alert(err.message);
+      } else {
+        alert('회원가입에 실패했습니다. 다시 시도해 주세요.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -218,7 +238,6 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    void emailCheck(e);
     try {
       formSchema.parse(formValues);
       if (formValues.password !== formValues.passwordConfirm) {
@@ -268,15 +287,21 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
         <Input
           name="authCode"
           type="text"
+          value={formValues.authCode}
+          onChange={handleInputChange}
           placeholder="인증코드를 입력해주세요."
           errors={errors.authCode}
+          onClick={() => handleReset('authCode')}
         />
         {/* </div> */}
         {!isOk.postCode ? (
           <button
             className="primary-btn bg-Grey-100 h-spacing-12 disabled:bg-Grey-100 disabled:text-white disabled:cursor-not-allowed rounded-radius-03 text-white font-semibold text-14"
             disabled={isLoading}
-            onClick={postCode}
+            onClick={(e) => {
+              e.preventDefault();
+              void postCode(e);
+            }}
           >
             {isLoading ? '인증 코드 보내기 중..' : '인증 코드 보내기'}
           </button>
