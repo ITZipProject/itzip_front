@@ -12,7 +12,7 @@ const RecruitPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
     techName: '',
-    locationName: '',
+    locationName: [] as string[],
     experienceMin: 0,
     experienceMax: 10,
     search: '',
@@ -21,14 +21,19 @@ const RecruitPage: React.FC = () => {
 
   useEffect(() => {
     fetchJobData();
-  }, [currentPage, filters]);
+  }, [currentPage, filters.techName, filters.locationName, filters.experienceMin, filters.experienceMax, filters.search, filters.sort]);
 
   const fetchJobData = async () => {
     try {
       const response = await fetchJobs({
         page: currentPage - 1,
         size: 20,
-        ...filters
+        sort: filters.sort,
+        techName: filters.techName,
+        locationName: filters.locationName,
+        experienceMin: filters.experienceMin,
+        experienceMax: filters.experienceMax,
+        search: filters.search
       });
       setJobs(response.jobs);
       setTotalPages(response.totalPages);

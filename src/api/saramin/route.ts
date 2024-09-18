@@ -3,6 +3,17 @@ import { Job } from '@/components/recruit/job';
 
 const baseUrl = 'http://3.39.78.0:8080/api';
 
+interface FetchJobsParams {
+  page: number;
+  size: number;
+  sort: string;
+  techName?: string;
+  locationName?: string[];
+  experienceMin?: number;
+  experienceMax?: number;
+  search?: string;
+}
+
 interface JobResponse {
   status: string;
   msg: string;
@@ -10,25 +21,13 @@ interface JobResponse {
     totalElements: number;
     totalPages: number;
     content: Job[];
-    // 필요한 경우 다른 필드들을 여기에 추가하세요
   };
   code: string;
 }
 
-export async function fetchJobs(params: {
-  page?: number;
-  size?: number;
-  sort?: string;
-} = {}): Promise<{ jobs: Job[]; totalPages: number }> {
-  const page = params.page ?? 10;
-  const size = params.size ?? 20;
-  const sort = params.sort ? encodeURIComponent(`["${params.sort}"]`) : '%5B%22string%22%5D';
-  
-  const url = `${baseUrl}/job-info?page=${page}&size=${size}&sort=${sort}`;
-
+export async function fetchJobs(params: FetchJobsParams): Promise<{ jobs: Job[]; totalPages: number }> {
   try {
-    const response = await axios.get<JobResponse>(url);
-    
+    const response = await axios.get<JobResponse>(`${baseUrl}/job-info`, { params });
     return {
       jobs: response.data.data.content,
       totalPages: response.data.data.totalPages

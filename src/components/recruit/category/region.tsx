@@ -24,26 +24,54 @@ const regions: Region[] = [
 ];
 
 interface Props {
-  selectedRegion: string;
-  setSelectedRegion: (region: string) => void;
-  groupName?: string; // Optional group name prop
+  selectedRegions: string[];
+  setSelectedRegions: (regions: string[]) => void;
 }
 
-const RegionCheckboxes: React.FC<Props> = ({ selectedRegion, setSelectedRegion, groupName = 'radioGroup2' }) => {
+const RegionCheckboxes: React.FC<Props> = ({ selectedRegions, setSelectedRegions }) => {
+  const handleRegionChange = (regionName: string) => {
+    if (selectedRegions.includes(regionName)) {
+      setSelectedRegions(selectedRegions.filter(r => r !== regionName));
+    } else {
+      setSelectedRegions([...selectedRegions, regionName]);
+    }
+  };
+
+  const handleRemoveRegion = (regionName: string) => {
+    setSelectedRegions(selectedRegions.filter(r => r !== regionName));
+  };
+
   return (
     <div className="container flex flex-col w-64">
+      {selectedRegions.length > 0 && (
+        <div className="selected-regions mb-4">
+          <h4 className="font-bold mb-2">선택된 지역:</h4>
+          <div className="flex flex-wrap gap-2">
+            {selectedRegions.map(region => (
+              <span key={region} className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                {region}
+                <button 
+                  onClick={() => handleRemoveRegion(region)}
+                  className="ml-2 text-blue-600 font-bold"
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
       {regions.map((region) => (
         <div className="region mb-2" key={region.id}>
           <input
-            type="radio"
+            type="checkbox"
             id={region.id}
-            name={groupName} // Dynamic group name
             value={region.name}
-            checked={selectedRegion === region.name}
-            onChange={() => setSelectedRegion(region.name)}
+            checked={selectedRegions.includes(region.name)}
+            onChange={() => handleRegionChange(region.name)}
             className="mr-2 cursor-pointer"
           />
-          <label htmlFor={region.id} className="inline-block">
+          <label htmlFor={region.id} className="inline-block cursor-pointer">
             {region.name}
           </label>
         </div>
