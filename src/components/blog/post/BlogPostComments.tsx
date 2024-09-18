@@ -1,7 +1,9 @@
 'use client';
-import Image from 'next/image';
-import React, { useState, useEffect, useCallback } from 'react';
 
+import Image from 'next/image';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+
+import CommentOptionsModal from './CommentOptionsModal';
 import BlogPagination from '../main/BlogPagination';
 
 interface Comment {
@@ -24,6 +26,8 @@ const BlogPostComments: React.FC<BlogPostCommentsProps> = ({ postId }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalComments, setTotalComments] = useState(0);
+  const [openModalId, setOpenModalId] = useState<number | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const fetchComments = useCallback(
     async (
@@ -35,7 +39,7 @@ const BlogPostComments: React.FC<BlogPostCommentsProps> = ({ postId }) => {
     }> => {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      const totalComments = 120;
+      const totalComments = 50;
       const totalPages = Math.ceil(totalComments / COMMENTS_PER_PAGE);
 
       const start = (page - 1) * COMMENTS_PER_PAGE;
@@ -69,6 +73,19 @@ const BlogPostComments: React.FC<BlogPostCommentsProps> = ({ postId }) => {
     void loadComments();
   }, [currentPage, fetchComments]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        setOpenModalId(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newComment.trim()) {
@@ -87,6 +104,16 @@ const BlogPostComments: React.FC<BlogPostCommentsProps> = ({ postId }) => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handleEditComment = (commentId: number) => {
+    console.log('Edit comment', commentId);
+    setOpenModalId(null);
+  };
+
+  const handleDeleteComment = (commentId: number) => {
+    console.log('Delete comment', commentId);
+    setOpenModalId(null);
   };
 
   return (
@@ -110,19 +137,34 @@ const BlogPostComments: React.FC<BlogPostCommentsProps> = ({ postId }) => {
                 <div className="grow">
                   <div className="flex items-center justify-between">
                     <h4 className="font-semibold text-gray-700">{comment.author}</h4>
-                    <button className="text-gray-400">
-                      <svg
-                        width="3"
-                        height="17"
-                        viewBox="0 0 3 17"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+                    <div className="relative" ref={modalRef}>
+                      <button
+                        className="flex size-6 flex-col items-center justify-center"
+                        onClick={() =>
+                          setOpenModalId(openModalId === comment.id ? null : comment.id)
+                        }
                       >
-                        <circle cx="1.48" cy="1.55" r="1.55" fill="#A3A3A3" />
-                        <circle cx="1.48" cy="8.5" r="1.55" fill="#A3A3A3" />
-                        <circle cx="1.48" cy="15.45" r="1.55" fill="#A3A3A3" />
-                      </svg>
-                    </button>
+                        <div className="flex flex-col gap-1">
+                          <svg
+                            width="3"
+                            height="17"
+                            viewBox="0 0 3 17"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <circle cx="1.48" cy="1.55" r="1.55" fill="#A3A3A3" />
+                            <circle cx="1.48" cy="8.5" r="1.55" fill="#A3A3A3" />
+                            <circle cx="1.48" cy="15.45" r="1.55" fill="#A3A3A3" />
+                          </svg>
+                        </div>
+                      </button>
+                      {openModalId === comment.id && (
+                        <CommentOptionsModal
+                          onEdit={() => handleEditComment(comment.id)}
+                          onDelete={() => handleDeleteComment(comment.id)}
+                        />
+                      )}
+                    </div>
                   </div>
                   <p className="mt-1 text-gray-600">{comment.content}</p>
                   <span className="mt-2 block text-sm text-gray-400">{comment.date}</span>
