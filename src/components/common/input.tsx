@@ -23,14 +23,11 @@ export default function Input({
           name={name}
           {...rest}
         />
-        <button onClick={onClick}>
-          <Image
-            src={resetBtn}
-            width={19}
-            height={19}
-            alt="resetbtn"
-            className="absolute right-[4px] top-5"
-          />
+        <button
+          className="absolute right-[4px] top-3 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-full p-1 hover:bg-Grey-10"
+          onClick={onClick}
+        >
+          <Image src={resetBtn} width={19} height={19} alt="resetbtn" />
         </button>
       </div>
       <Margin height={'9px'} />
