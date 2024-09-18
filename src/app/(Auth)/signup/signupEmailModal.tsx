@@ -23,7 +23,7 @@ interface FormValues {
   email: string;
   password: string;
   passwordConfirm: string;
-  authCode: string;
+  authCode: string | null;
 }
 
 const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
@@ -38,7 +38,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
     email: '',
     password: '',
     passwordConfirm: '',
-    authCode: '',
+    authCode: '' || null,
   });
   const [allChecked, setAllChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -135,7 +135,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
 
       if (res.status === 200) {
         alert('인증 코드가 이메일로 전송되었습니다.');
-        setIsOk((prev) => ({ ...prev, postCode: true }));
+        setIsOk((prev) => ({ ...prev, postCode: true, codeCheck: true }));
       } else {
         alert('인증 코드 전송에 실패했습니다. 다시 시도해주세요.');
         setIsOk((prev) => ({ ...prev, codeCheck: false }));
@@ -163,7 +163,6 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
       );
 
       if (res.status === 200) {
-        // localStorage 사용을 재고해보세요
         // localStorage.setItem('authCode', formValues.authCode);
         setIsOk((prev) => ({
           ...prev,
@@ -202,7 +201,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
         email: formValues.email,
         password: formValues.password,
         password_check: formValues.passwordConfirm,
-        authCode: formValues.authCode,
+        authCode: formValues.authCode || null,
       });
       if (res.status === 201) {
         alert('회원가입에 성공했습니다!');
@@ -219,6 +218,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    void emailCheck(e);
     try {
       formSchema.parse(formValues);
       if (formValues.password !== formValues.passwordConfirm) {
@@ -229,7 +229,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
         return;
       }
       setErrors({ email: '', password: '', passwordConfirm: '', authCode: '' });
-      signUp();
+      void signUp();
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors = { email: '', password: '', passwordConfirm: '', authCode: '' };
@@ -264,42 +264,33 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
           onClick={() => handleReset('email')}
           errors={errors.email}
         />
-        {!isOk.emailCheck ? (
+        {/* <div hidden={!isOk.codeCheck}> */}
+        <Input
+          name="authCode"
+          type="text"
+          placeholder="인증코드를 입력해주세요."
+          errors={errors.authCode}
+        />
+        {/* </div> */}
+        {!isOk.postCode ? (
           <button
             className="primary-btn bg-Grey-100 h-spacing-12 disabled:bg-Grey-100 disabled:text-white disabled:cursor-not-allowed rounded-radius-03 text-white font-semibold text-14"
             disabled={isLoading}
-            onClick={emailCheck}
+            onClick={postCode}
           >
-            {isLoading ? '중복확인 중..' : '중복 확인하기'}
+            {isLoading ? '인증 코드 보내기 중..' : '인증 코드 보내기'}
           </button>
         ) : (
-          <>
-            <div hidden={isOk.codeCheck}>
-              <Input
-                name="authCode"
-                type="text"
-                placeholder="인증코드를 입력해주세요."
-                errors={errors.authCode}
-              />
-            </div>
-            {!isOk.postCode ? (
-              <button
-                className="primary-btn bg-Grey-100 h-spacing-12 disabled:bg-Grey-100 disabled:text-white disabled:cursor-not-allowed rounded-radius-03 text-white font-semibold text-14"
-                disabled={isLoading}
-                type="button"
-                onClick={postCode}
-              >
-                인증 코드 보내기
-              </button>
-            ) : (
-              <button
-                className="primary-btn bg-Grey-100 h-spacing-12 disabled:bg-Grey-100 disabled:text-white disabled:cursor-not-allowed rounded-radius-03 text-white font-semibold text-14"
-                onClick={checkCode}
-              >
-                이메일 인증하기
-              </button>
-            )}
-          </>
+          <button
+            className="primary-btn bg-Grey-100 h-spacing-12 disabled:bg-Grey-100 disabled:text-white disabled:cursor-not-allowed rounded-radius-03 text-white font-semibold text-14"
+            disabled={isLoading}
+            onClick={(e) => {
+              e.preventDefault();
+              void checkCode(e);
+            }}
+          >
+            {isLoading ? '이메일 인증하기 중..' : '이메일 인증하기'}
+          </button>
         )}
         <div className="flex items-center">
           <label htmlFor="password">비밀번호</label>
