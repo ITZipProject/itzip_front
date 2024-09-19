@@ -3,11 +3,7 @@ import { InputHTMLAttributes } from 'react';
 import resetBtn from '../../../public/icons/common/Ic/vector.png';
 import Image from 'next/image';
 import { Margin } from './margin';
-interface InputProps {
-  name: string;
-  errors?: string;
-  onClick?: () => void;
-}
+import { InputProps } from '@/types/input';
 
 export default function Input({
   name,
