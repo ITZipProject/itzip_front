@@ -7,7 +7,7 @@ interface ModalProps {
   children?: React.ReactNode;
 }
 
-const AuthModal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
@@ -26,4 +26,4 @@ const AuthModal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   );
 };
 
-export default AuthModal;
+export default Modal;
