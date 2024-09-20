@@ -28,12 +28,7 @@ const RecruitPage: React.FC = () => {
       const response = await fetchJobs({
         page: currentPage - 1,
         size: 20,
-        sort: filters.sort,
-        techName: filters.techName,
-        locationName: filters.locationName,
-        experienceMin: filters.experienceMin,
-        experienceMax: filters.experienceMax,
-        search: filters.search
+        ...filters  // 모든 필터 값 전달
       });
       setJobs(response.jobs);
       setTotalPages(response.totalPages);
@@ -58,14 +53,14 @@ const RecruitPage: React.FC = () => {
         <h1 className="font-pre-heading-01">&nbsp;둘러보기</h1>
       </div>
       <div className="flex space-x-4">
-        <div className="w-1/5">
+        <div className="w-[200px] flex-shrink-0">
           <Filters
             filters={filters}
             setFilters={setFilters}
             applyFilters={applyFilters}
           />
         </div>
-        <div className="w-4/5">
+        <div className="flex-grow">
           <JobList 
             jobs={jobs} 
             currentPage={currentPage}
