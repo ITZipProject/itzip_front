@@ -1,30 +1,36 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Job } from './job';
-import Pagination from '../common/multipage';
+import ReactPaginate from 'react-paginate';
+import { fetchJobs } from '@/api/saramin/route';
 
-interface JobListProps {
-  filteredJobs: Job[];
-  // handleBookmark: (jobId: string) => void; // 주석 처리 (백엔드 응답에 없음)
+function cleanLocationNames(locationNames: string[]): string[] {
+  const uniqueLocations = new Set(locationNames.flatMap(name => name.split(' > ')).filter(name => name !== "&gt;"));
+  return Array.from(uniqueLocations);
 }
 
-const JobList: React.FC<JobListProps> = ({ filteredJobs /*, handleBookmark */ }) => {
-  const [sortOrder, setSortOrder] = useState<'latest' | 'oldest' | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const jobsPerPage = 10;
+interface JobListProps {
+  jobs: Job[];
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
 
-  const sortedJobs = [...filteredJobs].sort((a, b) => {
-    if (sortOrder === null) return 0;
-    // timestamp가 없으므로 expirationDate를 사용
-    return sortOrder === 'latest' 
-      ? new Date(b.expirationDate).getTime() - new Date(a.expirationDate).getTime() 
-      : new Date(a.expirationDate).getTime() - new Date(b.expirationDate).getTime();
-  });
+const JobList: React.FC<JobListProps> = ({ jobs, currentPage, totalPages, onPageChange }) => {  
+  const [sortOrder, setSortOrder] = useState<'latest' | 'oldest' | null>(null);
+
+  useEffect(() => {
+    // 필요한 경우 여기에 추가 로직
+  }, [currentPage, sortOrder]);
 
   const handleSort = (order: 'latest' | 'oldest') => {
     setSortOrder(order);
-    setCurrentPage(1);
+    onPageChange(0);  // 정렬 변경 시 첫 페이지로
+  };
+
+  const handlePageChange = ({ selected }: { selected: number }) => {
+    onPageChange(selected);
   };
 
   const formatDate = (dateString: string) => {
@@ -32,13 +38,15 @@ const JobList: React.FC<JobListProps> = ({ filteredJobs /*, handleBookmark */ })
     return date.toLocaleDateString('ko-KR', {year: 'numeric', month: 'long', day: 'numeric'});
   };
 
-  const pageCount = Math.ceil(sortedJobs.length / jobsPerPage);
-  const offset = (currentPage - 1) * jobsPerPage;
-  const currentJobs = sortedJobs.slice(offset, offset + jobsPerPage);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+  // 정렬 로직 (필요한 경우)
+  const sortedJobs = [...jobs].sort((a, b) => {
+    if (sortOrder === 'latest') {
+      return new Date(b.expirationDate).getTime() - new Date(a.expirationDate).getTime();
+    } else if (sortOrder === 'oldest') {
+      return new Date(a.expirationDate).getTime() - new Date(b.expirationDate).getTime();
+    }
+    return 0;
+  });
 
   return (
     <div>
@@ -58,28 +66,42 @@ const JobList: React.FC<JobListProps> = ({ filteredJobs /*, handleBookmark */ })
       </div>
       <hr className="my-6 border-blue-700"/>
       <div className="grid grid-cols-2 gap-6">
-        {currentJobs.map((job) => (
+        {sortedJobs.map((job) => (
           <div 
-            key={job.title} // id가 없으므로 title을 key로 사용 (주의: 중복 가능성 있음)
+            key={job.id} 
             className="p-6 border-01 radius-01 cursor-pointer"
-            // onClick={() => window.open(job.url, '_blank')} // url이 없으므로 주석 처리
+            onClick={() => window.open(job.url, '_blank')}
           >
             <h3 className="font-pre-body-01 text-center mb-2">{job.title}</h3>
-            {/* <p className="font-pre-body-02 text-center mb-2">{job.company}</p> */}
+            <p className="font-pre-body-02 text-center mb-2">{job.companyName}</p>
             <p className="font-pre-body-03 text-center text-gray-600 mb-4">
               {job.jobName.slice(0, 3).join(', ')}
             </p>
-            <p className="font-pre-body-04 text-center text-gray-600 mb-4">{job.locationName.join(', ')}</p>
+            <p className="font-pre-body-04 text-center text-gray-600 mb-4">
+              {cleanLocationNames(job.locationName).join(', ')}
+            </p>
             <p className="font-pre-body-04 text-center text-gray-600">
               만료일: {formatDate(job.expirationDate)}
             </p>
           </div>
         ))}
       </div>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={pageCount}
+      <ReactPaginate
+        previousLabel={'이전'}
+        nextLabel={'다음'}
+        breakLabel={'...'}
+        pageCount={totalPages}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={5}
         onPageChange={handlePageChange}
+        containerClassName={'pagination flex justify-center mt-8 space-x-2'}
+        pageClassName={'px-3 py-2 rounded-lg border'}
+        pageLinkClassName={'text-blue-500'}
+        activeClassName={'bg-blue-500 text-white'}
+        previousClassName={'px-3 py-2 rounded-lg border'}
+        nextClassName={'px-3 py-2 rounded-lg border'}
+        disabledClassName={'opacity-50 cursor-not-allowed'}
+        forcePage={currentPage}
       />
     </div>
   );

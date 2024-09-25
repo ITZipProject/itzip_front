@@ -1,21 +1,47 @@
 import axios from 'axios';
-import { Job, JobResponse } from '@/components/recruit/job';
+import { Job } from '@/components/recruit/job';
 
 const baseUrl = 'http://3.39.78.0:8080/api';
 
-export async function fetchJobs(params: {
-  search?: string;
+interface FetchJobsParams {
+  page: number;
+  size: number;
+  sort: string;
   techName?: string;
+  locationName?: string[];
   experienceMin?: number;
   experienceMax?: number;
-  page?: number;
-  size?: number;
-}): Promise<Job[]> {
+  search?: string;
+}
+
+interface JobResponse {
+  status: string;
+  msg: string;
+  data: {
+    totalElements: number;
+    totalPages: number;
+    content: Job[];
+  };
+  code: string;
+}
+
+export async function fetchJobs(params: FetchJobsParams): Promise<{ jobs: Job[]; totalPages: number }> {
   try {
+    console.log('Fetching jobs with params:', params);
     const response = await axios.get<JobResponse>(`${baseUrl}/job-info`, { params });
-    return response.data.data.content;
+    // console.log('API response:', response.data);
+    return {
+      jobs: response.data.data.content,
+      totalPages: response.data.data.totalPages
+    };
   } catch (error) {
-    console.error('Error fetching jobs:', error);
-    return [];
+    if (axios.isAxiosError(error)) {
+      console.error('Axios error:', error.message);
+      console.error('Error response:', error.response?.data);
+      console.error('Error config:', error.config);
+    } else {
+      console.error('Unexpected error:', error);
+    }
+    throw error;
   }
 }
