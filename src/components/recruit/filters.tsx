@@ -36,8 +36,8 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters, applyFilters }) 
     setFilters(prev => ({ ...prev, experienceMin: min, experienceMax: max }));
   };
 
-  const handleRegionChange = (regions: string[]) => {
-    setFilters(prev => ({ ...prev, locationName: regions }));
+  const handleRegionChange = (selected: string[]) => {
+    setFilters(prev => ({ ...prev, locationName: selected }));
   };
 
   const handleRemoveTechStack = (techName: string) => {
@@ -102,13 +102,12 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters, applyFilters }) 
           onSelectionChange={handleTechStackChange}
         />
       </div>
-      <div className="mb-4 p-4 border-01 radius-01">
+      {/* <div className="mb-4 p-4 border-01 radius-01">
         <h3 className="font-pre-body-01 mb-2">지역</h3>
         <RegionCheckboxes
-          selectedRegions={filters.locationName}
-          setSelectedRegions={handleRegionChange}
+          onSelectionChange={handleRegionChange}
         />
-      </div>
+      </div> */}
       <div className="mb-4 p-4 border-01 radius-01">
         <Experience
           selectedExperienceMin={filters.experienceMin}
@@ -116,12 +115,12 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters, applyFilters }) 
           onExperienceChange={handleExperienceChange}
         />
       </div>
-      <button
+      {/* <button
         className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
         onClick={applyFilters}
       >
         필터 적용
-      </button>
+      </button> */}
     </div>
   );
 };

@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 
 interface Region {
   id: string;
@@ -23,61 +25,74 @@ const regions: Region[] = [
   // Add more regions as needed
 ];
 
-interface Props {
-  selectedRegions: string[];
-  setSelectedRegions: (regions: string[]) => void;
+interface RegionCheckboxesProps {
+  onSelectionChange?: (selected: string[]) => void;
 }
 
-const RegionCheckboxes: React.FC<Props> = ({ selectedRegions, setSelectedRegions }) => {
-  const handleRegionChange = (regionName: string) => {
-    if (selectedRegions.includes(regionName)) {
-      setSelectedRegions(selectedRegions.filter(r => r !== regionName));
+export interface RegionCheckboxesRef {
+  resetSelections: (newSelection: string[]) => void;
+}
+
+const RegionCheckboxes = forwardRef<RegionCheckboxesRef, RegionCheckboxesProps>(({ onSelectionChange }, ref) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredRegions, setFilteredRegions] = useState<Region[]>(regions);
+  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (searchTerm.trim() === '') {
+      setFilteredRegions(regions);
     } else {
-      setSelectedRegions([...selectedRegions, regionName]);
+      const filtered = regions.filter(region =>
+        region.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredRegions(filtered);
+    }
+  }, [searchTerm]);
+
+  useImperativeHandle(ref, () => ({
+    resetSelections: (newSelection: string[]) => {
+      setSelectedRegions(newSelection);
+    }
+  }));
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleRegionChange = (regionName: string) => {
+    const updatedSelection = selectedRegions.includes(regionName)
+      ? selectedRegions.filter(r => r !== regionName)
+      : [...selectedRegions, regionName];
+    
+    setSelectedRegions(updatedSelection);
+    if (onSelectionChange) {
+      onSelectionChange(updatedSelection);
     }
   };
 
-  const handleRemoveRegion = (regionName: string) => {
-    setSelectedRegions(selectedRegions.filter(r => r !== regionName));
-  };
-
   return (
-    <div className="container flex flex-col w-64">
-      {selectedRegions.length > 0 && (
-        <div className="selected-regions mb-4">
-          <h4 className="font-bold mb-2">선택된 지역:</h4>
-          <div className="flex flex-wrap gap-2">
-            {selectedRegions.map(region => (
-              <span key={region} className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                {region}
-                <button 
-                  onClick={() => handleRemoveRegion(region)}
-                  className="ml-2 text-blue-600 font-bold"
-                >
-                  ×
-                </button>
-              </span>
-            ))}
+    <div className="region-checkboxes">
+      <div className="region-list">
+        {filteredRegions.map((region) => (
+          <div className="region mb-2" key={region.id}>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                id={region.id}
+                value={region.name}
+                checked={selectedRegions.includes(region.name)}
+                onChange={() => handleRegionChange(region.name)}
+                className="mr-2 cursor-pointer"
+              />
+              {region.name}
+            </label>
           </div>
-        </div>
-      )}
-      {regions.map((region) => (
-        <div className="region mb-2" key={region.id}>
-          <input
-            type="checkbox"
-            id={region.id}
-            value={region.name}
-            checked={selectedRegions.includes(region.name)}
-            onChange={() => handleRegionChange(region.name)}
-            className="mr-2 cursor-pointer"
-          />
-          <label htmlFor={region.id} className="inline-block cursor-pointer">
-            {region.name}
-          </label>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
-};
+});
+
+RegionCheckboxes.displayName = 'RegionCheckboxes';
 
 export default RegionCheckboxes;
