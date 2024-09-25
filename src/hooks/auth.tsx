@@ -13,6 +13,9 @@ import { useAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 
+import { FormValues } from '@/types/auth';
+import instance from '@/api/\baxiosInstance';
+
 const formSchema = z
   .object({
     email: z
@@ -61,7 +64,7 @@ export const useSignUp = () => {
 
   const handleApiError = (error: unknown, defaultMessage: string) => {
     if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
+      const axiosError = error as AxiosError<{ message: string }>;
       if (axiosError.response?.status === 400) {
         alert(axiosError.response.data.message || defaultMessage);
       } else {
@@ -77,8 +80,9 @@ export const useSignUp = () => {
     setIsLoading((prev) => ({ ...prev, emailCheck: true }));
 
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/checkDuplicateEmail`, {
+      const res = await instance.get('/user/checkDuplicateEmail', {
         params: { email: formValues.email },
+        headers: { 'No-Auth': true },
       });
 
       const isEmailAvailable = res.status === 200;
@@ -102,9 +106,11 @@ export const useSignUp = () => {
     setIsLoading((prev) => ({ ...prev, codePost: true }));
 
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/authEmail`, {
-        email: formValues.email,
-      });
+      const res = await instance.post(
+        '/user/authEmail',
+        { email: formValues.email },
+        { headers: { 'No-Auth': true } },
+      );
 
       if (res.status === 200) {
         alert('인증 코드가 이메일로 전송되었습니다.');
@@ -125,11 +131,12 @@ export const useSignUp = () => {
     setIsLoading((prev) => ({ ...prev, codeVerify: true }));
 
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/authEmail`, {
+      const res = await instance.get('/user/authEmail', {
         params: {
           email: formValues.email,
           authCode: formValues.authCode,
         },
+        headers: { 'No-Auth': true },
       });
 
       if (res.status === 200) {
@@ -149,12 +156,16 @@ export const useSignUp = () => {
   const signUp = async () => {
     setIsLoading((prev) => ({ ...prev, signUp: true }));
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/join`, {
-        email: formValues.email,
-        password: formValues.password,
-        passwordCheck: formValues.passwordCheck,
-        authCode: formValues.authCode,
-      });
+      const res = await instance.post(
+        '/user/join',
+        {
+          email: formValues.email,
+          password: formValues.password,
+          passwordCheck: formValues.passwordCheck,
+          authCode: formValues.authCode,
+        },
+        { headers: { 'No-Auth': true } },
+      );
 
       if (res.status === 201) {
         alert('회원가입에 성공했습니다!');
