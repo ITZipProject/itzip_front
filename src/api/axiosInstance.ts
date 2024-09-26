@@ -48,9 +48,7 @@ instance.interceptors.request.use(
 );
 
 instance.interceptors.response.use(
-  (res) => {
-    return res;
-  },
+  (res) => res,
   async (err: AxiosError) => {
     const originalRequest = err.config as AxiosRequestConfig & { _retry?: boolean };
     const { setAccessToken, setRefreshToken, accessToken, refreshToken } = getTokenState() as {
@@ -60,14 +58,11 @@ instance.interceptors.response.use(
       refreshToken: string;
     };
 
-    // originalRequest._retry : 원래의 요청을 이미 한 번 다시 보냈는지를 나타내는 플레그 (토큰 갱신 시도)
-    // 일반적으로 인증 실패에 대한 상태 코드는 401
-    // api 문서에 400으로 되어 있기 때문에 400으로 수정함.
     if (accessToken && refreshToken && err.response?.status === 400 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      return axios
-        .post(
+      try {
+        const res = await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}`,
           {},
           {
@@ -76,20 +71,17 @@ instance.interceptors.response.use(
               Refresh: `Bearer ${refreshToken}`,
             },
           },
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            setAccessToken(res.headers.authorizaion as string);
+        );
 
-            console.log(res);
-            return instance(originalRequest);
-          }
-        })
-        .catch(() => {
-          console.log('올 삭제');
-          setRefreshToken('');
-          setAccessToken('');
-        });
+        if (res.status === 200) {
+          setAccessToken(res.headers.authorization as string);
+          return instance(originalRequest);
+        }
+      } catch (error) {
+        console.log('토큰 갱신 실패, 모든 토큰 삭제');
+        setRefreshToken('');
+        setAccessToken('');
+      }
     }
     return Promise.reject(err);
   },
