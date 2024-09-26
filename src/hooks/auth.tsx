@@ -153,44 +153,38 @@ export const useSignUp = () => {
     }
   };
 
-  const signUp = async () => {
+  const signUp = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setIsLoading((prev) => ({ ...prev, signUp: true }));
     try {
-      const res = await instance.post(
-        '/user/join',
-        {
-          email: formValues.email,
-          password: formValues.password,
-          passwordCheck: formValues.passwordCheck,
-          authCode: formValues.authCode,
-        },
-        { headers: { 'No-Auth': true } },
-      );
-
-      if (res.status === 201) {
-        alert('회원가입에 성공했습니다!');
-        setIsOk((prev) => ({ ...prev, codeCheck: true }));
-        router.push('/profile');
-      } else {
-        throw new Error('회원가입 처리 중 오류가 발생했습니다.');
-      }
-    } catch (error) {
-      handleApiError(error, '회원가입에 실패했습니다. 다시 시도해 주세요.');
+      const res = await instance.post('/user/join', {
+        email: formValues.email,
+        password: formValues.password,
+        password_check: formValues.passwordCheck,
+        auth_code: formValues.authCode,
+      });
+      console.log('data__', res);
+    } catch (err) {
+      console.log(err);
     } finally {
       setIsLoading((prev) => ({ ...prev, signUp: false }));
     }
   };
-
-  const onSubmitSignUpButton = (e: React.SyntheticEvent) => {
+  const onSubmitSignUpButton = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (!isChecked.service || !isChecked.private) {
-      setAgreeError('약관에 모두 동의해야 합니다.');
-      return;
-    }
+    // if (!isChecked.service || !isChecked.private) {
+    //   setAgreeError('약관에 모두 동의해야 합니다.');
+    //   return;
+    // }
+
+    setIsLoading((prev) => ({ ...prev, join: true })); // 로딩 상태 시작
+
     try {
       formSchema.parse(formValues);
       setErrors({ email: '', password: '', passwordCheck: '', authCode: '', agreeTerms: false });
-      void signUp();
+
+      await signUp(); // 비동기 함수 await 사용
+      // 회원가입 성공 처리 (예: 로그인 페이지로 이동)
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Partial<Record<keyof FormValues, string | boolean>> = {};
@@ -203,7 +197,13 @@ export const useSignUp = () => {
           }
         });
         setErrors(newErrors as unknown as FormValues);
+      } else {
+        // Zod 오류가 아닌 경우의 처리
+        console.error('회원가입 중 오류 발생:', error);
       }
+    } finally {
+      setIsLoading((prev) => ({ ...prev, join: false }));
+      // 로딩 상태 종료
     }
   };
 
@@ -218,5 +218,6 @@ export const useSignUp = () => {
     sendAuthCode,
     verifyAuthCode,
     onSubmitSignUpButton,
+    signUp,
   };
 };
