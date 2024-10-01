@@ -26,18 +26,13 @@ const Main: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-3 h-full p-4 text-white bg-neutral-900 shadow-md overflow-auto">
+    <div className="flex flex-col gap-3 h-full p-4 text-white bg-neutral-800 shadow-md overflow-auto scrollbar-hide">
       <div className="flex justify-end gap-8 mb-4">
-        <button className="border border-gray-400 bg-blue-500 text-white py-2 px-3 rounded">
-          문제 랜덤
-        </button>
-        <button className="border border-gray-400 bg-blue-500 text-white py-2 px-3 rounded">
-          문제 추천
-        </button>
+        <button className="  bg-blue-900 text-white py-2 px-3 rounded">문제 추천</button>
       </div>
       <div className="w-full">
         <div className="flex justify-between p-5 border-b border-zinc-600 bg-gray-100 ">
-          <h3>ID</h3>
+          <h3>문제 번호</h3>
           <h3>제목</h3>
           <h3>푼 사람 수</h3>
         </div>
@@ -45,12 +40,12 @@ const Main: React.FC = () => {
           data.map((problem) => (
             <div
               key={problem.problemId}
-              className="flex justify-between p-5 border-b-2 bg-gray-800 hover:bg-gray-700 transition-colors cursor-pointer"
+              className="flex justify-between p-5 bg-gray-800 hover:bg-gray-700 transition-colors cursor-pointer"
               onClick={() => handleClick(problem.problemId)}
             >
-              <p>{problem.problemId}</p>
-              <p>{problem.title}</p>
-              <p>{problem.acceptedUserCount}</p>
+              <p className="text-gray-300">{problem.problemId}</p>
+              <p className="text-gray-300">{problem.title}</p>
+              <p className="text-gray-300">{problem.acceptedUserCount}</p>
             </div>
           ))
         ) : (

@@ -19,7 +19,7 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
   const { openModal } = useModal();
 
   const isStudyPage = pathname.startsWith('/study');
-  const headerBackgroundColor = isStudyPage ? 'bg-neutral-900' : 'bg-white';
+  const headerBackgroundColor = isStudyPage ? 'bg-stone-800' : 'bg-white';
   const textColor = isStudyPage ? 'text-gray-200' : 'text-headerText';
 
   return (

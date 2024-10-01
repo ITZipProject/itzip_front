@@ -6,7 +6,7 @@ const MyData: React.FC = () => {
   const { username, rating, rank, profileImageUrl } = useFetchMyAlgorithmData();
 
   return (
-    <div className="w-full flex flex-col gap-8 justify-center items-center border border-zinc-600	 rounded-3xl bg-zinc-800 p-5">
+    <div className="w-full flex flex-col gap-8 justify-center items-center border border-zinc-600	 rounded-3xl bg-zinc-700 p-5">
       <div>
         <Image
           src={'/defaultProfileImage.jpg'}

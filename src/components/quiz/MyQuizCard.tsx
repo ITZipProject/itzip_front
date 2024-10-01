@@ -20,7 +20,7 @@ const MyQuizCard: React.FC<MyQuizCardProps> = ({ quiz }) => {
   };
 
   return (
-    <div className="flex flex-col w-96 h-64 bg-neutral-800 items-center cursor-pointer rounded-lg gap-4 p-4">
+    <div className="flex flex-col w-96 h-64 bg-neutral-700 items-center cursor-pointer rounded-lg gap-4 p-4">
       <div className="w-full h-1/6 flex justify-between">
         <h3 className="text-slate-400 text-center text-xs rounded-sm">{quiz.category}</h3>
       </div>

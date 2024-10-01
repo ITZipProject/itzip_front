@@ -15,13 +15,13 @@ export default function Home() {
   };
 
   return (
-    <div className="flex gap-11 p-12 w-full h-screen overflow-auto text-white bg-neutral-900">
+    <div className="flex gap-11 p-12 w-full h-screen overflow-auto text-white bg-neutral-800">
       <div className="w-1/4 flex flex-col justify-start items-center">
         <div className="w-full  m-10">
           <MyData />
         </div>
         <div className="w-full overflow-auto">
-          <TagRank onSearchChange={handleSearchTermChange} />
+          <TagRank />
         </div>
       </div>
       <div className="w-3/4 h-full overflow-auto">

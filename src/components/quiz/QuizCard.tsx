@@ -22,7 +22,7 @@ const QuizCard: React.FC<QuizCardProps> = ({ quiz, onClick }) => {
 
   return (
     <div
-      className="flex flex-col w-full bg-neutral-800 items-center cursor-pointer rounded-lg gap-8 p-8"
+      className="flex flex-col w-full bg-neutral-700 items-center cursor-pointer rounded-lg gap-8 p-8"
       onClick={onClick}
     >
       <div className="w-full flex justify-between">

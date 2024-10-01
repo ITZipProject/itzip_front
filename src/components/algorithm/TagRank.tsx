@@ -1,30 +1,15 @@
 import React from 'react';
 
-interface TagRankProps {
-  onSearchChange: (term: string) => void;
-}
-
-const TagRank: React.FC<TagRankProps> = ({ onSearchChange }) => {
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onSearchChange(event.target.value);
-  };
-
+const TagRank = () => {
   return (
-    <div className="flex flex-col gap-4 p-4 border-2 rounded-md shadow-md  h-full text-white bg-neutral-900">
-      <div className="mb-4">
-        <input
-          className="w-full px-3 py-2 border rounded-md"
-          placeholder="Search..."
-          onChange={handleSearchChange}
-        />
-      </div>
+    <div className="flex flex-col gap-4 p-4 border border-gray-400 rounded-md shadow-md  h-full text-white bg-neutral-800 ">
       <div>
-        <h3 className="text-lg font-semibold mb-2">태그 순위</h3>
-        <div className="w-full h-72 gap-1 border-2 border-gray-300 rounded-md shadow-md flex flex-col justify-center items-center p-4 overflow-y-auto">
+        <h3 className="text-lg font-semibold mb-2">태그 추천</h3>
+        <div className="w-full h-72 gap-1 border-gray-300 rounded-md shadow-md flex flex-col justify-center items-center p-4 overflow-y-auto">
           {Array(8)
             .fill('다이나믹 프로그래밍')
             .map((tag, index) => (
-              <h3 key={index} className="text-gray-700">
+              <h3 key={index} className="text-gray-300  text-sm">
                 {index + 1}. {tag}
               </h3>
             ))}
