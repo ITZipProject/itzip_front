@@ -1,32 +1,26 @@
 import React from 'react';
 import Image from 'next/image';
+import { useFetchMyAlgorithmData } from '@/api/algorithm/fetchMyAlgorithmData';
 
-interface UserDataProps {
-  userData: {
-    username: string;
-    rating: number;
-    solvedCount: number;
-    solvedCountRank: number;
-  };
-  profileImage: string;
-}
+const MyData: React.FC = () => {
+  const { username, rating, rank, profileImageUrl } = useFetchMyAlgorithmData();
 
-const MyData: React.FC<UserDataProps> = ({ userData, profileImage }) => {
   return (
-    <div className="w-full flex flex-col justify-center items-center border rounded-3xl">
+    <div className="w-full flex flex-col gap-8 justify-center items-center border border-zinc-600	 rounded-3xl bg-zinc-800 p-5">
       <div>
         <Image
-          src={profileImage}
+          src={'/defaultProfileImage.jpg'}
           alt="프로필 이미지"
-          width={32}
-          height={32}
+          width={64}
+          height={64}
           className="rounded-full"
         />
       </div>
-      <h1>{userData.username}</h1>
-      <p>Rating: {userData.rating}</p>
-      <p>Solved Count: {userData.solvedCount}</p>
-      <p>Solved Count Rank: {userData.solvedCountRank}</p>
+      <h1>{username}</h1>
+      <div className="flex flex-col w-full justify-center items-start gap-4 px-5">
+        <p>Rating: {rating}</p>
+        <p>Rank: {rank}</p>
+      </div>
     </div>
   );
 };

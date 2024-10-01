@@ -1,18 +1,19 @@
+import { useFetchAlgorithmData } from '@/api/algorithm/fetchAlgorithm';
 import React from 'react';
 
-interface AlgorithmData {
-  id: number;
-  title: string;
-  solvedCount: number;
-}
+const Main: React.FC = () => {
+  const { data, isLoading, isError } = useFetchAlgorithmData();
 
-interface MainProps {
-  algorithmData: AlgorithmData[];
-}
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
-const Main: React.FC<MainProps> = ({ algorithmData }) => {
+  if (isError) {
+    return <p>Error occurred while fetching data.</p>;
+  }
+
   return (
-    <div className="flex flex-col gap-3 h-full p-4 text-white bg-neutral-900 border-2 rounded-md shadow-md overflow-auto">
+    <div className="flex flex-col gap-3 h-full p-4 text-white bg-neutral-900 shadow-md overflow-auto">
       <div className="flex justify-end gap-8 mb-4">
         <button className="border border-gray-400 bg-blue-500 text-white py-2 px-3 rounded">
           문제 랜덤
@@ -21,20 +22,23 @@ const Main: React.FC<MainProps> = ({ algorithmData }) => {
           문제 추천
         </button>
       </div>
-      <div className="w-full border-2 rounded-md">
-        <div className="flex justify-between p-5 border-b-2 bg-gray-100">
+      <div className="w-full">
+        <div className="flex justify-between p-5 border-b border-zinc-600 bg-gray-100 ">
           <h3>ID</h3>
           <h3>제목</h3>
           <h3>푼 사람 수</h3>
         </div>
-        {algorithmData &&
-          algorithmData.map((data) => (
-            <div key={data.id} className="flex justify-between p-5 border-b-2">
-              <p>{data.id}</p>
-              <p>{data.title}</p>
-              <p>{data.solvedCount}</p>
+        {data.length > 0 ? (
+          data.map((problem) => (
+            <div key={problem.problemId} className="flex justify-between p-5  bg-gray-800">
+              <p>{problem.problemId}</p>
+              <p>{problem.title}</p>
+              <p>{problem.acceptedUserCount}</p>
             </div>
-          ))}
+          ))
+        ) : (
+          <p>No problems found.</p>
+        )}
       </div>
     </div>
   );
