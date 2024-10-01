@@ -31,18 +31,12 @@ const QuizCard: React.FC<QuizCardProps> = ({ quiz, onClick }) => {
       <div className=" w-full h-3/5">
         <h3 className=" font-bold text-slate-300 text-2xl text-center">{quiz.questionText}</h3>
       </div>
-      <div className="w-full">
-        {quiz.choices.map((choice, index) => (
-          <h3 key={choice.id} className="text-neutral-600">
-            {choice.id}. {choice.choiceText}
-          </h3>
-        ))}
-      </div>
+
       <div className="w-full flex justify-between items-center">
-        <h3 className=" text-slate-400 text-center rounded-sm">
+        <h3 className=" text-sm text-slate-400 text-center rounded-sm">
           {renderDifficultyLevel(quiz.difficulty)}
         </h3>
-        <h3 className=" text-slate-400 text-center text-lg">{quiz.triedUserCount}명이 푼 문제</h3>
+        <h3 className="text-sm text-slate-400 text-center">{quiz.triedUserCount}명이 푼 문제</h3>
       </div>
     </div>
   );

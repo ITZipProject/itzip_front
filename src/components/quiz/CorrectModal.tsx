@@ -36,21 +36,21 @@ const CorrectModal: React.FC<CorrectModalProps> = ({ onClose, quizId }) => {
           <div></div>
           <h3 className="text-4xl font-bold">정답을 맞추셨네요. 축하드립니다!</h3>
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex flex-col gap-10 justify-center items-center ">
           <div className="flex gap-5">
             {ratings.map((rating) => (
               <button
                 key={rating.value}
-                className={`border-2 p-2 ${
-                  selectedRate === rating.value ? 'bg-blue-500 text-white' : ''
+                className={`border border-neutral-500 p-2 rounded-lg ${
+                  selectedRate === rating.value ? 'bg-slate-700 text-white' : ''
                 }`}
                 onClick={() => setSelectedRate(rating.value)}
               >
-                <h3>{rating.label}</h3>
+                <h3 className="text-sm">{rating.label}</h3>
               </button>
             ))}
           </div>
-          <button onClick={handleSubmit} className="px-2 py-1 bg-blue-500 text-white rounded">
+          <button onClick={handleSubmit} className="px-20 py-1 bg-slate-700 text-white rounded">
             제출
           </button>
         </div>
