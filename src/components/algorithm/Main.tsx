@@ -3,14 +3,27 @@ import React from 'react';
 
 const Main: React.FC = () => {
   const { data, isLoading, isError } = useFetchAlgorithmData();
+  console.log('data:', data);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   if (isError) {
-    return <p>Error occurred while fetching data.</p>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>Error occurred while fetching data.</p>
+      </div>
+    );
   }
+
+  const handleClick = (problemId: number) => {
+    window.open(`https://www.acmicpc.net/problem/${problemId}`, '_blank');
+  };
 
   return (
     <div className="flex flex-col gap-3 h-full p-4 text-white bg-neutral-900 shadow-md overflow-auto">
@@ -30,7 +43,11 @@ const Main: React.FC = () => {
         </div>
         {data.length > 0 ? (
           data.map((problem) => (
-            <div key={problem.problemId} className="flex justify-between p-5  bg-gray-800">
+            <div
+              key={problem.problemId}
+              className="flex justify-between p-5 border-b-2 bg-gray-800 hover:bg-gray-700 transition-colors cursor-pointer"
+              onClick={() => handleClick(problem.problemId)}
+            >
               <p>{problem.problemId}</p>
               <p>{problem.title}</p>
               <p>{problem.acceptedUserCount}</p>
