@@ -45,7 +45,7 @@ const Main: React.FC<MainProps> = ({ tagId, displayName }) => {
           data.map((problem) => (
             <div
               key={problem.problemId}
-              className="flex justify-between p-5 bg-gray-800 hover:bg-gray-700 transition-colors cursor-pointer"
+              className="flex justify-between p-5 bg-gray-800 hover:bg-gray-700 transition-colors cursor-pointer rounded-md shadow-sm transform hover:scale-105 hover:shadow-lg"
               onClick={() => handleClickProblem(problem.problemId)}
             >
               <p className="text-gray-400">{problem.problemId}</p>
