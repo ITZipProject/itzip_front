@@ -3,11 +3,11 @@ import React from 'react';
 
 interface MainProps {
   tagId?: number;
+  displayName?: string;
 }
 
-const Main: React.FC<MainProps> = ({ tagId }) => {
+const Main: React.FC<MainProps> = ({ tagId, displayName }) => {
   const { data, isLoading, isError } = useFetchAlgorithmData(tagId);
-  console.log('data:', data);
 
   if (isLoading) {
     return (
@@ -30,15 +30,16 @@ const Main: React.FC<MainProps> = ({ tagId }) => {
   };
 
   return (
-    <div className="flex flex-col gap-3 h-full p-4 text-white bg-neutral-800 shadow-md ">
-      <div className="flex justify-end gap-8 mb-4">
+    <div className="flex flex-col gap-3 h-full p-4 text-white bg-neutral-800 shadow-md">
+      <div className="flex justify-between items-center gap-8 mb-4">
+        <h3 className="text-2xl font-bold">{tagId ? displayName : '전체 문제'}</h3>
         <button className="bg-blue-900 text-white py-2 px-3 rounded">문제 추천</button>
       </div>
       <div className="w-full">
         <div className="flex justify-between p-5 border-b border-zinc-600 bg-gray-100">
-          <h3>문제 번호</h3>
-          <h3>제목</h3>
-          <h3>푼 사람 수</h3>
+          <h3 className="text-gray-400">문제 번호</h3>
+          <h3 className="text-gray-400">제목</h3>
+          <h3 className="text-gray-400">푼 사람 수</h3>
         </div>
         {data.length > 0 ? (
           data.map((problem) => (
@@ -47,9 +48,9 @@ const Main: React.FC<MainProps> = ({ tagId }) => {
               className="flex justify-between p-5 bg-gray-800 hover:bg-gray-700 transition-colors cursor-pointer"
               onClick={() => handleClickProblem(problem.problemId)}
             >
-              <p className="text-gray-300">{problem.problemId}</p>
+              <p className="text-gray-400">{problem.problemId}</p>
               <p className="text-gray-300">{problem.title}</p>
-              <p className="text-gray-300">{problem.acceptedUserCount}</p>
+              <p className="text-gray-400">{problem.acceptedUserCount}</p>
             </div>
           ))
         ) : (

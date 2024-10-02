@@ -7,9 +7,11 @@ import MyData from '../../../components/algorithm/MyData';
 
 const Home: React.FC = () => {
   const [tagId, setTagId] = useState<number | undefined>(undefined);
+  const [displayName, setDisplayName] = useState<string | undefined>(undefined);
 
-  const handleTagClick = (selectedTagId: number) => {
+  const handleTagClick = (selectedTagId: number, selectedDisplayName: string) => {
     setTagId(selectedTagId);
+    setDisplayName(selectedDisplayName);
   };
 
   return (
@@ -18,12 +20,12 @@ const Home: React.FC = () => {
         <section className="w-full m-10">
           <MyData />
         </section>
-        <section className="w-full  ">
+        <section className="w-full">
           <TagRank onTagClick={handleTagClick} />
         </section>
       </div>
-      <section className="w-3/4 h-full ">
-        <Main tagId={tagId} />
+      <section className="w-3/4 h-full">
+        <Main tagId={tagId} displayName={displayName} />
       </section>
     </div>
   );
