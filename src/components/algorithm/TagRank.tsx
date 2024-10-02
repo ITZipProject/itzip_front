@@ -78,7 +78,7 @@ const TagRank: React.FC<TagRankProps> = ({ onTagClick }) => {
 
   return (
     <div className="flex flex-col gap-3 p-4 border border-zinc-600 rounded-xl h-full text-white bg-neutral-800">
-      <h3 className="text-lg font-semibold mb-2">태그 추천 문제</h3>
+      <h3 className="text-lg font-semibold mb-2">태그별 추천 문제</h3>
       <div className="w-full gap-1 border-gray-300 rounded-md shadow-md flex flex-col justify-between items-start">
         {tags.map((tag, index) => (
           <button

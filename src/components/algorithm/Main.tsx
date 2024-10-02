@@ -4,15 +4,16 @@ import React from 'react';
 interface MainProps {
   tagId?: number;
   displayName?: string;
+  resetTag: () => void;
 }
 
-const Main: React.FC<MainProps> = ({ tagId, displayName }) => {
+const Main: React.FC<MainProps> = ({ tagId, displayName, resetTag }) => {
   const { data, isLoading, isError } = useFetchAlgorithmData(tagId);
 
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p>Loading...</p>
+        <p>문제 로딩중...</p>
       </div>
     );
   }
@@ -20,7 +21,7 @@ const Main: React.FC<MainProps> = ({ tagId, displayName }) => {
   if (isError) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p>Error occurred while fetching data.</p>
+        <p>데이터를 가져오는 중 오류가 발생했습니다.</p>
       </div>
     );
   }
@@ -33,7 +34,9 @@ const Main: React.FC<MainProps> = ({ tagId, displayName }) => {
     <div className="flex flex-col gap-3 h-full p-4 text-white bg-neutral-800 shadow-md">
       <div className="flex justify-between items-center gap-8 mb-4">
         <h3 className="text-2xl font-bold">{tagId ? displayName : '전체 문제'}</h3>
-        <button className="bg-blue-900 text-white py-2 px-3 rounded">문제 추천</button>
+        <button className="bg-blue-900 text-white py-2 px-3 rounded" onClick={resetTag}>
+          문제 추천
+        </button>
       </div>
       <div className="w-full">
         <div className="flex justify-between p-5 border-b border-zinc-600 bg-gray-100">

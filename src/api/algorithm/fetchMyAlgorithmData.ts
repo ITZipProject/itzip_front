@@ -27,7 +27,6 @@ export const useFetchMyAlgorithmData = (): AlgorithmData => {
       try {
         const response = await axios.get('http://3.39.78.0:8080/api/algorithm/user?userId=8');
         const data = response.data.data.solvedacUser;
-        console.log('data:', data);
         setUserId(data.userId);
         setUsername(data.username);
         setRating(data.rating);

@@ -32,8 +32,8 @@ export const useFetchAlgorithmData = (tagId?: number): UseFetchAlgorithmDataRetu
           : 'http://3.39.78.0:8080/api/algorithm/problems?userId=8';
         const response = await axios.get(url);
         const fetchedData: AlgorithmData[] = response.data.data.problems;
-        console.log('Fetched Data:', fetchedData);
         setData(fetchedData);
+        console.log('fetched Data');
       } catch (error) {
         console.error('데이터 가져오기 오류:', error);
         setIsError(true);

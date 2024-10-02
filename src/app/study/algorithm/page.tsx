@@ -14,6 +14,11 @@ const Home: React.FC = () => {
     setDisplayName(selectedDisplayName);
   };
 
+  const resetTag = () => {
+    setTagId(undefined);
+    setDisplayName(undefined);
+  };
+
   return (
     <div className="flex gap-11 p-12 w-full text-white bg-neutral-800">
       <div className="w-1/4 flex flex-col justify-start items-center">
@@ -25,7 +30,7 @@ const Home: React.FC = () => {
         </section>
       </div>
       <section className="w-3/4 h-full">
-        <Main tagId={tagId} displayName={displayName} />
+        <Main tagId={tagId} displayName={displayName} resetTag={resetTag} />
       </section>
     </div>
   );
