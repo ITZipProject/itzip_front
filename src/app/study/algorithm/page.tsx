@@ -1,32 +1,32 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import TagRank from '../../../components/algorithm/TagRank';
 import Main from '../../../components/algorithm/Main';
 import MyData from '../../../components/algorithm/MyData';
 
-const profileImage = '/userImage.png';
+const Home: React.FC = () => {
+  const [tagId, setTagId] = useState<number | undefined>(undefined);
 
-export default function Home() {
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const handleSearchTermChange = (term: string) => {
-    setSearchTerm(term);
+  const handleTagClick = (selectedTagId: number) => {
+    setTagId(selectedTagId);
   };
 
   return (
-    <div className="flex gap-11 p-12 w-full h-screen overflow-auto text-white bg-neutral-800">
+    <div className="flex gap-11 p-12 w-full text-white bg-neutral-800">
       <div className="w-1/4 flex flex-col justify-start items-center">
-        <div className="w-full  m-10">
+        <section className="w-full m-10">
           <MyData />
-        </div>
-        <div className="w-full overflow-auto">
-          <TagRank />
-        </div>
+        </section>
+        <section className="w-full  ">
+          <TagRank onTagClick={handleTagClick} />
+        </section>
       </div>
-      <div className="w-3/4 h-full overflow-auto">
-        <Main />
-      </div>
+      <section className="w-3/4 h-full ">
+        <Main tagId={tagId} />
+      </section>
     </div>
   );
-}
+};
+
+export default Home;
