@@ -10,7 +10,7 @@ interface AlgorithmData {
   rank: number;
   profileImageUrl: string;
   solvedClass: number | null;
-  tier: string;
+  tier: number;
 }
 
 export const useFetchMyAlgorithmData = (): AlgorithmData => {
@@ -20,7 +20,7 @@ export const useFetchMyAlgorithmData = (): AlgorithmData => {
   const [rank, setRank] = useState<number>(0);
   const [profileImageUrl, setProfileImageUrl] = useState<string>('');
   const [solvedClass, setSolvedClass] = useState<number | null>(null);
-  const [tier, setTier] = useState<string>('');
+  const [tier, setTier] = useState<number>(0);
 
   useEffect(() => {
     const fetchData = async () => {
