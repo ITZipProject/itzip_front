@@ -33,7 +33,7 @@ const Main: React.FC<MainProps> = ({ tagId, displayName, resetTag }) => {
   return (
     <div className="flex flex-col gap-3 h-full p-4 text-white bg-neutral-800 shadow-md">
       <div className="flex justify-between items-center gap-8 mb-4">
-        <h3 className="text-2xl font-bold">{tagId ? displayName : '전체 문제'}</h3>
+        <h3 className="text-2xl font-bold">{tagId ? `${displayName} 추천 문제` : '전체 문제'}</h3>
         <button className="bg-blue-900 text-white py-2 px-3 rounded" onClick={resetTag}>
           문제 추천
         </button>
