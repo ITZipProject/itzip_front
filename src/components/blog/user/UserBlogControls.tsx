@@ -26,10 +26,10 @@ const UserBlogControls: React.FC<UserBlogControlsProps> = ({ postCount }) => {
           options={sortOptions}
           selectedOption={selectedSortOption}
           onSelect={handleSortOptionSelect}
-          iconSrc="/icons/blog/whiteMode_DownArrow.png"
+          iconSrc="/icons/common/sub_icon/navigate_down_1.4px.svg"
           textSize="text-lg"
           textWeight="font-normal"
-          iconSize={12}
+          iconSize={24}
         />
       </div>
     </div>

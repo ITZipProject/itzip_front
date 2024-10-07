@@ -1,40 +1,48 @@
 export interface Job {
-  id: string;
+  id: number;
   title: string;
-  industry: {
-    code: string;
-    name: string;
-  };
-  location: {
-    code: string;
-    name: string;
-  };
-  jobType: {
-    code: string;
-    name: string;
-  };
-  jobMidCode: {
-    code: string;
-    name: string;
-  };
-  jobCode: {
-    code: string;
-    name: string;
-  };
-  experienceLevel: {
-    code: number;
-    min: number;
-    max: number;
-    name: string;
-  };
-  requiredEducationLevel: {
-    code: string;
-    name: string;
-  };
-  postedDate: string;
-  recommendations: number;
-  views: number;
-  companyImage: string;
+  industryName: string;
+  locationName: string[];
+  jobName: string[];
+  expirationDate: string;
+  experienceName: string;
+  experienceMin: number;
+  experienceMax: number;
+  scrapCount: number;
+  companyName: string;
   url: string;
-  company: string;
+}
+
+export interface JobResponse {
+  status: string;
+  msg: string;
+  data: {
+    totalElements: number;
+    totalPages: number;
+    first: boolean;
+    last: boolean;
+    sort: {
+      sorted: boolean;
+      unsorted: boolean;
+      empty: boolean;
+    };
+    size: number;
+    content: Job[];
+    number: number;
+    numberOfElements: number;
+    pageable: {
+      sort: {
+        sorted: boolean;
+        unsorted: boolean;
+        empty: boolean;
+      };
+      offset: number;
+      paged: boolean;
+      pageNumber: number;
+      pageSize: number;
+      unpaged: boolean;
+    };
+    empty: boolean;
+  };
+  code: string;
 }

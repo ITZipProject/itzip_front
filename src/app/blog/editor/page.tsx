@@ -1,29 +1,13 @@
 'use client';
+
 import React, { useState, useRef, useEffect } from 'react';
 
-import CategorySelector from '@/components/blog/editor/CategorySelector';
+import EditorNavigation from '@/components/blog/editor/EditorNavigation';
 import MarkdownEditor from '@/components/blog/editor/MarkdownEditor';
 import MarkdownPreview from '@/components/blog/editor/MarkdownPreview';
-import ToolbarButtons from '@/components/blog/editor/ToolbarButtons';
+import PublishModal from '@/components/blog/editor/PublishModal';
 
-// 카테고리 ID 매핑
-const categoryIdMap: { [key: string]: number } = {
-  '소프트웨어 개발': 1,
-  '시스템 & 인프라': 2,
-  테크: 3,
-  '디자인 & 아트': 4,
-  비즈니스: 5,
-  기타: 6,
-};
-
-// 카테고리 ID를 가져오는 함수
-function getCategoryId(category: string): number {
-  const [mainCategory] = category.split(' > ');
-  return categoryIdMap[mainCategory] || 0;
-}
-
-const BlogEditorPage = () => {
-  const [category, setCategory] = useState<string>('');
+const BlogEditorPage: React.FC = () => {
   const [markdownContent, setMarkdownContent] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const editorRef = useRef<HTMLTextAreaElement>(null);
@@ -32,23 +16,19 @@ const BlogEditorPage = () => {
   const [isPreviewScrolling, setIsPreviewScrolling] = useState(false);
   const lastEditorScrollTop = useRef(0);
   const lastPreviewScrollTop = useRef(0);
-  const [isSyncEnabled, setIsSyncEnabled] = useState(false);
-  const scrollThreshold = 5; // 스크롤 변화 감지를 위한 최소 픽셀 수
-
-  const handleCategoryChange = (selectedCategory: string) => {
-    setCategory(selectedCategory);
-  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const scrollThreshold = 5;
 
   const handleContentChange = (content: string) => {
     setMarkdownContent(content);
   };
 
-  // const handleTitleChange = (newTitle: string) => {
-  //   setTitle(newTitle);
-  // };
+  const handleTitleChange = (newTitle: string) => {
+    setTitle(newTitle);
+  };
 
   const handleToolbarAction = (action: string, value?: string) => {
-    const textarea = document.querySelector('textarea') as HTMLTextAreaElement;
+    const textarea = editorRef.current;
     if (!textarea) return;
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
@@ -96,43 +76,9 @@ const BlogEditorPage = () => {
     }
   };
 
-  const handleSubmit = async () => {
-    const categoryId = getCategoryId(category);
-
-    const articleData = {
-      categoryId,
-      title,
-      content: markdownContent,
-    };
-
-    console.log('Sending article data:', articleData);
-    try {
-      const response = await fetch('/api/articles', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(articleData),
-      });
-
-      if (response.ok) {
-        const result = (await response.json()) as { message: string };
-        console.log('Server response:', result);
-        alert('글이 성공적으로 작성되었습니다.');
-      } else {
-        const errorText = await response.text();
-        console.error('Failed to create article:', errorText);
-        alert('글 작성에 실패했습니다. 다시 시도해 주세요.');
-      }
-    } catch (error) {
-      console.error('Network error:', error);
-      alert('네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.');
-    }
-  };
-
   useEffect(() => {
-    if (!isSyncEnabled) return;
-
+    const editor = editorRef.current;
+    const preview = previewRef.current;
     let editorScrollTimer: number | null = null;
     let previewScrollTimer: number | null = null;
 
@@ -160,7 +106,6 @@ const BlogEditorPage = () => {
     const handlePreviewScroll = () => {
       if (isEditorScrolling) return;
       if (previewScrollTimer) cancelAnimationFrame(previewScrollTimer);
-
       previewScrollTimer = requestAnimationFrame(() => {
         if (editorRef.current && previewRef.current) {
           const currentScrollTop = previewRef.current.scrollTop;
@@ -179,65 +124,76 @@ const BlogEditorPage = () => {
       });
     };
 
-    editorRef.current?.addEventListener('scroll', handleEditorScroll);
-    previewRef.current?.addEventListener('scroll', handlePreviewScroll);
+    editor?.addEventListener('scroll', handleEditorScroll);
+    preview?.addEventListener('scroll', handlePreviewScroll);
 
     return () => {
-      editorRef.current?.removeEventListener('scroll', handleEditorScroll);
-      previewRef.current?.removeEventListener('scroll', handlePreviewScroll);
+      editor?.removeEventListener('scroll', handleEditorScroll);
+      preview?.removeEventListener('scroll', handlePreviewScroll);
       if (editorScrollTimer) cancelAnimationFrame(editorScrollTimer);
       if (previewScrollTimer) cancelAnimationFrame(previewScrollTimer);
     };
-  }, [isEditorScrolling, isPreviewScrolling, isSyncEnabled]);
+  }, [isEditorScrolling, isPreviewScrolling]);
+
+  const handlePublish = async (categoryId: number, thumbnailUrl: string) => {
+    const articleData = {
+      categoryId,
+      title,
+      content: markdownContent,
+      thumbnailUrl,
+    };
+
+    console.log('Sending article data:', articleData);
+    try {
+      const response = await fetch('/api/articles', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(articleData),
+      });
+
+      if (response.ok) {
+        const result = (await response.json()) as { message: string };
+        console.log('Server response:', result);
+        alert('글이 성공적으로 작성되었습니다.');
+        setIsModalOpen(false);
+      } else {
+        const errorText = await response.text();
+        console.error('Failed to create article:', errorText);
+        alert('글 작성에 실패했습니다. 다시 시도해 주세요.');
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+      alert('네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.');
+    }
+  };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="mb-4 text-2xl font-bold">블로그 글 작성/수정</h1>
-      <CategorySelector onCategoryChange={handleCategoryChange} />
-      <input
-        type="text"
-        className="mb-4 w-full border-b p-2 text-3xl font-bold"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="제목을 입력하세요..."
-      />
-      <div className="mb-4">
-        <ToolbarButtons onAction={handleToolbarAction} />
-      </div>
-      <div className="flex space-x-4">
-        <div className="w-1/2">
+    <div className="min-h-screen bg-white">
+      <EditorNavigation onAction={handleToolbarAction} onComplete={() => setIsModalOpen(true)} />
+      <div className="flex gap-20 px-20 py-4">
+        <div className="flex flex-1 flex-col gap-8">
           <MarkdownEditor
             content={markdownContent}
+            title={title}
             onContentChange={handleContentChange}
+            onTitleChange={handleTitleChange}
             ref={editorRef}
           />
         </div>
-        <div className="w-1/2">
-          <MarkdownPreview content={markdownContent} ref={previewRef} />
+
+        <div className="w-px bg-[#E8E8E8]"></div>
+
+        <div className="flex-1">
+          <MarkdownPreview content={markdownContent} title={title} ref={previewRef} />
         </div>
       </div>
-      <div className="mt-4 flex items-center justify-between">
-        <button
-          className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-          onClick={() => void handleSubmit()}
-        >
-          글 작성 완료
-        </button>
-        <div className="flex items-center">
-          <label className="inline-flex cursor-pointer items-center">
-            <input
-              type="checkbox"
-              className="form-checkbox size-4 rounded border-gray-300 text-blue-600 transition duration-150 ease-in-out focus:ring-blue-500"
-              checked={isSyncEnabled}
-              onChange={(e) => setIsSyncEnabled(e.target.checked)}
-            />
-            <span className="ml-2 text-sm text-gray-700">스크롤 동기화</span>
-          </label>
-          <span className="ml-1 rounded-full bg-blue-100 px-1.5 py-0.5 text-xs font-semibold text-blue-800">
-            Beta
-          </span>
-        </div>
-      </div>
+      <PublishModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onPublish={handlePublish}
+      />
     </div>
   );
 };

@@ -29,11 +29,10 @@ const UserBlogPostCard: React.FC<UserBlogPostCardProps> = ({
       <div className="flex items-center gap-2 pb-3 pt-6">
         <span className="text-lg text-gray-600">{category}</span>
         <Image
-          src="/icons/blog/whiteMode_DownArrow.png"
+          src="/icons/common/sub_icon/navigate_next_1.4px.svg"
           alt="Category Separator"
-          width={10}
-          height={10}
-          className="-rotate-90"
+          width={16}
+          height={16}
         />
         <span className="text-lg text-blue-600">{subCategory}</span>
       </div>

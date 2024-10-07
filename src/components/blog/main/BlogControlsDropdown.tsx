@@ -28,14 +28,14 @@ const BlogControlsDropdown: React.FC<BlogControlsDropdownProps> = ({
         <div className="relative">
           <button
             onClick={toggleDropdown}
-            className={`flex items-center space-x-4 ${textSize} ${textWeight}`}
+            className={`flex items-center space-x-3 ${textSize} ${textWeight}`}
           >
             <Image
               src={iconSrc}
               alt="Dropdown Arrow"
               width={iconSize}
               height={iconSize}
-              className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+              className={`pb-1 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
             />
             <span>{selectedOption}</span>
           </button>
