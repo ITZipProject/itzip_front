@@ -12,7 +12,7 @@ interface LoginResponse {
 export async function loginAction(
   email: string,
   password: string,
-): Promise<{ success: boolean; message: string }> {
+): Promise<{ success: boolean; message: string; accessToken?: string; refreshToken?: string }> {
   try {
     // API 호출을 통한 로그인 로직
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/login`, {
@@ -37,7 +37,7 @@ export async function loginAction(
       path: '/',
     });
 
-    // 필요한 경우 리프레시 토큰도 저장
+    // 리프레시 토큰도 저장
     if (data.refreshToken) {
       cookies().set('refreshToken', data.data.refreshToken, {
         httpOnly: true,
@@ -48,8 +48,13 @@ export async function loginAction(
       });
     }
 
-    // 리다이렉트 전에 성공 응답 반환
-    return { success: true, message: '로그인 성공' };
+    // 성공 응답에 accessToken과 refreshToken 포함
+    return {
+      success: true,
+      message: '로그인 성공',
+      accessToken: data.data.accessToken,
+      refreshToken: data.data.refreshToken,
+    };
   } catch (error) {
     console.error('로그인 에러:', error);
     return { success: false, message: '로그인 실패' };

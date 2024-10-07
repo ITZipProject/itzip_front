@@ -42,19 +42,21 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
     }
   };
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const login = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      await loginAction(email, password);
-      closeModal(modalId);
-    } catch (err) {
-      console.error('로그인 실패:', err);
-      setError('로그인에 실패했습니다. 이메일과 비밀번호를 확인해 주세요.');
-    } finally {
-      setIsLoading(false);
+    const result = await loginAction(email, password);
+    if (result.success) {
+      // 로컬 스토리지에 토큰 저장
+      localStorage.setItem('accessToken', result.accessToken);
+      if (result.refreshToken) {
+        localStorage.setItem('refreshToken', result.refreshToken);
+      }
+      // 로그인 성공 후 처리 (예: 리다이렉트)
+      closeModal('LoginModal');
+      router.push('/');
+    } else {
+      // 로그인 실패 처리
+      alert(result.message);
     }
   };
 
@@ -65,7 +67,7 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
         <h1 className="font-[700] text-[24px]">이메일로 로그인하기</h1>
       </button>
       <Margin height={'48px'} />
-      <form onSubmit={handleLogin} className="w-full space-y-4">
+      <form onSubmit={login} className="w-full space-y-4">
         <div className="flex items-center">
           <label htmlFor="email">이메일</label>
           <span className="text-[#E46969] ml-[2px]">*</span>
