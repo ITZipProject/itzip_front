@@ -3,11 +3,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useModal } from '@/lib/context/ModalContext';
-import LoginModal from '../../app/(Auth)/login/loginModal';
-import EmailLoginModal from '../../app/(Auth)/email/emailLoginModal';
-import SignUpModal from '../../app/(Auth)/signup/signUpModal';
-import SignUpEmailModal from '../../app/(Auth)/signup/signupEmailModal';
 import { Modals } from './Modals';
+import { Modal } from '../modal/modal';
+import { useState } from 'react';
 
 interface HeaderBarProps {
   exists?: boolean;
@@ -22,6 +20,7 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
   const headerBackgroundColor = isStudyPage ? 'bg-neutral-900' : 'bg-white';
   const textColor = isStudyPage ? 'text-gray-200' : 'text-headerText';
 
+  const [loginModal, setLoginModal] = useState(false);
   return (
     <div
       className={`h-[70px] ${headerBackgroundColor} flex justify-between w-screen px-10 items-center`}
@@ -31,7 +30,15 @@ export default function HeaderBar({ profileImage, exists }: HeaderBarProps) {
       </Link>
       <div className={`flex gap-[56px] ${textColor} text-headerSize`}>
         {!exists ? (
-          <button onClick={() => openModal('LoginModal')}>이력서</button>
+          // <button onClick={() => openModal('LoginModal')}>이력서</button>
+          <Modal
+            isOpen={loginModal}
+            onClose={() => setLoginModal(false)}
+            title="모달 1"
+            id="LoginModal"
+          >
+            <p>이것은 모달 1의 내용입니다.</p>
+          </Modal>
         ) : (
           <Link href={'/resume'}>이력서</Link>
         )}

@@ -15,6 +15,7 @@ import { z } from 'zod';
 
 import { FormValues } from '@/types/auth';
 import instance from '@/api/\baxiosInstance';
+import { useModal } from '@/lib/context/ModalContext';
 
 const formSchema = z
   .object({
@@ -52,7 +53,7 @@ export const useSignUp = () => {
   const [isChecked] = useAtom(agreeAtom);
   const [, setAgreeError] = useAtom(agreeErrorAtom);
   const router = useRouter();
-
+  const { openModal, closeModal } = useModal();
   const onClickResetButton = (field: keyof FormValues) => {
     setFormValues((prev) => ({ ...prev, [field]: '' }));
   };
@@ -164,6 +165,7 @@ export const useSignUp = () => {
         auth_code: formValues.authCode,
       });
       console.log('data__', res);
+      closeModal('signUpEmailModal');
     } catch (err) {
       console.log(err);
     } finally {

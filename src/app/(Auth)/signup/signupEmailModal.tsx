@@ -30,6 +30,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
     sendAuthCode,
     verifyAuthCode,
     onSubmitSignUpButton,
+    signUp,
   } = useSignUp();
   const [agreeError] = useAtom(agreeErrorAtom);
 
@@ -43,7 +44,8 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
         <h1 className="text-2xl font-bold">이메일로 회원가입하기</h1>
       </button>
       <Margin height={'48px'} />
-      <form onSubmit={onSubmitSignUpButton} className="w-full space-y-4" noValidate>
+      {/* 임시로 signUp 사용 - 이유 onSubmitSignUpBtn은 로그인 검증 로직인데 검증은 되는데 회원가입이 되지 않음. */}
+      <form onSubmit={signUp} className="w-full space-y-4" noValidate>
         <div className="flex items-center">
           <label htmlFor="email">이메일</label>
           <span className="text-[#E46969] ml-[2px]">*</span>
