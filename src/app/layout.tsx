@@ -38,36 +38,6 @@ export const metadata: Metadata = {
   description: 'description',
 };
 
-async function getUser() {
-  const session = await getSession();
-  if (session?.id) {
-    const user = await db.user.findUnique({
-      where: {
-        id: session.id,
-      },
-    });
-    if (user) {
-      return Boolean(user);
-    }
-  }
-  return false;
-}
-
-async function getUserProfile() {
-  const session = await getSession();
-  if (session.id) {
-    const user = await db.user.findUnique({
-      where: {
-        id: session.id,
-      },
-    });
-    if (user) {
-      return user.avatar ?? undefined;
-    }
-  }
-  return undefined;
-}
-
 function isEditorPage(child: ReactNode): boolean {
   if (
     typeof child === 'object' &&
@@ -93,6 +63,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       <link rel="icon" href="/favicon.png" sizes="any" />
       <body className={`mx-auto overflow-x-hidden bg-white text-black ${pretendard.className}`}>
         <ModalProvider>
+          <HeaderBar />
+          {children}
+          <Footer />
           {!shouldHideHeaderAndFooter && <HeaderBar profileImage={profileImage} exists={user} />}
           <main className={shouldHideHeaderAndFooter ? 'mt-[58px]' : ''}>{children}</main>
           {!shouldHideHeaderAndFooter && <Footer />}

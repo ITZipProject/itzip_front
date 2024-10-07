@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 
-import { AgreeTypes, FormValues, IsOkTypes, LoadingTypes } from '@/types/auth';
+import { AgreeTypes, FormValues, IsOkTypes, LoadingTypes, LoginFormType } from '@/types/auth';
 
 export const formValuesAtom = atom<FormValues>({
   email: '',
@@ -22,6 +22,7 @@ export const loadingAtom = atom<LoadingTypes>({
   codePost: false,
   codeVerify: false,
   signUp: false,
+  join: false,
 });
 
 export const isOkAtom = atom<IsOkTypes>({
@@ -40,3 +41,10 @@ export const agreeAtom = atom<AgreeTypes>({
 export const allCheckedAtom = atom(false);
 
 export const agreeErrorAtom = atom<string>('');
+
+export const loginFormAtom = atom<LoginFormType>({
+  email: '',
+  password: '',
+});
+
+export const lodingDataAtom = atom({});
