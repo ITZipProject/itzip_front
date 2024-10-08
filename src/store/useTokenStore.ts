@@ -18,6 +18,10 @@ const clearTokenAtom = atom(null, (get, set) => {
 });
 
 const getTokenState = () => {
+  if (typeof window === 'undefined') {
+    // 서버 사이드에서는 빈 문자열 반환
+    return { accessToken: '', refreshToken: '' };
+  }
   const accessToken = localStorage.getItem('accessToken') || '';
   const refreshToken = localStorage.getItem('refreshToken') || '';
   return { accessToken, refreshToken };

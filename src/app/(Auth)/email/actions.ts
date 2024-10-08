@@ -7,8 +7,6 @@ interface LoginResponse {
   data: {
     accessToken: string;
     refreshToken: string;
-    userId: number;
-    nickname: string;
   };
 }
 
@@ -20,20 +18,12 @@ export async function loginAction(
   message: string;
   accessToken?: string;
   refreshToken?: string;
-  userId?: number;
-  nickname?: string;
 }> {
   try {
-    const response = await instance.post<LoginResponse>(
-      '/user/login',
-      { email, password },
-      {
-        headers: { 'Both-Tokens': true },
-      },
-    );
+    const response = await instance.post<LoginResponse>('/user/login', { email, password });
 
     const { data } = response.data;
-
+    console.log('login server!', data);
     // 액세스 토큰을 쿠키에 저장
     cookies().set('accessToken', data.accessToken, {
       httpOnly: true,
@@ -59,11 +49,12 @@ export async function loginAction(
       message: '로그인 성공',
       accessToken: data.accessToken,
       refreshToken: data.refreshToken,
-      userId: data.userId,
-      nickname: data.nickname,
     };
   } catch (error) {
     console.error('로그인 에러:', error);
-    return { success: false, message: '로그인 실패' };
+    if (error instanceof Error) {
+      return { success: false, message: `로그인 실패: ${error.message}` };
+    }
+    return { success: false, message: '로그인 실패: 알 수 없는 오류' };
   }
 }

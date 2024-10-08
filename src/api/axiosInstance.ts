@@ -1,49 +1,26 @@
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-
+import axios from 'axios';
 import { getTokenState } from '@/store/useTokenStore';
 
 const instance = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
-    'ngrok-skip-browser-warning': '69420',
   },
 });
 
 instance.interceptors.request.use(
   (config) => {
-    const { accessToken, refreshToken } = getTokenState();
-
-    // 특별한 헤더 삭제
-    const noAuth: boolean = config.headers['No-Auth'] as boolean;
-    const onlyRefresh: boolean = config.headers['Only-Refresh'] as boolean;
-    const bothTokens: boolean = config.headers['Both-Tokens'] as boolean;
-
-    delete config.headers['No-Auth'];
-    delete config.headers['Only-Refresh'];
-    delete config.headers['Both-Tokens'];
-
-    // 토큰이 없을 때 (인증이 필요 없는 요청)
-    if (noAuth) {
-      return config;
-    }
-    if (accessToken) {
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
-    }
-    // 리프레시 토큰만 요청하고 싶을 때 (토큰 갱신)
-    if (onlyRefresh && refreshToken) {
-      config.headers['Refresh'] = `Bearer ${refreshToken}`;
-    }
-    // 액세스 & 리프레시 토큰 둘 다 필요할 때 (로그인)
-    if (bothTokens && refreshToken && accessToken) {
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
-      config.headers['Refresh'] = `Bearer ${refreshToken}`;
+    if (typeof window !== 'undefined') {
+      const { accessToken } = getTokenState();
+      if (accessToken) {
+        config.headers['Authorization'] = `Bearer ${accessToken}`;
+      }
     }
     return config;
   },
-  (err) => {
-    return Promise.reject(err);
+  (error) => {
+    return Promise.reject(error);
   },
 );
 
