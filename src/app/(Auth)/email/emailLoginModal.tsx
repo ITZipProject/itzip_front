@@ -2,12 +2,14 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAtom } from 'jotai';
 import Modal from '../auth/authModal';
 import Input from '../../../components/common/input';
 import { useModal } from '@/lib/context/ModalContext';
 import { ChevronLeftIcon } from '@heroicons/react/16/solid';
 import { Margin } from '@/components/common/margin';
 import { loginAction } from './actions';
+import { setAccressTokenAtom, setRefreshTokenAtom } from '@/store/useTokenStore';
 
 interface SignInModalProps {
   modalId: string;
@@ -20,6 +22,9 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  const [, setAccessToken] = useAtom(setAccressTokenAtom);
+  const [, setRefreshToken] = useAtom(setRefreshTokenAtom);
 
   // 모달이 열려 있는 경우에만 렌더링
   if (!openModals.includes(modalId)) return null;
@@ -44,19 +49,27 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
 
   const login = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await loginAction(email, password);
-    if (result.success) {
-      // 로컬 스토리지에 토큰 저장
-      localStorage.setItem('accessToken', result.accessToken);
-      if (result.refreshToken) {
-        localStorage.setItem('refreshToken', result.refreshToken);
+    setIsLoading(true);
+    setError(null);
+    try {
+      const result = await loginAction(email, password);
+      if (result.success) {
+        // 토큰 저장
+        if (result.accessToken) {
+          setAccessToken(result.accessToken);
+        }
+        if (result.refreshToken) {
+          setRefreshToken(result.refreshToken);
+        }
+        closeModal('LoginModal');
+        router.push('/');
+      } else {
+        setError(result.message);
       }
-      // 로그인 성공 후 처리 (예: 리다이렉트)
-      closeModal('LoginModal');
-      router.push('/');
-    } else {
-      // 로그인 실패 처리
-      alert(result.message);
+    } catch (error) {
+      setError('로그인 중 오류가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
