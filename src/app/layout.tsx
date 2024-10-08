@@ -6,9 +6,6 @@ import Footer from '@/components/common/footer';
 import HeaderBar from '@/components/common/header-bar';
 import { ModalProvider } from '@/lib/context/ModalContext';
 
-import db from '../lib/db';
-import getSession from '../lib/session';
-
 import './globals.css';
 
 interface RootLayoutProps {
@@ -53,9 +50,6 @@ function isEditorPage(child: ReactNode): boolean {
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const user = await getUser();
-  const profileImage = await getUserProfile();
-
   const shouldHideHeaderAndFooter = isEditorPage(children);
 
   return (
@@ -63,10 +57,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       <link rel="icon" href="/favicon.png" sizes="any" />
       <body className={`mx-auto overflow-x-hidden bg-white text-black ${pretendard.className}`}>
         <ModalProvider>
-          <HeaderBar />
-          {children}
-          <Footer />
-          {!shouldHideHeaderAndFooter && <HeaderBar profileImage={profileImage} exists={user} />}
+          {!shouldHideHeaderAndFooter && <HeaderBar />}
           <main className={shouldHideHeaderAndFooter ? 'mt-[58px]' : ''}>{children}</main>
           {!shouldHideHeaderAndFooter && <Footer />}
         </ModalProvider>
