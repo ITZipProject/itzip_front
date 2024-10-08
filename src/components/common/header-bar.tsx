@@ -4,16 +4,18 @@ import { usePathname } from 'next/navigation';
 import { useModal } from '@/lib/context/ModalContext';
 import { Modals } from './Modals';
 import { useState, useEffect } from 'react';
+import { useAtom } from 'jotai';
+import { accessTokenAtom } from '@/store/useTokenStore';
 
 export default function HeaderBar() {
   const pathname = usePathname();
   const { openModal } = useModal();
+  const [accessToken] = useAtom(accessTokenAtom);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
     setIsLoggedIn(!!accessToken);
-  }, []);
+  }, [accessToken]);
 
   const isStudyPage = pathname.startsWith('/study');
   const headerBackgroundColor = isStudyPage ? 'bg-neutral-900' : 'bg-white';
