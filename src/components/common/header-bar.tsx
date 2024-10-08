@@ -38,7 +38,12 @@ export default function HeaderBar() {
         <Link href={'/recruit'}>
           <span>채용공고</span>
         </Link>
-        <Link href={'/blog'}>기술정보</Link>
+        <Link
+          href={isLoggedIn ? '/blog' : '#'}
+          onClick={!isLoggedIn ? () => openModal('LoginModal') : undefined}
+        >
+          기술정보
+        </Link>
         <Link
           href={isLoggedIn ? '/study' : '#'}
           onClick={!isLoggedIn ? () => openModal('LoginModal') : undefined}
