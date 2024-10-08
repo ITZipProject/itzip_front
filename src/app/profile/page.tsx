@@ -35,11 +35,36 @@ export default function Profile() {
     }
   };
 
+  // api - 미구현
+  const out = async () => {
+    setLoading(true);
+    try {
+      const res = await instance.delete('/user/out');
+      console.log('회원탈퇴 성공', res.data);
+      clearTokens();
+      const result = await logoutServerAction();
+      if (result === false) {
+        console.error('out failed!', result);
+      } else {
+        router.push('/').then(() => {
+          window.location.reload();
+        });
+      }
+    } catch (err) {
+      console.error('회원탈퇴 실패:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       <h1>프로필</h1>
       <button onClick={logOut} disabled={loading}>
         {loading ? '로그아웃 중...' : '로그아웃'}
+      </button>
+      <button onClick={out} disabled={loading}>
+        {loading ? '회원탈퇴 중...' : '회원탈퇴'}
       </button>
     </div>
   );
