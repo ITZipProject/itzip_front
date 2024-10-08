@@ -1,10 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { logoutServerAction } from './actions';
 import { clearTokenAtom } from '@/store/useTokenStore';
 import { useAtom } from 'jotai';
-import instance from '@/api/\baxiosInstance';
+import instance from '@/api/axiosInstance';
 
 export default function Profile() {
   const [loading, setLoading] = useState(false);
@@ -56,6 +56,21 @@ export default function Profile() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const me = async () => {
+      setLoading(true);
+      try {
+        const res = await instance.get('/user', {});
+        console.log('me data___', res);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    me();
+  }, []);
 
   return (
     <div>

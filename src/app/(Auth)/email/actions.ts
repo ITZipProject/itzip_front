@@ -1,12 +1,15 @@
 'use server';
 
+import instance from '@/api/axiosInstance';
 import { cookies } from 'next/headers';
 
 interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
-  userId: number;
-  nickname: string;
+  data: {
+    accessToken: string;
+    refreshToken: string;
+    userId: number;
+    nickname: string;
+  };
 }
 
 export async function loginAction(
@@ -21,22 +24,18 @@ export async function loginAction(
   nickname?: string;
 }> {
   try {
-    // API 호출을 통한 로그인 로직
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await instance.post<LoginResponse>(
+      '/user/login',
+      { email, password },
+      {
+        headers: { 'Both-Tokens': true },
       },
-      body: JSON.stringify({ email, password }),
-    });
-    if (!response.ok) {
-      throw new Error('로그인 실패');
-    }
+    );
 
-    const data = (await response.json()) as LoginResponse;
+    const { data } = response.data;
 
     // 액세스 토큰을 쿠키에 저장
-    cookies().set('accessToken', data.data.accessToken, {
+    cookies().set('accessToken', data.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
@@ -46,7 +45,7 @@ export async function loginAction(
 
     // 리프레시 토큰도 저장
     if (data.refreshToken) {
-      cookies().set('refreshToken', data.data.refreshToken, {
+      cookies().set('refreshToken', data.refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
@@ -55,14 +54,13 @@ export async function loginAction(
       });
     }
 
-    // 성공 응답에 userId와 nickname도 포함
     return {
       success: true,
       message: '로그인 성공',
-      accessToken: data.data.accessToken,
-      refreshToken: data.data.refreshToken,
-      userId: data.data.userId,
-      nickname: data.data.nickname,
+      accessToken: data.accessToken,
+      refreshToken: data.refreshToken,
+      userId: data.userId,
+      nickname: data.nickname,
     };
   } catch (error) {
     console.error('로그인 에러:', error);
