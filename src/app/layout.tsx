@@ -1,13 +1,21 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { ReactNode } from 'react';
 
-import './globals.css';
 import Footer from '@/components/common/footer';
 import HeaderBar from '@/components/common/header-bar';
 import { ModalProvider } from '@/lib/context/ModalContext';
 
-import db from '../lib/db';
-import getSession from '../lib/session';
+import './globals.css';
+
+interface RootLayoutProps {
+  children: ReactNode;
+}
+
+interface PageProps {
+  childPropSegment?: string;
+  [key: string]: unknown;
+}
 
 const pretendard = localFont({
   src: '../fonts/PretendardVariable.woff2',
@@ -18,52 +26,40 @@ const pretendard = localFont({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | title',
-    default: 'description',
+    template: 'ITZIP | %s ',
+    default: 'ITZIP',
   },
+  // icons: {
+  //   icon: '/favicon.png',
+  // },
   description: 'description',
 };
 
-async function getUser() {
-  const session = await getSession();
-  if (session?.id) {
-    const user = await db.user.findUnique({
-      where: {
-        id: session.id,
-      },
-    });
-    if (user) {
-      return Boolean(user);
-    }
+function isEditorPage(child: ReactNode): boolean {
+  if (
+    typeof child === 'object' &&
+    child !== null &&
+    'props' in child &&
+    typeof child.props === 'object' &&
+    child.props !== null
+  ) {
+    const props = child.props as PageProps;
+    return props.childPropSegment === 'editor';
   }
   return false;
 }
 
-async function getUserProfile() {
-  const session = await getSession();
-  if (session.id) {
-    const user = await db.user.findUnique({
-      where: {
-        id: session.id,
-      },
-    });
-    if (user) {
-      return user.avatar ?? undefined;
-    }
-  }
-  return undefined;
-}
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const shouldHideHeaderAndFooter = isEditorPage(children);
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const user = await getUser();
-  const profileImage = await getUserProfile();
   return (
     <html lang="ko" className={pretendard.variable}>
+      <link rel="icon" href="/favicon.png" sizes="any" />
       <body className={`mx-auto overflow-x-hidden bg-white text-black ${pretendard.className}`}>
         <ModalProvider>
-          <HeaderBar profileImage={profileImage} exists={user} />
-          {children}
-          <Footer />
+          {!shouldHideHeaderAndFooter && <HeaderBar />}
+          <main className={shouldHideHeaderAndFooter ? 'mt-[58px]' : ''}>{children}</main>
+          {!shouldHideHeaderAndFooter && <Footer />}
         </ModalProvider>
       </body>
     </html>

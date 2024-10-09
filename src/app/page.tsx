@@ -1,5 +1,11 @@
-'use client';
-import StudyMainPage from '@/components/main/study-main-page';
+'use client'
+
+import MainPageJobPreview from "@/components/main/MainPageJobPreview";
+
 export default function Home() {
-  return <div></div>;
+  return(
+    <div>
+      <MainPageJobPreview />
+    </div>
+  );
 }

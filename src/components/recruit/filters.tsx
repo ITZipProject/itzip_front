@@ -1,109 +1,126 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
+import TechStack from './category/techStack';
 import RegionCheckboxes from './category/region';
 import Search from './category/search';
+import Experience from './category/Experience';
 
 interface FiltersProps {
   filters: {
-    technology: string;
-    location: string;
-    experience: string;
+    techName: string;
+    locationName: string[];
+    experienceMin: number;
+    experienceMax: number;
     search: string;
     sort: string;
   };
-  activeFilter: string | null;
-  setFilters: (filters: any) => void;
-  toggleFilter: (filterName: string) => void;
-  handleFilterChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  setFilters: React.Dispatch<React.SetStateAction<FiltersProps['filters']>>;
   applyFilters: () => void;
 }
 
-const Filters: React.FC<FiltersProps> = ({
-  filters,
-  activeFilter,
-  setFilters,
-  toggleFilter,
-  handleFilterChange,
-  applyFilters,
-}) => {
+interface TechStackFilterRef {
+  resetSelections: (newSelection: string[]) => void;
+}
+
+const Filters: React.FC<FiltersProps> = ({ filters, setFilters, applyFilters }) => {
+  const [selectedTechStacks, setSelectedTechStacks] = useState<string[]>(filters.techName ? filters.techName.split(',') : []);
+  const techStackRef = useRef<TechStackFilterRef | null>(null);
+
+  const handleTechStackChange = (selected: string[]) => {
+    setSelectedTechStacks(selected);
+    setFilters(prev => ({ ...prev, techName: selected.join(',') }));
+  };
+
+  const handleExperienceChange = (min: number, max: number) => {
+    setFilters(prev => ({ ...prev, experienceMin: min, experienceMax: max }));
+  };
+
+  const handleRegionChange = (selected: string[]) => {
+    setFilters(prev => ({ ...prev, locationName: selected }));
+  };
+
+  const handleRemoveTechStack = (techName: string) => {
+    const updatedTechStacks = selectedTechStacks.filter(tech => tech !== techName);
+    setSelectedTechStacks(updatedTechStacks);
+    setFilters(prev => ({ ...prev, techName: updatedTechStacks.join(',') }));
+    techStackRef.current?.resetSelections(updatedTechStacks);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilters(prev => ({ ...prev, search: e.target.value }));
+  };
+
+  const resetFilters = () => {
+    setFilters({
+      techName: '',
+      locationName: [],
+      experienceMin: 0,
+      experienceMax: 10,
+      search: '',
+      sort: 'expirationDate,desc',
+    });
+    setSelectedTechStacks([]);
+    techStackRef.current?.resetSelections([]);
+  };
+
   return (
-    <div className="">
+    <div>
       <div className="px-2 flex justify-between mb-4">
-        <h2 className="font-bold">필터</h2>
+        <h2 className="font-pre-heading-03">필터</h2>
         <button
-          className="bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
-          onClick={() => {
-            setFilters({
-              technology: '',
-              location: '',
-              experience: '',
-              search: '',
-              sort: 'latest',
-            });
-            applyFilters();
-          }}
+          className="font-pre-heading-03 text-gray-800 rounded hover:bg-blue-300"
+          onClick={resetFilters}
         >
           초기화
         </button>
       </div>
-      <Search search={filters.search} handleFilterChange={handleFilterChange} applyFilters={applyFilters} />
-      <div className="mb-4 p-4 border border-gray-300 rounded-lg">
-        <h3 className="font-semibold mb-2">기술 스택</h3>
-        <input
-          type="text"
-          name="technology"
-          value={filters.technology}
-          onChange={handleFilterChange}
-          className="w-full p-2 border border-gray-300 rounded"
-          placeholder="기술을 입력하세요"
+      <Search 
+        search={filters.search} 
+        handleFilterChange={handleSearchChange}
+        applyFilters={applyFilters} 
+      />
+      <div className="mb-4 p-4 border-01 radius-01">
+        <h3 className="font-pre-body-01 mb-2">기술 스택</h3>
+        {selectedTechStacks.length > 0 && (
+          <div className="selected-tech-stacks mb-2">
+            {selectedTechStacks.map((techName) => (
+              <span key={techName} className="bg-blue-100 text-blue-800 px-2 py-1 rounded mr-2 mb-2 inline-block">
+                {techName}
+                <button 
+                  className="ml-1 text-blue-600 font-bold"
+                  onClick={() => handleRemoveTechStack(techName)}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+        <TechStack
+          ref={techStackRef}
+          onSelectionChange={handleTechStackChange}
         />
-        <div className="mt-2">
-          <label className="block mb-1">
-            <input
-              type="checkbox"
-              name="label1"
-              checked={filters.technology.includes('label1')}
-              onChange={handleFilterChange}
-            />
-            label1
-          </label>
-          <label className="block mb-1">
-            <input
-              type="checkbox"
-              name="label2"
-              checked={filters.technology.includes('label2')}
-              onChange={handleFilterChange}
-            />
-            label2
-          </label>
-          {/* Add more labels as needed */}
-        </div>
       </div>
-      <div className="mb-4 p-4 border border-gray-300 rounded-lg">
-        <h3 className="font-semibold mb-2">지역</h3>
+      {/* <div className="mb-4 p-4 border-01 radius-01">
+        <h3 className="font-pre-body-01 mb-2">지역</h3>
         <RegionCheckboxes
-          selectedRegion={filters.location}
-          setSelectedRegion={(region: string) => setFilters({ ...filters, location: region })}
+          onSelectionChange={handleRegionChange}
+        />
+      </div> */}
+      <div className="mb-4 p-4 border-01 radius-01">
+        <Experience
+          selectedExperienceMin={filters.experienceMin}
+          selectedExperienceMax={filters.experienceMax}
+          onExperienceChange={handleExperienceChange}
         />
       </div>
-      <div className="mb-4 p-4 border border-gray-300 rounded-lg">
-        <h3 className="font-semibold mb-2">경력</h3>
-        <input
-          type="text"
-          name="experience"
-          value={filters.experience}
-          onChange={handleFilterChange}
-          className="w-full p-2 border border-gray-300 rounded"
-          placeholder="경력을 입력하세요"
-        />
-      </div>
-      <button
-        className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" // Modified button color
+      {/* <button
+        className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
         onClick={applyFilters}
       >
         필터 적용
-      </button>
+      </button> */}
     </div>
   );
 };

@@ -1,31 +1,47 @@
 import axios from 'axios';
 import { Job } from '@/components/recruit/job';
 
-const baseUrl = 'https://00f935c6-42a5-448a-8871-ff95c8a2f12a.mock.pstmn.io';
+const baseUrl = 'http://3.39.78.0:8080/api';
 
+interface FetchJobsParams {
+  page: number;
+  size: number;
+  sort: string;
+  techName?: string;
+  locationName?: string[];
+  experienceMin?: number;
+  experienceMax?: number;
+  search?: string;
+}
 
-export async function fetchJobs(): Promise<Job[]> {
+interface JobResponse {
+  status: string;
+  msg: string;
+  data: {
+    totalElements: number;
+    totalPages: number;
+    content: Job[];
+  };
+  code: string;
+}
+
+export async function fetchJobs(params: FetchJobsParams): Promise<{ jobs: Job[]; totalPages: number }> {
   try {
-    const response = await axios.get(`${baseUrl}/job-search`);
-    return response.data.jobs.job.map((job: any) => ({
-      id: job.id,
-      company: job.company.detail.name,
-      title: job.position.title,
-      industry: job.position.industry,
-      location: job.position.location,
-      jobType: job.position['job-type'],
-      jobMidCode: job.position['job-mid-code'],
-      jobCode: job.position['job-code'],
-      experienceLevel: job.position['experience-level'],
-      requiredEducationLevel: job.position['required-education-level'],
-      // postedDate: moment.unix(job.posting-timestamp).format('YYYY-MM-DD'),
-      recommendations: 0, // Recommendation 정보가 없어서 0으로 임시 설정
-      views: 0, // Views 정보가 없어서 0으로 임시 설정
-      companyImage: '', // 회사 이미지 정보가 없어서 빈 문자열로 임시 설정
-      url: job.url,
-    }));
+    console.log('Fetching jobs with params:', params);
+    const response = await axios.get<JobResponse>(`${baseUrl}/job-info`, { params });
+    // console.log('API response:', response.data);
+    return {
+      jobs: response.data.data.content,
+      totalPages: response.data.data.totalPages
+    };
   } catch (error) {
-    console.error('Error fetching jobs:', error);
-    return [];
+    if (axios.isAxiosError(error)) {
+      console.error('Axios error:', error.message);
+      console.error('Error response:', error.response?.data);
+      console.error('Error config:', error.config);
+    } else {
+      console.error('Unexpected error:', error);
+    }
+    throw error;
   }
 }
