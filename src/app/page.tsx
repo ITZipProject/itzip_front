@@ -1,3 +1,11 @@
+'use client'
+
+import MainPageJobPreview from "@/components/main/MainPageJobPreview";
+
 export default function Home() {
-  return <div>home</div>;
+  return(
+    <div>
+      <MainPageJobPreview />
+    </div>
+  );
 }
