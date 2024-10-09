@@ -5,7 +5,7 @@ import Image from 'next/image';
 const StudyPageLayout = () => {
   return (
     <div className="flex flex-col w-full gap-20 ">
-      <div className="flex flex-col justify-center items-center gap-10">
+      <section className="flex flex-col justify-center items-center gap-10">
         <h3 className="text-5xl font-bold">우리는 개발자입니다.</h3>
         <div className="flex gap-5">
           <div>
@@ -23,8 +23,8 @@ const StudyPageLayout = () => {
             </Link>
           </div>
         </div>
-      </div>
-      <div className="mt-20">
+      </section>
+      <section className="mt-20">
         <Image
           src="/studyFrame.png"
           alt="카드이미지"
@@ -32,9 +32,9 @@ const StudyPageLayout = () => {
           height={64}
           className="rounded-full"
         />
-      </div>
+      </section>
 
-      <div className="flex flex-col justify-center items-center gap-8">
+      <section className="flex flex-col justify-center items-center gap-8">
         <h3 className="text-3xl font-bold">실전 같은 문제 풀이를 하나씩 쌓아가며,</h3>
         <h3 className="text-3xl font-semibold">
           개발자로서의 실력과 자신감을 차곡차곡 쌓아 올리세요.
@@ -79,9 +79,9 @@ const StudyPageLayout = () => {
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="flex flex-col gap-7">
+      <section className="flex flex-col gap-7">
         <h3 className="text-5xl font-bold">성장을 위한 첫 코드</h3>
         <div className="flex flex-col gap-1">
           <h3>
@@ -100,7 +100,7 @@ const StudyPageLayout = () => {
         <div>
           <Image src="/quizExample.png" alt="카드이미지" width={1000} height={24} />
         </div>
-      </div>
+      </section>
     </div>
   );
 };

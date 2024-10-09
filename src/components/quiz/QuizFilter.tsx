@@ -81,7 +81,7 @@ const QuizFilter: React.FC = () => {
             <h3 className="text-xl font-semibold text-gray-500">퀴즈 검색</h3>
             <input
               type="text"
-              className="p-4 rounded-lg border-none outline-none box-border placeholder:text-sm placeholder:text-gray-400 bg-neutral-800"
+              className="p-4 rounded-lg border-none outline-none box-border placeholder:text-sm placeholder:text-gray-400 bg-neutral-700"
               placeholder="검색어를 입력하세요..."
               value={searchTerm}
               onChange={handleSearchTermChange}
