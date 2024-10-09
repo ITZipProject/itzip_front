@@ -13,8 +13,7 @@ import { useAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 
-import { FormValues } from '@/types/auth';
-import instance from '@/api/\baxiosInstance';
+import instance from '@/api/axiosInstance';
 import { useModal } from '@/lib/context/ModalContext';
 
 const formSchema = z
