@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-function StudyMainPage() {
+function StudyPreview() {
   return (
     <>
       <div className="flex bg-zinc-900 text-white">
@@ -20,14 +20,14 @@ function StudyMainPage() {
             <Image
               src="/quizImage1.png"
               alt="퀴즈이미지1"
-              width={1500}
+              width={300}
               height={64}
               className="rounded-md"
             />
             <Image
               src="/quizImage2.png"
               alt="퀴즈이미지2"
-              width={1500}
+              width={300}
               height={64}
               className="rounded-md"
             />
@@ -55,4 +55,4 @@ function StudyMainPage() {
   );
 }
 
-export default StudyMainPage;
+export default StudyPreview;
