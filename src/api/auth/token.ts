@@ -1,6 +1,6 @@
 import { CheckAccessTokenResponse } from '@/types/token';
 
-import instance from '../\baxiosInstance';
+import instance from '../axiosInstance';
 
 export const getAccessToken = async () => {
   const { data } = await instance.get<CheckAccessTokenResponse>('/token/verify-access', {});

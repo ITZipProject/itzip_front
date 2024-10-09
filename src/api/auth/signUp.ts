@@ -1,5 +1,5 @@
 import { CheckEmailRequest, CheckEmailResponse, SignUpRequest, SignUpResponse } from '@/types/auth';
-import instance from '../\baxiosInstance';
+import instance from '../axiosInstance';
 
 export const postSignUp = async (body: SignUpRequest) => {
   const { data } = await instance.post<SignUpResponse>('/user/join', body, {

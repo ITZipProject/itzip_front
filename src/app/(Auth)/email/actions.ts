@@ -1,35 +1,31 @@
 'use server';
 
+import instance from '@/api/axiosInstance';
 import { cookies } from 'next/headers';
 
 interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
-  userId: number;
-  nickname: string;
+  data: {
+    accessToken: string;
+    refreshToken: string;
+  };
 }
 
 export async function loginAction(
   email: string,
   password: string,
-): Promise<{ success: boolean; message: string; accessToken?: string; refreshToken?: string }> {
+): Promise<{
+  success: boolean;
+  message: string;
+  accessToken?: string;
+  refreshToken?: string;
+}> {
   try {
-    // API 호출을 통한 로그인 로직
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
-    if (!response.ok) {
-      throw new Error('로그인 실패');
-    }
+    const response = await instance.post<LoginResponse>('/user/login', { email, password });
 
-    const data = (await response.json()) as LoginResponse;
-
+    const { data } = response.data;
+    console.log('login server!', data);
     // 액세스 토큰을 쿠키에 저장
-    cookies().set('accessToken', data.data.accessToken, {
+    cookies().set('accessToken', data.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
@@ -39,7 +35,7 @@ export async function loginAction(
 
     // 리프레시 토큰도 저장
     if (data.refreshToken) {
-      cookies().set('refreshToken', data.data.refreshToken, {
+      cookies().set('refreshToken', data.refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
@@ -48,15 +44,17 @@ export async function loginAction(
       });
     }
 
-    // 성공 응답에 accessToken과 refreshToken 포함
     return {
       success: true,
       message: '로그인 성공',
-      accessToken: data.data.accessToken,
-      refreshToken: data.data.refreshToken,
+      accessToken: data.accessToken,
+      refreshToken: data.refreshToken,
     };
   } catch (error) {
     console.error('로그인 에러:', error);
-    return { success: false, message: '로그인 실패' };
+    if (error instanceof Error) {
+      return { success: false, message: `로그인 실패: ${error.message}` };
+    }
+    return { success: false, message: '로그인 실패: 알 수 없는 오류' };
   }
 }

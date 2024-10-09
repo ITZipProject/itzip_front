@@ -1,5 +1,5 @@
 import { FormValues, LoginResponse } from '@/types/auth';
-import instance from '../\baxiosInstance';
+import instance from '../axiosInstance';
 
 export const postLogin = async (body: FormValues) => {
   const { data, headers } = await instance.post<LoginResponse>('/user/login', body, {

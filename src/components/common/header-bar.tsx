@@ -4,16 +4,18 @@ import { usePathname } from 'next/navigation';
 import { useModal } from '@/lib/context/ModalContext';
 import { Modals } from './Modals';
 import { useState, useEffect } from 'react';
+import { useAtom } from 'jotai';
+import { accessTokenAtom } from '@/store/useTokenStore';
 
 export default function HeaderBar() {
   const pathname = usePathname();
   const { openModal } = useModal();
+  const [accessToken] = useAtom(accessTokenAtom);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
     setIsLoggedIn(!!accessToken);
-  }, []);
+  }, [accessToken]);
 
   const isStudyPage = pathname.startsWith('/study');
   const headerBackgroundColor = isStudyPage ? 'bg-stone-800' : 'bg-white';
@@ -36,7 +38,12 @@ export default function HeaderBar() {
         <Link href={'/recruit'}>
           <span>채용공고</span>
         </Link>
-        <Link href={'/blog'}>기술정보</Link>
+        <Link
+          href={isLoggedIn ? '/blog' : '#'}
+          onClick={!isLoggedIn ? () => openModal('LoginModal') : undefined}
+        >
+          기술정보
+        </Link>
         <Link
           href={isLoggedIn ? '/study' : '#'}
           onClick={!isLoggedIn ? () => openModal('LoginModal') : undefined}
