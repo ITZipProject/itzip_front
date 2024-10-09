@@ -19,7 +19,7 @@ const MyQuizSection: React.FC = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 2,
     slidesToScroll: 3,
   };
 
@@ -39,7 +39,7 @@ const MyQuizSection: React.FC = () => {
           <Slider {...settings}>
             {quizzes &&
               quizzes.map((quiz: QuizData) => (
-                <div key={quiz.id} className="px-2">
+                <div key={quiz.id}>
                   <MyQuizCard quiz={quiz} />
                 </div>
               ))}
