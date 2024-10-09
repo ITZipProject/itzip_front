@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Job } from './job';
 import ReactPaginate from 'react-paginate';
 import { fetchJobs } from '@/api/saramin/route';
+import { BookmarkIcon } from 'lucide-react';
 
 function cleanLocationNames(locationNames: string[]): string[] {
   const uniqueLocations = new Set(locationNames.flatMap(name => name.split(' > ')).filter(name => name !== "&gt;"));
@@ -19,6 +20,15 @@ interface JobListProps {
 
 const JobList: React.FC<JobListProps> = ({ jobs, currentPage, totalPages, onPageChange }) => {  
   const [sortOrder, setSortOrder] = useState<'latest' | 'oldest' | null>(null);
+  const [bookmarks, setBookmarks] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    // Load bookmarks from localStorage on component mount
+    const savedBookmarks = localStorage.getItem('jobBookmarks');
+    if (savedBookmarks) {
+      setBookmarks(new Set(JSON.parse(savedBookmarks)));
+    }
+  }, []);
 
   useEffect(() => {
     // 필요한 경우 여기에 추가 로직
@@ -36,6 +46,20 @@ const JobList: React.FC<JobListProps> = ({ jobs, currentPage, totalPages, onPage
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('ko-KR', {year: 'numeric', month: 'long', day: 'numeric'});
+  };
+
+  const toggleBookmark = (url: string) => {
+    setBookmarks(prevBookmarks => {
+      const newBookmarks = new Set(prevBookmarks);
+      if (newBookmarks.has(url)) {
+        newBookmarks.delete(url);
+      } else {
+        newBookmarks.add(url);
+      }
+      // Save updated bookmarks to localStorage
+      localStorage.setItem('jobBookmarks', JSON.stringify(Array.from(newBookmarks)));
+      return newBookmarks;
+    });
   };
 
   // 정렬 로직 (필요한 경우)
@@ -68,10 +92,21 @@ const JobList: React.FC<JobListProps> = ({ jobs, currentPage, totalPages, onPage
       <div className="grid grid-cols-2 gap-6">
         {sortedJobs.map((job) => (
           <div 
-            key={job.id} 
-            className="p-6 border-01 radius-01 cursor-pointer"
+            key={job.url} 
+            className="p-6 border-01 radius-01 cursor-pointer relative"
             onClick={() => window.open(job.url, '_blank')}
           >
+            <button
+              className="absolute top-2 right-2 z-10"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleBookmark(job.url);
+              }}
+            >
+              <BookmarkIcon
+                className={`h-6 w-6 ${bookmarks.has(job.url) ? 'fill-blue-500 text-blue-500' : 'text-gray-400'}`}
+              />
+            </button>
             <h3 className="font-pre-body-01 text-center mb-2">{job.title}</h3>
             <p className="font-pre-body-02 text-center mb-2">{job.companyName}</p>
             <p className="font-pre-body-03 text-center text-gray-600 mb-4">
