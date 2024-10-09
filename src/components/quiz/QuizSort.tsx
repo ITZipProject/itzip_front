@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { QuizData } from '@/types/quiz/quiz';
 import { useFilteredQuizzes } from '@/api/quiz/fetchQuizzes';
@@ -62,45 +64,60 @@ const QuizSort = ({ handleFilteredQuizzes }: QuizSortProps) => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-10 mb-10">
-      <div className="flex justify-between items-center">
-        <h3 className="text-3xl font-bold">기술퀴즈 둘러보기</h3>
-        <div className="flex justify-center items-center">
+    <div className="w-full flex flex-col gap-10 mb-10 px-4 sm:px-6 lg:px-8">
+      {/* 헤더 섹션 */}
+      <div className="flex flex-row justify-between items-center gap-5">
+        <h3 className="text-2xl sm:text-3xl font-bold whitespace-nowrap">기술퀴즈 둘러보기</h3>
+        <div className="flex justify-center items-center space-x-4">
           <div
             onClick={handleAddQuiz}
-            className="flex items-center justify-center  bg-color-button-primary  rounded-lg cursor-pointer p-3"
+            className="flex items-center justify-center bg-color-button-primary rounded-lg cursor-pointer p-3 whitespace-nowrap"
           >
-            <h3 className=" text-white justify-center items-center">+ 문제 생성하기</h3>
+            <h3 className="text-white text-sm sm:text-base">+ 문제 생성하기</h3>
           </div>
           {isModalOpen && <MakeQuizModal isOpen={isModalOpen} onClose={closeModal} />}
         </div>
       </div>
-      <div className="border-b"></div>
 
-      <div className="w-full flex justify-between border-gray-600">
-        <div className="w-1/3"></div>
-        <div className="w-1/3 flex justify-center gap-2 items-center">
+      {/* 구분선 */}
+      <div className="border-b border-gray-600"></div>
+
+      {/* 정렬 및 페이징 섹션 */}
+      <div className="w-full flex flex-row justify-between items-center border-gray-600 mt-4 flex-wrap">
+        {/* 빈 공간 */}
+        <div className="w-full sm:w-1/3 flex justify-center sm:justify-start mb-4 sm:mb-0"></div>
+
+        {/* 페이징 버튼 */}
+        <div className="w-full sm:w-1/3 flex justify-center gap-4 mb-4 sm:mb-0">
           <PaginationButtons totalPages={totalPages} />
         </div>
-        <div className="w-1/3 flex justify-center items-center">
+
+        {/* 정렬 버튼 */}
+        <div className="w-full sm:w-1/3 flex justify-center sm:justify-end items-center gap-4">
           <button
             onClick={() => setSortOrder('NEWEST')}
             disabled={sortOrder === 'NEWEST'}
-            className={`py-2 px-4 rounded text-slate-400 ${sortOrder === 'NEWEST' ? 'text-slate-200 font-bold' : ''}`}
+            className={`py-2 px-4 rounded text-slate-400 ${
+              sortOrder === 'NEWEST' ? 'text-slate-200 font-bold' : ''
+            } text-sm sm:text-base whitespace-nowrap`}
           >
             최신순
           </button>
           <button
             onClick={() => setSortOrder('OLDEST')}
             disabled={sortOrder === 'OLDEST'}
-            className={`py-2 px-4 rounded text-slate-400 ${sortOrder === 'OLDEST' ? 'text-slate-200 font-bold' : ''}`}
+            className={`py-2 px-4 rounded text-slate-400 ${
+              sortOrder === 'OLDEST' ? 'text-slate-200 font-bold' : ''
+            } text-sm sm:text-base whitespace-nowrap`}
           >
             오래된 순
           </button>
           <button
             onClick={() => setSortOrder('RECOMMENDED')}
             disabled={sortOrder === 'RECOMMENDED'}
-            className={`py-2 px-4 rounded text-slate-400 ${sortOrder === 'RECOMMENDED' ? 'text-slate-200 font-bold' : ''}`}
+            className={`py-2 px-4 rounded text-slate-400 ${
+              sortOrder === 'RECOMMENDED' ? 'text-slate-200 font-bold' : ''
+            } text-sm sm:text-base whitespace-nowrap`}
           >
             추천순
           </button>

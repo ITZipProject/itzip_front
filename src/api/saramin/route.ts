@@ -1,33 +1,47 @@
 import axios from 'axios';
 import { Job } from '@/components/recruit/job';
 
-const baseUrl = 'https://00f935c6-42a5-448a-8871-ff95c8a2f12a.mock.pstmn.io';
+const baseUrl = 'http://3.39.78.0:8080/api';
 
-export async function fetchJobs(): Promise<Job[]> {
+interface FetchJobsParams {
+  page: number;
+  size: number;
+  sort: string;
+  techName?: string;
+  locationName?: string[];
+  experienceMin?: number;
+  experienceMax?: number;
+  search?: string;
+}
+
+interface JobResponse {
+  status: string;
+  msg: string;
+  data: {
+    totalElements: number;
+    totalPages: number;
+    content: Job[];
+  };
+  code: string;
+}
+
+export async function fetchJobs(params: FetchJobsParams): Promise<{ jobs: Job[]; totalPages: number }> {
   try {
-    const response = await axios.get(`${baseUrl}/job-search`);
-    return response.data.jobs.job.map((job: any) => {
-      return {
-        id: job.id,
-        company: job.company.detail.name,
-        title: job.position.title,
-        industry: job.position.industry,
-        location: job.position.location,
-        jobType: job.position['job-type'],
-        jobMidCode: job.position['job-mid-code'],
-        jobCode: job.position['job-code'],
-        experienceLevel: job.position['experience-level'],
-        requiredEducationLevel: job.position['required-education-level'],
-        postedDate: job['posting-timestamp'] ? new Date(parseInt(job['posting-timestamp']) * 1000).toISOString() : null,
-        timestamp: job['posting-timestamp'] ? parseInt(job['posting-timestamp']) : null,
-        recommendations: job.recommendations || 0,
-        views: job.views || 0,
-        companyImage: job.companyImage || '',
-        url: job.url,
-      };
-    });
+    console.log('Fetching jobs with params:', params);
+    const response = await axios.get<JobResponse>(`${baseUrl}/job-info`, { params });
+    // console.log('API response:', response.data);
+    return {
+      jobs: response.data.data.content,
+      totalPages: response.data.data.totalPages
+    };
   } catch (error) {
-    console.error('Error fetching jobs:', error);
-    return [];
+    if (axios.isAxiosError(error)) {
+      console.error('Axios error:', error.message);
+      console.error('Error response:', error.response?.data);
+      console.error('Error config:', error.config);
+    } else {
+      console.error('Unexpected error:', error);
+    }
+    throw error;
   }
 }

@@ -56,7 +56,6 @@ const UserBlogPage: React.FC<UserBlogPageProps> = ({ params }) => {
           profileImage={`https://picsum.photos/seed/${decodedUserName}/130/130`}
           description={randomDescription}
         />
-        {/*<div className="rounded-xl border border-gray-300 p-4">*/}
         <div className="rounded-xl p-4">
           <WeeklyContributionGraph data={contributionData} />
         </div>

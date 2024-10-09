@@ -1,5 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 interface ModalProps {
   isOpen: boolean;
@@ -7,12 +9,19 @@ interface ModalProps {
   children?: React.ReactNode;
 }
 
-const AuthModal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null;
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  const [mounted, setMounted] = useState(false);
 
-  return ReactDOM.createPortal(
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  if (!isOpen || !mounted) return null;
+
+  return createPortal(
     <div
-      className="fixed top-0 left-0 right-0 bottom-0   flex justify-center bg-Grey-1000 bg-opacity-Grey-alpha-80 items-center "
+      className="fixed top-0 left-0 right-0 bottom-0 flex justify-center bg-Grey-1000 bg-opacity-Grey-alpha-80 items-center"
       onClick={onClose}
     >
       <div
@@ -26,4 +35,4 @@ const AuthModal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   );
 };
 
-export default AuthModal;
+export default Modal;

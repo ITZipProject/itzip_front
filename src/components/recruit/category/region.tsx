@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 
 interface Region {
   id: string;
@@ -23,33 +25,74 @@ const regions: Region[] = [
   // Add more regions as needed
 ];
 
-interface Props {
-  selectedRegion: string;
-  setSelectedRegion: (region: string) => void;
-  groupName?: string; // Optional group name prop
+interface RegionCheckboxesProps {
+  onSelectionChange?: (selected: string[]) => void;
 }
 
-const RegionCheckboxes: React.FC<Props> = ({ selectedRegion, setSelectedRegion, groupName = 'radioGroup2' }) => {
+export interface RegionCheckboxesRef {
+  resetSelections: (newSelection: string[]) => void;
+}
+
+const RegionCheckboxes = forwardRef<RegionCheckboxesRef, RegionCheckboxesProps>(({ onSelectionChange }, ref) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredRegions, setFilteredRegions] = useState<Region[]>(regions);
+  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (searchTerm.trim() === '') {
+      setFilteredRegions(regions);
+    } else {
+      const filtered = regions.filter(region =>
+        region.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredRegions(filtered);
+    }
+  }, [searchTerm]);
+
+  useImperativeHandle(ref, () => ({
+    resetSelections: (newSelection: string[]) => {
+      setSelectedRegions(newSelection);
+    }
+  }));
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleRegionChange = (regionName: string) => {
+    const updatedSelection = selectedRegions.includes(regionName)
+      ? selectedRegions.filter(r => r !== regionName)
+      : [...selectedRegions, regionName];
+    
+    setSelectedRegions(updatedSelection);
+    if (onSelectionChange) {
+      onSelectionChange(updatedSelection);
+    }
+  };
+
   return (
-    <div className="container flex flex-col w-64">
-      {regions.map((region) => (
-        <div className="region mb-2" key={region.id}>
-          <input
-            type="radio"
-            id={region.id}
-            name={groupName} // Dynamic group name
-            value={region.name}
-            checked={selectedRegion === region.name}
-            onChange={() => setSelectedRegion(region.name)}
-            className="mr-2 cursor-pointer"
-          />
-          <label htmlFor={region.id} className="inline-block">
-            {region.name}
-          </label>
-        </div>
-      ))}
+    <div className="region-checkboxes">
+      <div className="region-list">
+        {filteredRegions.map((region) => (
+          <div className="region mb-2" key={region.id}>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                id={region.id}
+                value={region.name}
+                checked={selectedRegions.includes(region.name)}
+                onChange={() => handleRegionChange(region.name)}
+                className="mr-2 cursor-pointer"
+              />
+              {region.name}
+            </label>
+          </div>
+        ))}
+      </div>
     </div>
   );
-};
+});
+
+RegionCheckboxes.displayName = 'RegionCheckboxes';
 
 export default RegionCheckboxes;

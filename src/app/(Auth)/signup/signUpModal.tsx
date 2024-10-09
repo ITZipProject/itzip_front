@@ -6,6 +6,8 @@ import githubIcon from '../../../../public/github.png';
 import { useModal } from '@/lib/context/ModalContext';
 import AuthModal from '../auth/authModal';
 import { Margin } from '@/components/common/margin';
+import SmallAsk from '@/components/auth/smallAsk';
+import Ask from '@/components/auth/ask';
 
 interface SignUpModalProps {
   modalId: string;
@@ -48,9 +50,9 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ modalId }) => {
           </span>
         </button>
 
-        <button onClick={() => openModal('LoginModal')} className="w-full pt-[38px]">
-          <h1 className="font-[400] text-[#0500E8] text-[13px] ">이미 회원이신가요?</h1>
-        </button>
+        <div className="w-full pt-[38px]">
+          <SmallAsk text="이미 회원이신가요?" textColor="#0500E8" modalName="LoginModal" />
+        </div>
       </div>
     </AuthModal>
   );
