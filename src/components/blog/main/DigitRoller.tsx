@@ -1,5 +1,5 @@
+import { useSpring, animated } from '@react-spring/web';
 import React from 'react';
-import { useSpring, animated } from 'react-spring';
 
 interface DigitRollerProps {
   digit: number;
