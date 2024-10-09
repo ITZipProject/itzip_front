@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-function StudyMainPage() {
+function StudyPreview() {
   return (
     <>
       <div className="flex bg-zinc-900 text-white">
@@ -55,4 +55,4 @@ function StudyMainPage() {
   );
 }
 
-export default StudyMainPage;
+export default StudyPreview;

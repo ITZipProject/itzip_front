@@ -1,13 +1,13 @@
 'use client';
 
 import MainPageJobPreview from '@/components/main/MainPageJobPreview';
-import StudyMainPage from '@/components/main/study-main-page';
+import StudyPreview from '@/components/main/StudyPreview';
 
 export default function Home() {
   return (
     <div>
       <MainPageJobPreview />
-      <StudyMainPage />
+      <StudyPreview />
     </div>
   );
 }
