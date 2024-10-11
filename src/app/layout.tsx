@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { ReactNode } from 'react';
-
 import Footer from '@/components/common/footer';
 import HeaderBar from '@/components/common/header-bar';
 import { ModalProvider } from '@/lib/context/ModalContext';
 
 import './globals.css';
+import { Modals } from '@/components/common/Modals';
 
 interface RootLayoutProps {
   children: ReactNode;
@@ -60,6 +60,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           {!shouldHideHeaderAndFooter && <HeaderBar />}
           <main className={shouldHideHeaderAndFooter ? 'mt-[58px]' : ''}>{children}</main>
           {!shouldHideHeaderAndFooter && <Footer />}
+          <Modals />
         </ModalProvider>
       </body>
     </html>

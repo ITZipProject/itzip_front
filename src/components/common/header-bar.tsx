@@ -2,7 +2,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useModal } from '@/lib/context/ModalContext';
-import { Modals } from './Modals';
 import { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { accessTokenAtom } from '@/store/useTokenStore';
@@ -75,7 +74,6 @@ export default function HeaderBar() {
 
         <Link href={'/customer-service'}>고객센터</Link>
       </div>
-      <Modals />
     </div>
   );
 }
