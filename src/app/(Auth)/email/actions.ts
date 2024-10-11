@@ -41,7 +41,7 @@ export async function loginAction(
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 3600, // 1시간 (초 단위)
+      maxAge: 7 * 24 * 3600, // 7일 (초 단위)
       path: '/',
     });
 
