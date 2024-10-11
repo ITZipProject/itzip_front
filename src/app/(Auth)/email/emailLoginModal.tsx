@@ -9,7 +9,7 @@ import { useModal } from '@/lib/context/ModalContext';
 import { ChevronLeftIcon } from '@heroicons/react/16/solid';
 import { Margin } from '@/components/common/margin';
 import { loginAction } from './actions';
-import { setAccressTokenAtom, setRefreshTokenAtom } from '@/store/useTokenStore';
+import { setAccessTokenAtom, setRefreshTokenAtom } from '@/store/useTokenStore';
 import instance from '@/api/axiosInstance';
 
 interface SignInModalProps {
@@ -24,7 +24,7 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const [, setAccessToken] = useAtom(setAccressTokenAtom);
+  const [, setAccessToken] = useAtom(setAccessTokenAtom);
   const [, setRefreshToken] = useAtom(setRefreshTokenAtom);
 
   // 모달이 열려 있는 경우에만 렌더링
@@ -77,27 +77,15 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const result = await loginAction(email, password);
-      if (result.success) {
-        console.log('login!');
-        // 토큰 저장
-        if (result.accessToken) {
-          setAccessToken(result.accessToken);
-        }
-        if (result.refreshToken) {
-          setRefreshToken(result.refreshToken);
-        }
-        closeModal('LoginModal');
-        router.push('/');
-      } else {
-        setError(result.message);
-      }
+      const res = await instance.post('/user/login', { email, password });
+      console.log('login!!____', res.data);
     } catch (err) {
-      console.error('로그인 중 오류 발생:', err);
+      console.error(err);
     } finally {
       setIsLoading(false);
     }
   };
+
   return (
     <Modal isOpen={true} onClose={() => closeModal(modalId)}>
       <button onClick={() => openModal('LoginModal')} className="flex items-center">
@@ -105,7 +93,7 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
         <h1 className="font-[700] text-[24px]">이메일로 로그인하기</h1>
       </button>
       <Margin height={'48px'} />
-      <form onSubmit={testLogin} className="w-full space-y-4">
+      <form onSubmit={login} className="w-full space-y-4">
         <div className="flex items-center">
           <label htmlFor="email">이메일</label>
           <span className="text-[#E46969] ml-[2px]">*</span>

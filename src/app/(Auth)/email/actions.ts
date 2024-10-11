@@ -20,7 +20,19 @@ export async function loginAction(
   refreshToken?: string;
 }> {
   try {
-    const response = await instance.post<LoginResponse>('/user/login', { email, password });
+    // 현재 쿠키 값을 가져옵니다.
+    const cookieStore = cookies();
+    const accessToken = cookieStore.get('accessToken')?.value;
+    const refreshToken = cookieStore.get('refreshToken')?.value;
+
+    // POST 요청에 쿠키 값을 포함합니다.
+    const response = await instance.post<LoginResponse>(
+      '/user/login',
+      { email, password },
+      {
+        withCredentials: true, // 크로스 도메인 요청 시 쿠키 전송을 허용
+      },
+    );
 
     const { data } = response.data;
     console.log('login server!', data);

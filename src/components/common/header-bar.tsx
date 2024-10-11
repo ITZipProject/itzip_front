@@ -14,7 +14,11 @@ export default function HeaderBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    setIsLoggedIn(!!accessToken);
+    if (accessToken !== '') {
+      setIsLoggedIn(!!accessToken);
+    } else {
+      return;
+    }
   }, [accessToken]);
 
   const isStudyPage = pathname.startsWith('/study');
@@ -23,7 +27,7 @@ export default function HeaderBar() {
 
   return (
     <div
-      className={`h-[70px] ${headerBackgroundColor} flex justify-between w-screen px-10 items-center`}
+      className={`h-[70px] ${headerBackgroundColor} flex justify-between w-screen px-10 items-center border border-b-2`}
     >
       <Link className={`text-logo font-extrabold text-logoSize ${textColor}`} href={'/'}>
         ITZIP
