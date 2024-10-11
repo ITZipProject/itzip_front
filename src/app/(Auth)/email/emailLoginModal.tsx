@@ -56,31 +56,16 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
       const result = await loginAction(email, password);
       if (result.success) {
         // 토큰 저장
-        if (result.accessToken) {
+        if (result.accessToken && result.refreshToken) {
           setAccessToken(result.accessToken);
-        }
-        if (result.refreshToken) {
           setRefreshToken(result.refreshToken);
+          closeModal('EmailLoginModal');
         }
-        closeModal('LoginModal');
-        router.push('/');
       } else {
         setError(result.message);
       }
     } catch (error) {
       setError('로그인 중 오류가 발생했습니다.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const testLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-      const res = await instance.post('/user/login', { email, password });
-      console.log('login!!____', res.data);
-    } catch (err) {
-      console.error(err);
     } finally {
       setIsLoading(false);
     }
