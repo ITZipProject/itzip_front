@@ -14,21 +14,13 @@ export default function Profile() {
   const { openModal } = useModal();
   const logOut = async () => {
     setLoading(true);
+
     try {
-      const response = await instance.delete('/user/logout');
-      console.log('로그아웃 성공:', response.data);
+      await logoutServerAction();
+      clearTokens();
 
-      clearTokens(); // Jotai store에서 토큰 제거
-
-      const result = await logoutServerAction();
-      if (result === false) {
-        console.error('logout failed!', result);
-      } else {
-        // 로그아웃 성공 시 홈으로 리다이렉트 및 페이지 새로고침
-        router.push('/').then(() => {
-          window.location.reload();
-        });
-      }
+      // 로그아웃 실패 로그 보려면 주석
+      router.push('/');
     } catch (error) {
       console.error('로그아웃 실패:', error);
     } finally {
@@ -37,26 +29,7 @@ export default function Profile() {
   };
 
   // api - 미구현
-  const out = async () => {
-    setLoading(true);
-    try {
-      const res = await instance.delete('/user/out');
-      console.log('회원탈퇴 성공', res.data);
-      clearTokens();
-      const result = await logoutServerAction();
-      if (result === false) {
-        console.error('out failed!', result);
-      } else {
-        router.push('/').then(() => {
-          window.location.reload();
-        });
-      }
-    } catch (err) {
-      console.error('회원탈퇴 실패:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const out = () => {};
 
   // useEffect(() => {
   //   const me = async () => {

@@ -41,7 +41,7 @@ export const EditProfileModal: React.FC<ModalProps> = ({ modalId }) => {
       <form onSubmit={onSubmit} className="flex flex-col">
         <label
           htmlFor="photo"
-          className="border-2 size-40 flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-full border-dashed cursor-pointer bg-center bg-cover"
+          className="flex flex-col items-center justify-center size-40 cursor-pointer border-2 border-dashed border-neutral-300 rounded-full bg-center bg-cover text-neutral-300"
           style={{
             backgroundImage: `url(${preview})`,
           }}
