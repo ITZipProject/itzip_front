@@ -20,6 +20,7 @@ export async function loginAction(
   refreshToken?: string;
 }> {
   try {
+    // post 요청 시 반환되는 토큰을 쿠키에 저장, 토큰을 클라이언트에서 사용할 수 있게 리턴
     const response = await instance.post<LoginResponse>('/user/login', { email, password });
 
     const { data } = response.data;
@@ -29,7 +30,7 @@ export async function loginAction(
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 3600, // 1시간 (초 단위)
+      maxAge: 7 * 24 * 3600, // 7일 (초 단위)
       path: '/',
     });
 

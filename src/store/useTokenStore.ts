@@ -4,7 +4,7 @@ import { atomWithStorage } from 'jotai/utils';
 const accessTokenAtom = atomWithStorage<string>('accessToken', '');
 const refreshTokenAtom = atomWithStorage<string>('refreshToken', '');
 
-const setAccressTokenAtom = atom(null, (get, set, accessToken: string) => {
+const setAccessTokenAtom = atom(null, (get, set, accessToken: string) => {
   set(accessTokenAtom, accessToken);
 });
 
@@ -19,18 +19,18 @@ const clearTokenAtom = atom(null, (get, set) => {
 
 const getTokenState = () => {
   if (typeof window === 'undefined') {
-    // 서버 사이드에서는 빈 문자열 반환
     return { accessToken: '', refreshToken: '' };
   }
-  const accessToken = localStorage.getItem('accessToken') || '';
-  const refreshToken = localStorage.getItem('refreshToken') || '';
-  return { accessToken, refreshToken };
+  return {
+    accessToken: localStorage.getItem('accessToken') || '',
+    refreshToken: localStorage.getItem('refreshToken') || '',
+  };
 };
 
 export {
   accessTokenAtom,
   refreshTokenAtom,
-  setAccressTokenAtom,
+  setAccessTokenAtom,
   setRefreshTokenAtom,
   clearTokenAtom,
   getTokenState,
