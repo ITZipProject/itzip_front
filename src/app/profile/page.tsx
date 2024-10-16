@@ -53,18 +53,23 @@ export default function Profile() {
           <div className="flex gap-4">
             <div className="size-16 rounded-full bg-slate-400" />
             <div className="flex flex-col justify-center">
-              <span>userName</span>
-              <span>Email</span>
+              <span className="font-semibold">userName</span>
+              <span className="text-[12px] text-[#A3A3A3]">Email</span>
             </div>
           </div>
           <div>
             <button
               onClick={() => openModal('editProfileModal')}
-              className="rounded-md border p-2 text-[12px] font-normal text-gray-300 hover:border-[#3733ED] hover:text-[#3733ED]"
+              className="rounded-md border p-2 text-[12px] font-normal text-[#D9D9D9] hover:border-[#3733ED] hover:text-[#3733ED]"
             >
               프로필 수정
             </button>
           </div>
+        </div>
+        <div className="w-full whitespace-pre-wrap break-words font-normal text-[12px] text-[#474747]">
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nemo reiciendis illum at nulla
+          recusandae quasi aliquid ut autem, fugiat adipisci facilis accusamus laborum tempora,
+          dignissimos sequi rerum dolore explicabo quam?
         </div>
       </div>
       <div className="flex flex-col">

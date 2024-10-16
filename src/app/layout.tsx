@@ -58,6 +58,8 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       <body className={`mx-auto overflow-x-hidden bg-white text-black ${pretendard.className}`}>
         <ModalProvider>
           {!shouldHideHeaderAndFooter && <HeaderBar />}
+          {/* {!shouldHideHeaderAndFooter && <SmallHeader />} */}
+
           <main className={shouldHideHeaderAndFooter ? 'mt-[58px]' : ''}>{children}</main>
           {!shouldHideHeaderAndFooter && <Footer />}
           <Modals />
