@@ -3,13 +3,12 @@ import Link from 'next/link';
 import React from 'react';
 
 interface BlogPostCardProps {
-  id: number;
+  id: string;
   title: string;
   content: string;
   category: string;
   subCategory: string;
   likes: number;
-  saves: number;
   author: string;
   timeAgo: string;
   imageUrl: string;
@@ -23,7 +22,6 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({
   category,
   subCategory,
   likes,
-  //saves,
   author,
   timeAgo,
   imageUrl,
@@ -36,7 +34,7 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({
       </Link>
       <div className="flex items-center justify-between py-4 text-sm">
         <div className="flex items-center">
-          <Link href={`/blog/category/${encodeURIComponent(category + subCategory)}`} passHref>
+          <Link href={`/blog/category/${encodeURIComponent(subCategory)}`} passHref>
             <div className="flex items-center gap-2 pr-1">
               <span className="text-gray-600">{category}</span>
               <Image
@@ -63,13 +61,15 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({
       </div>
       <div className="flex items-center py-4">
         <Link href={`/blog/user/${encodeURIComponent(author)}`} passHref>
-          <Image
-            src={profileImageUrl}
-            alt={author}
-            width={32}
-            height={32}
-            className="cursor-pointer rounded-full"
-          />
+          <div className="size-8 overflow-hidden rounded-full">
+            <Image
+              src={profileImageUrl}
+              alt={author}
+              width={32}
+              height={32}
+              className="size-full cursor-pointer object-cover"
+            />
+          </div>
         </Link>
         <div className="ml-3">
           <Link href={`/blog/user/${encodeURIComponent(author)}`} passHref>
