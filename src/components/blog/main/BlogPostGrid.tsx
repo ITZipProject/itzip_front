@@ -7,7 +7,7 @@ import BlogPagination from './BlogPagination';
 import BlogPostCard from './BlogPostCard';
 
 interface Post {
-  id: number;
+  id: string;
   title: string;
   content: string;
   category: string;
@@ -34,7 +34,7 @@ const generateRandomPosts = (count: number): Post[] => {
       '기타';
 
     return {
-      id: i + 1,
+      id: `${i + 1}`,
       title: `블로그 포스트 제목 ${i + 1}`,
       content: `서류 합격률을 높인 단 한가지 비법 : 멘티 인터뷰 입니다. 서류 합격률을 높은 단 한가지 비법 : 멘티 인터뷰 입니다.`,
       category,

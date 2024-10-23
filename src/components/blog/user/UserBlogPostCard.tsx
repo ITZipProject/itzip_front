@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 
 interface UserBlogPostCardProps {
-  id: number;
+  id: string;
   title: string;
   content: string;
   category: string;

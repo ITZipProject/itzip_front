@@ -4,7 +4,7 @@ import { withSentryConfig } from '@sentry/nextjs';
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['picsum.photos', 'fastly.picsum.photos'],
+    domains: ['picsum.photos', 'fastly.picsum.photos', 'dy1vg9emkijkn.cloudfront.net'],
   } /*임시 이미지. 추후 이 부분은 삭제*/,
 };
 
