@@ -4,8 +4,21 @@ import { withSentryConfig } from '@sentry/nextjs';
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['picsum.photos', 'fastly.picsum.photos', 'dy1vg9emkijkn.cloudfront.net'],
-  } /*임시 이미지. 추후 이 부분은 삭제*/,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+      },
+      {
+        protocol: 'https',
+        hostname: 'fastly.picsum.photos',
+      },
+      {
+        protocol: 'https',
+        hostname: 'dy1vg9emkijkn.cloudfront.net',
+      },
+    ],
+  },
 };
 
 export default withSentryConfig(nextConfig, {
@@ -16,6 +29,5 @@ export default withSentryConfig(nextConfig, {
   hideSourceMaps: true,
   disableLogger: true,
   automaticVercelMonitors: true,
-  // Sentry 인증 토큰
   authToken: process.env.SENTRY_AUTH_TOKEN,
 });
