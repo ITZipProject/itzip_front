@@ -1,5 +1,6 @@
-import { useFetchAlgorithmData } from '@/api/algorithm/fetchAlgorithm';
 import React from 'react';
+
+import { useFetchAlgorithmData } from '@/api/algorithm/fetchAlgorithm';
 
 interface MainProps {
   tagId?: number;
@@ -12,7 +13,7 @@ const Main: React.FC<MainProps> = ({ tagId, displayName, resetTag }) => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex h-screen items-center justify-center">
         <p>문제 로딩중...</p>
       </div>
     );
@@ -20,7 +21,7 @@ const Main: React.FC<MainProps> = ({ tagId, displayName, resetTag }) => {
 
   if (isError) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex h-screen items-center justify-center">
         <p>데이터를 가져오는 중 오류가 발생했습니다.</p>
       </div>
     );
@@ -31,15 +32,15 @@ const Main: React.FC<MainProps> = ({ tagId, displayName, resetTag }) => {
   };
 
   return (
-    <div className="flex flex-col gap-3 h-full p-4 text-white bg-neutral-800 shadow-md">
-      <div className="flex justify-between items-center gap-8 mb-4">
+    <div className="flex h-full flex-col gap-3 bg-neutral-800 p-4 text-white shadow-md">
+      <div className="mb-4 flex items-center justify-between gap-8">
         <h3 className="text-2xl font-bold">{tagId ? `${displayName} 추천 문제` : '전체 문제'}</h3>
-        <button className="bg-blue-900 text-white py-2 px-3 rounded" onClick={resetTag}>
+        <button className="rounded bg-blue-900 px-3 py-2 text-white" onClick={resetTag}>
           문제 추천
         </button>
       </div>
       <div className="w-full">
-        <div className="flex justify-between p-5 border-b border-zinc-600 bg-gray-100">
+        <div className="bg-gray-100 flex justify-between border-b border-zinc-600 p-5">
           <h3 className="text-gray-400">문제 번호</h3>
           <h3 className="text-gray-400">제목</h3>
           <h3 className="text-gray-400">푼 사람 수</h3>
@@ -48,7 +49,7 @@ const Main: React.FC<MainProps> = ({ tagId, displayName, resetTag }) => {
           data.map((problem) => (
             <div
               key={problem.problemId}
-              className="flex justify-between p-5 bg-gray-800 hover:bg-gray-700 transition-colors cursor-pointer rounded-md shadow-sm transform hover:scale-105 hover:shadow-lg"
+              className="bg-gray-800 hover:bg-gray-700 flex cursor-pointer justify-between rounded-md p-5 shadow-sm transition-colors hover:scale-105 hover:shadow-lg"
               onClick={() => handleClickProblem(problem.problemId)}
             >
               <p className="text-gray-400">{problem.problemId}</p>

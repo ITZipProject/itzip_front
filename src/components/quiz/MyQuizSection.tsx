@@ -4,10 +4,11 @@ import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 
 import { fetchMyQuizzes } from '@/api/quiz/fetchMyQuizzes';
-import MakeQuizButton from './MakeQuizButton';
 import { QuizData } from '@/types/quiz/quiz';
-import QuizShowModal from './QuizShowModal';
+
+import MakeQuizButton from './MakeQuizButton';
 import MyQuizCard from './MyQuizCard';
+import QuizShowModal from './QuizShowModal';
 
 const MyQuizSection: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,7 +32,7 @@ const MyQuizSection: React.FC = () => {
   return (
     <div className="flex flex-col gap-5">
       <h3 className="text-2xl font-bold">내가 만든 문제</h3>
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <div className="w-1/5">
           <MakeQuizButton />
         </div>

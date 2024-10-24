@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react';
 import axios from 'axios';
-
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://3.39.78.0:8080';
+import { useState, useEffect } from 'react';
 
 interface AlgorithmData {
   problemId: number;
@@ -17,6 +15,12 @@ interface UseFetchAlgorithmDataReturn {
   isError: boolean;
 }
 
+interface ApiResponse {
+  data: {
+    problems: AlgorithmData[];
+  };
+}
+
 export const useFetchAlgorithmData = (tagId?: number): UseFetchAlgorithmDataReturn => {
   const [data, setData] = useState<AlgorithmData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -28,12 +32,11 @@ export const useFetchAlgorithmData = (tagId?: number): UseFetchAlgorithmDataRetu
       setIsError(false);
       try {
         const url = tagId
-          ? `http://3.39.78.0:8080/api/algorithm/problems?userId=8&tagId=${tagId}`
-          : 'http://3.39.78.0:8080/api/algorithm/problems?userId=8';
-        const response = await axios.get(url);
+          ? `http://3.39.78.0:8080/api/algorithm/problems?&tagId=${tagId}`
+          : 'http://3.39.78.0:8080/api/algorithm/problems?';
+        const response = await axios.get<ApiResponse>(url);
         const fetchedData: AlgorithmData[] = response.data.data.problems;
         setData(fetchedData);
-        console.log('fetched Data');
       } catch (error) {
         console.error('데이터 가져오기 오류:', error);
         setIsError(true);
@@ -42,7 +45,9 @@ export const useFetchAlgorithmData = (tagId?: number): UseFetchAlgorithmDataRetu
       }
     };
 
-    fetchData();
+    fetchData().catch((error) => {
+      console.error('비동기 처리 중 오류 발생:', error);
+    });
   }, [tagId]);
 
   return { data, isLoading, isError };
