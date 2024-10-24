@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import QuizCard from './QuizCard';
+
 import { QuizData } from '@/types/quiz/quiz';
+
+import QuizCard from './QuizCard';
 import QuizShowModal from '../../components/quiz/QuizShowModal';
 
 type QuizCardSectionProps = {
@@ -27,7 +29,7 @@ const QuizCardSection: React.FC<QuizCardSectionProps> = ({ filteredAndSortedQuiz
 
   return (
     <div className="flex flex-col px-4 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
         {filteredAndSortedQuizzes.map((quiz) => (
           <QuizCard key={quiz.id} quiz={quiz} onClick={() => handleCardClick(quiz)} />
         ))}

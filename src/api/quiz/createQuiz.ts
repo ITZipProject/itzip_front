@@ -9,7 +9,6 @@ export const createQuiz = async (values: any) => {
       questionText: values.question,
       difficulty: parseInt(values.difficulty.replace('Lv.', '')),
       answer: values.options.indexOf(values.answer) + 1,
-      userId: 10,
       choices: values.options.map((option: string, index: number) => ({
         id: index + 1,
         choiceText: option,

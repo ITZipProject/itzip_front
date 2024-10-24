@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { QuizData } from '@/types/quiz/quiz';
-import { useFilteredQuizzes } from '@/api/quiz/fetchQuizzes';
-import PaginationButtons from './PaginationButtons';
 import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+
+import { useFilteredQuizzes } from '@/api/quiz/fetchQuizzes';
+import { QuizData } from '@/types/quiz/quiz';
+
 import MakeQuizModal from './MakeQuizModal';
+import PaginationButtons from './PaginationButtons';
 
 interface QuizSortProps {
   handleFilteredQuizzes: (filteredQuizzes: QuizData[]) => void;
@@ -64,16 +66,16 @@ const QuizSort = ({ handleFilteredQuizzes }: QuizSortProps) => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-10 mb-10 px-4 sm:px-6 lg:px-8">
+    <div className="mb-10 flex w-full flex-col gap-10 px-4 sm:px-6 lg:px-8">
       {/* 헤더 섹션 */}
-      <div className="flex flex-row justify-between items-center gap-5">
-        <h3 className="text-2xl sm:text-3xl font-bold whitespace-nowrap">기술퀴즈 둘러보기</h3>
-        <div className="flex justify-center items-center space-x-4">
+      <div className="flex flex-row items-center justify-between gap-5">
+        <h3 className="whitespace-nowrap text-2xl font-bold sm:text-3xl">기술퀴즈 둘러보기</h3>
+        <div className="flex items-center justify-center space-x-4">
           <div
             onClick={handleAddQuiz}
-            className="flex items-center justify-center bg-color-button-primary rounded-lg cursor-pointer p-3 whitespace-nowrap"
+            className="flex cursor-pointer items-center justify-center whitespace-nowrap rounded-lg bg-color-button-primary p-3"
           >
-            <h3 className="text-white text-sm sm:text-base">+ 문제 생성하기</h3>
+            <h3 className="text-sm text-white sm:text-base">+ 문제 생성하기</h3>
           </div>
           {isModalOpen && <MakeQuizModal isOpen={isModalOpen} onClose={closeModal} />}
         </div>
@@ -83,41 +85,41 @@ const QuizSort = ({ handleFilteredQuizzes }: QuizSortProps) => {
       <div className="border-b border-gray-600"></div>
 
       {/* 정렬 및 페이징 섹션 */}
-      <div className="w-full flex flex-row justify-between items-center border-gray-600 mt-4 flex-wrap">
+      <div className="mt-4 flex w-full flex-row flex-wrap items-center justify-between border-gray-600">
         {/* 빈 공간 */}
-        <div className="w-full sm:w-1/3 flex justify-center sm:justify-start mb-4 sm:mb-0"></div>
+        <div className="mb-4 flex w-full justify-center sm:mb-0 sm:w-1/3 sm:justify-start"></div>
 
         {/* 페이징 버튼 */}
-        <div className="w-full sm:w-1/3 flex justify-center gap-4 mb-4 sm:mb-0">
+        <div className="mb-4 flex w-full justify-center gap-4 sm:mb-0 sm:w-1/3">
           <PaginationButtons totalPages={totalPages} />
         </div>
 
         {/* 정렬 버튼 */}
-        <div className="w-full sm:w-1/3 flex justify-center sm:justify-end items-center gap-4">
+        <div className="flex w-full items-center justify-center gap-4 sm:w-1/3 sm:justify-end">
           <button
             onClick={() => setSortOrder('NEWEST')}
             disabled={sortOrder === 'NEWEST'}
-            className={`py-2 px-4 rounded text-slate-400 ${
-              sortOrder === 'NEWEST' ? 'text-slate-200 font-bold' : ''
-            } text-sm sm:text-base whitespace-nowrap`}
+            className={`rounded px-4 py-2 text-slate-400 ${
+              sortOrder === 'NEWEST' ? 'font-bold text-slate-200' : ''
+            } whitespace-nowrap text-sm sm:text-base`}
           >
             최신순
           </button>
           <button
             onClick={() => setSortOrder('OLDEST')}
             disabled={sortOrder === 'OLDEST'}
-            className={`py-2 px-4 rounded text-slate-400 ${
-              sortOrder === 'OLDEST' ? 'text-slate-200 font-bold' : ''
-            } text-sm sm:text-base whitespace-nowrap`}
+            className={`rounded px-4 py-2 text-slate-400 ${
+              sortOrder === 'OLDEST' ? 'font-bold text-slate-200' : ''
+            } whitespace-nowrap text-sm sm:text-base`}
           >
             오래된 순
           </button>
           <button
             onClick={() => setSortOrder('RECOMMENDED')}
             disabled={sortOrder === 'RECOMMENDED'}
-            className={`py-2 px-4 rounded text-slate-400 ${
-              sortOrder === 'RECOMMENDED' ? 'text-slate-200 font-bold' : ''
-            } text-sm sm:text-base whitespace-nowrap`}
+            className={`rounded px-4 py-2 text-slate-400 ${
+              sortOrder === 'RECOMMENDED' ? 'font-bold text-slate-200' : ''
+            } whitespace-nowrap text-sm sm:text-base`}
           >
             추천순
           </button>

@@ -1,18 +1,9 @@
 import axios from 'axios';
 
-export const submitPoint = async ({
-  quizId,
-  point,
-  userId,
-}: {
-  quizId: string;
-  point: number;
-  userId: number;
-}) => {
+export const submitPoint = async ({ quizId, point }: { quizId: string; point: number }) => {
   await axios.post(
     '/cs-quiz/point',
     {
-      userId: 7,
       quizId: quizId,
       points: point,
     },
