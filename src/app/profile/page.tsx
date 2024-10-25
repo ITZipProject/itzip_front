@@ -1,10 +1,9 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { logoutServerAction } from './actions';
 import { clearTokenAtom } from '@/store/useTokenStore';
 import { useAtom } from 'jotai';
-import instance from '@/api/axiosInstance';
 import { useModal } from '@/lib/context/ModalContext';
 
 export default function Profile() {
