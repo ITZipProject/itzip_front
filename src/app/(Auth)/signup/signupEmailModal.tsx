@@ -1,23 +1,24 @@
 'use client';
 
 import { ChevronLeftIcon, XCircleIcon } from '@heroicons/react/16/solid';
+import { useAtom } from 'jotai';
 
+import { agreeErrorAtom } from '@/atoms/formAtoms';
+import AgreeCheckboxes from '@/components/auth/agreeCheckbox';
+import Ask from '@/components/auth/ask';
 import SmallAsk from '@/components/auth/smallAsk';
 import Input from '@/components/common/input';
 import { Margin } from '@/components/common/margin';
+import { useSignUp } from '@/hooks/auth';
 import { useModal } from '@/lib/context/ModalContext';
 
-import Modal from '../auth/authModal';
-import Ask from '@/components/auth/ask';
-import { useAtom } from 'jotai';
-
-import AgreeCheckboxes from '@/components/auth/agreeCheckbox';
-import { SignInModalProps } from '@/types/modal';
-import { useSignUp } from '@/hooks/auth';
-import { agreeErrorAtom } from '@/atoms/formAtoms';
 import { AuthButton } from '../auth/authButton';
+import Modal from '../auth/authModal';
 
-const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
+interface SignInModalProps {
+  modalId: string;
+}
+const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalProps) => {
   const { openModals, closeModal, openModal } = useModal();
   const {
     formValues,
@@ -29,7 +30,6 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
     checkEmailDuplicate,
     sendAuthCode,
     verifyAuthCode,
-    onSubmitSignUpButton,
     signUp,
   } = useSignUp();
   const [agreeError] = useAtom(agreeErrorAtom);
@@ -45,15 +45,20 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
       </button>
       <Margin height={'48px'} />
       {/* 임시로 signUp 사용 - 이유 onSubmitSignUpBtn은 로그인 검증 로직인데 검증은 되는데 회원가입이 되지 않음. */}
-      <form onSubmit={signUp} className="w-full space-y-4" noValidate>
-        <div className="flex items-center">
-          <label htmlFor="email">이메일</label>
-          <span className="text-[#E46969] ml-[2px]">*</span>
-        </div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          void signUp(e);
+        }}
+        className="w-full space-y-4"
+        noValidate
+      >
         <Input
           id="email"
           name="email"
           type="email"
+          labelTitle="email"
+          title="이메일"
           value={formValues.email}
           onChange={onChangeFormValues}
           placeholder="ID@example.com"
@@ -79,6 +84,8 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
               <Input
                 name="authCode"
                 type="text"
+                labelTitle="authCode"
+                title="인증코드"
                 value={formValues.authCode}
                 onChange={onChangeFormValues}
                 placeholder="인증코드를 입력해주세요."
@@ -118,19 +125,17 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
                 </AuthButton>
               </>
             ) : (
-              <span className="flex justify-center w-full">인증완료</span>
+              <span className="flex justify-center">인증완료</span>
             )}
           </>
         )}
 
-        <div className="flex items-center">
-          <label htmlFor="password">비밀번호</label>
-          <span className="text-[#E46969] ml-[2px]">*</span>
-        </div>
         <Input
           id="password"
           name="password"
           type="password"
+          labelTitle="password"
+          title="비밀번호"
           placeholder="비밀번호를 입력해주세요."
           value={formValues.password}
           onChange={onChangeFormValues}
@@ -138,13 +143,12 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
           onClick={() => onClickResetButton('password')}
           errors={errors.password}
         />
-        <div className="flex items-center">
-          <label htmlFor="confirmPassword">비밀번호 확인</label>
-          <span className="text-[#E46969] ml-[2px]">*</span>
-        </div>
+
         <Input
           id="passwordCheck"
           name="passwordCheck"
+          labelTitle="passwordCheck"
+          title="비밀번호 확인"
           type="password"
           placeholder="비밀번호를 입력해주세요."
           value={formValues.passwordCheck}
@@ -157,17 +161,15 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }) => {
         {/* 약관 동의 체크박스 */}
         <AgreeCheckboxes />
         {agreeError && (
-          <span className="text-color-text-warning text-[12px] font-[500]">
-            <div className="flex items-center gap-[4.5px] mt-2">
+          <span className="text-12 font-[500] text-color-text-warning">
+            <div className="mt-2 flex items-center gap-[4.5px]">
               <XCircleIcon className="size-[19px]" />
               {agreeError}
             </div>
           </span>
         )}
         {/* 가입하기 버튼 */}
-        <button className="primary-btn bg-Grey-100 h-spacing-12 disabled:bg-Grey-100 disabled:text-white disabled:cursor-not-allowed rounded-radius-03 text-white font-semibold text-14">
-          가입하기
-        </button>
+        <AuthButton disabled={isLoading.signUp}>가입하기</AuthButton>
 
         <div className="flex flex-col items-center">
           <SmallAsk text="이미 회원이신가요?" textColor="#818181" />
