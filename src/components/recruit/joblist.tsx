@@ -9,7 +9,9 @@ import { Job } from './job';
 // import { fetchJobs } from '@/api/saramin/route';
 
 function cleanLocationNames(locationNames: string[]): string[] {
-  const uniqueLocations = new Set(locationNames.flatMap(name => name.split(' > ')).filter(name => name !== "&gt;"));
+  const uniqueLocations = new Set(
+    locationNames.flatMap((name) => name.split(' > ')).filter((name) => name !== '&gt;'),
+  );
   return Array.from(uniqueLocations);
 }
 
@@ -20,7 +22,7 @@ interface JobListProps {
   onPageChange: (page: number) => void;
 }
 
-const JobList: React.FC<JobListProps> = ({ jobs, currentPage, totalPages, onPageChange }) => {  
+const JobList: React.FC<JobListProps> = ({ jobs, currentPage, totalPages, onPageChange }) => {
   const [sortOrder, setSortOrder] = useState<'latest' | 'oldest' | null>(null);
   const [bookmarks, setBookmarks] = useState<Set<string>>(new Set());
 
@@ -28,6 +30,7 @@ const JobList: React.FC<JobListProps> = ({ jobs, currentPage, totalPages, onPage
     // Load bookmarks from localStorage on component mount
     const savedBookmarks = localStorage.getItem('jobBookmarks');
     if (savedBookmarks) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       setBookmarks(new Set(JSON.parse(savedBookmarks)));
     }
   }, []);
@@ -38,7 +41,7 @@ const JobList: React.FC<JobListProps> = ({ jobs, currentPage, totalPages, onPage
 
   const handleSort = (order: 'latest' | 'oldest') => {
     setSortOrder(order);
-    onPageChange(0);  // 정렬 변경 시 첫 페이지로
+    onPageChange(0); // 정렬 변경 시 첫 페이지로
   };
 
   const handlePageChange = ({ selected }: { selected: number }) => {
@@ -47,11 +50,11 @@ const JobList: React.FC<JobListProps> = ({ jobs, currentPage, totalPages, onPage
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('ko-KR', {year: 'numeric', month: 'long', day: 'numeric'});
+    return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
   };
 
   const toggleBookmark = (url: string) => {
-    setBookmarks(prevBookmarks => {
+    setBookmarks((prevBookmarks) => {
       const newBookmarks = new Set(prevBookmarks);
       if (newBookmarks.has(url)) {
         newBookmarks.delete(url);
@@ -76,45 +79,45 @@ const JobList: React.FC<JobListProps> = ({ jobs, currentPage, totalPages, onPage
 
   return (
     <div>
-      <div className="flex justify-end mb-4 space-x-4">
-        <button 
-          className={`font-pre-body-03 ${sortOrder === 'latest' ? 'text-blue-600 font-bold' : 'text-gray-600'}`}
+      <div className="mb-4 flex justify-end space-x-4">
+        <button
+          className={`font-pre-body-03 ${sortOrder === 'latest' ? 'font-bold text-blue-600' : 'text-gray-600'}`}
           onClick={() => handleSort('latest')}
         >
           최신순
         </button>
-        <button 
-          className={`font-pre-body-03 ${sortOrder === 'oldest' ? 'text-blue-600 font-bold' : 'text-gray-600'}`}
+        <button
+          className={`font-pre-body-03 ${sortOrder === 'oldest' ? 'font-bold text-blue-600' : 'text-gray-600'}`}
           onClick={() => handleSort('oldest')}
         >
           오래된순
         </button>
       </div>
-      <hr className="my-6 border-blue-700"/>
+      <hr className="my-6 border-blue-700" />
       <div className="grid grid-cols-2 gap-6">
         {sortedJobs.map((job) => (
-          <div 
-            key={job.url} 
-            className="p-6 border-01 radius-01 cursor-pointer relative"
+          <div
+            key={job.url}
+            className="relative cursor-pointer p-6 border-01 radius-01"
             onClick={() => window.open(job.url, '_blank')}
           >
             <button
-              className="absolute top-2 right-2 z-10"
+              className="absolute right-2 top-2 z-10"
               onClick={(e) => {
                 e.stopPropagation();
                 toggleBookmark(job.url);
               }}
             >
               <BookmarkIcon
-                className={`h-6 w-6 ${bookmarks.has(job.url) ? 'fill-blue-500 text-blue-500' : 'text-gray-400'}`}
+                className={`size-6 ${bookmarks.has(job.url) ? 'fill-blue-500 text-blue-500' : 'text-gray-400'}`}
               />
             </button>
-            <h3 className="font-pre-body-01 text-center mb-2">{job.title}</h3>
-            <p className="font-pre-body-02 text-center mb-2">{job.companyName}</p>
-            <p className="font-pre-body-03 text-center text-gray-600 mb-4">
+            <h3 className="font-pre-body-01 mb-2 text-center">{job.title}</h3>
+            <p className="font-pre-body-02 mb-2 text-center">{job.companyName}</p>
+            <p className="font-pre-body-03 mb-4 text-center text-gray-600">
               {job.jobName.slice(0, 3).join(', ')}
             </p>
-            <p className="font-pre-body-04 text-center text-gray-600 mb-4">
+            <p className="font-pre-body-04 mb-4 text-center text-gray-600">
               {cleanLocationNames(job.locationName).join(', ')}
             </p>
             <p className="font-pre-body-04 text-center text-gray-600">

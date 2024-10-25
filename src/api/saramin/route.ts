@@ -26,14 +26,16 @@ interface JobResponse {
   code: string;
 }
 
-export async function fetchJobs(params: FetchJobsParams): Promise<{ jobs: Job[]; totalPages: number }> {
+export async function fetchJobs(
+  params: FetchJobsParams,
+): Promise<{ jobs: Job[]; totalPages: number }> {
   try {
     console.log('Fetching jobs with params:', params);
     const response = await axios.get<JobResponse>(`${baseUrl}/job-info`, { params });
     // console.log('API response:', response.data);
     return {
       jobs: response.data.data.content,
-      totalPages: response.data.data.totalPages
+      totalPages: response.data.data.totalPages,
     };
   } catch (error) {
     if (axios.isAxiosError(error)) {

@@ -11,7 +11,7 @@ interface SearchProps {
 const Search: React.FC<SearchProps> = ({ search, handleFilterChange, applyFilters }) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      applyFilters(); 
+      applyFilters();
     }
   };
 
@@ -23,7 +23,7 @@ const Search: React.FC<SearchProps> = ({ search, handleFilterChange, applyFilter
         value={search}
         onChange={handleFilterChange}
         onKeyDown={handleKeyDown}
-        className="w-full p-2 border border-gray-300 rounded"
+        className="w-full rounded border border-gray-300 p-2"
         placeholder="검색어 입력"
       />
     </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 import Filters from '@/components/recruit/filters';
 import { Job } from '@/components/recruit/job';
@@ -21,32 +21,32 @@ const RecruitPage: React.FC = () => {
     sort: 'expirationDate,desc',
   });
 
-  useEffect(() => {
-    fetchJobData();
-  }, [currentPage, filters.techName, filters.locationName, filters.experienceMin, filters.experienceMax, filters.search, filters.sort]);
-
-  const fetchJobData = async () => {
+  const fetchJobData = useCallback(async () => {
     try {
       const response = await fetchJobs({
         page: currentPage - 1,
         size: 20,
-        ...filters  // 모든 필터 값 전달
+        ...filters,
       });
       setJobs(response.jobs);
       setTotalPages(response.totalPages);
     } catch (error) {
       console.error('Error fetching jobs:', error);
     }
-  };
+  }, [currentPage, filters]); // 의존성에 필요한 값들만 포함
 
-  const handlePageChange = (page: number) => {
+  useEffect(() => {
+    void fetchJobData();
+  }, [fetchJobData]); // fetchJobData만 의존성으로 설정
+
+  const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
-  };
+  }, []); // 의존성 없음
 
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     setCurrentPage(1);
-    fetchJobData();
-  };
+    void fetchJobData();
+  }, [fetchJobData]); // fetchJobData를 의존성으로 추가
 
   return (
     <div className="mx-auto max-w-7xl px-4">
@@ -55,16 +55,12 @@ const RecruitPage: React.FC = () => {
         <h1 className="font-pre-heading-01">&nbsp;둘러보기</h1>
       </div>
       <div className="flex space-x-4">
-        <div className="w-[200px] flex-shrink-0">
-          <Filters
-            filters={filters}
-            setFilters={setFilters}
-            applyFilters={applyFilters}
-          />
+        <div className="w-spacing-19 shrink-0">
+          <Filters filters={filters} setFilters={setFilters} applyFilters={applyFilters} />
         </div>
-        <div className="flex-grow">
-          <JobList 
-            jobs={jobs} 
+        <div className="grow">
+          <JobList
+            jobs={jobs}
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
