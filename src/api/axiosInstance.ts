@@ -1,10 +1,14 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import https from 'https';
 
 import { getTokenState } from '@/store/useTokenStore';
 
 const instance = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
   timeout: 5000,
+  httpAgent: new https.Agent({
+    rejectUnauthorized: false,
+  }),
   headers: {
     'Content-Type': 'application/json',
     'ngrok-skip-browser-warning': '69420',
