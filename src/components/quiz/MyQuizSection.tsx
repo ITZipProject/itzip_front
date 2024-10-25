@@ -3,7 +3,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 
-import { fetchMyQuizzes } from '@/api/quiz/fetchMyQuizzes';
+import { useMyQuizzes } from '@/api/quiz/fetchMyQuizzes';
 import { QuizData } from '@/types/quiz/quiz';
 
 import MakeQuizButton from './MakeQuizButton';
@@ -14,7 +14,7 @@ const MyQuizSection: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedQuiz, setSelectedQuiz] = useState<QuizData | null>(null);
 
-  const { data: quizzes } = fetchMyQuizzes();
+  const { data: quizzes, isLoading, isError } = useMyQuizzes();
 
   const settings = {
     dots: true,
@@ -28,6 +28,14 @@ const MyQuizSection: React.FC = () => {
     setIsModalOpen(false);
     setSelectedQuiz(null);
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error fetching quizzes</div>;
+  }
 
   return (
     <div className="flex flex-col gap-5">

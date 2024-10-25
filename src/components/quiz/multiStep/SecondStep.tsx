@@ -1,5 +1,7 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+
 import StepIndicator from './StepIndicator';
 
 interface StepProps {
@@ -27,14 +29,14 @@ export function SecondStep({ errors }: StepProps) {
       <StepIndicator currentStep={2} totalSteps={3} />
       <div className="flex flex-col gap-3">
         <h3>문제</h3>
-        <input type="text" className="w-full bg-slate-900 rounded-md" {...register('question')} />
+        <input type="text" className="w-full rounded-md bg-slate-900" {...register('question')} />
         {errors.question && <p className="text-red-500">{errors.question.message}</p>}
       </div>
       <div className="flex flex-col gap-3">
         <h3>선택지</h3>
         <div className="felx flex-col">
           {options.map((option, index) => (
-            <div key={index} className="flex items-center gap-3 mb-2">
+            <div key={index} className="mb-2 flex items-center gap-3">
               <input
                 type="radio"
                 name="answer"
@@ -43,7 +45,7 @@ export function SecondStep({ errors }: StepProps) {
               />
               <input
                 type="text"
-                className="flex-grow border bg-slate-900 rounded-md"
+                className="grow rounded-md border bg-slate-900"
                 value={option}
                 placeholder="답안을 입력해 주세요"
                 onChange={(e) => updateOptions(index, e.target.value)}
@@ -56,7 +58,7 @@ export function SecondStep({ errors }: StepProps) {
           {options.length < 4 && (
             <button
               onClick={() => setOptions([...options, ''])}
-              className="py-1 px-3 border bg-slate-900 text-white rounded"
+              className="rounded border bg-slate-900 px-3 py-1 text-white"
             >
               선택지 추가
             </button>

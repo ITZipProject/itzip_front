@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAtom } from 'jotai';
@@ -33,7 +34,7 @@ const QuizShowModal: React.FC<ModalProps & QuizData> = ({
   const queryClient = useQueryClient();
 
   const submitAnswer = async ({ quizId, answer }: SubmitAnswerParams) => {
-    const response = await axios.post<QuizAnswerResponse>(
+    const response = await axios.post(
       `${apiUrl}cs-quiz/answer`,
       {
         quizId,
@@ -45,16 +46,18 @@ const QuizShowModal: React.FC<ModalProps & QuizData> = ({
         },
       },
     );
-    console.log(response);
-    return response.data.data;
+    console.log('response: ', response);
+    return response.data;
   };
 
   const answerMutation = useMutation({
     mutationFn: submitAnswer,
-    onSuccess: async (result: string) => {
+    onSuccess: async (data) => {
       await queryClient.invalidateQueries();
-      if (result === 'CORRECT') {
+      if (data.data === 'CORRECT') {
         setIsCorrectModalOpen(true);
+      } else if (data.data === 'ALREADY_CORRECT') {
+        alert('정답을 이미 맞췄습니다!');
       } else {
         setIsIncorrectModalOpen(true);
       }

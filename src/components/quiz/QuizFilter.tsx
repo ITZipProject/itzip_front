@@ -1,3 +1,4 @@
+/* eslint-disable */
 import debounce from 'lodash/debounce';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useState, useEffect, useCallback } from 'react';

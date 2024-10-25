@@ -1,7 +1,22 @@
 import axios from 'axios';
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export const createQuiz = async ({ values, accessToken }: { values: any; accessToken: string }) => {
+interface QuizValues {
+  question: string;
+  difficulty: string;
+  answer: string;
+  options: string[];
+  category: number;
+}
+
+export const createQuiz = async ({
+  values,
+  accessToken,
+}: {
+  values: QuizValues;
+  accessToken: string;
+}) => {
+  console.log(accessToken);
   await axios.post(
     `${apiUrl}cs-quiz/`,
     {

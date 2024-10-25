@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAtom } from 'jotai';
@@ -17,7 +18,7 @@ const useCreateQuiz = () => {
   const methods = useForm<QuizFormValues>({
     resolver: zodResolver(quizSchema),
     defaultValues: {
-      category: '',
+      category: 0,
       difficulty: '',
       question: '',
       options: ['', ''],

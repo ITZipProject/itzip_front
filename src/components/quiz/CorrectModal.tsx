@@ -37,7 +37,7 @@ const CorrectModal: React.FC<CorrectModalProps> = ({ onClose, quizId }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
       <div className="flex h-3/4 w-1/2 flex-col items-center justify-center gap-40 rounded-3xl bg-zinc-900 p-7 shadow-lg">
         <div className="flex items-center justify-between">
           <div></div>
