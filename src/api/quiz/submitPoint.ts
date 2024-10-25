@@ -1,12 +1,25 @@
 import axios from 'axios';
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export const submitPoint = async ({ quizId, point }: { quizId: string; point: number }) => {
+export const submitPoint = async ({
+  quizId,
+  point,
+  accessToken,
+}: {
+  quizId: string;
+  point: number;
+  accessToken: string;
+}) => {
   await axios.post(
-    '/cs-quiz/point',
+    `${apiUrl}cs-quiz/point`,
     {
       quizId: quizId,
       points: point,
     },
-    { baseURL: process.env.NEXT_PUBLIC_API_URL },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
   );
 };

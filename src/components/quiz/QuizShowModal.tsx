@@ -1,11 +1,21 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import { useAtom } from 'jotai';
 import React, { useState } from 'react';
 
+import { accessTokenAtom } from '@/store/useTokenStore';
 import { QuizData, ModalProps, SubmitAnswerParams } from '@/types/quiz/quiz';
+
+interface QuizAnswerResponse {
+  data: {
+    result: string;
+  };
+}
 
 import CorrectModal from '../quiz/CorrectModal';
 import IncorrectModal from '../quiz/IncorrectModal';
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const QuizShowModal: React.FC<ModalProps & QuizData> = ({
   isOpen,
@@ -19,24 +29,30 @@ const QuizShowModal: React.FC<ModalProps & QuizData> = ({
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isCorrectModalOpen, setIsCorrectModalOpen] = useState(false);
   const [isIncorrectModalOpen, setIsIncorrectModalOpen] = useState(false);
+  const [accessToken] = useAtom(accessTokenAtom);
   const queryClient = useQueryClient();
 
   const submitAnswer = async ({ quizId, answer }: SubmitAnswerParams) => {
-    const response = await axios.post('http://3.39.78.0:8080/api/cs-quiz/answer', {
-      params: {
+    const response = await axios.post<QuizAnswerResponse>(
+      `${apiUrl}cs-quiz/answer`,
+      {
         quizId,
         answer,
       },
-    });
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    console.log(response);
     return response.data.data;
   };
 
-  if (!isOpen) return null;
-
   const answerMutation = useMutation({
     mutationFn: submitAnswer,
-    onSuccess: (result: string) => {
-      queryClient.invalidateQueries();
+    onSuccess: async (result: string) => {
+      await queryClient.invalidateQueries();
       if (result === 'CORRECT') {
         setIsCorrectModalOpen(true);
       } else {
@@ -47,6 +63,8 @@ const QuizShowModal: React.FC<ModalProps & QuizData> = ({
       console.error('Failed to submit answer:', error);
     },
   });
+
+  if (!isOpen) return null;
 
   const handleOptionClick = (index: number) => {
     setSelectedOption(index);
@@ -77,7 +95,7 @@ const QuizShowModal: React.FC<ModalProps & QuizData> = ({
   const difficultyLabel = difficulty === 1 ? 'Level 1' : difficulty === 2 ? 'Level 2' : 'Level 3';
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
       <div className="relative flex h-5/6 max-h-screen w-1/2 max-w-5xl flex-col items-center justify-start gap-10 overflow-auto rounded-lg bg-zinc-800 px-8 shadow-lg">
         <button className="absolute right-0 top-0 m-2" onClick={onClose}>
           X
