@@ -4,9 +4,9 @@ import Image from 'next/image';
 import googleIcon from '../../../../public/Google.png';
 import githubIcon from '../../../../public/github.png';
 import { useModal } from '@/lib/context/ModalContext';
-import AuthModal from '../auth/authModal';
 import { Margin } from '@/components/common/margin';
 import SmallAsk from '@/components/auth/smallAsk';
+import Modal from '../auth/authModal';
 
 interface SignUpModalProps {
   modalId: string;
@@ -18,7 +18,7 @@ const LoginModal: React.FC<SignUpModalProps> = ({ modalId }) => {
   if (!openModals.includes(modalId)) return null;
 
   return (
-    <AuthModal isOpen={true} onClose={() => closeModal(modalId)}>
+    <Modal isOpen={true} onClose={() => closeModal(modalId)}>
       <div>
         <h2 className="text-[#6C6C6C] font-[500] text-[16px]">ITZIP을 다채롭게 즐기기 위해서는</h2>
         <h2 className="text-[#171717] font-[700] text-[24px]">로그인이 필요해요!</h2>
@@ -49,7 +49,7 @@ const LoginModal: React.FC<SignUpModalProps> = ({ modalId }) => {
           <SmallAsk text="아직 계정이 없으신가요?" textColor="#0500E8" modalName="signUpModal" />
         </div>
       </div>
-    </AuthModal>
+    </Modal>
   );
 };
 
