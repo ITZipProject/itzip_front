@@ -1,8 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
+import { useAtom } from 'jotai';
 import React, { useState } from 'react';
 
 import { submitPoint } from '@/api/quiz/submitPoint';
 import { ratings } from '@/data/QuizData';
+import { accessTokenAtom } from '@/store/useTokenStore';
 
 interface CorrectModalProps {
   onClose: () => void;
@@ -11,9 +13,13 @@ interface CorrectModalProps {
 
 const CorrectModal: React.FC<CorrectModalProps> = ({ onClose, quizId }) => {
   const [selectedRate, setSelectedRate] = useState<number | null>(null);
+  const [accessToken] = useAtom(accessTokenAtom);
 
   const pointMutation = useMutation({
     mutationFn: submitPoint,
+    onSuccess: () => {
+      console.log('점수 제출 성공!');
+    },
     onError: (error: any) => {
       console.error('Failed to submit point:', error);
     },
@@ -24,6 +30,7 @@ const CorrectModal: React.FC<CorrectModalProps> = ({ onClose, quizId }) => {
       pointMutation.mutate({
         quizId,
         point: selectedRate,
+        accessToken,
       });
     }
     onClose();
