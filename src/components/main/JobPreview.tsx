@@ -87,8 +87,10 @@ const JobPreview: React.FC = () => {
   };
 
   return (
-    <div className="mt-8">
-      <h2 className="mb-4 text-xl font-bold">지금 뜨는 채용공고는?</h2>
+    <div className="mx-auto max-w-7xl px-4">
+      <h2 className="mb-8 ml-2 mt-24 text-3xl font-semibold leading-relaxed tracking-tight">
+        지금 뜨는 채용공고는?
+      </h2>
       <div className="mb-4 flex space-x-2 overflow-x-auto">
         {techStacks.map((tech) => (
           <button
