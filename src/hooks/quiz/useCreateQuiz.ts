@@ -1,14 +1,18 @@
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { quizSchema } from '@/lib/quiz/QuizValidationSchema';
-import { z } from 'zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAtom } from 'jotai';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { z } from 'zod';
+
 import { createQuiz } from '@/api/quiz/createQuiz';
+import { quizSchema } from '@/lib/quiz/QuizValidationSchema';
+import { accessTokenAtom } from '@/store/useTokenStore';
 
 type QuizFormValues = z.infer<typeof quizSchema>;
 
 const useCreateQuiz = () => {
   const queryClient = useQueryClient();
+  const [accessToken] = useAtom(accessTokenAtom);
 
   const methods = useForm<QuizFormValues>({
     resolver: zodResolver(quizSchema),
@@ -33,7 +37,7 @@ const useCreateQuiz = () => {
   });
 
   const handleCreateQuiz: SubmitHandler<QuizFormValues> = (values) => {
-    mutation.mutate(values);
+    mutation.mutate({ values, accessToken });
   };
 
   return {

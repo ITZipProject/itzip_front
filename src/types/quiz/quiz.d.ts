@@ -28,5 +28,4 @@ export interface ModalProps {
 export interface SubmitAnswerParams {
   quizId: string;
   answer: number;
-  userId: number;
 }
