@@ -35,17 +35,34 @@ const Experience: React.FC<ExperienceFilterProps> = ({
   return (
     <div className="experience-filter">
       <h3 className="font-pre-body-01 mb-2">경력</h3>
-      <div className="text-center font-bold mb-2">
-        {sliderValues[0] === sliderValues[1] 
+      <div className="mb-2 text-center font-bold">
+        {sliderValues[0] === sliderValues[1]
           ? formatExperience(sliderValues[0])
-          : `${formatExperience(sliderValues[0])} ~ ${formatExperience(sliderValues[1])}`
-        }
+          : `${formatExperience(sliderValues[0])} ~ ${formatExperience(sliderValues[1])}`}
       </div>
       <div className="mb-4">
         <ReactSlider
-          className="w-full h-10 flex items-center"
-          thumbClassName="w-6 h-6 bg-blue-500 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer"
-          trackClassName="h-2 bg-gray-200 rounded-full"
+          className="h-3 w-full"
+          thumbClassName="
+            absolute h-5 w-5 
+            -translate-y-1/4 
+            cursor-pointer 
+            rounded-full 
+            bg-blue-500 
+            focus:outline-none 
+            focus:ring-2 
+            focus:ring-blue-500 
+            focus:ring-opacity-50
+            hover:bg-blue-600
+            translate-y-0
+          "
+          trackClassName="
+            h-1 
+            top-1
+            rounded-full 
+            bg-gray-200
+            [&.slider-track-1]:bg-blue-500
+          "
           defaultValue={[0, 10]}
           value={sliderValues}
           onChange={handleSliderChange}
@@ -54,10 +71,6 @@ const Experience: React.FC<ExperienceFilterProps> = ({
           step={1}
           pearling
           minDistance={1}
-          renderThumb={(props, state) => (
-            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-2 py-1 rounded text-xs"{...props}>
-            </div>
-          )}
         />
       </div>
     </div>

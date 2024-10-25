@@ -33,65 +33,67 @@ export interface RegionCheckboxesRef {
   resetSelections: (newSelection: string[]) => void;
 }
 
-const RegionCheckboxes = forwardRef<RegionCheckboxesRef, RegionCheckboxesProps>(({ onSelectionChange }, ref) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredRegions, setFilteredRegions] = useState<Region[]>(regions);
-  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+const RegionCheckboxes = forwardRef<RegionCheckboxesRef, RegionCheckboxesProps>(
+  ({ onSelectionChange }, ref) => {
+    const [searchTerm] = useState('');
+    const [filteredRegions, setFilteredRegions] = useState<Region[]>(regions);
+    const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
 
-  useEffect(() => {
-    if (searchTerm.trim() === '') {
-      setFilteredRegions(regions);
-    } else {
-      const filtered = regions.filter(region =>
-        region.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredRegions(filtered);
-    }
-  }, [searchTerm]);
+    useEffect(() => {
+      if (searchTerm.trim() === '') {
+        setFilteredRegions(regions);
+      } else {
+        const filtered = regions.filter((region) =>
+          region.name.toLowerCase().includes(searchTerm.toLowerCase()),
+        );
+        setFilteredRegions(filtered);
+      }
+    }, [searchTerm]);
 
-  useImperativeHandle(ref, () => ({
-    resetSelections: (newSelection: string[]) => {
-      setSelectedRegions(newSelection);
-    }
-  }));
+    useImperativeHandle(ref, () => ({
+      resetSelections: (newSelection: string[]) => {
+        setSelectedRegions(newSelection);
+      },
+    }));
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
+    // const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //   setSearchTerm(e.target.value);
+    // };
 
-  const handleRegionChange = (regionName: string) => {
-    const updatedSelection = selectedRegions.includes(regionName)
-      ? selectedRegions.filter(r => r !== regionName)
-      : [...selectedRegions, regionName];
-    
-    setSelectedRegions(updatedSelection);
-    if (onSelectionChange) {
-      onSelectionChange(updatedSelection);
-    }
-  };
+    const handleRegionChange = (regionName: string) => {
+      const updatedSelection = selectedRegions.includes(regionName)
+        ? selectedRegions.filter((r) => r !== regionName)
+        : [...selectedRegions, regionName];
 
-  return (
-    <div className="region-checkboxes">
-      <div className="region-list">
-        {filteredRegions.map((region) => (
-          <div className="region mb-2" key={region.id}>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                id={region.id}
-                value={region.name}
-                checked={selectedRegions.includes(region.name)}
-                onChange={() => handleRegionChange(region.name)}
-                className="mr-2 cursor-pointer"
-              />
-              {region.name}
-            </label>
-          </div>
-        ))}
+      setSelectedRegions(updatedSelection);
+      if (onSelectionChange) {
+        onSelectionChange(updatedSelection);
+      }
+    };
+
+    return (
+      <div className="region-checkboxes">
+        <div className="region-list">
+          {filteredRegions.map((region) => (
+            <div className="region mb-2" key={region.id}>
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  id={region.id}
+                  value={region.name}
+                  checked={selectedRegions.includes(region.name)}
+                  onChange={() => handleRegionChange(region.name)}
+                  className="mr-2 cursor-pointer"
+                />
+                {region.name}
+              </label>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  },
+);
 
 RegionCheckboxes.displayName = 'RegionCheckboxes';
 
