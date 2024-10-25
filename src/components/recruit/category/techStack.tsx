@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+
 import { TechStack, loadTechStacks } from '../../../utils/techStacksLoader';
 
 interface TechStackFilterProps {

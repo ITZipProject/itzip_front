@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import { Job } from '@/components/recruit/job';
 
 const baseUrl = 'http://3.39.78.0:8080/api';

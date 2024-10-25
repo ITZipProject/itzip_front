@@ -1,10 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { Job } from '../recruit/job';
-import { fetchJobs } from '@/api/saramin/route';
 import { BookmarkIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+
+import { fetchJobs } from '@/api/saramin/route';
+
+import { Job } from '../recruit/job';
 
 // FetchJobsParams 인터페이스를 직접 정의합니다.
 interface FetchJobsParams {
@@ -21,7 +23,7 @@ interface FetchJobsParams {
 const techStacks = ['Spring', 'Java', 'React', 'Linux', 'Python', 'C++', 'Javascript', 'C'] as const;
 type TechStack = typeof techStacks[number];
 
-const MainPageJobPreview: React.FC = () => {
+const JobPreview: React.FC = () => {
   const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [selectedTech, setSelectedTech] = useState<TechStack>('Spring');
@@ -116,11 +118,13 @@ const MainPageJobPreview: React.FC = () => {
         ))}
       </div>
       <div className="flex justify-between mt-4">
-        <button className="text-blue-500" onClick={handleViewAllJobs}>채용공고 모두보기</button>
+        <button className="text-blue-500" onClick={handleViewAllJobs}>
+          채용공고 모두보기
+        </button>
         {/* <button className="text-blue-500">기술스택 설정</button> */}
       </div>
     </div>
   );
 };
 
-export default MainPageJobPreview;
+export default JobPreview;

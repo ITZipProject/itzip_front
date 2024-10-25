@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import TechStack from './category/techStack';
-import RegionCheckboxes from './category/region';
-import Search from './category/search';
+
 import Experience from './category/Experience';
+// import RegionCheckboxes from './category/region';
+import Search from './category/search';
+import TechStack from './category/techStack';
 
 interface FiltersProps {
   filters: {
