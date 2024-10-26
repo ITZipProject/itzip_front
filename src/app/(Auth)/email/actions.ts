@@ -1,7 +1,8 @@
 'use server';
 
-import instance from '@/api/axiosInstance';
 import { cookies } from 'next/headers';
+
+import instance from '@/api/axiosInstance';
 
 interface LoginResponse {
   data: {

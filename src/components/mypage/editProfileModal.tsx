@@ -1,12 +1,17 @@
 'use client';
+
+import { PhotoIcon } from '@heroicons/react/16/solid';
+import { useAtom } from 'jotai';
+import { useState } from 'react';
+
+import instance from '@/api/axiosInstance';
 import Modal from '@/app/(Auth)/auth/authModal';
 import { useModal } from '@/lib/context/ModalContext';
-import Input from '../common/input';
-import { useState } from 'react';
-import { PhotoIcon } from '@heroicons/react/16/solid';
-import instance from '@/api/axiosInstance';
-import { useAtom } from 'jotai';
 import { accessTokenAtom } from '@/store/useTokenStore';
+
+import Input from '../common/input';
+
+// ... 나머지 코드 ...
 
 interface ModalProps {
   modalId: string;
@@ -73,6 +78,7 @@ export const EditProfileModal: React.FC<ModalProps> = ({ modalId }: ModalProps) 
           },
         },
       );
+      console.log(res);
     } catch (err) {
       console.error(err);
     } finally {
@@ -91,6 +97,7 @@ export const EditProfileModal: React.FC<ModalProps> = ({ modalId }: ModalProps) 
           },
         },
       );
+      console.log(res);
     } catch (err) {
       console.error(err);
     } finally {
@@ -109,6 +116,7 @@ export const EditProfileModal: React.FC<ModalProps> = ({ modalId }: ModalProps) 
           },
         },
       );
+      console.log(res);
     } catch (err) {
       console.error(err);
     } finally {
@@ -131,24 +139,6 @@ export const EditProfileModal: React.FC<ModalProps> = ({ modalId }: ModalProps) 
     const { name, value } = e.target;
     if (name === 'nickname') setNickname(value);
     if (name === 'password') setPassword(value);
-  };
-  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,16}$/;
-
-  const validatePassword = (password: string) => {
-    return passwordRegex.test(password);
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newPassword = e.target.value;
-    setPassword(newPassword);
-
-    if (validatePassword(newPassword)) {
-      // 비밀번호가 유효한 경우
-      setIsPasswordValid(true);
-    } else {
-      // 비밀번호가 유효하지 않은 경우
-      setIsPasswordValid(false);
-    }
   };
 
   if (!openModals.includes(modalId)) return null;
@@ -177,7 +167,7 @@ export const EditProfileModal: React.FC<ModalProps> = ({ modalId }: ModalProps) 
   };
   return (
     <Modal isOpen={true} onClose={() => closeModal(modalId)}>
-      <form className="flex flex-col" onSubmit={onSubmit}>
+      <form className="flex flex-col" onSubmit={() => onSubmit}>
         <label
           htmlFor="photo"
           className="flex flex-col items-center justify-center size-40 cursor-pointer border-2 border-dashed border-neutral-300 rounded-full bg-center bg-cover text-neutral-300 self-center"
@@ -204,10 +194,7 @@ export const EditProfileModal: React.FC<ModalProps> = ({ modalId }: ModalProps) 
           value={nickname}
         />
         <EditButton
-          onClick={(e) => {
-            e.preventDefault(); // 이벤트의 기본 동작을 방지
-            void checkDuplicateNickname();
-          }}
+          onClick={() => checkDuplicateNickname}
           text={isLoading ? '닉네임 중복체크 하는 중...' : '닉네임 중복체크'}
         />
         <span>비밀번호</span>

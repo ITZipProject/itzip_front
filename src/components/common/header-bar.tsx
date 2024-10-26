@@ -1,12 +1,14 @@
 'use client';
+
+import { useAtom } from 'jotai';
+import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
 import { useModal } from '@/lib/context/ModalContext';
-import { useState, useEffect } from 'react';
-import { useAtom } from 'jotai';
 import { accessTokenAtom } from '@/store/useTokenStore';
 import logo from 'public/logo.svg';
-import Image from 'next/image';
 
 export default function HeaderBar() {
   const pathname = usePathname();
@@ -24,10 +26,10 @@ export default function HeaderBar() {
 
   return (
     <div
-      className={`h-[70px] ${headerBackgroundColor} flex justify-between w-full px-10 items-center border border-b-2 *:text-[8px] *:[516px]:text-[8px] *:md:text-[14px] *:xl:text-[16px] `}
+      className={`flex h-[70px] w-full items-center justify-between border border-b-2 px-10 ${headerBackgroundColor} *:text-8 *:[516px]:text-8 *:md:text-14 *:xl:text-16`}
     >
-      <Link className={`text-logo font-extrabold text-logoSize ${textColor}`} href={'/'}>
-        <Image src={logo} alt="logo" sizes="10" />
+      <Link className={`font-extrabold text-logoSize ${textColor} text-logo`} href={'/'}>
+        <Image src={logo as StaticImageData} alt="logo" className="size-20" />
       </Link>
       <div className={`flex gap-[56px] ${textColor} text-headerSize`}>
         <Link

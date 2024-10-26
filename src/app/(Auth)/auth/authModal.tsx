@@ -21,11 +21,11 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
   return createPortal(
     <div
-      className="fixed top-0 left-0 right-0 bottom-0 flex justify-center bg-Grey-1000 bg-opacity-Grey-alpha-80 items-center"
+      className="fixed inset-0 flex items-center justify-center bg-Grey-1000 bg-opacity-Grey-alpha-80"
       onClick={onClose}
     >
       <div
-        className="bg-white w-[435px] rounded-[24px] py-[50px] px-[40px] shadow-Shadow-modal"
+        className="w-[435px] rounded-radius-06 bg-white px-spacing-11 py-[50px] shadow-Shadow-modal"
         onClick={(e) => e.stopPropagation()}
       >
         {children}

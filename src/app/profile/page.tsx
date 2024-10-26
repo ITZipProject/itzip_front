@@ -1,16 +1,20 @@
 'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { logoutServerAction } from './actions';
-import { clearTokenAtom } from '@/store/useTokenStore';
+
 import { useAtom } from 'jotai';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
 import { useModal } from '@/lib/context/ModalContext';
+import { clearTokenAtom } from '@/store/useTokenStore';
+
+import { logoutServerAction } from './actions';
 
 export default function Profile() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [, clearTokens] = useAtom(clearTokenAtom);
   const { openModal } = useModal();
+
   const logOut = async () => {
     setLoading(true);
 
@@ -72,7 +76,7 @@ export default function Profile() {
         </div>
       </div>
       <div className="flex flex-col">
-        <button onClick={logOut} disabled={loading}>
+        <button onClick={() => logOut} disabled={loading}>
           {loading ? '로그아웃 중...' : '로그아웃'}
         </button>
         <button className="text-gray-300" onClick={out} disabled={loading}>

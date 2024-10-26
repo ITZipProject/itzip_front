@@ -7,9 +7,10 @@ import SmallAsk from '@/components/auth/smallAsk';
 import { Margin } from '@/components/common/margin';
 import { useModal } from '@/lib/context/ModalContext';
 
-import Modal from '../auth/authModal';
 import githubIcon from '../../../../public/github.png';
 import googleIcon from '../../../../public/Google.png';
+import Modal from '../auth/authModal';
+
 interface SignUpModalProps {
   modalId: string;
 }
