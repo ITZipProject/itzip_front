@@ -4,7 +4,7 @@ export const AuthButton: React.FC<
   React.ButtonHTMLAttributes<HTMLButtonElement> & { children: React.ReactNode }
 > = ({ children, ...props }) => (
   <button
-    className="primary-btn bg-Grey-100 h-spacing-12 disabled:bg-Grey-100 disabled:text-white disabled:cursor-not-allowed rounded-radius-03 text-white font-semibold text-14"
+    className="rounded-radius-03 bg-Grey-100 text-white text-14 font-semibold h-spacing-12 disabled:bg-Grey-100 disabled:text-white disabled:cursor-not-allowed primary-btn"
     {...props}
   >
     {children}

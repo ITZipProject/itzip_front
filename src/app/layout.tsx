@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
 import { ReactNode } from 'react';
+
 import Footer from '@/components/common/footer';
 import HeaderBar from '@/components/common/header-bar';
+import { Modals } from '@/components/common/Modals';
 import { ModalProvider } from '@/lib/context/ModalContext';
 
 import './globals.css';
-import { Modals } from '@/components/common/Modals';
 
+// pretendard 함수 관련 에러로 500이 떠서 일단 주석 처리
 interface RootLayoutProps {
   children: ReactNode;
 }
@@ -17,12 +18,12 @@ interface PageProps {
   [key: string]: unknown;
 }
 
-const pretendard = localFont({
-  src: '../fonts/PretendardVariable.woff2',
-  display: 'swap',
-  weight: '45 920',
-  variable: '--font-pretendard',
-});
+// const pretendard = localFont({
+//   src: '../fonts/PretendardVariable.woff2',
+//   display: 'swap',
+//   weight: '45 920',
+//   variable: '--font-pretendard',
+// });
 
 export const metadata: Metadata = {
   title: {
@@ -49,13 +50,15 @@ function isEditorPage(child: ReactNode): boolean {
   return false;
 }
 
-export default async function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({ children }: RootLayoutProps) {
   const shouldHideHeaderAndFooter = isEditorPage(children);
 
   return (
-    <html lang="ko" className={pretendard.variable}>
+    <html lang="ko" className={''}>
+      {/* pretendard.variable */}
       <link rel="icon" href="/favicon.png" sizes="any" />
-      <body className={`mx-auto overflow-x-hidden bg-white text-black ${pretendard.className}`}>
+      <body className={`mx-auto overflow-x-hidden bg-white text-black ${''}`}>
+        {/* pretendard.className */}
         <ModalProvider>
           {!shouldHideHeaderAndFooter && <HeaderBar />}
           {/* {!shouldHideHeaderAndFooter && <SmallHeader />} */}

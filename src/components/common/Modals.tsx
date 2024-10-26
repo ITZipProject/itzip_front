@@ -1,7 +1,8 @@
 import EmailLoginModal from '@/app/(Auth)/email/emailLoginModal';
 import LoginModal from '@/app/(Auth)/login/loginModal';
-import SignUpModal from '@/app/(Auth)/signup/signUpModal';
 import SignUpEmailModal from '@/app/(Auth)/signup/signupEmailModal';
+import SignUpModal from '@/app/(Auth)/signup/signUpModal';
+
 import { EditProfileModal } from '../mypage/editProfileModal';
 
 export const Modals = () => {
