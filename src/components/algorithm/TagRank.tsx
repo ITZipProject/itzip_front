@@ -77,14 +77,14 @@ const TagRank: React.FC<TagRankProps> = ({ onTagClick }) => {
   ];
 
   return (
-    <div className="flex flex-col gap-3 p-4 border border-zinc-600 rounded-xl h-full text-white bg-neutral-800">
-      <h3 className="text-lg font-semibold mb-2">태그별 추천 문제</h3>
-      <div className="w-full gap-1 border-gray-300 rounded-md shadow-md flex flex-col justify-between items-start">
+    <div className="flex h-full flex-col gap-3 rounded-xl border border-zinc-600 bg-neutral-800 p-4 text-white">
+      <h3 className="mb-2 text-lg font-semibold">태그별 추천 문제</h3>
+      <div className="flex w-full flex-col items-start justify-between gap-1 rounded-md border-gray-300 shadow-md">
         {tags.map((tag, index) => (
           <button
             key={index}
             onClick={() => onTagClick(tag.bojTagId, tag.displayName)}
-            className="text-gray-300 text-sm transition duration-300 ease-in-out transform hover:bg-gray-700 hover:text-white hover:shadow-lg hover:scale-110 p-1 rounded-md"
+            className="hover:bg-gray-700 rounded-md p-1 text-sm text-gray-300 transition duration-300 ease-in-out hover:scale-110 hover:text-white hover:shadow-lg"
           >
             {index + 1}. {tag.displayName}
           </button>

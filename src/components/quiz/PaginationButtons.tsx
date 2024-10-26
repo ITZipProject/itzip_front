@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable */
 import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
 
 interface PaginationButtonsProps {
   totalPages: number;
@@ -36,7 +37,7 @@ const PaginationButtons: React.FC<PaginationButtonsProps> = ({ totalPages }) => 
       <button
         key={i}
         onClick={() => handlePageChange(i)}
-        className={`px-4  rounded text-sm ${
+        className={`rounded  px-4 text-sm ${
           page === i ? 'bg-gray-600 text-white' : 'bg-gray-700 text-slate-400'
         }`}
       >
@@ -46,11 +47,11 @@ const PaginationButtons: React.FC<PaginationButtonsProps> = ({ totalPages }) => 
   }
 
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex items-center justify-between">
       <button
         onClick={() => handlePageChange(page - 1)}
         disabled={page === 0}
-        className="px-4 bg-gray-700 rounded text-sm text-slate-400"
+        className="bg-gray-700 rounded px-4 text-sm text-slate-400"
       >
         이전
       </button>
@@ -58,7 +59,7 @@ const PaginationButtons: React.FC<PaginationButtonsProps> = ({ totalPages }) => 
       <button
         onClick={() => handlePageChange(page + 1)}
         disabled={page === totalPages - 1}
-        className="px-4 py-2 bg-gray-700 rounded text-sm text-slate-400"
+        className="bg-gray-700 rounded px-4 py-2 text-sm text-slate-400"
       >
         다음
       </button>

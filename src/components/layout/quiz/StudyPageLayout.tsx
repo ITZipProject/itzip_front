@@ -1,23 +1,23 @@
-import React from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
 
 const StudyPageLayout = () => {
   return (
-    <div className="flex flex-col w-full gap-20 ">
-      <section className="flex flex-col justify-center items-center gap-10">
+    <div className="flex w-full flex-col gap-20 ">
+      <section className="flex flex-col items-center justify-center gap-10">
         <h3 className="text-5xl font-bold">우리는 개발자입니다.</h3>
         <div className="flex gap-5">
           <div>
             <Link href="/study/quiz">
-              <button className="border-2 rounded-xl px-5 py-2">
+              <button className="rounded-xl border-2 px-5 py-2">
                 <h3>문제 풀기</h3>
               </button>
             </Link>
           </div>
           <div>
             <Link href="/study/algorithm">
-              <button className="border-2 rounded-xl px-5 py-2">
+              <button className="rounded-xl border-2 px-5 py-2">
                 <h3>알고리즘</h3>
               </button>
             </Link>
@@ -34,7 +34,7 @@ const StudyPageLayout = () => {
         />
       </section>
 
-      <section className="flex flex-col justify-center items-center gap-8">
+      <section className="flex flex-col items-center justify-center gap-8">
         <h3 className="text-3xl font-bold">실전 같은 문제 풀이를 하나씩 쌓아가며,</h3>
         <h3 className="text-3xl font-semibold">
           개발자로서의 실력과 자신감을 차곡차곡 쌓아 올리세요.
@@ -92,7 +92,7 @@ const StudyPageLayout = () => {
         </div>
         <div>
           <Link href="/study/quiz">
-            <button className="border-2 rounded-xl px-5 py-2">
+            <button className="rounded-xl border-2 px-5 py-2">
               <h3>문제 풀기</h3>
             </button>
           </Link>

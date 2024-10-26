@@ -1,5 +1,6 @@
-import React from 'react';
 import Image from 'next/image';
+import React from 'react';
+
 import { useFetchMyAlgorithmData } from '@/api/algorithm/fetchMyAlgorithmData';
 
 interface Tier {
@@ -43,12 +44,12 @@ const MyData: React.FC = () => {
     { level: 31, name: 'Master' },
   ];
 
-  const { username, rating, rank, tier, profileImageUrl } = useFetchMyAlgorithmData();
+  const { username, rating, rank, tier } = useFetchMyAlgorithmData();
 
   const tierName = tiers.find((v) => v.level === tier)?.name || 'unrated';
 
   return (
-    <div className="w-full flex flex-col gap-8 justify-center items-center border border-zinc-600 rounded-3xl bg-zinc-700 p-5">
+    <div className="flex w-full flex-col items-center justify-center gap-8 rounded-3xl border border-zinc-600 bg-zinc-700 p-5">
       <div>
         <Image
           src={'/defaultProfileImage.jpg'}
@@ -59,7 +60,7 @@ const MyData: React.FC = () => {
         />
       </div>
       <h1>{username}</h1>
-      <div className="flex flex-col w-full justify-center items-start gap-4 px-5">
+      <div className="flex w-full flex-col items-start justify-center gap-4 px-5">
         <p>
           {tierName} {rating}
         </p>

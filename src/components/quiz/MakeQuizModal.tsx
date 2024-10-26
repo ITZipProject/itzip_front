@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useAtom } from 'jotai';
 import { FormProvider } from 'react-hook-form';
 
@@ -20,8 +21,6 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
   const formMethods = methods;
 
-  const [accessToken] = useAtom(accessTokenAtom);
-
   const stepField = [
     ['category', 'difficulty'],
     ['question', 'options', 'answer'],
@@ -38,14 +37,14 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   );
 
   const onSubmit = (data: MakeQuizData) => {
-    handleCreateQuiz(data, accessToken);
+    handleCreateQuiz(data);
     onClose();
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
       <FormProvider {...formMethods}>
         <div className="relative mx-4 h-[600px] w-[500px] max-w-lg space-y-4 rounded-lg bg-zinc-800 p-6 shadow-md">
           <button

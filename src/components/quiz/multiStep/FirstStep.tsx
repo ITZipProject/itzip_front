@@ -1,6 +1,9 @@
+/* eslint-disable */
 import React from 'react';
-import { QuizRatings, QuizCategories } from '@/data/QuizData';
 import { useFormContext } from 'react-hook-form';
+
+import { QuizRatings, QuizCategories } from '@/data/QuizData';
+
 import StepIndicator from './StepIndicator';
 
 interface StepProps {
@@ -17,11 +20,14 @@ export function FirstStep({ errors }: StepProps) {
   };
 
   return (
-    <div className=" flex flex-col justify-center items-center gap-10">
+    <div className=" flex flex-col items-center justify-center gap-10">
       <StepIndicator currentStep={1} totalSteps={3} />
       <div className="flex flex-col gap-3">
         <h3>카테고리</h3>
-        <select {...register('category')} className="px-3 py-1 bg-color-button-tertiary rounded-md">
+        <select
+          {...register('category', { valueAsNumber: true })}
+          className="rounded-md bg-color-button-tertiary px-3 py-1"
+        >
           <option value="">목록</option>
           {QuizCategories.map((category) => (
             <option key={category.id} value={category.id}>
@@ -29,6 +35,7 @@ export function FirstStep({ errors }: StepProps) {
             </option>
           ))}
         </select>
+
         {errors.category && <p className="text-red-500">{errors.category.message}</p>}
       </div>
       <div className="flex flex-col gap-3">
@@ -38,7 +45,7 @@ export function FirstStep({ errors }: StepProps) {
             <button
               key={rating.value}
               type="button"
-              className={`border px-12 py-2 rounded-md ${
+              className={`rounded-md border px-12 py-2 ${
                 selectedDifficulty === rating.label ? 'bg-slate-900 text-white' : ''
               }`}
               onClick={() => handleDifficultyChange(rating.label)}

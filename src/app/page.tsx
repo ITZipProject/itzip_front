@@ -1,13 +1,13 @@
 'use client';
 
 import BlogPreview from '@/components/main/BlogPreview';
-import MainPageJobPreview from '@/components/main/MainPageJobPreview';
+import JobPreview from '@/components/main/JobPreview';
 import StudyPreview from '@/components/main/StudyPreview';
 
 export default function Home() {
   return (
     <div>
-      <MainPageJobPreview />
+      <JobPreview />
       <BlogPreview />
       <StudyPreview />
     </div>

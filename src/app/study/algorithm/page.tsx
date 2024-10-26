@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import TagRank from '../../../components/algorithm/TagRank';
+
 import Main from '../../../components/algorithm/Main';
 import MyData from '../../../components/algorithm/MyData';
+import TagRank from '../../../components/algorithm/TagRank';
 
 const Home: React.FC = () => {
   const [tagId, setTagId] = useState<number | undefined>(undefined);
@@ -20,16 +21,16 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="flex gap-11 p-12 w-full text-white bg-neutral-800">
-      <div className="w-1/4 flex flex-col justify-start items-center">
-        <section className="w-full m-10">
+    <div className="flex w-full gap-11 bg-neutral-800 p-12 text-white">
+      <div className="flex w-1/4 flex-col items-center justify-start">
+        <section className="m-10 w-full">
           <MyData />
         </section>
         <section className="w-full">
           <TagRank onTagClick={handleTagClick} />
         </section>
       </div>
-      <section className="w-3/4 h-full">
+      <section className="h-full w-3/4">
         <Main tagId={tagId} displayName={displayName} resetTag={resetTag} />
       </section>
     </div>
