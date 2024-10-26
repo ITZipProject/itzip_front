@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import TechStack from './category/techStack';
-import RegionCheckboxes from './category/region';
-import Search from './category/search';
+
 import Experience from './category/Experience';
+// import RegionCheckboxes from './category/region';
+import Search from './category/search';
+import TechStack from './category/techStack';
 
 interface FiltersProps {
   filters: {
@@ -24,31 +25,34 @@ interface TechStackFilterRef {
 }
 
 const Filters: React.FC<FiltersProps> = ({ filters, setFilters, applyFilters }) => {
-  const [selectedTechStacks, setSelectedTechStacks] = useState<string[]>(filters.techName ? filters.techName.split(',') : []);
+  const [selectedTechStacks, setSelectedTechStacks] = useState<string[]>(
+    filters.techName ? filters.techName.split(',') : [],
+  );
   const techStackRef = useRef<TechStackFilterRef | null>(null);
 
   const handleTechStackChange = (selected: string[]) => {
     setSelectedTechStacks(selected);
-    setFilters(prev => ({ ...prev, techName: selected.join(',') }));
+    setFilters((prev) => ({ ...prev, techName: selected.join(',') }));
   };
 
   const handleExperienceChange = (min: number, max: number) => {
-    setFilters(prev => ({ ...prev, experienceMin: min, experienceMax: max }));
+    setFilters((prev) => ({ ...prev, experienceMin: min, experienceMax: max }));
   };
 
-  const handleRegionChange = (selected: string[]) => {
-    setFilters(prev => ({ ...prev, locationName: selected }));
-  };
+  // 지역 체크박스
+  // const handleRegionChange = (selected: string[]) => {
+  //   setFilters(prev => ({ ...prev, locationName: selected }));
+  // };
 
   const handleRemoveTechStack = (techName: string) => {
-    const updatedTechStacks = selectedTechStacks.filter(tech => tech !== techName);
+    const updatedTechStacks = selectedTechStacks.filter((tech) => tech !== techName);
     setSelectedTechStacks(updatedTechStacks);
-    setFilters(prev => ({ ...prev, techName: updatedTechStacks.join(',') }));
+    setFilters((prev) => ({ ...prev, techName: updatedTechStacks.join(',') }));
     techStackRef.current?.resetSelections(updatedTechStacks);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters(prev => ({ ...prev, search: e.target.value }));
+    setFilters((prev) => ({ ...prev, search: e.target.value }));
   };
 
   const resetFilters = () => {
@@ -66,29 +70,32 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters, applyFilters }) 
 
   return (
     <div>
-      <div className="px-2 flex justify-between mb-4">
+      <div className="mb-4 flex justify-between px-2">
         <h2 className="font-pre-heading-03">필터</h2>
         <button
-          className="font-pre-heading-03 text-gray-800 rounded hover:bg-blue-300"
+          className="font-pre-heading-03 rounded text-gray-800 hover:bg-blue-300"
           onClick={resetFilters}
         >
           초기화
         </button>
       </div>
-      <Search 
-        search={filters.search} 
+      <Search
+        search={filters.search}
         handleFilterChange={handleSearchChange}
-        applyFilters={applyFilters} 
+        applyFilters={applyFilters}
       />
       <div className="mb-4 p-4 border-01 radius-01">
         <h3 className="font-pre-body-01 mb-2">기술 스택</h3>
         {selectedTechStacks.length > 0 && (
           <div className="selected-tech-stacks mb-2">
             {selectedTechStacks.map((techName) => (
-              <span key={techName} className="bg-blue-100 text-blue-800 px-2 py-1 rounded mr-2 mb-2 inline-block">
+              <span
+                key={techName}
+                className="mb-2 mr-2 inline-block rounded bg-blue-100 px-2 py-1 text-blue-800"
+              >
                 {techName}
-                <button 
-                  className="ml-1 text-blue-600 font-bold"
+                <button
+                  className="ml-1 font-bold text-blue-600"
                   onClick={() => handleRemoveTechStack(techName)}
                 >
                   ×
@@ -97,10 +104,7 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters, applyFilters }) 
             ))}
           </div>
         )}
-        <TechStack
-          ref={techStackRef}
-          onSelectionChange={handleTechStackChange}
-        />
+        <TechStack ref={techStackRef} onSelectionChange={handleTechStackChange} />
       </div>
       {/* <div className="mb-4 p-4 border-01 radius-01">
         <h3 className="font-pre-body-01 mb-2">지역</h3>

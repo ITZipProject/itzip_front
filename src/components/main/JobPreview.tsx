@@ -1,10 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { Job } from '../recruit/job';
-import { fetchJobs } from '@/api/saramin/route';
 import { BookmarkIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+
+import { fetchJobs } from '@/api/saramin/route';
+
+import { Job } from '../recruit/job';
 
 // FetchJobsParams 인터페이스를 직접 정의합니다.
 interface FetchJobsParams {
@@ -18,10 +20,19 @@ interface FetchJobsParams {
   search?: string;
 }
 
-const techStacks = ['Spring', 'Java', 'React', 'Linux', 'Python', 'C++', 'Javascript', 'C'] as const;
-type TechStack = typeof techStacks[number];
+const techStacks = [
+  'Spring',
+  'Java',
+  'React',
+  'Linux',
+  'Python',
+  'C++',
+  'Javascript',
+  'C',
+] as const;
+type TechStack = (typeof techStacks)[number];
 
-const MainPageJobPreview: React.FC = () => {
+const JobPreview: React.FC = () => {
   const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [selectedTech, setSelectedTech] = useState<TechStack>('Spring');
@@ -34,7 +45,7 @@ const MainPageJobPreview: React.FC = () => {
           page: 1,
           size: 3,
           sort: 'latest',
-          techName: selectedTech
+          techName: selectedTech,
         };
         const { jobs: fetchedJobs } = await fetchJobs(params);
         setJobs(fetchedJobs);
@@ -43,12 +54,13 @@ const MainPageJobPreview: React.FC = () => {
       }
     };
 
-    fetchJobsData();
+    void fetchJobsData();
   }, [selectedTech]);
 
   useEffect(() => {
     const savedBookmarks = localStorage.getItem('jobBookmarks');
     if (savedBookmarks) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       setBookmarks(new Set(JSON.parse(savedBookmarks)));
     }
   }, []);
@@ -58,7 +70,7 @@ const MainPageJobPreview: React.FC = () => {
   };
 
   const toggleBookmark = (url: string) => {
-    setBookmarks(prevBookmarks => {
+    setBookmarks((prevBookmarks) => {
       const newBookmarks = new Set(prevBookmarks);
       if (newBookmarks.has(url)) {
         newBookmarks.delete(url);
@@ -75,13 +87,15 @@ const MainPageJobPreview: React.FC = () => {
   };
 
   return (
-    <div className="mt-8">
-      <h2 className="text-xl font-bold mb-4">지금 뜨는 채용공고는?</h2>
-      <div className="flex space-x-2 mb-4 overflow-x-auto">
-        {techStacks.map(tech => (
+    <div className="mx-auto max-w-7xl px-4">
+      <h2 className="mb-8 ml-2 mt-24 text-3xl font-semibold leading-relaxed tracking-tight">
+        지금 뜨는 채용공고는?
+      </h2>
+      <div className="mb-4 flex space-x-2 overflow-x-auto">
+        {techStacks.map((tech) => (
           <button
             key={tech}
-            className={`px-3 py-1 rounded-full ${
+            className={`rounded-full px-3 py-1 ${
               selectedTech === tech ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
             }`}
             onClick={() => setSelectedTech(tech)}
@@ -91,36 +105,38 @@ const MainPageJobPreview: React.FC = () => {
         ))}
       </div>
       <div className="grid grid-cols-3 gap-4">
-        {jobs.map(job => (
-          <div 
-            key={job.url} 
-            className="border p-4 rounded-lg relative cursor-pointer"
+        {jobs.map((job) => (
+          <div
+            key={job.url}
+            className="relative cursor-pointer rounded-lg border p-4"
             onClick={() => handleJobClick(job.url)}
           >
             <button
-              className="absolute top-2 right-2"
+              className="absolute right-2 top-2"
               onClick={(e) => {
                 e.stopPropagation();
                 toggleBookmark(job.url);
               }}
             >
               <BookmarkIcon
-                className={`h-5 w-5 ${bookmarks.has(job.url) ? 'fill-blue-500 text-blue-500' : 'text-gray-400'}`}
+                className={`size-5 ${bookmarks.has(job.url) ? 'fill-blue-500 text-blue-500' : 'text-gray-400'}`}
               />
             </button>
-            <h3 className="font-bold mb-2">{job.title}</h3>
+            <h3 className="mb-2 font-bold">{job.title}</h3>
             <p className="text-sm text-gray-600">{job.companyName}</p>
-            <p className="text-sm text-gray-500 mt-2">{job.experienceName}</p>
+            <p className="mt-2 text-sm text-gray-500">{job.experienceName}</p>
             <p className="text-sm text-gray-500">{job.locationName[0]}</p>
           </div>
         ))}
       </div>
-      <div className="flex justify-between mt-4">
-        <button className="text-blue-500" onClick={handleViewAllJobs}>채용공고 모두보기</button>
+      <div className="mt-4 flex justify-between">
+        <button className="text-blue-500" onClick={handleViewAllJobs}>
+          채용공고 모두보기
+        </button>
         {/* <button className="text-blue-500">기술스택 설정</button> */}
       </div>
     </div>
   );
 };
 
-export default MainPageJobPreview;
+export default JobPreview;

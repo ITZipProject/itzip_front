@@ -3,7 +3,7 @@ import { z } from 'zod';
 const hasUniqueValues = (arr: string[]) => new Set(arr).size === arr.length;
 
 export const quizSchema = z.object({
-  category: z.string().min(1, { message: '카테고리를 선택해 주세요.' }),
+  category: z.number().int().min(1, { message: '카테고리를 선택해 주세요.' }),
   difficulty: z.string().min(1, { message: '난이도를 선택해 주세요.' }),
   question: z.string().min(1, { message: '문제를 입력해 주세요!' }),
   options: z

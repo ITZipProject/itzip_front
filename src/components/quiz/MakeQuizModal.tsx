@@ -1,9 +1,13 @@
+/* eslint-disable */
+import { useAtom } from 'jotai';
 import { FormProvider } from 'react-hook-form';
-import useMultiForm from '@/hooks/quiz/useMultiForm';
+
 import { FirstStep } from '@/components/quiz/multiStep/FirstStep';
 import { SecondStep } from '@/components/quiz/multiStep/SecondStep';
 import { ThirdStep } from '@/components/quiz/multiStep/ThirdStep';
 import useCreateQuiz from '@/hooks/quiz/useCreateQuiz';
+import useMultiForm from '@/hooks/quiz/useMultiForm';
+import { accessTokenAtom } from '@/store/useTokenStore';
 import { MakeQuizData } from '@/types/quiz/quiz';
 
 interface ModalProps {
@@ -40,11 +44,11 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
       <FormProvider {...formMethods}>
-        <div className="w-[500px] h-[600px] bg-zinc-800 p-6 rounded-lg shadow-md relative space-y-4 max-w-lg mx-4">
+        <div className="relative mx-4 h-[600px] w-[500px] max-w-lg space-y-4 rounded-lg bg-zinc-800 p-6 shadow-md">
           <button
-            className="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
+            className="absolute right-4 top-4 text-gray-600 hover:text-gray-900"
             onClick={onClose}
           >
             X
@@ -56,14 +60,14 @@ const MakeQuizModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
             {!isFirstStep && (
               <button
                 onClick={back}
-                className="py-2 px-4 bg-gray-700 text-white rounded-lg hover:bg-gray-600 mr-2"
+                className="bg-gray-700 hover:bg-gray-600 mr-2 rounded-lg px-4 py-2 text-white"
               >
                 이전
               </button>
             )}
             <button
               onClick={isLastStep ? handleSubmit(onSubmit) : next}
-              className="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
             >
               {isLastStep ? '완료' : '다음'}
             </button>

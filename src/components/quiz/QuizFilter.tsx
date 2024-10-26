@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+/* eslint-disable */
 import debounce from 'lodash/debounce';
-import { QuizCategories, QuizRatings } from '@/data/QuizData';
 import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useState, useEffect, useCallback } from 'react';
+
+import { QuizCategories, QuizRatings } from '@/data/QuizData';
 
 const QuizFilter: React.FC = () => {
   const router = useRouter();
@@ -66,30 +68,30 @@ const QuizFilter: React.FC = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex justify-between items-center mb-6 px-6">
-        <h3 className="font-semibold text-xl">필터</h3>
+      <div className="mb-6 flex items-center justify-between px-6">
+        <h3 className="text-xl font-semibold">필터</h3>
         <button
           onClick={resetFilters}
-          className="bg-white px-4 py-2 bg-gray-700 rounded text-l text-slate-700 "
+          className="bg-gray-700 text-l rounded bg-white px-4 py-2 text-slate-700 "
         >
           초기화
         </button>
       </div>
-      <div className="w-full flex flex-col border-2 border-gray-700 rounded-lg p-6">
-        <div className="flex flex-col justify-center items-center gap-4">
-          <div className="w-full flex flex-col gap-8">
+      <div className="flex w-full flex-col rounded-lg border-2 border-gray-700 p-6">
+        <div className="flex flex-col items-center justify-center gap-4">
+          <div className="flex w-full flex-col gap-8">
             <h3 className="text-xl font-semibold text-gray-500">퀴즈 검색</h3>
             <input
               type="text"
-              className="p-4 rounded-lg border-none outline-none box-border placeholder:text-sm placeholder:text-gray-400 bg-neutral-700"
+              className="box-border rounded-lg border-none bg-neutral-700 p-4 outline-none placeholder:text-sm placeholder:text-gray-400"
               placeholder="검색어를 입력하세요..."
               value={searchTerm}
               onChange={handleSearchTermChange}
             />
-            <div className="border-b my-5"></div>
+            <div className="my-5 border-b"></div>
           </div>
 
-          <div className="w-full flex flex-col gap-4">
+          <div className="flex w-full flex-col gap-4">
             <h3 className="text-xl font-semibold text-gray-500">난이도</h3>
             {QuizRatings.map((rating) => (
               <label key={rating.value} className="flex items-center gap-2">
@@ -103,10 +105,10 @@ const QuizFilter: React.FC = () => {
                 {rating.label}
               </label>
             ))}
-            <div className="border-b my-5"></div>
+            <div className="my-5 border-b"></div>
           </div>
 
-          <div className="w-full flex flex-col gap-4">
+          <div className="flex w-full flex-col gap-4">
             <h3 className="text-xl font-semibold text-gray-500">카테고리</h3>
             {QuizCategories.map((cat) => (
               <label key={cat.id} className="flex items-center gap-2">

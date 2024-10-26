@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+/* eslint-disable */
 import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 

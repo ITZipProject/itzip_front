@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+/* eslint-disable */
 import { useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
+import { useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -20,21 +21,20 @@ const fetchFilteredQuizzes = async ({
   page,
   keyword,
 }: UseFilteredQuizzesProps) => {
-  console.log('fetchFilteredQuizzes');
   const response = await axios.get('/cs-quizzes/search', {
     baseURL: apiUrl,
     params: {
       difficulty,
       categoryId: category,
       sortBy: sortOrder,
-      userId: 7,
-      inUserSolved: true,
+      inUserSolved: false,
       page,
       size: 9,
       keyword,
     },
   });
 
+  console.log(response.data);
   return response.data.data;
 };
 

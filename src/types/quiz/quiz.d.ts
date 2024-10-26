@@ -13,7 +13,7 @@ export interface QuizData {
 }
 
 export interface MakeQuizData {
-  category: string;
+  category: number;
   difficulty: string;
   question: string;
   options: string[];
@@ -28,5 +28,4 @@ export interface ModalProps {
 export interface SubmitAnswerParams {
   quizId: string;
   answer: number;
-  userId: number;
 }
