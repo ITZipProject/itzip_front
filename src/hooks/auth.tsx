@@ -1,58 +1,45 @@
-import {
-  errorsAtom,
-  formValuesAtom,
-  isOkAtom,
-  loadingAtom,
-  agreeAtom,
-  agreeErrorAtom,
-} from '@/atoms/formAtoms';
-import { PASSWORD_MIN_LENGTH, PASSWORD_REGEX, PASSWORD_REGEX_ERROR } from '@/lib/constants';
-import { FormValues } from '@/types/auth';
 import axios, { AxiosError } from 'axios';
 import { useAtom } from 'jotai';
-import { useRouter } from 'next/navigation';
-import { z } from 'zod';
 
-import { useModal } from '@/lib/context/ModalContext';
 import instance from '@/api/axiosInstance';
+import { errorsAtom, formValuesAtom, isOkAtom, loadingAtom } from '@/atoms/formAtoms';
+import { useModal } from '@/lib/context/ModalContext';
+import { FormValues } from '@/types/auth';
 
-const formSchema = z
-  .object({
-    email: z
-      .string()
-      .min(1, '이메일을 입력해주세요.')
-      .email('올바른 이메일 형식이 아닙니다.')
-      .toLowerCase(),
-    password: z
-      .string()
-      .min(1, '비밀번호를 입력해주세요.')
-      .min(PASSWORD_MIN_LENGTH, `비밀번호는 최소 ${PASSWORD_MIN_LENGTH}자 이상이어야 합니다.`)
-      .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
-    passwordCheck: z
-      .string()
-      .min(1, '비밀번호 확인을 입력해주세요.')
-      .min(PASSWORD_MIN_LENGTH, `비밀번호 확인는 최소 ${PASSWORD_MIN_LENGTH}자 이상이어야 합니다.`),
-    authCode: z.string().min(1, '인증 코드를 입력해주세요.'),
-    agreeTerms: z.boolean(),
-  })
-  .refine((data) => data.password === data.passwordCheck, {
-    message: '비밀번호가 일치하지 않습니다.',
-    path: ['passwordCheck'],
-  })
-  .refine((data) => data.agreeTerms === true, {
-    message: '약관에 모두 동의해야 합니다.',
-    path: ['agreeTerms'],
-  });
+// const formSchema = z
+//   .object({
+//     email: z
+//       .string()
+//       .min(1, '이메일을 입력해주세요.')
+//       .email('올바른 이메일 형식이 아닙니다.')
+//       .toLowerCase(),
+//     password: z
+//       .string()
+//       .min(1, '비밀번호를 입력해주세요.')
+//       .min(PASSWORD_MIN_LENGTH, `비밀번호는 최소 ${PASSWORD_MIN_LENGTH}자 이상이어야 합니다.`)
+//       .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
+//     passwordCheck: z
+//       .string()
+//       .min(1, '비밀번호 확인을 입력해주세요.')
+//       .min(PASSWORD_MIN_LENGTH, `비밀번호 확인는 최소 ${PASSWORD_MIN_LENGTH}자 이상이어야 합니다.`),
+//     authCode: z.string().min(1, '인증 코드를 입력해주세요.'),
+//     agreeTerms: z.boolean(),
+//   })
+//   .refine((data) => data.password === data.passwordCheck, {
+//     message: '비밀번호가 일치하지 않습니다.',
+//     path: ['passwordCheck'],
+//   })
+//   .refine((data) => data.agreeTerms === true, {
+//     message: '약관에 모두 동의해야 합니다.',
+//     path: ['agreeTerms'],
+//   });
 
 export const useSignUp = () => {
   const [formValues, setFormValues] = useAtom(formValuesAtom);
-  const [errors, setErrors] = useAtom(errorsAtom);
+  const [errors] = useAtom(errorsAtom);
   const [isLoading, setIsLoading] = useAtom(loadingAtom);
   const [isOk, setIsOk] = useAtom(isOkAtom);
-  const [isChecked] = useAtom(agreeAtom);
-  const [, setAgreeError] = useAtom(agreeErrorAtom);
-  const router = useRouter();
-  const { openModal, closeModal } = useModal();
+  const { closeModal } = useModal();
   const onClickResetButton = (field: keyof FormValues) => {
     setFormValues((prev) => ({ ...prev, [field]: '' }));
   };
@@ -171,42 +158,6 @@ export const useSignUp = () => {
       setIsLoading((prev) => ({ ...prev, signUp: false }));
     }
   };
-  const onSubmitSignUpButton = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    // if (!isChecked.service || !isChecked.private) {
-    //   setAgreeError('약관에 모두 동의해야 합니다.');
-    //   return;
-    // }
-
-    setIsLoading((prev) => ({ ...prev, join: true })); // 로딩 상태 시작
-
-    try {
-      formSchema.parse(formValues);
-      setErrors({ email: '', password: '', passwordCheck: '', authCode: '', agreeTerms: false });
-
-      await signUp(); // 비동기 함수 await 사용
-      // 회원가입 성공 처리 (예: 로그인 페이지로 이동)
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const newErrors: Partial<Record<keyof FormValues, string | boolean>> = {};
-        error.errors.forEach((err) => {
-          if (err.path.length === 1) {
-            const field = err.path[0] as keyof FormValues;
-            newErrors[field] = field === 'agreeTerms' ? false : err.message;
-          } else if (err.path.length === 0) {
-            newErrors.passwordCheck = err.message;
-          }
-        });
-        setErrors(newErrors as unknown as FormValues);
-      } else {
-        // Zod 오류가 아닌 경우의 처리
-        console.error('회원가입 중 오류 발생:', error);
-      }
-    } finally {
-      setIsLoading((prev) => ({ ...prev, join: false }));
-      // 로딩 상태 종료
-    }
-  };
 
   return {
     formValues,
@@ -218,7 +169,6 @@ export const useSignUp = () => {
     checkEmailDuplicate,
     sendAuthCode,
     verifyAuthCode,
-    onSubmitSignUpButton,
     signUp,
   };
 };
