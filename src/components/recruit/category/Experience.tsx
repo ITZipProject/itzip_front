@@ -44,26 +44,24 @@ const Experience: React.FC<ExperienceFilterProps> = ({
         <ReactSlider
           className="h-3 w-full"
           thumbClassName="
-            absolute h-5 w-5 
-            -translate-y-1/4 
-            cursor-pointer 
-            rounded-full 
-            bg-blue-500 
-            focus:outline-none 
-            focus:ring-2 
-            focus:ring-blue-500 
-            focus:ring-opacity-50
-            hover:bg-blue-600
-            translate-y-0
-          "
+          absolute h-5 w-5 
+          -translate-y-1/4 
+          cursor-pointer 
+          rounded-full 
+          bg-blue-700 
+          focus:outline-none 
+          focus:ring-2 
+          focus:ring-blue-500 
+          focus:ring-opacity-50
+          hover:bg-blue-600
+        "
           trackClassName="
-            h-1 
-            top-1
-            rounded-full 
-            bg-gray-200
-            [&.slider-track-1]:bg-blue-500
-          "
-          defaultValue={[0, 10]}
+          h-1 
+          top-1
+          rounded-full 
+          bg-gray-200
+          [&.slider-track-1]:bg-blue-500
+        "
           value={sliderValues}
           onChange={handleSliderChange}
           min={0}
