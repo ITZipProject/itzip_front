@@ -1,17 +1,9 @@
 import Image from 'next/image';
 import React from 'react';
 
-interface BlogPaginationProps {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-}
+import { PaginationProps } from '@/types/blog/common';
 
-const BlogPagination: React.FC<BlogPaginationProps> = ({
-  currentPage,
-  totalPages,
-  onPageChange,
-}) => {
+const BlogPagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
   const getPageNumbers = () => {
     const pageNumbers = [];
     let startPage = Math.max(1, currentPage - 2);

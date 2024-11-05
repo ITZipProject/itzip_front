@@ -1,10 +1,6 @@
 import React from 'react';
 
-interface ContributionTooltipProps {
-  weekStart: string;
-  count: number;
-  position: { x: number; y: number };
-}
+import { ContributionTooltipProps } from '@/types/blog/common';
 
 const ContributionTooltip: React.FC<ContributionTooltipProps> = ({
   weekStart,

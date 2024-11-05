@@ -2,12 +2,9 @@
 
 import React from 'react';
 
-interface CommentOptionsModalProps {
-  onEdit: () => void;
-  onDelete: () => void;
-}
+import { OptionsModalProps } from '@/types/blog/common';
 
-const CommentOptionsModal: React.FC<CommentOptionsModalProps> = ({ onEdit, onDelete }) => {
+const CommentOptionsModal: React.FC<OptionsModalProps> = ({ onEdit, onDelete }) => {
   return (
     <div className="absolute right-0 top-full z-50 mt-2 w-32 overflow-hidden rounded-md bg-white shadow-lg">
       <button

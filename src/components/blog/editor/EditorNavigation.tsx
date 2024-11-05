@@ -2,12 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
-import ImageUploadButton from './ImageUploadButton';
+import { EditorNavigationProps } from '@/types/blog/common';
 
-interface EditorNavigationProps {
-  onAction: (action: string, value?: string) => void;
-  onComplete: () => void;
-}
+import ImageUploadButton from './ImageUploadButton';
 
 const EditorNavigation: React.FC<EditorNavigationProps> = ({ onAction, onComplete }) => {
   const [isHeadingOpen, setIsHeadingOpen] = useState(false);

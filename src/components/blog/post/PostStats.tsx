@@ -2,11 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 
-import PostOptionsModal from './PostOptionsModal';
+import { PostStatsProps } from '@/types/blog/common';
 
-interface PostStatsProps {
-  views: string;
-}
+import PostOptionsModal from './PostOptionsModal';
 
 const PostStats: React.FC<PostStatsProps> = ({ views }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);

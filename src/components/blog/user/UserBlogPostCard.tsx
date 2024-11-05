@@ -2,17 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-interface UserBlogPostCardProps {
-  id: string;
-  title: string;
-  content: string;
-  category: string;
-  subCategory: string;
-  timeAgo: string;
-  imageUrl: string;
-}
+import { UserBlogPost } from '@/types/blog/common';
 
-const UserBlogPostCard: React.FC<UserBlogPostCardProps> = ({
+const UserBlogPostCard: React.FC<UserBlogPost> = ({
   id,
   title,
   content,

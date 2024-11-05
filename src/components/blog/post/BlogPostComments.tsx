@@ -3,20 +3,10 @@
 import Image from 'next/image';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
+import { Comment, BlogPostCommentsProps } from '@/types/blog/common';
+
 import CommentOptionsModal from './CommentOptionsModal';
 import BlogPagination from '../main/BlogPagination';
-
-interface Comment {
-  id: number;
-  author: string;
-  content: string;
-  date: string;
-  profileImage: string;
-}
-
-interface BlogPostCommentsProps {
-  postId: number;
-}
 
 const COMMENTS_PER_PAGE = 10;
 
@@ -86,7 +76,7 @@ const BlogPostComments: React.FC<BlogPostCommentsProps> = ({ postId }) => {
     };
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (newComment.trim()) {
       const newCommentObj: Comment = {

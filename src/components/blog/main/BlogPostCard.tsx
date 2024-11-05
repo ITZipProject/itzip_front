@@ -2,19 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-interface BlogPostCardProps {
-  id: string;
-  title: string;
-  content: string;
-  category: string;
-  subCategory: string;
-  likes: number;
-  author: string;
-  timeAgo: string;
-  imageUrl: string;
-  profileImageUrl: string;
-}
+import { BlogPostCardProps } from '@/types/blog/common';
 
+// BlogPostCardProps 인터페이스 제거
 const BlogPostCard: React.FC<BlogPostCardProps> = ({
   id,
   title,

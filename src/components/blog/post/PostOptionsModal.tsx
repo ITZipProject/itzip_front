@@ -1,11 +1,8 @@
 import React from 'react';
 
-interface PostOptionsModalProps {
-  onEdit: () => void;
-  onDelete: () => void;
-}
+import { OptionsModalProps } from '@/types/blog/common';
 
-const PostOptionsModal: React.FC<PostOptionsModalProps> = ({ onEdit, onDelete }) => {
+const PostOptionsModal: React.FC<OptionsModalProps> = ({ onEdit, onDelete }) => {
   return (
     <div className="absolute right-0 top-full z-50 mt-2 w-32 overflow-hidden rounded-md bg-white shadow-lg">
       <button

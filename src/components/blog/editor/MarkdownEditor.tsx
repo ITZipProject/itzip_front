@@ -1,11 +1,6 @@
 import React, { forwardRef, useEffect, useRef } from 'react';
 
-interface MarkdownEditorProps {
-  content: string;
-  title: string;
-  onContentChange: (content: string) => void;
-  onTitleChange: (title: string) => void;
-}
+import { MarkdownEditorProps } from '@/types/blog/common';
 
 const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(
   ({ content, title, onContentChange, onTitleChange }, ref) => {

@@ -6,9 +6,7 @@ import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import remarkGfm from 'remark-gfm';
 
-interface BlogPostContentProps {
-  content: string;
-}
+import { BlogPostContentProps } from '@/types/blog/common';
 
 const BlogPostContent: FC<BlogPostContentProps> = ({ content }) => {
   const components: Partial<Components> = {

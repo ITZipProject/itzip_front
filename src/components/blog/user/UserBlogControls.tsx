@@ -1,11 +1,9 @@
 'use client';
 import React, { useState } from 'react';
 
-import BlogControlsDropdown from '../main/BlogControlsDropdown';
+import { UserBlogControlsProps } from '@/types/blog/common';
 
-interface UserBlogControlsProps {
-  postCount: number;
-}
+import BlogControlsDropdown from '../main/BlogControlsDropdown';
 
 const UserBlogControls: React.FC<UserBlogControlsProps> = ({ postCount }) => {
   const [selectedSortOption, setSelectedSortOption] = useState<string>('최신순');

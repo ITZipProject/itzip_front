@@ -2,19 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { CategoryType } from '@/data/BlogCategories';
+import { CarouselItem } from '@/types/blog/common';
 
 import CarouselIndicator from './CarouselIndicator';
-
-interface CarouselItem {
-  id: number;
-  imageUrl: string;
-  title: string;
-  content: string;
-  category: keyof CategoryType;
-  subCategory: string;
-  link: string;
-}
 
 interface CarouselProps {
   items: CarouselItem[];

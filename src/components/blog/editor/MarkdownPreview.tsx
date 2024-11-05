@@ -11,10 +11,7 @@ import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import remarkGfm from 'remark-gfm';
 
-interface MarkdownPreviewProps {
-  content: string;
-  title: string;
-}
+import { MarkdownPreviewProps } from '@/types/blog/common';
 
 const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(
   ({ content, title }, ref) => {

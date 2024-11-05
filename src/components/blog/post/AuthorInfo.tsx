@@ -1,10 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 
-interface AuthorInfoProps {
-  author: string;
-  date: string;
-}
+import { AuthorInfoProps } from '@/types/blog/common';
 
 const AuthorInfo: React.FC<AuthorInfoProps> = ({ author, date }) => {
   return (
