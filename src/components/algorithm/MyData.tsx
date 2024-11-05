@@ -1,7 +1,9 @@
+import { useAtom } from 'jotai';
 import Image from 'next/image';
 import React from 'react';
 
-import { useFetchMyAlgorithmData } from '@/api/algorithm/fetchMyAlgorithmData';
+import { useUserAlgorithmStats } from '@/api/algorithm/fetchMyAlgorithmData';
+import { accessTokenAtom } from '@/store/useTokenStore';
 
 interface Tier {
   level: number;
@@ -9,7 +11,9 @@ interface Tier {
 }
 
 const MyData: React.FC = () => {
-  const tiers: Tier[] = [
+  const [accessToken] = useAtom(accessTokenAtom);
+
+  const tierStandard: Tier[] = [
     { level: 0, name: 'unrated' },
     { level: 1, name: 'Bronze5' },
     { level: 2, name: 'Bronze4' },
@@ -44,15 +48,24 @@ const MyData: React.FC = () => {
     { level: 31, name: 'Master' },
   ];
 
-  const { username, rating, rank, tier } = useFetchMyAlgorithmData();
+  const { data, isLoading } = useUserAlgorithmStats(accessToken);
 
-  const tierName = tiers.find((v) => v.level === tier)?.name || 'unrated';
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (!data) {
+    return <p>No data available</p>;
+  }
+
+  const { username, rating, rank, profileImageUrl, tier } = data;
+  const tierName = tierStandard.find((v) => v.level === tier)?.name || 'unrated';
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-8 rounded-3xl border border-zinc-600 bg-zinc-700 p-5">
       <div>
         <Image
-          src={'/defaultProfileImage.jpg'}
+          src={profileImageUrl || '/defaultProfileImage.jpg'}
           alt="프로필 이미지"
           width={64}
           height={64}

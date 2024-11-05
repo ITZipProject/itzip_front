@@ -1,9 +1,11 @@
+import { useAtom } from 'jotai';
 import React, { useState } from 'react';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 
 import { useMyQuizzes } from '@/api/quiz/fetchMyQuizzes';
+import { accessTokenAtom } from '@/store/useTokenStore';
 import { QuizData } from '@/types/quiz/quiz';
 
 import MakeQuizButton from './MakeQuizButton';
@@ -13,8 +15,9 @@ import QuizShowModal from './QuizShowModal';
 const MyQuizSection: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedQuiz, setSelectedQuiz] = useState<QuizData | null>(null);
+  const [accessToken] = useAtom(accessTokenAtom);
 
-  const { data: quizzes, isLoading, isError } = useMyQuizzes();
+  const { data: quizzes, isLoading, isError } = useMyQuizzes(accessToken);
 
   const settings = {
     dots: true,

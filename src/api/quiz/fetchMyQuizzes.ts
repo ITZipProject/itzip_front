@@ -28,9 +28,12 @@ interface ApiResponse {
   };
 }
 
-const fetchFilteredQuizzes = async (): Promise<Quiz[]> => {
+const fetchFilteredQuizzes = async (accessToken: string): Promise<Quiz[]> => {
   const response = await axios.get<ApiResponse>('/cs-quizzes/search', {
     baseURL: apiUrl,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
     params: {
       inUserSolved: true,
     },
@@ -38,10 +41,11 @@ const fetchFilteredQuizzes = async (): Promise<Quiz[]> => {
   return response.data.data.content;
 };
 
-export const useMyQuizzes = () => {
+export const useMyQuizzes = (accessToken: string) => {
   return useQuery<Quiz[]>({
-    queryKey: ['filteredQuizzes'],
-    queryFn: () => fetchFilteredQuizzes(),
+    queryKey: ['filteredQuizzes', accessToken],
+    queryFn: () => fetchFilteredQuizzes(accessToken),
     staleTime: 1000,
+    enabled: !!accessToken,
   });
 };
