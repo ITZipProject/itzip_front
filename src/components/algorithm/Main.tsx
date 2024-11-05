@@ -1,6 +1,8 @@
+import { useAtom } from 'jotai';
 import React from 'react';
 
 import { useFetchAlgorithmData } from '@/api/algorithm/fetchAlgorithm';
+import { accessTokenAtom } from '@/store/useTokenStore';
 
 interface MainProps {
   tagId?: number;
@@ -9,7 +11,8 @@ interface MainProps {
 }
 
 const Main: React.FC<MainProps> = ({ tagId, displayName, resetTag }) => {
-  const { data, isLoading, isError } = useFetchAlgorithmData(tagId);
+  const [accessToken] = useAtom(accessTokenAtom);
+  const { data, isLoading, isError } = useFetchAlgorithmData(accessToken, tagId);
 
   if (isLoading) {
     return (
@@ -45,7 +48,7 @@ const Main: React.FC<MainProps> = ({ tagId, displayName, resetTag }) => {
           <h3 className="text-gray-400">제목</h3>
           <h3 className="text-gray-400">푼 사람 수</h3>
         </div>
-        {data.length > 0 ? (
+        {data && data.length > 0 ? (
           data.map((problem) => (
             <div
               key={problem.problemId}
@@ -58,7 +61,7 @@ const Main: React.FC<MainProps> = ({ tagId, displayName, resetTag }) => {
             </div>
           ))
         ) : (
-          <p>No problems found.</p>
+          <p className="text-gray-400">문제를 찾을 수 없습니다.</p> // 메시지 변경
         )}
       </div>
     </div>
