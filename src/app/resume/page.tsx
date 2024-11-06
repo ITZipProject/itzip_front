@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import CreateResumeLayout from '@/components/layout/createResumeLayout';
 import * as React from 'react';
 

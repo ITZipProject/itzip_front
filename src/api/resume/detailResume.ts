@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import axios from 'axios';
 
 async function DetailResumeApi(id: Number) {

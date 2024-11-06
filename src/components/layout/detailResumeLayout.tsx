@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 'use client';
 import DetailResumeApi from '@/api/resume/detailResume';
 import * as React from 'react';

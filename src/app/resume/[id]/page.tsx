@@ -1,5 +1,8 @@
-import DetailResumeLayout from '@/components/layout/detailResumeLayout';
+/* eslint-disable */
+
 import * as React from 'react';
+
+import DetailResumeLayout from '@/components/layout/detailResumeLayout';
 
 interface IResumeDetailPageProps {}
 

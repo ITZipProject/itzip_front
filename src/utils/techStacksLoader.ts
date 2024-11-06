@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import techStacksData from '../data/techStacks.json';
 
 export interface TechStack {

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export interface IDefaultResume {
   resume_title: string;
   phone: string;

@@ -1,4 +1,5 @@
 import { atomWithReset } from 'jotai/utils';
+
 import { IDefaultResume, IEducationResume, FormErrors, ICareerResume } from '@/types/resume';
 
 export const defaultResumeAtom = atomWithReset<IDefaultResume>({

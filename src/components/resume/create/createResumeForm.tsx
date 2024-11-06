@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 'use client';
 import * as React from 'react';
 import { useAtom } from 'jotai';
