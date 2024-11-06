@@ -1,8 +1,12 @@
 'use client';
-import React from 'react';
+import React, { Suspense } from 'react';
 
 import QuizPageLayout from '../../../components/layout/quiz/QuizPageLayout';
 
 export default function Home() {
-  return <QuizPageLayout />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <QuizPageLayout />
+    </Suspense>
+  );
 }

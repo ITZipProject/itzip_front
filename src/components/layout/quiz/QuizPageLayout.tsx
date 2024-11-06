@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 
 import MyQuizSection from '@/components/quiz/MyQuizSection';
 import QuizFilter from '@/components/quiz/QuizFilter';
@@ -20,13 +20,19 @@ const QuizPageLayout: React.FC = () => {
   return (
     <div className="flex size-full flex-col gap-8 overflow-y-auto bg-neutral-800 px-5 py-8 text-white md:gap-12 md:px-10 md:py-14">
       <QueryClientProvider client={queryClient}>
-        <MyQuizSection />
+        <Suspense fallback={<div>Loading...</div>}>
+          <MyQuizSection />
+        </Suspense>
         <div className="flex w-full flex-col gap-5 md:flex-row">
           <section className="hidden md:block md:w-1/4">
-            <QuizFilter />
+            <Suspense fallback={<div>Loading...</div>}>
+              <QuizFilter />
+            </Suspense>
           </section>
           <section className="flex w-full flex-col md:w-3/4">
-            <QuizSort handleFilteredQuizzes={handleFilteredQuizzes} />
+            <Suspense fallback={<div>Loading...</div>}>
+              <QuizSort handleFilteredQuizzes={handleFilteredQuizzes} />
+            </Suspense>
             <QuizCardSection filteredAndSortedQuizzes={filteredQuizzes} />
           </section>
         </div>
