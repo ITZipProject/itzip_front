@@ -15,7 +15,7 @@ const UserBlogPostCard: React.FC<UserBlogPost> = ({
 }) => {
   return (
     <div className="flex h-[500px] w-full max-w-[400px] flex-col overflow-hidden">
-      <Link href={`/blog/post/${id}`} passHref className="relative h-[240px]">
+      <Link href={`/blog/post/${id}`} passHref className="relative h-spacing-20">
         <Image src={imageUrl} className="rounded-xl" alt={title} layout="fill" objectFit="cover" />
       </Link>
       <div className="flex items-center gap-2 pb-3 pt-6">
