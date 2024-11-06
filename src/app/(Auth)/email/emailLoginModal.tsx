@@ -107,7 +107,7 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
         <button
           type="submit"
           disabled={isLoading}
-          className="h-spacing-12 rounded-radius-03 bg-Grey-100 text-white text-14 font-semibold primary-btn disabled:bg-Grey-100 disabled:text-white disabled:cursor-not-allowed"
+          className="primary-btn h-spacing-12 rounded-radius-03 bg-Grey-100 text-14 font-semibold text-white disabled:cursor-not-allowed disabled:bg-Grey-100 disabled:text-white"
         >
           {isLoading ? '로그인 중...' : '이메일로 로그인하기'}
         </button>

@@ -25,7 +25,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       onClick={onClose}
     >
       <div
-        className="w-[435px] rounded-radius-06 bg-white px-spacing-11 py-[50px] shadow-Shadow-modal"
+        className="shadow-Shadow-modal w-[435px] rounded-radius-06 bg-white px-spacing-11 py-[50px]"
         onClick={(e) => e.stopPropagation()}
       >
         {children}

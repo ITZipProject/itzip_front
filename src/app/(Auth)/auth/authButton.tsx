@@ -1,16 +1,25 @@
-import PropTypes from 'prop-types';
+import React, { ButtonHTMLAttributes, ReactNode } from 'react';
 
-export const AuthButton: React.FC<
-  React.ButtonHTMLAttributes<HTMLButtonElement> & { children: React.ReactNode }
-> = ({ children, ...props }) => (
+interface AuthButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  children: ReactNode;
+}
+
+export const AuthButton: React.FC<AuthButtonProps> = ({ children, ...props }) => (
   <button
-    className="rounded-radius-03 bg-Grey-100 text-white text-14 font-semibold h-spacing-12 disabled:bg-Grey-100 disabled:text-white disabled:cursor-not-allowed primary-btn"
+    className={`
+      primary-btn 
+      h-spacing-12 
+      rounded-radius-03 
+      bg-Grey-100 
+      text-14 
+      font-semibold 
+      text-white 
+      disabled:cursor-not-allowed 
+      disabled:bg-Grey-100 
+      disabled:text-white
+    `}
     {...props}
   >
     {children}
   </button>
 );
-
-AuthButton.propTypes = {
-  children: PropTypes.node.isRequired,
-};

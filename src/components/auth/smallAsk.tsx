@@ -12,7 +12,7 @@ export default function SmallAsk({ text, textColor, modalName }: AskProps) {
     <div>
       <button
         onClick={() => openModal(modalName || '')}
-        className={` text-[12px] font-[500] text-[${textColor}] hover:underline underline-offset-4`}
+        className={`text-[ text-12 font-[500]${textColor}] underline-offset-4 hover:underline`}
       >
         {text}
       </button>

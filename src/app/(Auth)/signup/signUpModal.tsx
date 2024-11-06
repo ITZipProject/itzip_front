@@ -26,7 +26,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ modalId }) => {
         <h2 className="text-16 font-[500] text-[#6C6C6C]  ">ITZIP을 다채롭게 즐기기 위해서는</h2>
         <h2 className="text-24 font-[700] text-[#191919]">로그인이 필요해요!</h2>
       </div>
-      <div className="*:flex *:justify-center space-y-[16px]">
+      <div className="space-y-spacing-05 *:flex *:justify-center">
         <Margin height={'48px'} />
         <button onClick={() => openModal('signUpEmailModal')} className="primary-btn">
           <span>이메일로 회원가입하기</span>
@@ -38,12 +38,12 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ modalId }) => {
 
         <h1 className="text-12 font-[400] text-[#818181]">또는</h1>
 
-        <button className="bg-Grey-300 flex h-spacing-12 items-center px-spacing-04 rounded-radius-03 w-full">
+        <button className="flex h-spacing-12 w-full items-center rounded-radius-03 bg-Grey-300 px-spacing-04">
           <Image src={googleIcon} width={24} height={24} alt="googleIcon" />
-          <span className="font-[600] text-14 text-[#191919] w-full">Google로 회원가입하기</span>
+          <span className="w-full text-14 font-[600] text-[#191919]">Google로 회원가입하기</span>
         </button>
 
-        <button className="flex items-center w-full px-spacing-04 h-spacing-12 rounded-radius-03 bg-Grey-700">
+        <button className="flex h-spacing-12 w-full items-center rounded-radius-03 bg-Grey-700 px-spacing-04">
           <Image src={githubIcon} width={24} height={24} alt="githubIcon" />
           <span className="w-full text-14 font-[600] text-[#FFFFFF]">Github로 회원가입하기</span>
         </button>
