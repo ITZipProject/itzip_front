@@ -3,9 +3,7 @@
 import Image from 'next/image';
 import React from 'react';
 
-interface BlogPostActionsProps {
-  likes: number;
-}
+import { BlogPostActionsProps } from '@/types/blog/common';
 
 const BlogPostActions: React.FC<BlogPostActionsProps> = ({ likes }) => {
   const handleLike = () => {

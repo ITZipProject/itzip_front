@@ -1,19 +1,11 @@
 import Image from 'next/image';
 import React from 'react';
 
+import { DropdownProps } from '@/types/blog/common';
+
 import HeadlessDropdown from '../../common/dropdown';
 
-interface BlogControlsDropdownProps {
-  options: string[];
-  selectedOption: string;
-  onSelect: (option: string) => void;
-  iconSrc: string;
-  textSize?: string;
-  textWeight?: string;
-  iconSize?: number;
-}
-
-const BlogControlsDropdown: React.FC<BlogControlsDropdownProps> = ({
+const BlogControlsDropdown: React.FC<DropdownProps> = ({
   options,
   selectedOption,
   onSelect,

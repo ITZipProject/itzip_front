@@ -1,13 +1,8 @@
 import Image from 'next/image';
 import React, { useState, useRef } from 'react';
 
-import { blogCategories, CategoryType } from '@/data/BlogCategories';
-
-interface PublishModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onPublish: (categoryId: number, thumbnailUrl: string) => Promise<void>;
-}
+import { CategoryType, blogCategories } from '@/data/BlogCategories';
+import { PublishModalProps } from '@/types/blog/common';
 
 const PublishModal: React.FC<PublishModalProps> = ({ isOpen, onClose, onPublish }) => {
   const [mainCategory, setMainCategory] = useState('');

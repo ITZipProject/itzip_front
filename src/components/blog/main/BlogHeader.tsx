@@ -2,19 +2,10 @@
 import React, { useState, useEffect } from 'react';
 
 import { blogCategories, CategoryType, getAllSubcategories } from '@/data/BlogCategories';
+import { CarouselItem } from '@/types/blog/common';
 
 import BlogCarousel from './BlogCarousel';
 import RollingCounter from './RollingCounter';
-
-interface CarouselItem {
-  id: number;
-  imageUrl: string;
-  title: string;
-  content: string;
-  category: keyof CategoryType;
-  subCategory: string;
-  link: string;
-}
 
 const generateRandomCarouselItems = (count: number): CarouselItem[] => {
   const subcategories = getAllSubcategories();

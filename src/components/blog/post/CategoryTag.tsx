@@ -1,10 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 
-interface CategoryTagProps {
-  primary: string;
-  secondary: string;
-}
+import { CategoryTagProps } from '@/types/blog/common';
 
 const CategoryTag: React.FC<CategoryTagProps> = ({ primary, secondary }) => {
   return (

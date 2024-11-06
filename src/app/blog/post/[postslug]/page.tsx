@@ -5,6 +5,7 @@ import BlogPostContent from '@/components/blog/post/BlogPostContent';
 import BlogPostHeader from '@/components/blog/post/BlogPostHeader';
 import RelatedPosts from '@/components/blog/post/RelatedPosts';
 import UserInfo from '@/components/blog/post/UserInfo';
+import { BlogPostPageProps } from '@/types/blog/common';
 
 const BlogPostActions = dynamic(() => import('@/components/blog/post/BlogPostActions'), {
   ssr: false,
@@ -13,12 +14,6 @@ const BlogPostActions = dynamic(() => import('@/components/blog/post/BlogPostAct
 const BlogPostComments = dynamic(() => import('@/components/blog/post/BlogPostComments'), {
   ssr: false,
 });
-
-interface BlogPostPageProps {
-  params: {
-    postSlug: string;
-  };
-}
 
 const BlogPostPage: React.FC<BlogPostPageProps> = ({ params }) => {
   const postId = parseInt(params.postSlug, 10);

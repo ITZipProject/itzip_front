@@ -1,14 +1,11 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 
+import { CounterProps } from '@/types/blog/common';
+
 import DigitRoller from './DigitRoller';
 
-interface RollingCounterProps {
-  endValue: number;
-  duration?: number;
-}
-
-const RollingCounter: React.FC<RollingCounterProps> = ({ endValue, duration = 2000 }) => {
+const RollingCounter: React.FC<CounterProps> = ({ endValue, duration = 2000 }) => {
   const [currentValue, setCurrentValue] = useState(endValue);
 
   useEffect(() => {

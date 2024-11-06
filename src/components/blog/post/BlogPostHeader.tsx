@@ -1,23 +1,10 @@
 import React from 'react';
 
+import { BlogPostHeaderProps } from '@/types/blog/common';
+
 import AuthorInfo from './AuthorInfo';
 import CategoryTag from './CategoryTag';
 import PostStats from './PostStats';
-
-interface PostData {
-  category: {
-    primary: string;
-    secondary: string;
-  };
-  title: string;
-  author: string;
-  date: string;
-  views: string;
-}
-
-interface BlogPostHeaderProps {
-  postData: PostData;
-}
 
 const BlogPostHeader: React.FC<BlogPostHeaderProps> = ({ postData }) => {
   return (

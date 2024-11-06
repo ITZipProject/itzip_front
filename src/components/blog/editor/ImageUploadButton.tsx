@@ -1,9 +1,7 @@
 import Image from 'next/image';
 import React, { useRef } from 'react';
 
-interface ImageUploadButtonProps {
-  onImageUpload: (imageUrls: string[]) => void;
-}
+import { ImageUploadButtonProps } from '@/types/blog/common';
 
 const ImageUploadButton: React.FC<ImageUploadButtonProps> = ({ onImageUpload }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);

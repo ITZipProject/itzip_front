@@ -2,27 +2,15 @@
 import React, { useState, useEffect } from 'react';
 
 import { blogCategories, getAllSubcategories } from '@/data/BlogCategories';
+import { BlogPost } from '@/types/blog/common';
 
 import BlogPagination from './BlogPagination';
 import BlogPostCard from './BlogPostCard';
 
-interface Post {
-  id: string;
-  title: string;
-  content: string;
-  category: string;
-  subCategory: string;
-  likes: number;
-  saves: number;
-  author: string;
-  timeAgo: string;
-  imageUrl: string;
-  profileImageUrl: string;
-}
-
+// Post 인터페이스 제거
 const POSTS_PER_PAGE = 12;
 
-const generateRandomPosts = (count: number): Post[] => {
+const generateRandomPosts = (count: number): BlogPost[] => {
   const subcategories = getAllSubcategories();
   const authors = ['짱구는멋쟁이', '철수는못말려', '유리는예쁘다', '맹구는똑똑해', '훈이는멋져'];
   const timeAgo = ['1시간 전', '3시간 전', '6시간 전', '12시간 전', '1일 전'];
@@ -50,7 +38,7 @@ const generateRandomPosts = (count: number): Post[] => {
 };
 
 const BlogPostGrid: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<BlogPost[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [, setTotalPosts] = useState(0);

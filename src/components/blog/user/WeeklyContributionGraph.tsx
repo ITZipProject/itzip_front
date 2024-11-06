@@ -1,16 +1,9 @@
 'use client';
 import React, { useState, useRef } from 'react';
 
+import { ContributionData, WeeklyContributionGraphProps } from '@/types/blog/common';
+
 import ContributionTooltip from './ContributionTooltip';
-
-interface ContributionData {
-  weekStart: string;
-  count: number;
-}
-
-interface WeeklyContributionGraphProps {
-  data: ContributionData[];
-}
 
 const WeeklyContributionGraph: React.FC<WeeklyContributionGraphProps> = ({ data }) => {
   const [tooltipData, setTooltipData] = useState<ContributionData | null>(null);

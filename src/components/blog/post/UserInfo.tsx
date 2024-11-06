@@ -2,16 +2,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-interface UserInfoProps {
-  name: string;
-  description: string;
-  email: string;
-  profileImage: string;
-}
+import { DetailedUserInfoProps } from '@/types/blog/common';
 
-const UserInfo: React.FC<UserInfoProps> = ({ name, description, email, profileImage }) => {
+const UserInfo: React.FC<DetailedUserInfoProps> = ({ name, description, email, profileImage }) => {
   return (
-    <div className="mt-10 flex items-center space-x-6 rounded-xl bg-[#FAFAFA] p-6">
+    <div className="mt-10 flex items-center space-x-6 rounded-xl bg-Grey-50 p-6">
       <div className="shrink-0">
         <Image
           src={profileImage}

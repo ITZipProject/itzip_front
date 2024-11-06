@@ -1,16 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-interface RelatedPost {
-  id: string;
-  title: string;
-  date: string;
-}
-
-interface RelatedPostsProps {
-  userName: string;
-  posts: RelatedPost[];
-}
+import { RelatedPostsProps } from '@/types/blog/common';
 
 const RelatedPosts: React.FC<RelatedPostsProps> = ({ userName, posts }) => {
   return (

@@ -4,12 +4,7 @@ import UserBlogControls from '@/components/blog/user/UserBlogControls';
 import UserBlogPostGrid from '@/components/blog/user/UserBlogPostGrid';
 import UserInfoCard from '@/components/blog/user/UserInfoCard';
 import WeeklyContributionGraph from '@/components/blog/user/WeeklyContributionGraph';
-
-interface UserBlogPageProps {
-  params: {
-    userName: string;
-  };
-}
+import { UserBlogPageParams } from '@/types/blog/common';
 
 const generateContributionData = () => {
   const data = [];
@@ -40,7 +35,7 @@ const generateRandomDescription = () => {
   return descriptions[Math.floor(Math.random() * descriptions.length)];
 };
 
-const UserBlogPage: React.FC<UserBlogPageProps> = ({ params }) => {
+const UserBlogPage: React.FC<UserBlogPageParams> = ({ params }) => {
   const decodedUserName = decodeURIComponent(params.userName);
   const contributionData = generateContributionData();
   const postCount = Math.floor(Math.random() * 1000000);

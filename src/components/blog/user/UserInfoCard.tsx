@@ -2,19 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-interface UserInfoCardProps {
-  username: string;
-  email: string;
-  profileImage: string;
-  description: string;
-}
+import { UserInfo } from '@/types/blog/common';
 
-const UserInfoCard: React.FC<UserInfoCardProps> = ({
-  username,
-  email,
-  profileImage,
-  description,
-}) => {
+const UserInfoCard: React.FC<UserInfo> = ({ username, email, profileImage, description }) => {
   return (
     <div className="flex w-full max-w-[376px] flex-col items-center rounded-xl border border-gray-300 p-8">
       <Image

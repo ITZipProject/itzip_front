@@ -1,13 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 
-interface CarouselIndicatorProps {
-  totalItems: number;
-  currentIndex: number;
-  onIndicatorClick: (index: number) => void;
-  onPrevClick: () => void;
-  onNextClick: () => void;
-}
+import { CarouselIndicatorProps } from '@/types/blog/common';
 
 const CarouselIndicator: React.FC<CarouselIndicatorProps> = ({
   totalItems,
