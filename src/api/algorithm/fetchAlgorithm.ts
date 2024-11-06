@@ -1,5 +1,7 @@
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+
+const baseApiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 interface AlgorithmData {
   problemId: number;
@@ -9,46 +11,33 @@ interface AlgorithmData {
   averageTries: number;
 }
 
-interface UseFetchAlgorithmDataReturn {
-  data: AlgorithmData[];
-  isLoading: boolean;
-  isError: boolean;
-}
-
 interface ApiResponse {
   data: {
     problems: AlgorithmData[];
   };
 }
 
-export const useFetchAlgorithmData = (tagId?: number): UseFetchAlgorithmDataReturn => {
-  const [data, setData] = useState<AlgorithmData[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isError, setIsError] = useState<boolean>(false);
+const fetchAlgorithmData = async (
+  accessToken: string,
+  tagId?: number,
+): Promise<AlgorithmData[]> => {
+  const url = tagId
+    ? `${baseApiUrl}algorithm/problems?tagId=${tagId}`
+    : `${baseApiUrl}algorithm/problems?`;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setIsError(false);
-      try {
-        const url = tagId
-          ? `http://3.39.78.0:8080/api/algorithm/problems?&tagId=${tagId}`
-          : 'http://3.39.78.0:8080/api/algorithm/problems?';
-        const response = await axios.get<ApiResponse>(url);
-        const fetchedData: AlgorithmData[] = response.data.data.problems;
-        setData(fetchedData);
-      } catch (error) {
-        console.error('데이터 가져오기 오류:', error);
-        setIsError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const response = await axios.get<ApiResponse>(url, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data.data.problems;
+};
 
-    fetchData().catch((error) => {
-      console.error('비동기 처리 중 오류 발생:', error);
-    });
-  }, [tagId]);
-
-  return { data, isLoading, isError };
+export const useFetchAlgorithmData = (accessToken: string, tagId?: number) => {
+  return useQuery<AlgorithmData[], Error>({
+    queryKey: ['algorithmData', tagId],
+    queryFn: () => fetchAlgorithmData(accessToken, tagId),
+    staleTime: 1000 * 60 * 5,
+    enabled: !!accessToken,
+  });
 };

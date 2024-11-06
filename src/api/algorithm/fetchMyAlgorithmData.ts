@@ -1,55 +1,32 @@
 /* eslint-disable */
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const baseApiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-interface AlgorithmData {
-  userId: number | null;
+interface UserAlgorithmStats {
   username: string;
   rating: number | null;
   rank: number;
-  profileImageUrl: string;
+  profileImageUrl: string | null;
   solvedClass: number | null;
   tier: number;
 }
 
-export const useFetchMyAlgorithmData = (): AlgorithmData => {
-  const [userId, setUserId] = useState<number | null>(null);
-  const [username, setUsername] = useState<string>('');
-  const [rating, setRating] = useState<number | null>(null);
-  const [rank, setRank] = useState<number>(0);
-  const [profileImageUrl, setProfileImageUrl] = useState<string>('');
-  const [solvedClass, setSolvedClass] = useState<number | null>(null);
-  const [tier, setTier] = useState<number>(0);
+const fetchUserAlgorithmStats = async (accessToken: string): Promise<UserAlgorithmStats> => {
+  const response = await axios.get(`${baseApiUrl}algorithm/user`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data.data.solvedacUser;
+};
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://3.39.78.0:8080/api/algorithm/user?userId=8');
-        const data = response.data.data.solvedacUser;
-        setUserId(data.userId);
-        setUsername(data.username);
-        setRating(data.rating);
-        setRank(data.rank);
-        setProfileImageUrl(data.profileImageUrl);
-        setSolvedClass(data.solvedClass);
-        setTier(data.tier);
-      } catch (error) {
-        console.error('데이터 가져오기 오류:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  return {
-    userId,
-    username,
-    rating,
-    rank,
-    profileImageUrl,
-    solvedClass,
-    tier,
-  };
+export const useUserAlgorithmStats = (accessToken: string) => {
+  return useQuery<UserAlgorithmStats>({
+    queryKey: ['algorithmData', accessToken],
+    queryFn: () => fetchUserAlgorithmStats(accessToken),
+    staleTime: 1000 * 60 * 5,
+    enabled: !!accessToken,
+  });
 };
