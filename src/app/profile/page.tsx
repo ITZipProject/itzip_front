@@ -51,25 +51,25 @@ export default function Profile() {
 
   return (
     <div className="flex h-screen flex-col bg-[#F9FBFC] p-4">
-      <div className="rounded-lg border-2 border-[#3733ED] px-[16px] py-[20px]">
+      <div className="rounded-lg border-2 border-Blue-500 px-spacing-05 py-spacing-06">
         <div className="flex items-center justify-between pb-2">
           <div className="flex gap-4">
             <div className="size-16 rounded-full bg-slate-400" />
             <div className="flex flex-col justify-center">
               <span className="font-semibold">userName</span>
-              <span className="text-[12px] text-[#A3A3A3]">Email</span>
+              <span className="text-12 text-[#A3A3A3]">Email</span>
             </div>
           </div>
           <div>
             <button
               onClick={() => openModal('editProfileModal')}
-              className="rounded-md border p-2 text-[12px] font-normal text-[#D9D9D9] hover:border-[#3733ED] hover:text-[#3733ED]"
+              className="rounded-md border p-2 text-12 font-normal text-Grey-300 hover:border-Blue-500 hover:text-Blue-400"
             >
               프로필 수정
             </button>
           </div>
         </div>
-        <div className="w-full whitespace-pre-wrap break-words font-normal text-[12px] text-[#474747]">
+        <div className="w-full whitespace-pre-wrap break-words text-12 font-normal text-[#474747]">
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nemo reiciendis illum at nulla
           recusandae quasi aliquid ut autem, fugiat adipisci facilis accusamus laborum tempora,
           dignissimos sequi rerum dolore explicabo quam?

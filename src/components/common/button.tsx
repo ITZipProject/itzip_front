@@ -1,8 +1,9 @@
 'use client';
 
-import { useModal } from '@/lib/context/ModalContext';
 import { useEffect } from 'react';
 import { useFormStatus } from 'react-dom';
+
+import { useModal } from '@/lib/context/ModalContext';
 
 interface ButtonProps {
   text: string;
@@ -24,7 +25,7 @@ export default function Button({ text, modalId }: ButtonProps) {
     <button
       onClick={() => closeModal(modalId)}
       disabled={pending}
-      className="primary-btn bg-[#D3D3D3] h-[48px] disabled:bg-neutral-400 disabled:text-neutral-300 disabled:cursor-not-allowed rounded-[16px] text-white"
+      className="primary-btn h-spacing-12 rounded-radius-04 bg-[#D3D3D3] text-white disabled:cursor-not-allowed disabled:bg-neutral-400 disabled:text-neutral-300"
     >
       {pending ? '로딩 중...' : text}
     </button>

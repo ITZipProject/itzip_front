@@ -12,7 +12,7 @@ export default function Ask({ text, textColor, modalName }: AskProps) {
     <div>
       <button
         onClick={() => openModal(modalName || '')}
-        className={`my-[16px] text-[${textColor}] hover:underline underline-offset-4`}
+        className={`text-[ my-spacing-05${textColor}] underline-offset-4 hover:underline`}
       >
         {text}
       </button>

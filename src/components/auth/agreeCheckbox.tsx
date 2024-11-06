@@ -1,5 +1,6 @@
-import { agreeAtom, allCheckedAtom, agreeErrorAtom } from '@/atoms/formAtoms';
 import { useAtom } from 'jotai';
+
+import { agreeAtom, allCheckedAtom, agreeErrorAtom } from '@/atoms/formAtoms';
 
 const AgreeCheckboxes: React.FC = () => {
   const [isChecked, setIsChecked] = useAtom(agreeAtom);
@@ -35,16 +36,16 @@ const AgreeCheckboxes: React.FC = () => {
   };
 
   return (
-    <div className="*:p-[12px]">
+    <div className="*:p-spacing-04">
       <div>
         <input
           id="all"
           type="checkbox"
           checked={allChecked}
           onChange={onChangeAllCheckbox}
-          className="size-[16px] border border-[##C6C6C6] outline-none ring-0"
+          className="size-spacing-05 border border-[##C6C6C6] outline-none ring-0"
         />
-        <label htmlFor="all" className="ml-[9px] text-[#8F8F8F]">
+        <label htmlFor="all" className="ml-[9px] text-Grey-500">
           다음 약관에 모두 동의합니다.
         </label>
       </div>
@@ -56,9 +57,9 @@ const AgreeCheckboxes: React.FC = () => {
           checked={isChecked.service}
           onChange={onChangeCheckbox}
           required
-          className="size-[16px] border border-[##C6C6C6] outline-none ring-0"
+          className="size-spacing-05 border border-[##C6C6C6] outline-none ring-0"
         />
-        <label htmlFor="service" className="ml-[9px] text-[#8F8F8F]">
+        <label htmlFor="service" className="ml-[9px] text-Grey-500">
           <span>(필수)</span>
           <span> ITZIP 이용약관</span>
           <span>에 동의합니다</span>
@@ -72,9 +73,9 @@ const AgreeCheckboxes: React.FC = () => {
           checked={isChecked.private}
           onChange={onChangeCheckbox}
           required
-          className="size-[16px] border border-[##C6C6C6] outline-none ring-0 "
+          className="size-spacing-05 border border-[##C6C6C6] outline-none ring-0 "
         />
-        <label htmlFor="private" className="ml-[9px] text-[#8F8F8F]">
+        <label htmlFor="private" className="ml-[9px] text-Grey-500">
           <span>(필수)</span>
           <span> 개인정보 수집 및 이용</span>
           <span>에 동의합니다</span>
