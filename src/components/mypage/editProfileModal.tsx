@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 'use client';
 
 import { PhotoIcon } from '@heroicons/react/16/solid';

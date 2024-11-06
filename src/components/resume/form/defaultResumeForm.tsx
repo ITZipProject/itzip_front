@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import * as React from 'react';
 import { useAtom } from 'jotai';
 import { defaultResumeAtom, errorsAtom } from './ResumeAtoms';

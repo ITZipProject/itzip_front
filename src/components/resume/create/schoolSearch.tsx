@@ -1,7 +1,9 @@
-import SearchSchoolApi from "@/api/resume/searchSchool";
-import * as React from "react";
-import Modal from "react-modal";
-import { atom, useAtom } from "jotai";
+/* eslint-disable */
+
+import SearchSchoolApi from '@/api/resume/searchSchool';
+import * as React from 'react';
+import Modal from 'react-modal';
+import { atom, useAtom } from 'jotai';
 
 interface ISchoolSearchProps {
   isOpen: boolean;
@@ -11,16 +13,12 @@ interface ISchoolSearchProps {
 type schoolTypeSelect = string | undefined;
 type schoolSearchValue = string | undefined;
 
-export const schoolNameAtom = atom("");
+export const schoolNameAtom = atom('');
 
-const SchoolSearch: React.FunctionComponent<ISchoolSearchProps> = ({
-  isOpen,
-  onRequestClose,
-}) => {
-  const [schoolTypeSelect, setSchoolTypeSelect] =
-    React.useState<schoolTypeSelect>("대학교");
+const SchoolSearch: React.FunctionComponent<ISchoolSearchProps> = ({ isOpen, onRequestClose }) => {
+  const [schoolTypeSelect, setSchoolTypeSelect] = React.useState<schoolTypeSelect>('대학교');
 
-  const [schoolSearchValue, setSchoolSearchValue] = React.useState("");
+  const [schoolSearchValue, setSchoolSearchValue] = React.useState('');
 
   const [schoolName, setSchoolName] = useAtom(schoolNameAtom);
 

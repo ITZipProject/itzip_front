@@ -1,5 +1,6 @@
-import { PHONE_REGEX, PHONE_REGEX_ERROR } from '@/lib/constants';
 import { z } from 'zod';
+
+import { PHONE_REGEX, PHONE_REGEX_ERROR } from '@/lib/constants';
 
 export const createResumeSchema = z.object({
   resume_title: z.string().max(50),

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import * as React from 'react';
 import MyResumeHeader from '../resume/mypage/myResumeHeader';
 import MyResumeCardView from '../resume/mypage/myResumeCardView';

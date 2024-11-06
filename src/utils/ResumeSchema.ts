@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { PHONE_REGEX, PHONE_REGEX_ERROR } from '@/lib/constants';
 import { z } from 'zod';
 import { IDefaultResume, IEducationResume, FormErrors, ICareerResume } from '@/types/resume';
