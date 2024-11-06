@@ -1,12 +1,11 @@
 'use client';
-import React, { Suspense } from 'react';
 
-import QuizPageLayout from '../../../components/layout/quiz/QuizPageLayout';
+import dynamic from 'next/dynamic';
+
+const QuizPageLayout = dynamic(() => import('../../../components/layout/quiz/QuizPageLayout'), {
+  ssr: false,
+});
 
 export default function Home() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <QuizPageLayout />
-    </Suspense>
-  );
+  return <QuizPageLayout />;
 }

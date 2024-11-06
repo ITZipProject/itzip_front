@@ -77,7 +77,13 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
         <h1 className="text-24 font-[700]">이메일로 로그인하기</h1>
       </button>
       <Margin height={'48px'} />
-      <form onSubmit={() => login} className="w-full space-y-4">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          void login(e);
+        }}
+        className="w-full space-y-4"
+      >
         <Input
           name="email"
           type="email"

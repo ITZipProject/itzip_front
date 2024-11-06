@@ -18,7 +18,7 @@ export const createQuiz = async ({
 }) => {
   console.log(accessToken);
   await axios.post(
-    `${apiUrl}cs-quiz/`,
+    `${apiUrl}/cs-quiz/`,
     {
       questionText: values.question,
       difficulty: parseInt(values.difficulty.replace('Lv.', '')),

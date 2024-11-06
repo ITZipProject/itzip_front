@@ -1,5 +1,6 @@
+'use client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import React, { Suspense, useState } from 'react';
+import React, { useState } from 'react';
 
 import MyQuizSection from '@/components/quiz/MyQuizSection';
 import QuizFilter from '@/components/quiz/QuizFilter';
@@ -8,9 +9,8 @@ import { QuizData } from '../../../types/quiz/quiz';
 import QuizCardSection from '../../quiz/QuizCardSection';
 import QuizSort from '../../quiz/QuizSort';
 
-const queryClient = new QueryClient();
-
 const QuizPageLayout: React.FC = () => {
+  const [queryClient] = useState(() => new QueryClient());
   const [filteredQuizzes, setFilteredQuizzes] = useState<QuizData[]>([]);
 
   const handleFilteredQuizzes = (filteredQuizzes: QuizData[]) => {
@@ -18,26 +18,20 @@ const QuizPageLayout: React.FC = () => {
   };
 
   return (
-    <div className="flex size-full flex-col gap-8 overflow-y-auto bg-neutral-800 px-5 py-8 text-white md:gap-12 md:px-10 md:py-14">
-      <QueryClientProvider client={queryClient}>
-        <Suspense fallback={<div>Loading...</div>}>
-          <MyQuizSection />
-        </Suspense>
+    <QueryClientProvider client={queryClient}>
+      <div className="flex size-full flex-col gap-8 overflow-y-auto bg-neutral-800 px-5 py-8 text-white md:gap-12 md:px-10 md:py-14">
+        <MyQuizSection />
         <div className="flex w-full flex-col gap-5 md:flex-row">
           <section className="hidden md:block md:w-1/4">
-            <Suspense fallback={<div>Loading...</div>}>
-              <QuizFilter />
-            </Suspense>
+            <QuizFilter />
           </section>
           <section className="flex w-full flex-col md:w-3/4">
-            <Suspense fallback={<div>Loading...</div>}>
-              <QuizSort handleFilteredQuizzes={handleFilteredQuizzes} />
-            </Suspense>
+            <QuizSort handleFilteredQuizzes={handleFilteredQuizzes} />
             <QuizCardSection filteredAndSortedQuizzes={filteredQuizzes} />
           </section>
         </div>
-      </QueryClientProvider>
-    </div>
+      </div>
+    </QueryClientProvider>
   );
 };
 
