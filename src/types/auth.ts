@@ -43,7 +43,7 @@ export type SignUpRequest = {
   authCode: string;
 };
 
-export type SignUpResponse = {};
+// export type SignUpResponse = {};
 
 export type LoginRequest = {
   email: string;
