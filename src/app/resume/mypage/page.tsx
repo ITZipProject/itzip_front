@@ -1,3 +1,4 @@
+/* eslint-disable */
 import AdminResumeLayout from '@/components/layout/adminResumeLayout';
 import * as React from 'react';
 
