@@ -6,11 +6,11 @@ import React, { useState } from 'react';
 
 import Input from '@/components/common/input';
 import { Margin } from '@/components/common/margin';
+import Modal from '@/components/portal/modal';
 import { useModal } from '@/lib/context/ModalContext';
 import { setAccessTokenAtom, setRefreshTokenAtom } from '@/store/useTokenStore';
 
 import { loginAction } from './actions';
-import Modal from '../auth/authModal';
 
 interface SignInModalProps {
   modalId: string;
