@@ -6,6 +6,7 @@ import HeaderBar from '@/components/common/header-bar';
 import { Modals } from '@/components/common/Modals';
 import { ModalProvider } from '@/lib/context/ModalContext';
 import './globals.css';
+// eslint-disable-next-line import/order
 import MobileHeader from '@/components/common/mobileHeader';
 
 // pretendard 함수 관련 에러로 500이 떠서 일단 주석 처리
