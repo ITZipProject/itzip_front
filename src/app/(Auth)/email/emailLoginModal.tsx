@@ -3,58 +3,107 @@
 import { ChevronLeftIcon } from '@heroicons/react/16/solid';
 import { useAtom } from 'jotai';
 import React, { useState } from 'react';
+import { z } from 'zod';
 
 import Input from '@/components/common/input';
 import { Margin } from '@/components/common/margin';
 import Modal from '@/components/portal/modal';
+import { PASSWORD_MIN_LENGTH, PASSWORD_REGEX, PASSWORD_REGEX_ERROR } from '@/lib/constants';
 import { useModal } from '@/lib/context/ModalContext';
 import { setAccessTokenAtom, setRefreshTokenAtom } from '@/store/useTokenStore';
 
 import { loginAction } from './actions';
+import { AuthButton } from '../auth/authButton';
 
 interface SignInModalProps {
   modalId: string;
 }
 
+const formValueSchema = z.object({
+  email: z
+    .string()
+    .min(1, '이메일을 입력해주세요.')
+    .email('올바른 이메일 형식이 아닙니다.')
+    .toLowerCase(),
+  password: z
+    .string()
+    .min(1, '비밀번호를 입력해주세요.')
+    .min(PASSWORD_MIN_LENGTH, `비밀번호는 최소 ${PASSWORD_MIN_LENGTH}자 이상이어야 합니다.`)
+    .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
+});
+
+interface InputErrors {
+  email: string | undefined;
+  password: string | undefined;
+}
+
 const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
   const { openModals, closeModal, openModal } = useModal();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formValues, setFormValues] = useState({
+    email: '',
+    password: '',
+  });
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [, setAccessToken] = useAtom(setAccessTokenAtom);
   const [, setRefreshToken] = useAtom(setRefreshTokenAtom);
 
+  // 각 필드별 에러 상태 추가
+  const [inputErrors, setInputErrors] = useState<InputErrors>({
+    email: undefined,
+    password: undefined,
+  });
+
   // 모달이 열려 있는 경우에만 렌더링
   if (!openModals.includes(modalId)) return null;
 
   const handleReset = (field: 'email' | 'password') => {
-    if (field === 'email') {
-      setEmail('');
-    } else if (field === 'password') {
-      setPassword('');
-    }
+    setFormValues((prev) => ({
+      ...prev,
+      [field]: '',
+    }));
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    if (name === 'email') {
-      setEmail(value);
-    } else if (name === 'password') {
-      setPassword(value);
-    }
+    setFormValues((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    // 입력 시 해당 필드의 에러 초기화
+    setInputErrors((prev) => ({
+      ...prev,
+      [name]: undefined,
+    }));
   };
 
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
+    setInputErrors({ email: undefined, password: undefined });
+
     try {
-      const result = await loginAction(email, password);
+      const validationResult = formValueSchema.safeParse(formValues);
+      if (!validationResult.success) {
+        const fieldErrors: InputErrors = {
+          email: undefined,
+          password: undefined,
+        };
+
+        validationResult.error.errors.forEach((error) => {
+          const field = error.path[0] as keyof InputErrors;
+          fieldErrors[field] = error.message;
+        });
+
+        setInputErrors(fieldErrors);
+        return;
+      }
+
+      const result = await loginAction(formValues.email, formValues.password);
       if (result.success) {
-        // 토큰 저장
         if (result.accessToken && result.refreshToken) {
           setAccessToken(result.accessToken);
           setRefreshToken(result.refreshToken);
@@ -78,6 +127,7 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
       </button>
       <Margin height={'48px'} />
       <form
+        noValidate
         onSubmit={(e) => {
           e.preventDefault();
           void login(e);
@@ -85,9 +135,10 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
         className="w-full space-y-4"
       >
         <Input
+          id="email"
           name="email"
           type="email"
-          value={email}
+          value={formValues.email}
           labelTitle="email"
           title="이메일"
           onChange={handleInputChange}
@@ -95,28 +146,32 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
           required
           minLength={2}
           onClick={() => handleReset('email')}
+          errors={inputErrors?.email}
         />
 
         <Input
+          id="password"
           name="password"
           type="password"
           labelTitle="password"
           title="비밀번호"
           placeholder="비밀번호를 입력해주세요."
-          value={password}
+          value={formValues.password}
           onChange={handleInputChange}
           required
           minLength={2}
           onClick={() => handleReset('password')}
+          errors={inputErrors.password}
         />
 
-        <button
+        {/* <button
           type="submit"
           disabled={isLoading}
           className="primary-btn h-spacing-12 rounded-radius-03 bg-Grey-100 text-14 font-semibold text-white disabled:cursor-not-allowed disabled:bg-Grey-100 disabled:text-white"
         >
           {isLoading ? '로그인 중...' : '이메일로 로그인하기'}
-        </button>
+        </button> */}
+        <AuthButton disabled={isLoading}>가입하기</AuthButton>
         {/* 비밀번호 찾기 미구현 */}
         {/* <div className="flex flex-col items-center">
           <h1 className="text-[12px] font-[500] text-[#818181]">또는</h1>
