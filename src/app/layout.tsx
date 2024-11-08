@@ -5,8 +5,8 @@ import Footer from '@/components/common/footer';
 import HeaderBar from '@/components/common/header-bar';
 import { Modals } from '@/components/common/Modals';
 import { ModalProvider } from '@/lib/context/ModalContext';
-
 import './globals.css';
+import MobileHeader from '@/components/common/mobileHeader';
 
 // pretendard 함수 관련 에러로 500이 떠서 일단 주석 처리
 interface RootLayoutProps {
@@ -60,7 +60,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body className={`mx-auto overflow-x-hidden bg-white text-black ${''}`}>
         {/* pretendard.className */}
         <ModalProvider>
-          {!shouldHideHeaderAndFooter && <HeaderBar />}
+          {!shouldHideHeaderAndFooter && (
+            <div>
+              <MobileHeader />
+              <HeaderBar />
+            </div>
+          )}
           {/* {!shouldHideHeaderAndFooter && <SmallHeader />} */}
 
           <main className={shouldHideHeaderAndFooter ? 'mt-[58px]' : ''}>{children}</main>
