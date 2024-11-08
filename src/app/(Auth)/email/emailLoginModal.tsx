@@ -166,7 +166,7 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
           errors={inputErrors.password}
         />
 
-        <AuthButton disabled={isLoading}>가입하기</AuthButton>
+        <AuthButton disabled={isLoading}>로그인하기</AuthButton>
 
         {error && <p className="text-sm text-red-500">{error}</p>}
       </form>
