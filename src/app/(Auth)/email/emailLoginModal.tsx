@@ -102,7 +102,9 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
         return;
       }
 
-      const result = await loginAction(formValues.email, formValues.password);
+      const validatedData = validationResult.data;
+      const result = await loginAction(validatedData.email, validatedData.password);
+
       if (result.success) {
         if (result.accessToken && result.refreshToken) {
           setAccessToken(result.accessToken);
@@ -164,21 +166,7 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
           errors={inputErrors.password}
         />
 
-        {/* <button
-          type="submit"
-          disabled={isLoading}
-          className="primary-btn h-spacing-12 rounded-radius-03 bg-Grey-100 text-14 font-semibold text-white disabled:cursor-not-allowed disabled:bg-Grey-100 disabled:text-white"
-        >
-          {isLoading ? '로그인 중...' : '이메일로 로그인하기'}
-        </button> */}
         <AuthButton disabled={isLoading}>가입하기</AuthButton>
-        {/* 비밀번호 찾기 미구현 */}
-        {/* <div className="flex flex-col items-center">
-          <h1 className="text-[12px] font-[500] text-[#818181]">또는</h1>
-          <h1 className="my-[16px] text-[#0500E8] hover:underline underline-offset-4">
-            비밀번호 찾기
-          </h1>
-        </div> */}
 
         {error && <p className="text-sm text-red-500">{error}</p>}
       </form>
