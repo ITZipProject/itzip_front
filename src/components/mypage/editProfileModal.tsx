@@ -7,11 +7,11 @@ import { useAtom } from 'jotai';
 import { useState } from 'react';
 
 import instance from '@/api/axiosInstance';
-import Modal from '@/app/(Auth)/auth/authModal';
 import { useModal } from '@/lib/context/ModalContext';
 import { accessTokenAtom } from '@/store/useTokenStore';
 
 import Input from '../common/input';
+import Modal from '../portal/modal';
 
 // ... 나머지 코드 ...
 
