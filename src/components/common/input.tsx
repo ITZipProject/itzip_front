@@ -1,17 +1,17 @@
 // React 관련
 import { XCircleIcon } from '@heroicons/react/16/solid';
-import Image from 'next/image';
 import { InputHTMLAttributes } from 'react';
+import { FaCheckCircle } from 'react-icons/fa';
 
 import { InputProps } from '@/types/input';
 
 import { Margin } from './margin';
-import resetBtn from '../../../public/icons/common/Ic/vector.png';
 import AccentStar from '../auth/accent-star';
 
 export default function Input({
   name,
   errors,
+  messages,
   onClick,
   labelTitle,
   title,
@@ -28,12 +28,13 @@ export default function Input({
         )}
         <input
           id={name || labelTitle}
-          className="rounded-radius-03 border-none px-[10px] py-spacing-05 ring-1 ring-Grey-400 
+          className={`rounded-radius-03 border-none px-[10px] py-spacing-05 ring-1 ring-Grey-400 
           transition placeholder:text-Grey-600 focus:outline-none focus:ring-2 focus:ring-Blue-400
-          disabled:bg-Grey-100 disabled:text-Grey-500"
+          disabled:bg-Grey-100 disabled:text-Grey-500 ${errors && 'ring-[#E46969]'} ${messages && 'ring-green-400'}`}
           name={name}
           {...rest}
         />
+        {/* todo: reset button  */}
         {onClick && (
           <button
             type="button"
@@ -42,7 +43,7 @@ export default function Input({
             onClick={onClick}
             aria-label="입력값 초기화"
           >
-            <Image src={resetBtn} width={19} height={19} alt="초기화" />
+            <XCircleIcon className="size-[19px]" />
           </button>
         )}
       </div>
@@ -52,6 +53,14 @@ export default function Input({
           <div className="mt-2 flex items-center gap-[4.5px]">
             <XCircleIcon className="size-[19px]" />
             {errors}
+          </div>
+        </span>
+      )}
+      {messages && (
+        <span className="text-12 font-[500] text-green-400">
+          <div className="mt-2 flex items-center gap-[4.5px]">
+            <FaCheckCircle className="size-[19px]" />
+            {messages}
           </div>
         </span>
       )}

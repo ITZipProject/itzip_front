@@ -39,7 +39,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
   if (!openModals.includes(modalId)) return null;
 
   return (
-    <Modal isOpen={true} onClose={closeModal}>
+    <Modal isOpen={true} onClose={() => closeModal()}>
       <ModalBackButton title="이메일로 회원가입하기" />
       <Margin height={'48px'} />
       <form
@@ -170,7 +170,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
         <AuthButton disabled={isLoading.signUp}>가입하기</AuthButton>
 
         <div className="flex flex-col items-center">
-          <SmallAsk text="이미 회원이신가요?" textColor="#818181" />
+          <SmallAsk text="이미 회원이신가요?" modalName="LoginModal" />
         </div>
       </form>
     </Modal>

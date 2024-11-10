@@ -17,6 +17,12 @@ export const errorsAtom = atom<Partial<FormValues>>({
   authCode: '',
 });
 
+export const messageAtom = atom<Partial<FormValues>>({
+  email: '',
+  password: '',
+  passwordCheck: '',
+  authCode: '',
+});
 export const loadingAtom = atom<LoadingTypes>({
   emailCheck: false,
   codePost: false,

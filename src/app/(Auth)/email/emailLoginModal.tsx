@@ -109,7 +109,7 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
         if (result.accessToken && result.refreshToken) {
           setAccessToken(result.accessToken);
           setRefreshToken(result.refreshToken);
-          closeModal('EmailLoginModal');
+          closeModal();
         }
       } else {
         setError(result.message);
@@ -122,7 +122,7 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }) => {
   };
 
   return (
-    <Modal isOpen={true} onClose={() => closeModal(modalId)}>
+    <Modal isOpen={true} onClose={() => closeModal()}>
       <button onClick={() => openModal('LoginModal')} className="flex items-center">
         <ChevronLeftIcon className="-ml-4 size-1/6" />
         <h1 className="text-24 font-[700]">이메일로 로그인하기</h1>
