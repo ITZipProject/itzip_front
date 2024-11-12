@@ -18,14 +18,14 @@ const MakeQuizButton: React.FC = () => {
     <div>
       <div
         onClick={handleAddQuiz}
-        className="flex cursor-pointer items-center justify-center  rounded-lg bg-neutral-700 py-12"
+        className="flex h-[70px] w-[250px] cursor-pointer items-center justify-center  rounded-lg bg-neutral-700 py-12"
       >
         <div className="flex flex-col items-center justify-center gap-4">
           <Image
             src="/QuizAddImage.png"
             alt="카드이미지"
-            width={48}
-            height={48}
+            width={24}
+            height={24}
             className="rounded-full"
           />
           <h3 className="text-xl font-semibold text-slate-300">문제 만들기</h3>

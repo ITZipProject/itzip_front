@@ -28,8 +28,8 @@ const QuizCardSection: React.FC<QuizCardSectionProps> = ({ filteredAndSortedQuiz
   };
 
   return (
-    <div className="flex flex-col px-4 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+    <div className="mx-auto flex  flex-col items-center px-4 sm:px-6 lg:px-8">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-1 md:grid-cols-2  lg:grid-cols-3">
         {filteredAndSortedQuizzes.map((quiz) => (
           <QuizCard key={quiz.id} quiz={quiz} onClick={() => handleCardClick(quiz)} />
         ))}

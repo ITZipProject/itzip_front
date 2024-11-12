@@ -8,7 +8,6 @@ import { useMyQuizzes } from '@/api/quiz/fetchMyQuizzes';
 import { accessTokenAtom } from '@/store/useTokenStore';
 import { QuizData } from '@/types/quiz/quiz';
 
-import MakeQuizButton from './MakeQuizButton';
 import MyQuizCard from './MyQuizCard';
 import QuizShowModal from './QuizShowModal';
 
@@ -23,8 +22,35 @@ const MyQuizSection: React.FC = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 2,
-    slidesToScroll: 3,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    arrows: true,
+    responsive: [
+      {
+        breakpoint: 992,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          arrows: true,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          arrows: true,
+        },
+      },
+      {
+        breakpoint: 500,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          arrows: true,
+        },
+      },
+    ],
   };
 
   const closeModal = () => {
@@ -41,17 +67,14 @@ const MyQuizSection: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="mx-auto flex max-w-[335px] flex-col gap-5 sm:max-w-2xl md:max-w-[704px] lg:max-w-6xl">
       <h3 className="text-2xl font-bold">내가 만든 문제</h3>
-      <div className="flex items-center justify-between">
-        <div className="w-1/5">
-          <MakeQuizButton />
-        </div>
-        <div className="w-3/4 ">
+      <div className=" flex flex-col items-center justify-center md:flex md:flex-row">
+        <div className="w-full max-w-full">
           <Slider {...settings}>
             {quizzes &&
               quizzes.map((quiz: QuizData) => (
-                <div key={quiz.id}>
+                <div key={quiz.id} className="mx-8">
                   <MyQuizCard quiz={quiz} />
                 </div>
               ))}
