@@ -12,7 +12,7 @@ export type LoadingTypes = {
   emailCheck: boolean;
   codePost: boolean;
   codeVerify: boolean;
-  signUp: boolean;
+  createAccount: boolean;
   join: boolean;
 };
 

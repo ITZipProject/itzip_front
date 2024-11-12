@@ -31,10 +31,6 @@ const LoginModal: React.FC<SignUpModalProps> = ({ modalId }) => {
         <button onClick={() => openModal('EmailLoginModal')} className="primary-btn">
           <span>이메일로 로그인</span>
         </button>
-        {/* <LargeButton modalId="signinModal" btnType="primary-btn" text="이메일로 로그인" /> */}
-        {/* <button onClick={() => openModal('signinModal')} className="bg-black text-white">
-          이메일 로그인
-        </button> */}
 
         <h1 className="text-12 font-[400] text-[#818181]">또는</h1>
 

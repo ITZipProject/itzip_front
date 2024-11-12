@@ -113,7 +113,7 @@ export const useSignUp = () => {
 
   const signUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading((prev) => ({ ...prev, signUp: true }));
+    setIsLoading((prev) => ({ ...prev, createAccount: true }));
 
     try {
       const validatedData = formSchema.parse({
@@ -146,7 +146,7 @@ export const useSignUp = () => {
         }));
       }
     } finally {
-      setIsLoading((prev) => ({ ...prev, signUp: false }));
+      setIsLoading((prev) => ({ ...prev, createAccount: false }));
     }
   };
 

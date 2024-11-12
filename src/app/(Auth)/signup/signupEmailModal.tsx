@@ -10,7 +10,7 @@ import SmallAsk from '@/components/auth/smallAsk';
 import Input from '@/components/common/input';
 import { Margin } from '@/components/common/margin';
 import Modal from '@/components/portal/modal';
-import { useSignUp } from '@/hooks/useSignUp';
+import { useSignUp } from '@/hooks/auth/useSignUp';
 import { useModal } from '@/lib/context/ModalContext';
 
 import { AuthButton } from '../auth/authButton';
@@ -167,7 +167,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
           </span>
         )}
         {/* 가입하기 버튼 */}
-        <AuthButton disabled={isLoading.signUp}>가입하기</AuthButton>
+        <AuthButton disabled={isLoading.createAccount}>가입하기</AuthButton>
 
         <div className="flex flex-col items-center">
           <SmallAsk text="이미 회원이신가요?" modalName="LoginModal" />

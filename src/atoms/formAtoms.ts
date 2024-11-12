@@ -27,7 +27,7 @@ export const loadingAtom = atom<LoadingTypes>({
   emailCheck: false,
   codePost: false,
   codeVerify: false,
-  signUp: false,
+  createAccount: false,
   join: false,
 });
 
