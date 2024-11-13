@@ -2,6 +2,7 @@
 
 import { useAtom } from 'jotai';
 import Image from 'next/image';
+import { FaRegUserCircle } from 'react-icons/fa';
 
 import { loadingAtom } from '@/atoms/formAtoms';
 import useUser from '@/hooks/mypage/useUser';
@@ -21,7 +22,7 @@ export default function Profile() {
             {user?.imageUrl ? (
               <Image src={user.imageUrl} alt="profileImage" />
             ) : (
-              <div className="size-16 rounded-full bg-slate-400" />
+              <FaRegUserCircle className="size-16" />
             )}
             <div className="flex flex-col justify-center">
               <span className="font-semibold">{user?.nickname}</span>
