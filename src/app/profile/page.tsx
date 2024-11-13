@@ -1,63 +1,30 @@
 'use client';
 
 import { useAtom } from 'jotai';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import Image from 'next/image';
 
+import { loadingAtom } from '@/atoms/formAtoms';
+import useUser from '@/hooks/mypage/useUser';
 import { useModal } from '@/lib/context/ModalContext';
-import { clearTokenAtom } from '@/store/useTokenStore';
-
-import { logoutServerAction } from './actions';
 
 export default function Profile() {
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-  const [, clearTokens] = useAtom(clearTokenAtom);
+  const [loading] = useAtom(loadingAtom);
   const { openModal } = useModal();
-
-  const logOut = async () => {
-    setLoading(true);
-
-    try {
-      await logoutServerAction();
-      clearTokens();
-
-      // 로그아웃 실패 로그 보려면 주석
-      router.push('/');
-    } catch (error) {
-      console.error('로그아웃 실패:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // api - 미구현
-  const out = () => {};
-
-  // useEffect(() => {
-  //   const me = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const res = await instance.get('/user', {});
-  //       console.log('me data___', res);
-  //     } catch (err) {
-  //       console.error(err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   me();
-  // }, []);
+  const { user, userLogout } = useUser();
 
   return (
     <div className="flex h-screen flex-col bg-[#F9FBFC] p-4">
       <div className="rounded-lg border-2 border-Blue-500 px-spacing-05 py-spacing-06">
         <div className="flex items-center justify-between pb-2">
           <div className="flex gap-4">
-            <div className="size-16 rounded-full bg-slate-400" />
+            {user?.imageUrl ? (
+              <Image src={user.imageUrl} alt="profileImage" />
+            ) : (
+              <div className="size-16 rounded-full bg-slate-400" />
+            )}
             <div className="flex flex-col justify-center">
-              <span className="font-semibold">userName</span>
-              <span className="text-12 text-[#A3A3A3]">Email</span>
+              <span className="font-semibold">{user?.nickname}</span>
+              <span className="text-12 text-[#A3A3A3]">{user?.email}</span>
             </div>
           </div>
           <div>
@@ -69,18 +36,13 @@ export default function Profile() {
             </button>
           </div>
         </div>
-        <div className="w-full whitespace-pre-wrap break-words text-12 font-normal text-[#474747]">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nemo reiciendis illum at nulla
-          recusandae quasi aliquid ut autem, fugiat adipisci facilis accusamus laborum tempora,
-          dignissimos sequi rerum dolore explicabo quam?
-        </div>
       </div>
       <div className="flex flex-col">
-        <button onClick={() => logOut} disabled={loading}>
-          {loading ? '로그아웃 중...' : '로그아웃'}
+        <button onClick={() => void userLogout()} disabled={loading.logout}>
+          {loading.logout ? '로그아웃 중...' : '로그아웃'}
         </button>
-        <button className="text-gray-300" onClick={out} disabled={loading}>
-          {loading ? '회원탈퇴 중...' : '회원탈퇴 >'}
+        <button className="text-gray-300" onClick={() => {}} disabled={loading.userOut}>
+          {loading.userOut ? '회원탈퇴 중...' : '회원탈퇴 >'}
         </button>
       </div>
       <div></div>

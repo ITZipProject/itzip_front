@@ -26,8 +26,8 @@ const MyData: React.FC = () => {
   const tierName = getTierName(tier);
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-8 rounded-3xl border border-zinc-600 bg-zinc-700 p-5">
-      <div>
+    <div className="flex w-[335px] flex-col items-center justify-center gap-8 rounded-3xl border border-zinc-600 bg-Grey-800 p-5 sm:h-[300px] md:w-spacing-20 lg:h-[300px] lg:w-spacing-21">
+      <div className="rounded-full bg-white p-4">
         <Image
           src={profileImageUrl || '/defaultProfileImage.jpg'}
           alt="프로필 이미지"
@@ -36,12 +36,16 @@ const MyData: React.FC = () => {
           className="rounded-full"
         />
       </div>
-      <h1>{username}</h1>
+      <h1 className="text-xl font-bold">{username}</h1>
       <div className="flex w-full flex-col items-start justify-center gap-4 px-5">
-        <p>
-          {tierName} {rating}
-        </p>
-        <p>Rank: {rank}</p>
+        <div className="flex gap-2">
+          <p className="text-color-text-tertiary">{tierName}</p>
+          <p>{rating}</p>
+        </div>
+        <div className="flex gap-2">
+          <p className="text-color-text-tertiary">Rank</p>
+          <p>{rank}</p>
+        </div>
       </div>
     </div>
   );
