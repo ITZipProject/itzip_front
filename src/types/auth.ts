@@ -16,6 +16,7 @@ export type LoadingTypes = {
   join: boolean;
   logout: boolean;
   userOut: boolean;
+  user: boolean;
 };
 
 export type IsOkTypes = {

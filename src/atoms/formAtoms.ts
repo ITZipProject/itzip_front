@@ -31,6 +31,7 @@ export const loadingAtom = atom<LoadingTypes>({
   join: false,
   logout: false,
   userOut: false,
+  user: false,
 });
 
 export const isOkAtom = atom<IsOkTypes>({

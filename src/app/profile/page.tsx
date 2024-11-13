@@ -6,12 +6,13 @@ import Image from 'next/image';
 import { loadingAtom } from '@/atoms/formAtoms';
 import useUser from '@/hooks/mypage/useUser';
 import { useModal } from '@/lib/context/ModalContext';
+import { accessTokenAtom } from '@/store/useTokenStore';
 
 export default function Profile() {
-  const [loading] = useAtom(loadingAtom);
+  const [accessToken] = useAtom(accessTokenAtom);
   const { openModal } = useModal();
-  const { user, userLogout } = useUser();
-
+  const { user, userLogout } = useUser(accessToken ?? '');
+  const [loading] = useAtom(loadingAtom);
   return (
     <div className="flex h-screen flex-col bg-[#F9FBFC] p-4">
       <div className="rounded-lg border-2 border-Blue-500 px-spacing-05 py-spacing-06">
