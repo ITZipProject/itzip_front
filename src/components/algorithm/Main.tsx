@@ -12,7 +12,7 @@ interface MainProps {
 
 const Main: React.FC<MainProps> = ({ tagId, displayName, resetTag }) => {
   const [accessToken] = useAtom(accessTokenAtom);
-  const { data, isLoading, isError } = useFetchAlgorithmData(accessToken, tagId);
+  const { data, isLoading, isError } = useFetchAlgorithmData(accessToken ?? '', tagId);
 
   if (isLoading) {
     return (
