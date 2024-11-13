@@ -22,8 +22,8 @@ const fetchAlgorithmData = async (
   tagId?: number,
 ): Promise<AlgorithmData[]> => {
   const url = tagId
-    ? `${baseApiUrl}algorithm/problems?tagId=${tagId}`
-    : `${baseApiUrl}algorithm/problems`;
+    ? `${baseApiUrl}/algorithm/problems?tagId=${tagId}`
+    : `${baseApiUrl}/algorithm/problems`;
 
   const response = await axios.get<ApiResponse>(url, {
     headers: {

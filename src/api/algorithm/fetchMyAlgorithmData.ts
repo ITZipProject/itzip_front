@@ -14,7 +14,7 @@ interface UserAlgorithmStats {
 }
 
 const fetchUserAlgorithmStats = async (accessToken: string): Promise<UserAlgorithmStats> => {
-  const response = await axios.get(`${baseApiUrl}algorithm/user`, {
+  const response = await axios.get(`${baseApiUrl}/algorithm/user`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
