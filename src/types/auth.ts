@@ -14,6 +14,8 @@ export type LoadingTypes = {
   codeVerify: boolean;
   createAccount: boolean;
   join: boolean;
+  logout: boolean;
+  userOut: boolean;
 };
 
 export type IsOkTypes = {

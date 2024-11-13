@@ -46,15 +46,15 @@ const useSignIn = () => {
     setIsLoading((prev) => ({ ...prev, join: true }));
 
     try {
-      const result = await join(formData);
+      const res = await join(formData);
 
-      if (result && 'data' in result) {
+      if (res.success) {
         setErrors((prev) => ({ ...prev, email: '' }));
-        const tokens = result.data;
-        setAccessToken(tokens.accessToken);
-
-        setRefreshToken(tokens.refreshToken);
-        closeModal();
+        if (res.data?.accessToken && res.data?.refreshToken) {
+          setAccessToken(res.data.accessToken);
+          setRefreshToken(res.data.refreshToken);
+          closeModal();
+        }
       } else {
         const email = formData.get('email') as string;
         const password = formData.get('password') as string;
