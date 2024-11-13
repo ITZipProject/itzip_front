@@ -57,8 +57,6 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPro
         />
 
         <AuthButton disabled={isLoading.join}>로그인하기</AuthButton>
-
-        {/* {errors && <p className="text-sm text-red-500">{errors}</p>} */}
       </form>
     </Modal>
   );

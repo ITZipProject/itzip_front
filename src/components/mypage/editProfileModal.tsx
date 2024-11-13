@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 'use client';
 
 import { PhotoIcon } from '@heroicons/react/16/solid';
@@ -12,8 +10,6 @@ import { accessTokenAtom } from '@/store/useTokenStore';
 
 import Input from '../common/input';
 import Modal from '../portal/modal';
-
-// ... 나머지 코드 ...
 
 interface ModalProps {
   modalId: string;
@@ -158,7 +154,7 @@ export const EditProfileModal: React.FC<ModalProps> = ({ modalId }: ModalProps) 
       if (password !== '') {
         await changePassword();
       }
-      closeModal('editProfileModal');
+      closeModal();
       alert('프로필이 성공적으로 수정되었습니다.');
     } catch (err) {
       console.error(err);
@@ -168,7 +164,7 @@ export const EditProfileModal: React.FC<ModalProps> = ({ modalId }: ModalProps) 
     }
   };
   return (
-    <Modal isOpen={true} onClose={() => closeModal(modalId)}>
+    <Modal isOpen={true} onClose={() => closeModal()}>
       <form className="flex flex-col" onSubmit={() => onSubmit}>
         <label
           htmlFor="photo"
