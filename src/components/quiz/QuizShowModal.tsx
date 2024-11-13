@@ -15,6 +15,7 @@ interface QuizAnswerResponse {
 
 import CorrectModal from '../quiz/CorrectModal';
 import IncorrectModal from '../quiz/IncorrectModal';
+import { QUIZ_CONSTANTS } from '@/constants/quiz';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -35,7 +36,7 @@ const QuizShowModal: React.FC<ModalProps & QuizData> = ({
 
   const submitAnswer = async ({ quizId, answer }: SubmitAnswerParams) => {
     const response = await axios.post(
-      `${apiUrl}cs-quiz/answer`,
+      `${apiUrl}/cs-quiz/answer`,
       {
         quizId,
         answer,
@@ -57,7 +58,7 @@ const QuizShowModal: React.FC<ModalProps & QuizData> = ({
       if (data.data === 'CORRECT') {
         setIsCorrectModalOpen(true);
       } else if (data.data === 'ALREADY_CORRECT') {
-        alert('정답을 이미 맞췄습니다!');
+        alert(QUIZ_CONSTANTS.MODAL_MESSAGES.ALREADY_SOLVED);
       } else {
         setIsIncorrectModalOpen(true);
       }
@@ -75,7 +76,7 @@ const QuizShowModal: React.FC<ModalProps & QuizData> = ({
 
   const handleSubmitAnswer = () => {
     if (selectedOption === null) {
-      alert('선택지를 선택해주세요.');
+      alert('답을 선택해주세요');
       return;
     }
 

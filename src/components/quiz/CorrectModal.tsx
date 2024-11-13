@@ -3,6 +3,7 @@ import { useAtom } from 'jotai';
 import React, { useState } from 'react';
 
 import { submitPoint } from '@/api/quiz/submitPoint';
+import { QUIZ_CONSTANTS } from '@/constants/quiz';
 import { ratings } from '@/data/QuizData';
 import { accessTokenAtom } from '@/store/useTokenStore';
 
@@ -26,7 +27,7 @@ const CorrectModal: React.FC<CorrectModalProps> = ({ onClose, quizId }) => {
   });
 
   const handleSubmit = () => {
-    if (selectedRate !== null) {
+    if (selectedRate !== null && accessToken) {
       pointMutation.mutate({
         quizId,
         point: selectedRate,
@@ -41,7 +42,7 @@ const CorrectModal: React.FC<CorrectModalProps> = ({ onClose, quizId }) => {
       <div className="flex h-3/4 w-1/2 flex-col items-center justify-center gap-40 rounded-3xl bg-zinc-900 p-7 shadow-lg">
         <div className="flex items-center justify-between">
           <div></div>
-          <h3 className="text-4xl font-bold">정답을 맞추셨네요. 축하드립니다!</h3>
+          <h3 className="text-4xl font-bold">{QUIZ_CONSTANTS.MODAL_MESSAGES.CORRECT}</h3>
         </div>
         <div className="flex flex-col items-center justify-center gap-10 ">
           <div className="flex gap-5">
