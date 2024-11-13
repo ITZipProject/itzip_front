@@ -29,8 +29,11 @@ instance.interceptors.request.use(
       return config;
     }
     if (!accessToken) {
-      console.warn('토큰이 없습니다');
-      // 필요한 처리
+      console.log('토큰이 없습니다');
+      // 인증이 필요한 요청인데 토큰이 없는 경우
+      if (!noAuth) {
+        throw new Error('인증이 필요한 요청입니다.');
+      }
     }
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
@@ -61,7 +64,6 @@ instance.interceptors.response.use(
       accessToken: string;
       refreshToken: string;
     };
-
     if (accessToken && refreshToken && err.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
