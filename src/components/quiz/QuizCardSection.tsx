@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { QUIZ_CONSTANTS } from '@/constants/quiz';
 import { QuizData } from '@/types/quiz/quiz';
 
 import QuizCard from './QuizCard';
@@ -12,10 +13,9 @@ type QuizCardSectionProps = {
 const QuizCardSection: React.FC<QuizCardSectionProps> = ({ filteredAndSortedQuizzes }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedQuiz, setSelectedQuiz] = useState<QuizData | null>(null);
-
   const handleCardClick = (quiz: QuizData) => {
     if (quiz.userQuizStatus === 'CORRECT') {
-      alert('이미 푼 문제입니다.');
+      alert(QUIZ_CONSTANTS.MODAL_MESSAGES.ALREADY_SOLVED);
       return;
     }
     setSelectedQuiz(quiz);

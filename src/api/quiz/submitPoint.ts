@@ -11,7 +11,7 @@ export const submitPoint = async ({
   accessToken: string;
 }) => {
   await axios.post(
-    `${apiUrl}cs-quiz/point`,
+    `${apiUrl}/cs-quiz/point`,
     {
       quizId: quizId,
       points: point,
