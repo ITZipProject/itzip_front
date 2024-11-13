@@ -38,7 +38,10 @@ const Main: React.FC<MainProps> = ({ tagId, displayName, resetTag }) => {
     <div className="flex h-full flex-col gap-3 bg-neutral-800 p-4 text-white shadow-md">
       <div className="mb-4 flex items-center justify-between gap-8">
         <h3 className="text-2xl font-bold">{tagId ? `${displayName} 추천 문제` : '전체 문제'}</h3>
-        <button className="rounded bg-blue-900 px-3 py-2 text-white" onClick={resetTag}>
+        <button
+          className="rounded bg-blue-900 px-3 py-2 text-white hover:scale-105"
+          onClick={resetTag}
+        >
           문제 추천
         </button>
       </div>

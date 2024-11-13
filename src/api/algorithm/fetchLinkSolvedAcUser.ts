@@ -20,16 +20,22 @@ export const useSolvedacLink = (username: string | null) => {
 
     setLoading(true);
     try {
-      const response = await axios.get(`algorithm/user?username=${username}`, {
-        baseURL: apiUrl,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
+      const response = await axios.post(
+        'algorithm/user',
+        {}, // 요청 본문을 빈 객체로 설정
+        {
+          baseURL: apiUrl,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          params: { username }, // 쿼리 파라미터로 username 전달
         },
-      });
+      );
 
       console.log('response: ', response);
 
       if (response.data.code === 'SUCCESS') {
+        // 성공 처리
       } else {
         setError('연동 실패');
       }
