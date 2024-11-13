@@ -23,7 +23,7 @@ const QuizCard: React.FC<QuizCardProps> = ({ quiz, onClick }) => {
 
   return (
     <div
-      className="flex cursor-pointer flex-col items-center gap-6 rounded-lg bg-neutral-700 p-6 transition-transform hover:scale-105"
+      className="flex h-[202px] w-[224px] cursor-pointer flex-col items-center gap-6 rounded-lg bg-neutral-700 p-6 transition-transform hover:scale-105 lg:h-[243px] lg:w-[264px]"
       onClick={onClick}
       style={{ minWidth: '224px' }}
     >

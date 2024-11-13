@@ -67,7 +67,7 @@ const QuizSort = ({ handleFilteredQuizzes }: QuizSortProps) => {
   };
 
   return (
-    <div className="mb-10 flex w-full flex-col gap-10 px-4 sm:px-6 lg:px-8">
+    <div className=" mb-10 flex w-full flex-col gap-10 px-4 sm:px-6 lg:px-8">
       {/* 헤더 섹션 */}
       <div className="flex flex-row items-center justify-between gap-5">
         <h3 className="whitespace-nowrap text-2xl font-bold sm:text-3xl">기술퀴즈 둘러보기</h3>
@@ -86,7 +86,7 @@ const QuizSort = ({ handleFilteredQuizzes }: QuizSortProps) => {
       <div className="border-b border-gray-600"></div>
 
       {/* 정렬 및 페이징 섹션 */}
-      <div className="mt-4 flex w-full flex-row flex-wrap items-center justify-between border-gray-600">
+      <div className="mt-4 flex w-full flex-col lg:flex-row flex-wrap items-center justify-between border-gray-600">
         {/* 빈 공간 */}
         <div className="mb-4 flex w-full justify-center sm:mb-0 sm:w-1/3 sm:justify-start"></div>
 

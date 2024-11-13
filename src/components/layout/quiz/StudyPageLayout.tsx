@@ -1,12 +1,23 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+
+import SolvedacLinkBotton from '@/components/study/solvedacLinkButton';
 
 const StudyPageLayout = () => {
   return (
     <div className="flex w-full flex-col gap-20 ">
       <section className="flex flex-col items-center justify-center gap-10">
-        <h3 className="text-5xl font-bold">우리는 개발자입니다.</h3>
+        <div className="flex flex-col items-center justify-center gap-5">
+          <h3 className="text-5xl font-bold">우리는 개발자입니다.</h3>
+          <div>
+            <p className="text-center text-slate-500">
+              학습하기 홈은 주니어 개발자를 위한 문제 해결 중심의 학습 플랫폼입니다.
+            </p>
+            <p className="text-center text-slate-500">
+              다양한 기술 퀴즈와 알고리즘 문제를 통해 실전에서 요구되는 문제 해결 능력을 키우세요!
+            </p>
+          </div>
+        </div>
         <div className="flex gap-5">
           <div>
             <Link href="/study/quiz">
@@ -23,6 +34,7 @@ const StudyPageLayout = () => {
             </Link>
           </div>
         </div>
+        <SolvedacLinkBotton />
       </section>
       <section className="mt-20">
         <Image

@@ -21,12 +21,14 @@ const MyQuizCard: React.FC<MyQuizCardProps> = ({ quiz }) => {
   };
 
   return (
-    <div className="flex h-64 w-96 cursor-pointer flex-col items-center gap-4 rounded-lg bg-neutral-700 p-4">
+    <div className="lg:w-264px flex h-[150] w-[224px] cursor-pointer flex-col items-center gap-4 overflow-hidden rounded-lg bg-neutral-700 p-4 lg:h-[166px]">
       <div className="flex h-1/6 w-full justify-between">
         <h3 className="rounded-sm text-center text-xs text-slate-400">{quiz.category}</h3>
       </div>
       <div className="h-3/5 w-full overflow-hidden">
-        <h3 className="text-center text-2xl font-bold text-slate-300 ">{quiz.questionText}</h3>
+        <h3 className="truncate text-center text-2xl font-bold text-slate-300">
+          {quiz.questionText}
+        </h3>
       </div>
       <div className="flex h-1/6 w-full items-center justify-between">
         <h3 className="rounded-sm text-center text-slate-400">

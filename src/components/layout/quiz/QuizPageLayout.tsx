@@ -19,7 +19,7 @@ const QuizPageLayout: React.FC = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex size-full flex-col gap-8 overflow-y-auto bg-neutral-800 px-5 py-8 text-white md:gap-12 md:px-10 md:py-14">
+      <div className="flex  flex-col items-center justify-center gap-8 overflow-y-auto bg-neutral-800 px-5 py-8 text-white md:gap-12 md:px-5 md:py-14 lg:px-8">
         <MyQuizSection />
         <div className="flex w-full flex-col gap-5 md:flex-row">
           <section className="hidden md:block md:w-1/4">

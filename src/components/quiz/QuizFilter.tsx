@@ -68,16 +68,16 @@ const QuizFilter: React.FC = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="mb-6 flex items-center justify-between px-6">
+      <div className="w-[220px] mb-6 flex items-center justify-between px-2">
         <h3 className="text-xl font-semibold">필터</h3>
         <button
           onClick={resetFilters}
-          className="bg-gray-700 text-l rounded bg-white px-4 py-2 text-slate-700 "
+          className="bg-gray-700 text-l rounded bg-white px-4 h-[28px] text-slate-700 "
         >
           초기화
         </button>
       </div>
-      <div className="flex w-full flex-col rounded-lg border-2 border-gray-700 p-6">
+      <div className="flex w-[220px] flex-col rounded-lg border-2 border-gray-700 p-6">
         <div className="flex flex-col items-center justify-center gap-4">
           <div className="flex w-full flex-col gap-8">
             <h3 className="text-xl font-semibold text-gray-500">퀴즈 검색</h3>
