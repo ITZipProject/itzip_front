@@ -32,7 +32,7 @@ const Home: React.FC = () => {
             <TagRank onTagClick={handleTagClick} />
           </section>
         </div>
-        <section className="h-full sm:w-3/4">
+        <section className="h-fulel sm:w-3/4">
           <Main tagId={tagId} displayName={displayName} resetTag={resetTag} />
         </section>
       </div>
