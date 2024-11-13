@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useFetchAlgorithmData } from '@/api/algorithm/fetchAlgorithm';
 import { accessTokenAtom } from '@/store/useTokenStore';
@@ -12,12 +12,21 @@ interface MainProps {
 
 const Main: React.FC<MainProps> = ({ tagId, displayName, resetTag }) => {
   const [accessToken] = useAtom(accessTokenAtom);
-  const { data, isLoading, isError } = useFetchAlgorithmData(accessToken, tagId);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const { data, isLoading, isError } = useFetchAlgorithmData(accessToken ?? '', tagId);
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!isLoading) {
+      setIsInitialLoading(false);
+    }
+  }, [isLoading]);
+
+  if (isInitialLoading) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <p>문제 로딩중...</p>
+      <div className="flex h-full flex-col gap-3 bg-neutral-800 p-4 text-white shadow-md">
+        <div className="mb-4 flex items-center justify-between gap-8">
+          <h3 className="text-2xl font-bold">{tagId ? `${displayName} 추천 문제` : '전체 문제'}</h3>
+        </div>
       </div>
     );
   }
@@ -25,7 +34,7 @@ const Main: React.FC<MainProps> = ({ tagId, displayName, resetTag }) => {
   if (isError) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <p>데이터를 가져오는 중 오류가 발생했습니다.</p>
+        <div>데이터를 가져오는 중 오류가 발생했습니다.</div>
       </div>
     );
   }

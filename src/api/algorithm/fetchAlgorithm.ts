@@ -22,8 +22,8 @@ const fetchAlgorithmData = async (
   tagId?: number,
 ): Promise<AlgorithmData[]> => {
   const url = tagId
-    ? `${baseApiUrl}algorithm/problems?tagId=${tagId}`
-    : `${baseApiUrl}algorithm/problems`;
+    ? `${baseApiUrl}/algorithm/problems?tagId=${tagId}`
+    : `${baseApiUrl}/algorithm/problems`;
 
   const response = await axios.get<ApiResponse>(url, {
     headers: {
@@ -38,6 +38,6 @@ export const useFetchAlgorithmData = (accessToken: string, tagId?: number) => {
     queryKey: ['algorithmData', tagId],
     queryFn: () => fetchAlgorithmData(accessToken, tagId),
     staleTime: 1000 * 60 * 5,
-    enabled: !!accessToken,
+    enabled: !!accessToken && accessToken !== '',
   });
 };
