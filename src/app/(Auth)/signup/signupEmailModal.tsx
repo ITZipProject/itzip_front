@@ -9,11 +9,11 @@ import Ask from '@/components/auth/ask';
 import SmallAsk from '@/components/auth/smallAsk';
 import Input from '@/components/common/input';
 import { Margin } from '@/components/common/margin';
+import Modal from '@/components/portal/modal';
 import { useSignUp } from '@/hooks/auth';
 import { useModal } from '@/lib/context/ModalContext';
 
 import { AuthButton } from '../auth/authButton';
-import Modal from '../auth/authModal';
 
 interface SignInModalProps {
   modalId: string;
