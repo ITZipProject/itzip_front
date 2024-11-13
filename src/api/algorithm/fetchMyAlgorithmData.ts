@@ -27,6 +27,6 @@ export const useUserAlgorithmStats = (accessToken: string) => {
     queryKey: ['algorithmData', accessToken],
     queryFn: () => fetchUserAlgorithmStats(accessToken),
     staleTime: 1000 * 60 * 5,
-    enabled: !!accessToken,
+    enabled: !!accessToken && accessToken !== ""
   });
 };
