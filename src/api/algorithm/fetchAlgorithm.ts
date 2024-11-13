@@ -38,6 +38,6 @@ export const useFetchAlgorithmData = (accessToken: string, tagId?: number) => {
     queryKey: ['algorithmData', tagId],
     queryFn: () => fetchAlgorithmData(accessToken, tagId),
     staleTime: 1000 * 60 * 5,
-    enabled: !!accessToken,
+    enabled: !!accessToken && accessToken !== '',
   });
 };
