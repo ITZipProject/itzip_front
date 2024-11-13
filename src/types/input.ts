@@ -4,4 +4,5 @@ export type InputProps = {
   title?: string;
   labelTitle?: string;
   onClick?: () => void;
+  messages?: string;
 };

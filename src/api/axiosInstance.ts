@@ -1,14 +1,10 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import https from 'https';
 
 import { getTokenState } from '@/store/useTokenStore';
 
 const instance = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
   timeout: 5000,
-  httpAgent: new https.Agent({
-    rejectUnauthorized: false,
-  }),
   headers: {
     'Content-Type': 'application/json',
     'ngrok-skip-browser-warning': '69420',
@@ -32,6 +28,13 @@ instance.interceptors.request.use(
     if (noAuth) {
       return config;
     }
+    if (!accessToken) {
+      console.log('토큰이 없습니다');
+      // 인증이 필요한 요청인데 토큰이 없는 경우
+      if (!noAuth) {
+        throw new Error('인증이 필요한 요청입니다.');
+      }
+    }
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
@@ -39,7 +42,7 @@ instance.interceptors.request.use(
     if (onlyRefresh && refreshToken) {
       config.headers['Refresh'] = `Bearer ${refreshToken}`;
     }
-    // 액세스 & 리프레시 토큰 둘 다 필요할 때 (로그인)
+    // 액세스 & 리프레시 토큰 둘 다 필요할 때 (로그인 성공 후, 토큰 갱신)
     if (bothTokens && refreshToken && accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
       config.headers['Refresh'] = `Bearer ${refreshToken}`;
@@ -61,8 +64,7 @@ instance.interceptors.response.use(
       accessToken: string;
       refreshToken: string;
     };
-
-    if (accessToken && refreshToken && err.response?.status === 400 && !originalRequest._retry) {
+    if (accessToken && refreshToken && err.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
@@ -79,12 +81,16 @@ instance.interceptors.response.use(
 
         if (res.status === 200) {
           setAccessToken(res.headers.authorization as string);
+          if (res.headers.refresh) {
+            setRefreshToken(res.headers.refresh as string);
+          }
           return instance(originalRequest);
         }
       } catch (error) {
-        console.log('토큰 갱신 실패, 모든 토큰 삭제');
+        alert('인증이 만료되었습니다. 다시 로그인해 주세요.');
         setRefreshToken('');
         setAccessToken('');
+        window.location.href = '/';
       }
     }
     return Promise.reject(err);

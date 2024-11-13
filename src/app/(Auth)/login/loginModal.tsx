@@ -21,7 +21,7 @@ const LoginModal: React.FC<SignUpModalProps> = ({ modalId }) => {
   if (!openModals.includes(modalId)) return null;
 
   return (
-    <Modal isOpen={true} onClose={() => closeModal(modalId)}>
+    <Modal isOpen={true} onClose={() => closeModal()}>
       <div>
         <h2 className="text-16 font-[500] text-[#6C6C6C]">ITZIP을 다채롭게 즐기기 위해서는</h2>
         <h2 className="text-24 font-[700] text-Grey-900">로그인이 필요해요!</h2>
@@ -31,10 +31,6 @@ const LoginModal: React.FC<SignUpModalProps> = ({ modalId }) => {
         <button onClick={() => openModal('EmailLoginModal')} className="primary-btn">
           <span>이메일로 로그인</span>
         </button>
-        {/* <LargeButton modalId="signinModal" btnType="primary-btn" text="이메일로 로그인" /> */}
-        {/* <button onClick={() => openModal('signinModal')} className="bg-black text-white">
-          이메일 로그인
-        </button> */}
 
         <h1 className="text-12 font-[400] text-[#818181]">또는</h1>
 
@@ -49,7 +45,7 @@ const LoginModal: React.FC<SignUpModalProps> = ({ modalId }) => {
         </button>
 
         <div className="w-full pt-[38px]">
-          <SmallAsk text="아직 계정이 없으신가요?" textColor="#0500E8" modalName="signUpModal" />
+          <SmallAsk text="아직 계정이 없으신가요?" modalName="signUpModal" />
         </div>
       </div>
     </Modal>

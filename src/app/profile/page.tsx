@@ -1,73 +1,16 @@
 'use client';
 
-import axios from 'axios';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
 
+import { loadingAtom } from '@/atoms/formAtoms';
+import useUser from '@/hooks/mypage/useUser';
 import { useModal } from '@/lib/context/ModalContext';
-import { accessTokenAtom, clearTokenAtom } from '@/store/useTokenStore';
-
-import { logoutServerAction } from './actions';
-
-interface UserProps {
-  email: string;
-  nickname: string;
-  imageUrl?: string | null;
-}
 
 export default function Profile() {
-  const [loading, setLoading] = useState({
-    user: false,
-    logout: false,
-    goodbye: false,
-  });
-  const router = useRouter();
-  const [, clearTokens] = useAtom(clearTokenAtom);
-  const [accessToken] = useAtom(accessTokenAtom);
+  const [loading] = useAtom(loadingAtom);
   const { openModal } = useModal();
-  const [user, setUser] = useState<UserProps>();
-
-  const logOut = async () => {
-    setLoading((prev) => ({ ...prev, logout: true }));
-
-    try {
-      await logoutServerAction();
-      clearTokens();
-
-      // 로그아웃 실패 로그 보려면 주석
-      router.push('/');
-    } catch (error) {
-      console.error('로그아웃 실패:', error);
-    } finally {
-      setLoading((prev) => ({ ...prev, logout: false }));
-    }
-  };
-
-  const getUser = useCallback(async () => {
-    setLoading((prev) => ({ ...prev, user: true }));
-    try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      setUser((res?.data as { data: UserProps })?.data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading((prev) => ({ ...prev, user: false }));
-    }
-  }, [accessToken]);
-
-  useEffect(() => {
-    void getUser();
-  }, [getUser]);
-
-  // api - 미구현
-  const out = () => {};
+  const { user, userLogout } = useUser();
 
   return (
     <div className="flex h-screen flex-col bg-[#F9FBFC] p-4">
@@ -95,11 +38,11 @@ export default function Profile() {
         </div>
       </div>
       <div className="flex flex-col">
-        <button onClick={() => void logOut()} disabled={loading.logout}>
+        <button onClick={() => void userLogout()} disabled={loading.logout}>
           {loading.logout ? '로그아웃 중...' : '로그아웃'}
         </button>
-        <button className="text-gray-300" onClick={out} disabled={loading.goodbye}>
-          {loading.goodbye ? '회원탈퇴 중...' : '회원탈퇴 >'}
+        <button className="text-gray-300" onClick={() => {}} disabled={loading.userOut}>
+          {loading.userOut ? '회원탈퇴 중...' : '회원탈퇴 >'}
         </button>
       </div>
       <div></div>

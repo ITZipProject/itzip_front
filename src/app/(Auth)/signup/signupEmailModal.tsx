@@ -1,16 +1,16 @@
 'use client';
 
-import { ChevronLeftIcon, XCircleIcon } from '@heroicons/react/16/solid';
+import { XCircleIcon } from '@heroicons/react/16/solid';
 import { useAtom } from 'jotai';
 
 import { agreeErrorAtom } from '@/atoms/formAtoms';
 import AgreeCheckboxes from '@/components/auth/agreeCheckbox';
-import Ask from '@/components/auth/ask';
+import ModalBackButton from '@/components/auth/modalBackButton';
 import SmallAsk from '@/components/auth/smallAsk';
 import Input from '@/components/common/input';
 import { Margin } from '@/components/common/margin';
 import Modal from '@/components/portal/modal';
-import { useSignUp } from '@/hooks/auth';
+import { useSignUp } from '@/hooks/auth/useSignUp';
 import { useModal } from '@/lib/context/ModalContext';
 
 import { AuthButton } from '../auth/authButton';
@@ -19,10 +19,11 @@ interface SignInModalProps {
   modalId: string;
 }
 const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalProps) => {
-  const { openModals, closeModal, openModal } = useModal();
+  const { openModals, closeModal } = useModal();
   const {
     formValues,
     errors,
+    message,
     isLoading,
     isOk,
     onClickResetButton,
@@ -38,16 +39,11 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
   if (!openModals.includes(modalId)) return null;
 
   return (
-    <Modal isOpen={true} onClose={() => closeModal(modalId)}>
-      <button onClick={() => openModal('signUpModal')} className="flex items-center">
-        <ChevronLeftIcon className="-ml-4 size-1/6" />
-        <h1 className="text-2xl font-bold">이메일로 회원가입하기</h1>
-      </button>
+    <Modal isOpen={true} onClose={() => closeModal()}>
+      <ModalBackButton title="이메일로 회원가입하기" />
       <Margin height={'48px'} />
-      {/* 임시로 signUp 사용 - 이유 onSubmitSignUpBtn은 로그인 검증 로직인데 검증은 되는데 회원가입이 되지 않음. */}
       <form
         onSubmit={(e) => {
-          e.preventDefault();
           void signUp(e);
         }}
         className="w-full space-y-4"
@@ -66,21 +62,21 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
           minLength={2}
           onClick={() => onClickResetButton('email')}
           errors={errors.email}
+          messages={message.email}
         />
-        {!isOk.emailCheck && (
+
+        {!isOk.emailCheck ? (
           <AuthButton
             disabled={isLoading.emailCheck}
-            onClick={(e) => {
-              e.preventDefault();
-              void checkEmailDuplicate(e);
+            onClick={() => {
+              void checkEmailDuplicate();
             }}
           >
             {isLoading.emailCheck ? '중복 확인 중..' : '중복 확인하기'}
           </AuthButton>
-        )}
-        {isOk.emailCheck && (
+        ) : (
           <>
-            <div hidden={!isOk.codeHidden}>
+            {isOk.codeHidden && (
               <Input
                 name="authCode"
                 type="text"
@@ -90,42 +86,42 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
                 onChange={onChangeFormValues}
                 placeholder="인증코드를 입력해주세요."
                 errors={errors.authCode}
+                messages={message.authCode}
                 onClick={() => onClickResetButton('authCode')}
               />
-            </div>
+            )}
             {!isOk.codePost ? (
               <AuthButton
                 disabled={isLoading.codePost}
-                onClick={(e) => {
-                  e.preventDefault();
-                  void sendAuthCode(e);
+                onClick={() => {
+                  void sendAuthCode();
                 }}
               >
                 {isLoading.codePost ? '인증 코드 보내기 중..' : '인증 코드 보내기'}
               </AuthButton>
-            ) : !isOk.codeVerify ? (
-              <>
-                <AuthButton
-                  disabled={isLoading.codeVerify}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    void verifyAuthCode(e);
-                  }}
-                >
-                  {isLoading.codeVerify ? '이메일 인증하기 중..' : '이메일 인증하기'}
-                </AuthButton>
-                <AuthButton
-                  disabled={isLoading.codePost}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    void sendAuthCode(e);
-                  }}
-                >
-                  {isLoading.codePost ? '인증 코드 보내기 중..' : '인증 코드 다시 보내기'}
-                </AuthButton>
-              </>
             ) : (
-              <span className="flex justify-center">인증완료</span>
+              <>
+                {!isOk.codeVerify && (
+                  <>
+                    <AuthButton
+                      disabled={isLoading.codeVerify}
+                      onClick={() => {
+                        void verifyAuthCode();
+                      }}
+                    >
+                      {isLoading.codeVerify ? '인증코드 확인 중..' : '인증코드 확인하기'}
+                    </AuthButton>
+                    <AuthButton
+                      disabled={isLoading.codePost}
+                      onClick={() => {
+                        void sendAuthCode();
+                      }}
+                    >
+                      {isLoading.codePost ? '인증 코드 보내기 중..' : '인증 코드 다시 보내기'}
+                    </AuthButton>
+                  </>
+                )}
+              </>
             )}
           </>
         )}
@@ -142,6 +138,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
           required
           onClick={() => onClickResetButton('password')}
           errors={errors.password}
+          messages={message.password}
         />
 
         <Input
@@ -157,6 +154,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
           minLength={2}
           onClick={() => onClickResetButton('passwordCheck')}
           errors={errors.passwordCheck}
+          messages={message.passwordCheck}
         />
         {/* 약관 동의 체크박스 */}
         <AgreeCheckboxes />
@@ -169,11 +167,10 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
           </span>
         )}
         {/* 가입하기 버튼 */}
-        <AuthButton disabled={isLoading.signUp}>가입하기</AuthButton>
+        <AuthButton disabled={isLoading.createAccount}>가입하기</AuthButton>
 
         <div className="flex flex-col items-center">
-          <SmallAsk text="이미 회원이신가요?" textColor="#818181" />
-          <Ask text="회원가입하기" textColor="#0500E8" modalName="verifyModal" />
+          <SmallAsk text="이미 회원이신가요?" modalName="LoginModal" />
         </div>
       </form>
     </Modal>
