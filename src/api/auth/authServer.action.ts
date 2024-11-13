@@ -28,73 +28,71 @@ export const join = async (formData: FormData) => {
       },
     );
     const { data } = result.data;
+
     cookies().set('accessToken', data.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 3600, // 1시간
+      maxAge: 3600,
       path: '/',
     });
     cookies().set('refreshToken', data.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 2 * 7 * 24 * 3600, // 7일 (초 단위)
+      maxAge: 2 * 7 * 24 * 3600,
       path: '/',
     });
-    console.log('success login', result.data);
-    return result.data;
+
+    return {
+      success: true,
+      data: {
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+      },
+    };
   } catch (err) {
-    return console.error(err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : '로그인 중 오류가 발생했습니다.',
+    };
   }
 };
 
-// export async function loginAction(
-//   email: string,
-//   password: string,
-// ): Promise<{
-//   success: boolean;
-//   message: string;
-//   accessToken?: string;
-//   refreshToken?: string;
-// }> {
-//   try {
-//     // post 요청 시 반환되는 토큰을 쿠키에 저장, 토큰을 클라이언트에서 사용할 수 있게 리턴
-//     const response = await instance.post<LoginResponse>('/user/login', { email, password });
+export const logout = async () => {
+  try {
+    const cookieStore = cookies();
+    const accessToken = cookieStore.get('accessToken')?.value;
 
-//     const { data } = response.data;
-//     console.log('login server!', data);
-//     // 액세스 토큰을 쿠키에 저장
-//     cookies().set('accessToken', data.accessToken, {
-//       httpOnly: true,
-//       secure: process.env.NODE_ENV === 'production',
-//       sameSite: 'strict',
-//       maxAge: 7 * 24 * 3600, // 7일 (초 단위)
-//       path: '/',
-//     });
+    if (!accessToken) {
+      console.log('로그아웃: 토큰이 없음');
+      return;
+    }
 
-//     // 리프레시 토큰도 저장
-//     if (data.refreshToken) {
-//       cookies().set('refreshToken', data.refreshToken, {
-//         httpOnly: true,
-//         secure: process.env.NODE_ENV === 'production',
-//         sameSite: 'strict',
-//         maxAge: 7 * 24 * 3600, // 7일 (초 단위)
-//         path: '/',
-//       });
-//     }
+    await instance.delete('/user/logout', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'No-Auth': true,
+      },
+    });
 
-//     return {
-//       success: true,
-//       message: '로그인 성공',
-//       accessToken: data.accessToken,
-//       refreshToken: data.refreshToken,
-//     };
-//   } catch (error) {
-//     console.error('로그인 에러:', error);
-//     if (error instanceof Error) {
-//       return { success: false, message: `로그인 실패: ${error.message}` };
-//     }
-//     return { success: false, message: '로그인 실패: 알 수 없는 오류' };
-//   }
-// }
+    // 로그아웃 후 쿠키 삭제
+    cookieStore.delete('accessToken');
+    cookieStore.delete('refreshToken');
+  } catch (err) {
+    console.log('Failed Logout:', err);
+  }
+};
+
+export const out = async (accessToken: string) => {
+  try {
+    const res = await instance.delete('/user/out', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log('user out', res);
+  } catch (err) {
+    console.error(err);
+  }
+};
