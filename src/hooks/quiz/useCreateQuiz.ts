@@ -38,7 +38,7 @@ const useCreateQuiz = () => {
   });
 
   const handleCreateQuiz: SubmitHandler<QuizFormValues> = (values) => {
-    mutation.mutate({ values, accessToken });
+    mutation.mutate({ values, accessToken: accessToken ?? '' });
   };
 
   return {
