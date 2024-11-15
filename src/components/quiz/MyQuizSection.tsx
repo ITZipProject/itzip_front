@@ -16,7 +16,7 @@ const MyQuizSection: React.FC = () => {
   const [selectedQuiz, setSelectedQuiz] = useState<QuizData | null>(null);
   const [accessToken] = useAtom(accessTokenAtom);
 
-  const { data: quizzes, isLoading, isError } = useMyQuizzes(accessToken);
+  const { data: quizzes, isLoading, isError } = useMyQuizzes(accessToken ?? '');
 
   const settings = {
     dots: true,
