@@ -1,10 +1,10 @@
+import { animated } from '@react-spring/web';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
 import { BlogPostCardProps } from '@/types/blog/common';
 
-// BlogPostCardProps 인터페이스 제거
 const BlogPostCard: React.FC<BlogPostCardProps> = ({
   id,
   title,
@@ -16,9 +16,13 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({
   timeAgo,
   imageUrl,
   profileImageUrl,
+  style,
 }) => {
   return (
-    <div className="flex h-[400px] w-full max-w-[300px] flex-col overflow-hidden">
+    <animated.div
+      style={style}
+      className="flex h-[400px] w-full max-w-[300px] flex-col overflow-hidden"
+    >
       <Link href={`/blog/post/${id}`} passHref className="relative h-[180px]">
         <Image src={imageUrl} className="rounded-lg" alt={title} layout="fill" objectFit="cover" />
       </Link>
@@ -68,7 +72,7 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({
           <p className="text-xs text-gray-400">{timeAgo}</p>
         </div>
       </div>
-    </div>
+    </animated.div>
   );
 };
 
