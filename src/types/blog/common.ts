@@ -1,4 +1,45 @@
+import { SpringValue } from '@react-spring/web';
+
 import { CategoryType } from '@/data/BlogCategories';
+
+// 애니메이션
+/** 애니메이션 스타일 Props 타입 */
+export interface AnimatedStyleProps {
+  opacity: SpringValue<number>;
+  transform: SpringValue<string>;
+}
+// blog/CardPreview
+/** 게시글 카드 미리보기 관련 타입 */
+export interface PostPreviewResponse {
+  postId: string;
+  categoryId: string;
+  title: string;
+  content: string;
+  thumbnailImagePath: string;
+  likeCount: number;
+  profileImagePath: string;
+  author: string;
+  createDate: string;
+  links: Array<any>;
+}
+
+export interface ApiPageInfo {
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  number: number;
+}
+
+export interface ApiResponse {
+  status: string;
+  msg: string;
+  data: {
+    content: PostPreviewResponse[];
+    links: Array<any>;
+    page: ApiPageInfo;
+  };
+  code: string;
+}
 
 // blog/main
 /** 캐러셀 관련 타입 */
@@ -60,8 +101,10 @@ export interface CarouselIndicatorProps {
   onNextClick: () => void;
 }
 
-/** 블로그 포스트 카드 관련 타입 */
-export type BlogPostCardProps = BlogPost;
+/** 블로그 포스트 카드 Props 타입 (애니메이션 포함) */
+export interface BlogPostCardProps extends BlogPost {
+  style?: AnimatedStyleProps;
+}
 
 // blog/user
 /** 사용자 블로그 관련 타입 */
