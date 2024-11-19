@@ -23,7 +23,7 @@ const EditButton = ({ onClick, text, type }: ButtonProps) => {
   return (
     <button
       type={type}
-      className="primary-btn bg-Grey-100 h-spacing-12 disabled:bg-Grey-100 disabled:text-white disabled:cursor-not-allowed rounded-radius-03 text-white font-semibold text-14 mt-2"
+      className="primary-btn mt-2 h-spacing-12 rounded-radius-03 bg-Grey-100 text-14 font-semibold text-white disabled:cursor-not-allowed disabled:bg-Grey-100 disabled:text-white"
       onClick={onClick}
     >
       {text}
@@ -168,7 +168,7 @@ export const EditProfileModal: React.FC<ModalProps> = ({ modalId }: ModalProps) 
       <form className="flex flex-col" onSubmit={() => onSubmit}>
         <label
           htmlFor="photo"
-          className="flex flex-col items-center justify-center size-40 cursor-pointer border-2 border-dashed border-neutral-300 rounded-full bg-center bg-cover text-neutral-300 self-center"
+          className="flex size-40 cursor-pointer flex-col items-center justify-center self-center rounded-full border-2 border-dashed border-neutral-300 bg-cover bg-center text-neutral-300"
           style={{
             backgroundImage: `url(${preview})`,
           }}
@@ -176,7 +176,7 @@ export const EditProfileModal: React.FC<ModalProps> = ({ modalId }: ModalProps) 
           {preview === '' ? (
             <>
               <PhotoIcon className="w-20" />
-              <button onClick={() => changeProfileImage} className="text-neutral-400 text-sm">
+              <button onClick={() => changeProfileImage} className="text-sm text-neutral-400">
                 사진 변경
               </button>
             </>
