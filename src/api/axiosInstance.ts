@@ -68,16 +68,12 @@ instance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const res = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/user/refreshToken`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              Refresh: `Bearer ${refreshToken}`,
-            },
+        const res = await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/user/refreshToken`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            Refresh: `Bearer ${refreshToken}`,
           },
-        );
+        });
 
         if (res.status === 200) {
           setAccessToken(res.headers.authorization as string);

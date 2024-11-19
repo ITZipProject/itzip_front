@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { QUIZ_CONSTANTS } from '../../constants/quiz';
 import { QuizData } from '../../types/quiz/quiz';
 
 interface QuizCardProps {
@@ -10,11 +11,11 @@ interface QuizCardProps {
 const QuizCard: React.FC<QuizCardProps> = ({ quiz, onClick }) => {
   const renderDifficultyLevel = (difficulty: number) => {
     switch (difficulty) {
-      case 1:
+      case QUIZ_CONSTANTS.DIFFICULTY_LEVELS.LEVEL_1:
         return 'Level 1';
-      case 2:
+      case QUIZ_CONSTANTS.DIFFICULTY_LEVELS.LEVEL_2:
         return 'Level 2';
-      case 3:
+      case QUIZ_CONSTANTS.DIFFICULTY_LEVELS.LEVEL_3:
         return 'Level 3';
       default:
         return 'Unknown Level';

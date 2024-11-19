@@ -6,23 +6,14 @@ import { useSolvedacLinkStatus } from '@/api/algorithm/fetchCheckSolvedAcUser';
 
 import SolvedacLinkModal from './solvedacLinkModal';
 
+const SOLVED_AC_ICON = '/solvedac-connect-icon.png';
+
 const SolvedacLinkButton = () => {
   const { isSolvedacLinked, loading, error } = useSolvedacLinkStatus();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
-
-  if (isSolvedacLinked) {
-    return <></>;
+  if (loading || error || isSolvedacLinked) {
+    return null;
   }
 
   return (
@@ -31,14 +22,14 @@ const SolvedacLinkButton = () => {
         <h3 className="text-xl font-medium">Solved.ac와 연동이 필요합니다!</h3>
         <button
           className="flex items-center justify-center gap-2 rounded-xl border bg-zinc-800 px-4 py-2"
-          onClick={handleOpenModal}
+          onClick={() => setIsModalOpen(true)}
         >
-          <Image src="/solvedac-connect-icon.png" width={16} height={16} alt="solvedacIcon" />
+          <Image src={SOLVED_AC_ICON} width={16} height={16} alt="solvedac 아이콘" />
           <p>연동하기</p>
         </button>
       </div>
 
-      {isModalOpen && <SolvedacLinkModal onClose={handleCloseModal} />}
+      {isModalOpen && <SolvedacLinkModal onClose={() => setIsModalOpen(false)} />}
     </div>
   );
 };
