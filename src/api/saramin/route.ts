@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { Job } from '@/components/recruit/job';
 
-const baseUrl = 'http://3.39.78.0:8080/api';
+const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '');
 
 interface FetchJobsParams {
   page: number;
