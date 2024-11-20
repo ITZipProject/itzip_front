@@ -37,7 +37,7 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: 22
         script: |
-          sudo docker-compose -f /home/ubuntu/itzip/docker-compose.yml down
-          sudo docker rmi itzip/ts-react-18-nextjs-14.2:latest
-          sudo docker-compose -f /home/ubuntu/itzip/docker-compose.yml up -d
-          sudo docker system prune -a -f
+          docker-compose -f /home/ubuntu/itzip/docker-compose.yml down
+          docker-compose -f /home/ubuntu/itzip/docker-compose.yml pull
+          docker-compose -f /home/ubuntu/itzip/docker-compose.yml up -d
+          docker system prune -a -f
