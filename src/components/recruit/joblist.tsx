@@ -1,6 +1,6 @@
 'use client';
 
-import { BookmarkIcon } from 'lucide-react';
+import { BookmarkIcon, Loader2 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
 
@@ -20,9 +20,16 @@ interface JobListProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  isLoading: boolean;
 }
 
-const JobList: React.FC<JobListProps> = ({ jobs, currentPage, totalPages, onPageChange }) => {
+const JobList: React.FC<JobListProps> = ({
+  jobs,
+  currentPage,
+  totalPages,
+  onPageChange,
+  isLoading,
+}) => {
   const [sortOrder, setSortOrder] = useState<'latest' | 'oldest' | null>(null);
   const [bookmarks, setBookmarks] = useState<Set<string>>(new Set());
 
@@ -76,6 +83,14 @@ const JobList: React.FC<JobListProps> = ({ jobs, currentPage, totalPages, onPage
     }
     return 0;
   });
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center">
+        <Loader2 className="w-8 animate-spin text-blue-500" />
+      </div>
+    );
+  }
 
   return (
     <div>

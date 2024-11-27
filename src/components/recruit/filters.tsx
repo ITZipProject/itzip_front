@@ -113,6 +113,7 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters, applyFilters }) 
         />
       </div> */}
       <div className="mb-4 p-4 border-01 radius-01">
+        <h3 className="font-pre-body-01 mb-2">경력</h3>
         <Experience
           selectedExperienceMin={filters.experienceMin}
           selectedExperienceMax={filters.experienceMax}
