@@ -62,8 +62,8 @@ const Experience: React.FC<ExperienceFilterProps> = ({
               backgroundColor: '#e5e7eb',
             },
             '& .MuiSlider-thumb': {
-              width: 20,
-              height: 20,
+              width: 15,
+              height: 15,
               backgroundColor: '#2563eb',
               '&:hover, &.Mui-focusVisible': {
                 boxShadow: '0 0 0 8px rgba(37, 99, 235, 0.16)',
