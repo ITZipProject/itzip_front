@@ -64,6 +64,7 @@ const RecruitPage: React.FC = () => {
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
+            isLoading={false}
           />
         </div>
       </div>

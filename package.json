@@ -13,8 +13,11 @@
     "test:coverage": "react-scripts test --watchAll=false --coverage"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
     "@heroicons/react": "^2.1.5",
     "@hookform/resolvers": "^3.9.0",
+    "@mui/material": "^6.1.8",
     "@prisma/client": "^5.16.1",
     "@react-spring/web": "^9.7.5",
     "@sentry/nextjs": "^8.13.0",
