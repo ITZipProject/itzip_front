@@ -6,8 +6,6 @@ import ReactPaginate from 'react-paginate';
 
 import { Job } from './job';
 
-// import { fetchJobs } from '@/api/saramin/route';
-
 function cleanLocationNames(locationNames: string[]): string[] {
   const uniqueLocations = new Set(
     locationNames.flatMap((name) => name.split(' > ')).filter((name) => name !== '&gt;'),

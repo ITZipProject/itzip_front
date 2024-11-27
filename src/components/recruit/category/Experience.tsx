@@ -50,7 +50,7 @@ const Experience: React.FC<ExperienceFilterProps> = ({
           step={1}
           marks={[
             { value: 0, label: '신입' },
-            { value: 10, label: '10년 이상' },
+            { value: 10, label: '10년' },
           ]}
           sx={{
             '& .MuiSlider-track': {
