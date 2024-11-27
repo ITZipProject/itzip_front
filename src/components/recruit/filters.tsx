@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 
 import Experience from './category/Experience';
-// import RegionCheckboxes from './category/region';
+import RegionCheckboxes from './category/region';
 import Search from './category/search';
 import TechStack from './category/techStack';
 
@@ -40,9 +40,9 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters, applyFilters }) 
   };
 
   // 지역 체크박스
-  // const handleRegionChange = (selected: string[]) => {
-  //   setFilters(prev => ({ ...prev, locationName: selected }));
-  // };
+  const handleRegionChange = (selected: string[]) => {
+    setFilters((prev) => ({ ...prev, locationName: selected }));
+  };
 
   const handleRemoveTechStack = (techName: string) => {
     const updatedTechStacks = selectedTechStacks.filter((tech) => tech !== techName);
@@ -106,12 +106,10 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters, applyFilters }) 
         )}
         <TechStack ref={techStackRef} onSelectionChange={handleTechStackChange} />
       </div>
-      {/* <div className="mb-4 p-4 border-01 radius-01">
+      <div className="mb-4 p-4 border-01 radius-01">
         <h3 className="font-pre-body-01 mb-2">지역</h3>
-        <RegionCheckboxes
-          onSelectionChange={handleRegionChange}
-        />
-      </div> */}
+        <RegionCheckboxes onSelectionChange={handleRegionChange} />
+      </div>
       <div className="mb-4 p-4 border-01 radius-01">
         <h3 className="font-pre-body-01 mb-2">경력</h3>
         <Experience
