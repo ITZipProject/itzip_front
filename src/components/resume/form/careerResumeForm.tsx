@@ -1,82 +1,132 @@
-import Slider from '@mui/material/Slider';
-import React, { useState, useEffect } from 'react';
+/* eslint-disable */
 
-interface ExperienceFilterProps {
-  selectedExperienceMin: number;
-  selectedExperienceMax: number;
-  onExperienceChange: (min: number, max: number) => void;
-}
+import * as React from 'react';
+import { useAtom } from 'jotai';
+import { careerResumeAtom, errorsAtom } from './ResumeAtoms';
+import { ICareerResume } from '@/types/resume';
 
-const Experience: React.FC<ExperienceFilterProps> = ({
-  selectedExperienceMin,
-  selectedExperienceMax,
-  onExperienceChange,
-}) => {
-  const [value, setValue] = useState<number[]>([0, 10]);
+const CareerResumeForm: React.FC = () => {
+  const [careerList, setCareerList] = useAtom(careerResumeAtom);
+  const [careerErrors, setCareerErrors] = useAtom(errorsAtom);
 
-  useEffect(() => {
-    const min = isNaN(selectedExperienceMin) ? 0 : selectedExperienceMin;
-    const max = isNaN(selectedExperienceMax) ? 10 : selectedExperienceMax;
-    setValue([min, max]);
-  }, [selectedExperienceMin, selectedExperienceMax]);
+  // 입력 필드 변경 시 호출되는 함수
+  const handleChange = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = event.target;
+    const updatedList = [...careerList];
+    updatedList[index] = { ...updatedList[index], [name]: value };
 
-  const handleChange = (_event: Event, newValue: number | number[]) => {
-    setValue(newValue as number[]);
-    if (Array.isArray(newValue)) {
-      onExperienceChange(newValue[0], newValue[1]);
-    }
+    setCareerList(updatedList);
+
+    // 에러 메시지 초기화
+    setCareerErrors((prevErrors) => ({
+      ...prevErrors,
+      careerResume: {
+        ...prevErrors.careerResume,
+        [index]: {
+          ...prevErrors.careerResume?.[index],
+          [name]: '',
+        },
+      },
+    }));
   };
 
-  const formatExperience = (years: number) => {
-    if (isNaN(years)) return '경력 무관';
-    if (years === 0) return '신입';
-    if (years >= 10) return '10년 이상';
-    return `${years}년`;
+  const handleAdd = () => {
+    setCareerList([
+      ...careerList,
+      {
+        company_name: '',
+        department: '',
+        status: 'WORKING',
+        start_date: '',
+        end_date: '',
+      },
+    ]);
+  };
+
+  const handleDelete = (index: number) => {
+    setCareerList(careerList.filter((_, i) => i !== index));
+    setCareerErrors((prevErrors) => {
+      const updatedErrors = { ...prevErrors };
+      delete updatedErrors.careerResume?.[index];
+      return updatedErrors;
+    });
   };
 
   return (
-    <div className="px-4 py-3">
-      <h3 className="mb-2 text-base font-medium">경력</h3>
-      <div className="mb-4 text-center font-medium">
-        {value[0] === value[1]
-          ? formatExperience(value[0])
-          : `${formatExperience(value[0])} ~ ${formatExperience(value[1])}`}
-      </div>
-      <div className="px-2">
-        <Slider
-          getAriaLabel={() => 'Temperature range'}
-          value={value}
-          onChange={handleChange}
-          valueLabelDisplay="auto"
-          min={0}
-          max={10}
-          step={1}
-          marks={[
-            { value: 0, label: '신입' },
-            { value: 10, label: '10년 이상' },
-          ]}
-          sx={{
-            '& .MuiSlider-track': {
-              height: 4,
-              backgroundColor: '#2563eb',
-            },
-            '& .MuiSlider-rail': {
-              height: 4,
-              backgroundColor: '#e5e7eb',
-            },
-            '& .MuiSlider-thumb': {
-              width: 20,
-              height: 20,
-              backgroundColor: '#2563eb',
-              '&:hover, &.Mui-focusVisible': {
-                boxShadow: '0 0 0 8px rgba(37, 99, 235, 0.16)',
-              },
-            },
-          }}
-        />
-      </div>
+    <div>
+      <h2>Career List</h2>
+      {careerList.map((career, index) => (
+        <div key={index}>
+          <h3>Career {index + 1}</h3>
+          <div>
+            <label>Company Name:</label>
+            <input
+              type="text"
+              name="company_name"
+              value={career.company_name}
+              onChange={(e) => handleChange(index, e)}
+              style={{ borderColor: careerErrors.careerResume?.[index]?.company_name ? 'red' : '' }}
+            />
+            {careerErrors.careerResume?.[index]?.company_name && (
+              <p style={{ color: 'red' }}>{careerErrors.careerResume[index].company_name}</p>
+            )}
+          </div>
+          <div>
+            <label>Department:</label>
+            <input
+              type="text"
+              name="department"
+              value={career.department}
+              onChange={(e) => handleChange(index, e)}
+              style={{ borderColor: careerErrors.careerResume?.[index]?.department ? 'red' : '' }}
+            />
+          </div>
+          <div>
+            <label>Status:</label>
+            <select
+              name="status"
+              value={career.status}
+              onChange={(e) => handleChange(index, e)}
+              style={{ borderColor: careerErrors.careerResume?.[index]?.status ? 'red' : '' }}
+            >
+              <option value="WORKING">Working</option>
+              <option value="LEAVE">Leave</option>
+            </select>
+          </div>
+          <div>
+            <label>Start Date:</label>
+            <input
+              type="date"
+              name="start_date"
+              value={career.start_date}
+              onChange={(e) => handleChange(index, e)}
+              style={{ borderColor: careerErrors.careerResume?.[index]?.start_date ? 'red' : '' }}
+            />
+          </div>
+          <div>
+            <label>End Date:</label>
+            <input
+              type="date"
+              name="end_date"
+              value={career.end_date}
+              onChange={(e) => handleChange(index, e)}
+              style={{ borderColor: careerErrors.careerResume?.[index]?.end_date ? 'red' : '' }}
+            />
+          </div>
+          <button type="button" onClick={() => handleDelete(index)}>
+            Remove
+          </button>
+          <hr />
+        </div>
+      ))}
+      <button type="button" onClick={handleAdd}>
+        Add New Career
+      </button>
     </div>
   );
 };
 
-export default Experience;
+export default CareerResumeForm;
