@@ -9,7 +9,7 @@ interface FetchJobsParams {
   size: number;
   sort: string;
   techName?: string;
-  locationName?: string[];
+  locationName?: string;
   experienceMin?: number;
   experienceMax?: number;
   search?: string;
