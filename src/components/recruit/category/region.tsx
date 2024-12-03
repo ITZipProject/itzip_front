@@ -1,7 +1,7 @@
 'use client';
 
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 
 interface Region {
   id: string;
@@ -11,12 +11,12 @@ interface Region {
 const regions: Region[] = [
   { id: '101000', name: '서울' },
   { id: '102000', name: '경기' },
-  { id: '106000', name: '부산' },
-  { id: '108000', name: '인천' },
+  { id: '103000', name: '광주' },
   { id: '104000', name: '대구' },
   { id: '105000', name: '대전' },
-  { id: '103000', name: '광주' },
+  { id: '106000', name: '부산' },
   { id: '107000', name: '울산' },
+  { id: '108000', name: '인천' },
   { id: '109000', name: '강원' },
   { id: '110000', name: '경남' },
   { id: '111000', name: '경북' },
@@ -30,7 +30,8 @@ const regions: Region[] = [
 ];
 
 interface RegionCheckboxesProps {
-  onSelectionChange?: (selected: string[]) => void;
+  selectedLocationName: string[];
+  onRegionChange: (selected: string[]) => void;
 }
 
 export interface RegionCheckboxesRef {
@@ -38,10 +39,14 @@ export interface RegionCheckboxesRef {
 }
 
 const RegionCheckboxes = forwardRef<RegionCheckboxesRef, RegionCheckboxesProps>(
-  ({ onSelectionChange }, ref) => {
-    const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+  ({ selectedLocationName, onRegionChange }, ref) => {
+    const [selectedRegions, setSelectedRegions] = useState<string[]>(selectedLocationName);
     const [isExpanded, setIsExpanded] = useState(false);
     const INITIAL_DISPLAY_COUNT = 6;
+
+    useEffect(() => {
+      setSelectedRegions(selectedLocationName);
+    }, [selectedLocationName]);
 
     useImperativeHandle(ref, () => ({
       resetSelections: (newSelection: string[]) => {
@@ -49,19 +54,16 @@ const RegionCheckboxes = forwardRef<RegionCheckboxesRef, RegionCheckboxesProps>(
       },
     }));
 
-    const displayedRegions = isExpanded ? regions : regions.slice(0, INITIAL_DISPLAY_COUNT);
-
     const handleRegionChange = (regionName: string) => {
       const updatedSelection = selectedRegions.includes(regionName)
         ? selectedRegions.filter((r) => r !== regionName)
         : [...selectedRegions, regionName];
 
       setSelectedRegions(updatedSelection);
-
-      if (onSelectionChange) {
-        onSelectionChange(updatedSelection);
-      }
+      onRegionChange(updatedSelection);
     };
+
+    const displayedRegions = isExpanded ? regions : regions.slice(0, INITIAL_DISPLAY_COUNT);
 
     return (
       <div className="space-y-4">
@@ -105,25 +107,6 @@ const RegionCheckboxes = forwardRef<RegionCheckboxesRef, RegionCheckboxesProps>(
               </>
             )}
           </button>
-        )}
-
-        {selectedRegions.length > 0 && (
-          <div className="flex flex-wrap gap-2 pt-2">
-            {selectedRegions.map((region) => (
-              <span
-                key={region}
-                className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800"
-              >
-                {region}
-                <button
-                  onClick={() => handleRegionChange(region)}
-                  className="ml-1.5 inline-flex items-center justify-center text-blue-400 hover:text-blue-600"
-                >
-                  ×
-                </button>
-              </span>
-            ))}
-          </div>
         )}
       </div>
     );
