@@ -12,17 +12,24 @@ interface ModalProps {
 
 const Modal = ({ isOpen, onClose, children }: ModalProps) => {
   useEffect(() => {
-    if (isOpen) {
-      const currentOverflow = document.body.style.overflow;
-      if (currentOverflow !== 'hidden') {
+    const handleBodyScroll = () => {
+      const modalElements = document.querySelectorAll('[data-modal]');
+      if (modalElements.length > 0) {
         document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
       }
+    };
+
+    if (isOpen) {
+      handleBodyScroll();
     }
+
     return () => {
-      const modalCount = document.querySelectorAll('[data-modal]').length;
-      if (modalCount === 1) {
-        document.body.style.overflow = 'unset';
-      }
+      // setTimeout을 사용하여 DOM 업데이트 후 스크롤 상태 확인
+      setTimeout(() => {
+        handleBodyScroll();
+      }, 0);
     };
   }, [isOpen]);
 

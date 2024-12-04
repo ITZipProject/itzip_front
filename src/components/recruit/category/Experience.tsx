@@ -1,5 +1,5 @@
+import Slider from '@mui/material/Slider';
 import React, { useState, useEffect } from 'react';
-import ReactSlider from 'react-slider';
 
 interface ExperienceFilterProps {
   selectedExperienceMin: number;
@@ -12,17 +12,19 @@ const Experience: React.FC<ExperienceFilterProps> = ({
   selectedExperienceMax,
   onExperienceChange,
 }) => {
-  const [sliderValues, setSliderValues] = useState<[number, number]>([0, 10]);
+  const [value, setValue] = useState<number[]>([0, 10]);
 
   useEffect(() => {
     const min = isNaN(selectedExperienceMin) ? 0 : selectedExperienceMin;
     const max = isNaN(selectedExperienceMax) ? 10 : selectedExperienceMax;
-    setSliderValues([min, max]);
+    setValue([min, max]);
   }, [selectedExperienceMin, selectedExperienceMax]);
 
-  const handleSliderChange = (value: [number, number]) => {
-    setSliderValues(value);
-    onExperienceChange(value[0], value[1]);
+  const handleChange = (_event: Event, newValue: number | number[]) => {
+    setValue(newValue as number[]);
+    if (Array.isArray(newValue)) {
+      onExperienceChange(newValue[0], newValue[1]);
+    }
   };
 
   const formatExperience = (years: number) => {
@@ -34,41 +36,40 @@ const Experience: React.FC<ExperienceFilterProps> = ({
 
   return (
     <div className="experience-filter">
-      <h3 className="font-pre-body-01 mb-2">경력</h3>
-      <div className="mb-2 text-center font-bold">
-        {sliderValues[0] === sliderValues[1]
-          ? formatExperience(sliderValues[0])
-          : `${formatExperience(sliderValues[0])} ~ ${formatExperience(sliderValues[1])}`}
+      <div className="mb-4 text-center font-bold">
+        {value[0] === value[1]
+          ? formatExperience(value[0])
+          : `${formatExperience(value[0])} ~ ${formatExperience(value[1])}`}
       </div>
-      <div className="mb-4">
-        <ReactSlider
-          className="h-3 w-full"
-          thumbClassName="
-          absolute h-5 w-5 
-          -translate-y-1/4 
-          cursor-pointer 
-          rounded-full 
-          bg-blue-700 
-          focus:outline-none 
-          focus:ring-2 
-          focus:ring-blue-500 
-          focus:ring-opacity-50
-          hover:bg-blue-600
-        "
-          trackClassName="
-          h-1 
-          top-1
-          rounded-full 
-          bg-gray-200
-          [&.slider-track-1]:bg-blue-500
-        "
-          value={sliderValues}
-          onChange={handleSliderChange}
+      <div className="px-2">
+        <Slider
+          value={value}
+          onChange={handleChange}
           min={0}
           max={10}
           step={1}
-          pearling
-          minDistance={1}
+          marks={[
+            { value: 0, label: '신입' },
+            { value: 10, label: '10년' },
+          ]}
+          sx={{
+            '& .MuiSlider-track': {
+              height: 4,
+              backgroundColor: '#2563eb',
+            },
+            '& .MuiSlider-rail': {
+              height: 4,
+              backgroundColor: '#e5e7eb',
+            },
+            '& .MuiSlider-thumb': {
+              width: 15,
+              height: 15,
+              backgroundColor: '#2563eb',
+              '&:hover, &.Mui-focusVisible': {
+                boxShadow: '0 0 0 8px rgba(37, 99, 235, 0.16)',
+              },
+            },
+          }}
         />
       </div>
     </div>
