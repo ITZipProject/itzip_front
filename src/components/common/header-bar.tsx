@@ -23,11 +23,12 @@ export default function HeaderBar() {
   const isStudyPage = pathname.startsWith('/study');
   const headerBackgroundColor = isStudyPage ? 'bg-stone-800' : 'bg-white';
   const textColor = isStudyPage ? 'text-gray-200' : 'text-headerText';
+  const borderClass = isStudyPage ? '' : 'border border-b-2';
 
   return (
     <div className="header">
       <div
-        className={`flex h-[70px] w-full items-center justify-between border border-b-2 px-10 ${headerBackgroundColor} *:[516px]:text-8 *:text-14  *:xl:text-16`}
+        className={`flex h-[70px] w-full items-center justify-between px-10 ${headerBackgroundColor} ${borderClass} *:[516px]:text-8 *:text-14  *:xl:text-16`}
       >
         <Link className={`text-logoSize font-extrabold ${textColor} text-logo`} href={'/'}>
           <Image src={logo as StaticImageData} alt="logo" className="size-20" />
