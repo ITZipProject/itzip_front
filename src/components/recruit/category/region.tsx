@@ -30,36 +30,33 @@ const regions: Region[] = [
 ];
 
 interface RegionCheckboxesProps {
-  selectedLocationName: string[];
-  onRegionChange: (selected: string[]) => void;
+  selectedLocationCode: string;
+  onRegionChange: (selected: string) => void;
 }
 
 export interface RegionCheckboxesRef {
-  resetSelections: (newSelection: string[]) => void;
+  resetSelections: (newSelection: string) => void;
 }
 
 const RegionCheckboxes = forwardRef<RegionCheckboxesRef, RegionCheckboxesProps>(
-  ({ selectedLocationName, onRegionChange }, ref) => {
-    const [selectedRegions, setSelectedRegions] = useState<string[]>(selectedLocationName);
+  ({ selectedLocationCode = '', onRegionChange }, ref) => {
+    const [selectedRegion, setSelectedRegion] = useState<string>(selectedLocationCode);
     const [isExpanded, setIsExpanded] = useState(false);
     const INITIAL_DISPLAY_COUNT = 6;
 
     useEffect(() => {
-      setSelectedRegions(selectedLocationName);
-    }, [selectedLocationName]);
+      setSelectedRegion(selectedLocationCode);
+    }, [selectedLocationCode]);
 
     useImperativeHandle(ref, () => ({
-      resetSelections: (newSelection: string[]) => {
-        setSelectedRegions(newSelection);
+      resetSelections: (newSelection: string) => {
+        setSelectedRegion(newSelection);
       },
     }));
 
-    const handleRegionChange = (regionName: string) => {
-      const updatedSelection = selectedRegions.includes(regionName)
-        ? selectedRegions.filter((r) => r !== regionName)
-        : [...selectedRegions, regionName];
-
-      setSelectedRegions(updatedSelection);
+    const handleRegionChange = (regionId: string) => {
+      const updatedSelection = selectedRegion === regionId ? '' : regionId;
+      setSelectedRegion(updatedSelection);
       onRegionChange(updatedSelection);
     };
 
@@ -76,8 +73,8 @@ const RegionCheckboxes = forwardRef<RegionCheckboxesRef, RegionCheckboxesProps>(
               <input
                 type="checkbox"
                 id={region.id}
-                checked={selectedRegions.includes(region.name)}
-                onChange={() => handleRegionChange(region.name)}
+                checked={selectedRegion?.startsWith(region.id.substring(0, 3))}
+                onChange={() => handleRegionChange(region.id)}
                 className="size-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
               <label
