@@ -303,3 +303,26 @@ export interface ArticleData {
   content: string;
   thumbnailUrl: string;
 }
+
+/** 게시글 수 응답 타입 */
+export interface PostCountResponse {
+  status: string;
+  msg: string;
+  data: number;
+  code: string;
+}
+
+export type SortType = 'NEWEST' | 'OLDEST' | 'VIEWCOUNT' | 'LIKECOUNT';
+
+/** 블로그 필터 상태 타입 */
+export interface BlogFilterState {
+  categoryId?: string;
+  sortType: SortType;
+  page: number;
+  size: number;
+}
+
+/** 블로그 컨트롤 Props 타입 */
+export interface BlogControlsProps {
+  onFilterChange: (filter: BlogFilterState) => void;
+}
