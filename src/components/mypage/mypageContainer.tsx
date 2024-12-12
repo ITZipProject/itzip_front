@@ -297,7 +297,9 @@ export default function MyPageContainer() {
           </div>
         </div>
       </section>
-      <button className="self-end">{'계정 탈퇴 >'}</button>
+      <button onClick={userLogout} className="self-end">
+        {'로그아웃 >'}
+      </button>
     </div>
   );
 }

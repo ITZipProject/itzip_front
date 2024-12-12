@@ -27,8 +27,8 @@ const clearTokenAtom = atom(null, (get, set) => {
   if (typeof window !== 'undefined') {
     localStorage.clear(); // 모든 항목 제거
     // 또는
-    localStorage.removeItem('jotai-storage-accessToken'); // jotai가 사용하는 실제 키
-    localStorage.removeItem('jotai-storage-refreshToken');
+    localStorage.removeItem('accessToken'); // jotai가 사용하는 실제 키
+    localStorage.removeItem('refreshToken');
   }
 
   // 쿠키 제거
