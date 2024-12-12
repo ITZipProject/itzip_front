@@ -29,7 +29,6 @@ export default function MyPageContainer() {
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  // 컴포넌트가 언마운트될 때 URL 정리
   useEffect(() => {
     return () => {
       if (previewUrl) {
@@ -66,7 +65,7 @@ export default function MyPageContainer() {
     setLoading(true);
     try {
       if (!nickname || !accessToken) return;
-      const res = await checkNickname(nickname, accessToken);
+      await checkNickname(nickname, accessToken);
       setIsOk((prev) => ({ ...prev, nicknameOk: true }));
       toast.success('사용 가능한 닉네임입니다');
     } catch (err) {
@@ -154,7 +153,7 @@ export default function MyPageContainer() {
                 <div className="flex w-[100px] h-[100px] gap-4 border-2 border-Blue-200 p-[10px] rounded-xl bg-white justify-center items-center">
                   {previewUrl || user?.imageUrl ? (
                     <Image
-                      src={previewUrl || user?.imageUrl}
+                      src={previewUrl || user?.imageUrl || '/profile.png'}
                       alt="profileImage"
                       width={100}
                       height={100}
