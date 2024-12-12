@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-
-import { getTokenState } from '@/store/useTokenStore';
+import { getDefaultStore } from 'jotai';
+import { getTokenState, setAccessTokenAtom, setRefreshTokenAtom } from '@/store/useTokenStore';
 
 const instance = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
@@ -11,6 +11,7 @@ const instance = axios.create({
   },
 });
 
+// Request Interceptor
 instance.interceptors.request.use(
   (config) => {
     const { accessToken, refreshToken } = getTokenState();
@@ -24,71 +25,109 @@ instance.interceptors.request.use(
     delete config.headers['Only-Refresh'];
     delete config.headers['Both-Tokens'];
 
-    // 토큰이 없을 때 (인증이 필요 없는 요청)
-    if (noAuth) {
-      return config;
-    }
+    if (noAuth) return config;
+
     if (!accessToken) {
       console.log('토큰이 없습니다');
-      // 인증이 필요한 요청인데 토큰이 없는 경우
       if (!noAuth) {
         throw new Error('인증이 필요한 요청입니다.');
       }
     }
+
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
-    // 리프레시 토큰만 요청하고 싶을 때 (토큰 갱신)
+
     if (onlyRefresh && refreshToken) {
       config.headers['Refresh'] = `Bearer ${refreshToken}`;
     }
-    // 액세스 & 리프레시 토큰 둘 다 필요할 때 (로그인 성공 후, 토큰 갱신)
+
     if (bothTokens && refreshToken && accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
       config.headers['Refresh'] = `Bearer ${refreshToken}`;
     }
+
     return config;
   },
-  (err) => {
-    return Promise.reject(err);
-  },
+  (err) => Promise.reject(err),
 );
 
+// 토큰 갱신 함수
+async function refreshTokenAndUpdateRequest(
+  error: AxiosError,
+  originalRequest: AxiosRequestConfig & { _retry?: boolean },
+) {
+  const store = getDefaultStore();
+  const { refreshToken } = getTokenState();
+
+  try {
+    // 리프레시 토큰으로 새 액세스 토큰 요청
+    const res = await axios.patch(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/refreshToken`,
+      {},
+      {
+        headers: {
+          Authorization: originalRequest.headers?.['Authorization'],
+          Refresh: `Bearer ${refreshToken}`,
+        },
+      },
+    );
+
+    if (res.status === 200) {
+      const newAccessToken = res.headers.authorization;
+      const newRefreshToken = res.headers.refresh;
+
+      if (originalRequest.headers && !originalRequest.headers['No-Auth']) {
+        // 새 액세스 토큰 설정
+        if (newAccessToken) {
+          instance.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+          store.set(setAccessTokenAtom, newAccessToken);
+        }
+
+        // 새 리프레시 토큰이 있다면 설정 (리프레시 토큰 순환)
+        if (newRefreshToken) {
+          instance.defaults.headers.common['Refresh'] = `Bearer ${newRefreshToken}`;
+          store.set(setRefreshTokenAtom, newRefreshToken);
+        }
+
+        // 원래 요청 재시도
+        return instance(originalRequest);
+      }
+    }
+    throw new Error('토큰 갱신 실패');
+  } catch (error) {
+    // 리프레시 토큰도 만료된 경우에만 로그아웃
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      store.set(setAccessTokenAtom, '');
+      store.set(setRefreshTokenAtom, '');
+      alert('로그인이 만료되었습니다. 다시 로그인해 주세요.');
+      window.location.href = '/signin';
+    }
+    return Promise.reject(error);
+  }
+}
+
+// Response Interceptor
 instance.interceptors.response.use(
   (res) => res,
   async (err: AxiosError) => {
     const originalRequest = err.config as AxiosRequestConfig & { _retry?: boolean };
-    const { setAccessToken, setRefreshToken, accessToken, refreshToken } = getTokenState() as {
-      setAccessToken: (token: string) => void;
-      setRefreshToken: (token: string) => void;
-      accessToken: string;
-      refreshToken: string;
-    };
-    if (accessToken && refreshToken && err.response?.status === 401 && !originalRequest._retry) {
+    const { accessToken, refreshToken } = getTokenState();
+
+    // 401 에러이고 토큰이 있고 아직 재시도하지 않은 경우
+    if (err.response?.status === 401 && accessToken && refreshToken && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        const res = await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/user/refreshToken`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            Refresh: `Bearer ${refreshToken}`,
-          },
-        });
-
-        if (res.status === 200) {
-          setAccessToken(res.headers.authorization as string);
-          if (res.headers.refresh) {
-            setRefreshToken(res.headers.refresh as string);
-          }
-          return instance(originalRequest);
-        }
-      } catch (error) {
-        alert('인증이 만료되었습니다. 다시 로그인해 주세요.');
-        setRefreshToken('');
-        setAccessToken('');
-        window.location.href = '/';
+        // 토큰 갱신 시도
+        return await refreshTokenAndUpdateRequest(err, originalRequest);
+      } catch (refreshError) {
+        // 갱신 실패 시 원본 에러 반환
+        return Promise.reject(err);
       }
     }
+
+    // 다른 에러는 그대로 반환
     return Promise.reject(err);
   },
 );
