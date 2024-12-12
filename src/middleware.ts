@@ -8,6 +8,8 @@ interface Routes {
 const publicOnlyUrls: Routes = {
   '/': true,
   '/recruit': true,
+  '/policy/terms': true,
+  '/policy/privacy': true,
 };
 
 export function middleware(request: NextRequest) {
