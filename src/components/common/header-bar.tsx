@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 import { useModal } from '@/lib/context/ModalContext';
 import { accessTokenAtom } from '@/store/useTokenStore';
-import logo from 'public/logo.svg';
+import logo from 'public/logo.png';
 
 export default function HeaderBar() {
   const pathname = usePathname();
@@ -30,7 +30,7 @@ export default function HeaderBar() {
         className={`flex h-[70px] w-full items-center justify-between border border-b-2 px-10 ${headerBackgroundColor} *:[516px]:text-8 *:text-14  *:xl:text-16`}
       >
         <Link className={`text-logoSize font-extrabold ${textColor} text-logo`} href={'/'}>
-          <Image src={logo as StaticImageData} alt="logo" className="size-20" />
+          <Image src={logo as StaticImageData} alt="logo" className="w-[100px]" />
         </Link>
         <div className={`flex gap-spacing-05 ${textColor} text-headerSize`}>
           <Link

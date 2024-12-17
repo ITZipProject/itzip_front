@@ -8,6 +8,8 @@ interface Routes {
 const publicOnlyUrls: Routes = {
   '/': true,
   '/recruit': true,
+  '/policy/terms': true,
+  '/policy/privacy': true,
 };
 
 export function middleware(request: NextRequest) {
@@ -33,5 +35,5 @@ export function middleware(request: NextRequest) {
 
 // middleware를 실행시키고 싶은 경로 - 아래는 해당되는 경로는 제외 시킨다.
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|icons/|public/|logo.svg).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|icons/|public/|logo.svg|images/).*)'],
 };
