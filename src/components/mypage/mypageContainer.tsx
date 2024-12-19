@@ -7,13 +7,14 @@ import { useEffect, useState } from 'react';
 
 import { loadingAtom } from '@/atoms/formAtoms';
 import useUser from '@/hooks/mypage/useUser';
-import { accessTokenAtom } from '@/store/useTokenStore';
+import { tokenAtom, clearTokenAtom } from '@/store/useTokenStore';
 import profile from '../../../public/profile.png';
 import { checkNickname, editNickname, editPassword } from '@/api/mypage/mypage.action';
 
 export default function MyPageContainer() {
-  const [accessToken] = useAtom(accessTokenAtom);
-  const { user, userLogout } = useUser(accessToken ?? '');
+  const [token] = useAtom(tokenAtom);
+  const [, clearToken] = useAtom(clearTokenAtom);
+  const { user, userLogout } = useUser(token.accessToken ?? '');
   const [loading] = useAtom(loadingAtom);
   const [isEdit, setIsEdit] = useState({
     myProfile: false,
@@ -64,8 +65,8 @@ export default function MyPageContainer() {
   const nicknameCheck = async () => {
     setLoading(true);
     try {
-      if (!nickname || !accessToken) return;
-      await checkNickname(nickname, accessToken);
+      if (!nickname || !token.accessToken) return;
+      await checkNickname(nickname, token.accessToken);
       setIsOk((prev) => ({ ...prev, nicknameOk: true }));
       toast.success('사용 가능한 닉네임입니다');
     } catch (err) {
@@ -80,8 +81,8 @@ export default function MyPageContainer() {
   const updateUserNickname = async () => {
     setLoading(true);
     try {
-      if (!nickname || !accessToken) return;
-      await editNickname(nickname, accessToken);
+      if (!nickname || !token.accessToken) return;
+      await editNickname(nickname, token.accessToken);
       toast.success('닉네임이 변경되었습니다');
     } catch (err) {
       console.error(err);
@@ -94,8 +95,8 @@ export default function MyPageContainer() {
   const updateUserPassword = async () => {
     setLoading(true);
     try {
-      if (!password || !accessToken) return;
-      await editPassword(password, accessToken);
+      if (!password || !token.accessToken) return;
+      await editPassword(password, token.accessToken);
       toast.success('비밀번호가 변경되었습니다');
       setIsEdit((prev) => ({ ...prev, default: false }));
       setPassword('');
@@ -110,17 +111,11 @@ export default function MyPageContainer() {
   const savedProfile = async () => {
     setLoading(true);
     try {
-      if (!accessToken) return;
+      if (!token.accessToken) return;
 
-      // 닉네임 변경
       if (nickname && nickname !== user?.nickname && isOk.nicknameOk) {
         await updateUserNickname();
       }
-
-      // 이미지 변경
-      // if (profileImage) {
-      //   await updateProfileImage(profileImage, accessToken);
-      // }
 
       toast.success('프로필이 저장되었습니다');
       setIsEdit((prev) => ({ ...prev, myProfile: false }));
@@ -139,6 +134,11 @@ export default function MyPageContainer() {
     } else {
       await updateUserPassword();
     }
+  };
+
+  const handleLogout = () => {
+    clearToken();
+    userLogout();
   };
 
   return (
@@ -296,7 +296,7 @@ export default function MyPageContainer() {
           </div>
         </div>
       </section>
-      <button onClick={userLogout} className="self-end">
+      <button onClick={handleLogout} className="self-end">
         {'로그아웃 >'}
       </button>
     </div>

@@ -7,7 +7,6 @@ import { useState } from 'react';
 import { IoIosMenu } from 'react-icons/io';
 
 import logo from 'public/logo.png';
-
 import DropdownItem from './menu/dropdownItem';
 import Dropdown from '../portal/dropdown';
 
@@ -18,6 +17,7 @@ export default function MobileHeader() {
   const handleDropdownButton = () => {
     setIsShow(!isShow);
   };
+
   const isStudyPage = pathname.startsWith('/study');
   const headerBackgroundColor = isStudyPage ? 'bg-stone-800' : 'bg-white';
 
@@ -32,7 +32,6 @@ export default function MobileHeader() {
 
         <div className={`flex items-center gap-spacing-07`}>
           <div>
-            {/* <DropdownItem hidden={isShow} /> */}
             <Dropdown
               isOpen={isShow}
               onClose={handleDropdownButton}

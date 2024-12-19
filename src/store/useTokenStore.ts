@@ -1,70 +1,96 @@
 import { atom } from 'jotai';
-import { atomWithStorage } from 'jotai/utils';
 
-const accessTokenAtom = atomWithStorage<string | null>('accessToken', null);
-const refreshTokenAtom = atomWithStorage<string | null>('refreshToken', null);
+interface CookieOptions {
+  maxAge?: number;
+  path?: string;
+  secure?: boolean;
+  sameSite?: 'strict' | 'lax' | 'none';
+  domain?: string;
+}
 
-const setCookie = (name: string, value: string, maxAge?: number) => {
-  document.cookie = `${name}=${value}; path=/; ${maxAge ? `max-age=${maxAge};` : ''}samesite=strict`;
+// 쿠키 설정 함수
+const setCookie = (name: string, value: string, options: CookieOptions = {}) => {
+  try {
+    const { maxAge, path = '/', secure = true, sameSite = 'strict', domain } = options;
+
+    // 값 인코딩
+    const encodedValue = encodeURIComponent(value);
+
+    // 쿠키 옵션 구성
+    const cookieOptions = [
+      `${name}=${encodedValue}`,
+      `path=${path}`,
+      maxAge && `max-age=${maxAge}`,
+      secure && 'secure',
+      `samesite=${sameSite}`,
+      domain && `domain=${domain}`,
+    ]
+      .filter(Boolean)
+      .join('; ');
+
+    // 쿠키 설정
+    document.cookie = cookieOptions;
+
+    return true;
+  } catch (error) {
+    console.error(`Error setting cookie '${name}':`, error);
+    return false;
+  }
 };
 
-const setAccessTokenAtom = atom(null, (get, set, accessToken: string) => {
-  set(accessTokenAtom, accessToken);
-  setCookie('accessToken', accessToken, 3600);
-});
+// 쿠키 가져오기 함수
+const getCookie = (name: string): string => {
+  // SSR 체크
+  if (typeof window === 'undefined') return '';
 
-const setRefreshTokenAtom = atom(null, (get, set, refreshToken: string) => {
-  set(refreshTokenAtom, refreshToken);
-  setCookie('refreshToken', refreshToken, 2 * 7 * 24 * 3600);
-});
+  try {
+    // 정규식을 사용한 쿠키 파싱
+    const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
 
-const clearTokenAtom = atom(null, (get, set) => {
-  // atom 초기화
-  set(accessTokenAtom, null);
-  set(refreshTokenAtom, null);
+    // null 체크와 디코딩
+    if (match) {
+      return decodeURIComponent(match[2]);
+    }
 
-  // localStorage 직접 제거
-  if (typeof window !== 'undefined') {
-    localStorage.clear(); // 모든 항목 제거
-    // 또는
-    localStorage.removeItem('accessToken'); // jotai가 사용하는 실제 키
-    localStorage.removeItem('refreshToken');
+    return '';
+  } catch (error) {
+    console.error(`Error getting cookie '${name}':`, error);
+    return '';
   }
+};
 
-  // 쿠키 제거
-  setCookie('accessToken', '', 0);
-  setCookie('refreshToken', '', 0);
+// 쿠키 삭제 함수
+const deleteCookie = (name: string) => {
+  document.cookie = `${name}=; path=/; max-age=0; samesite=strict; secure`;
+};
+
+// 토큰 상태 atom을 읽기/쓰기 가능하도록 수정
+const tokenAtom = atom({
+  accessToken: getCookie('accessToken'),
+  refreshToken: getCookie('refreshToken'),
 });
 
+// 리프레시 토큰 설정
+const setRefreshTokenAtom = atom(null, (get, set, refreshToken: string) => {
+  setCookie('refreshToken', refreshToken, { maxAge: 2 * 7 * 24 * 3600 }); // 2주
+});
+
+// 토큰 초기화
+const clearTokenAtom = atom(null, (get, set) => {
+  deleteCookie('accessToken');
+  deleteCookie('refreshToken');
+});
+
+// 토큰 상태 가져오기
 const getTokenState = () => {
-  // SSR 대응
   if (typeof window === 'undefined') {
     return { accessToken: '', refreshToken: '' };
   }
 
-  const cookies = document.cookie.split(';').reduce(
-    (acc, curr) => {
-      const [key, value] = curr.trim().split('=');
-      acc[key] = value;
-      return acc;
-    },
-    {} as Record<string, string>,
-  );
-
-  const accessToken = cookies.accessToken || '';
-  const refreshToken = cookies.refreshToken || '';
-
   return {
-    accessToken,
-    refreshToken,
+    accessToken: getCookie('accessToken'),
+    refreshToken: getCookie('refreshToken'),
   };
 };
 
-export {
-  accessTokenAtom,
-  refreshTokenAtom,
-  setAccessTokenAtom,
-  setRefreshTokenAtom,
-  clearTokenAtom,
-  getTokenState,
-};
+export { tokenAtom, setRefreshTokenAtom, clearTokenAtom, getTokenState };

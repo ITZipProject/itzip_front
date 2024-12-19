@@ -1,7 +1,6 @@
 'use server';
-import { cookies } from 'next/headers';
-
 import instance from '@/api/axiosInstance';
+import { cookies } from 'next/headers';
 
 interface LoginResponse {
   data: {
@@ -9,6 +8,22 @@ interface LoginResponse {
     refreshToken: string;
   };
 }
+
+// 쿠키 설정 함수
+const setServerCookie = (name: string, value: string, maxAge: number) => {
+  cookies().set(name, value, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge,
+    path: '/',
+  });
+};
+
+// 쿠키 삭제 함수
+const deleteServerCookie = (name: string) => {
+  cookies().delete(name);
+};
 
 export const join = async (formData: FormData) => {
   const email = formData.get('email') as string;
@@ -29,20 +44,9 @@ export const join = async (formData: FormData) => {
     );
     const { data } = result.data;
 
-    cookies().set('accessToken', data.accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 3600,
-      path: '/',
-    });
-    cookies().set('refreshToken', data.refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 2 * 7 * 24 * 3600,
-      path: '/',
-    });
+    // 서버 쿠키 설정
+    setServerCookie('accessToken', data.accessToken, 3600);
+    setServerCookie('refreshToken', data.refreshToken, 2 * 7 * 24 * 3600);
 
     return {
       success: true,
@@ -76,11 +80,17 @@ export const logout = async () => {
       },
     });
 
-    // 로그아웃 후 쿠키 삭제
-    cookieStore.delete('accessToken');
-    cookieStore.delete('refreshToken');
+    // 서버 쿠키 삭제
+    deleteServerCookie('accessToken');
+    deleteServerCookie('refreshToken');
+
+    return { success: true };
   } catch (err) {
-    console.log('Failed Logout:', err);
+    console.error('Failed Logout:', err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : '로그아웃 중 오류가 발생했습니다.',
+    };
   }
 };
 
@@ -91,8 +101,17 @@ export const out = async (accessToken: string) => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log('user out', res);
+
+    // 회원 탈퇴 시 쿠키 삭제
+    deleteServerCookie('accessToken');
+    deleteServerCookie('refreshToken');
+
+    return { success: true };
   } catch (err) {
-    console.error(err);
+    console.error('Failed to delete account:', err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : '회원 탈퇴 중 오류가 발생했습니다.',
+    };
   }
 };

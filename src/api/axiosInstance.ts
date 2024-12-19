@@ -9,6 +9,7 @@ const instance = axios.create({
     'Content-Type': 'application/json',
     'ngrok-skip-browser-warning': '69420',
   },
+  withCredentials: true,
 });
 
 // Request Interceptor

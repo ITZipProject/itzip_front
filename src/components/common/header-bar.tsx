@@ -1,24 +1,24 @@
 'use client';
 
-import { useAtom } from 'jotai';
+import { useEffect, useState } from 'react';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useAtom } from 'jotai';
 
 import { useModal } from '@/lib/context/ModalContext';
-import { accessTokenAtom } from '@/store/useTokenStore';
+import { tokenAtom } from '@/store/useTokenStore';
 import logo from 'public/logo.png';
 
 export default function HeaderBar() {
   const pathname = usePathname();
   const { openModal } = useModal();
-  const [accessToken] = useAtom(accessTokenAtom);
+  const [token] = useAtom(tokenAtom);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    setIsLoggedIn(!!accessToken);
-  }, [accessToken]);
+    setIsLoggedIn(!!token.accessToken);
+  }, [token.accessToken]);
 
   const isStudyPage = pathname.startsWith('/study');
   const headerBackgroundColor = isStudyPage ? 'bg-stone-800' : 'bg-white';
@@ -72,7 +72,6 @@ export default function HeaderBar() {
               </Link>
             )}
           </div>
-
           <Link href={'/customer-service'}>고객센터</Link>
         </div>
       </div>
