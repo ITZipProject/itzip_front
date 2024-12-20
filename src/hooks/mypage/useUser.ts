@@ -23,12 +23,12 @@ const useUser = (accessToken: string) => {
   const [user, setUser] = useState<UserProps>();
   const [, setLoading] = useAtom(loadingAtom);
   const [, clearToken] = useAtom(clearTokenAtom);
+
   const userLogout = async () => {
     setLoading((prev) => ({ ...prev, logout: true }));
     try {
       await logout();
-      clearToken;
-      localStorage.clear();
+      clearToken();
       window.location.reload();
     } catch (err) {
       console.log(err);
@@ -36,6 +36,7 @@ const useUser = (accessToken: string) => {
       setLoading((prev) => ({ ...prev, logout: false }));
     }
   };
+
   const fetchUser = useCallback(async () => {
     setLoading((prev) => ({ ...prev, user: true }));
     try {

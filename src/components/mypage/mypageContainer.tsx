@@ -10,11 +10,11 @@ import useUser from '@/hooks/mypage/useUser';
 import { tokenAtom, clearTokenAtom } from '@/store/useTokenStore';
 import profile from '../../../public/profile.png';
 import { checkNickname, editNickname, editPassword } from '@/api/mypage/mypage.action';
+import { useModal } from '@/lib/context/ModalContext';
 
 export default function MyPageContainer() {
   const [token] = useAtom(tokenAtom);
-  const [, clearToken] = useAtom(clearTokenAtom);
-  const { user, userLogout } = useUser(token.accessToken ?? '');
+  const { user } = useUser(token.accessToken ?? '');
   const [loading] = useAtom(loadingAtom);
   const [isEdit, setIsEdit] = useState({
     myProfile: false,
@@ -29,7 +29,7 @@ export default function MyPageContainer() {
   });
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
+  const { openModal } = useModal();
   useEffect(() => {
     return () => {
       if (previewUrl) {
@@ -134,11 +134,6 @@ export default function MyPageContainer() {
     } else {
       await updateUserPassword();
     }
-  };
-
-  const handleLogout = () => {
-    clearToken();
-    userLogout();
   };
 
   return (
@@ -296,7 +291,7 @@ export default function MyPageContainer() {
           </div>
         </div>
       </section>
-      <button onClick={handleLogout} className="self-end">
+      <button onClick={() => openModal('alertModal')} className="self-end">
         {'로그아웃 >'}
       </button>
     </div>

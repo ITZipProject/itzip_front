@@ -1,5 +1,5 @@
+import instance from '@/api/axiosInstance';
 import axios from 'axios';
-import instance from '../axiosInstance';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
