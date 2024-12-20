@@ -14,15 +14,45 @@ export default function HeaderBar() {
   const pathname = usePathname();
   const { openModal } = useModal();
   const [token] = useAtom(tokenAtom);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setIsLoggedIn(!!token.accessToken);
-  }, [token.accessToken]);
+    setMounted(true);
+  }, []);
 
   const isStudyPage = pathname.startsWith('/study');
   const headerBackgroundColor = isStudyPage ? 'bg-stone-800' : 'bg-white';
   const textColor = isStudyPage ? 'text-gray-200' : 'text-headerText';
+
+  if (!mounted) {
+    return (
+      <div className="header">
+        <div
+          className={`flex h-[70px] w-full items-center justify-between border border-b-2 px-10 ${headerBackgroundColor} *:[516px]:text-8 *:text-14  *:xl:text-16`}
+        >
+          <Link className={`text-logoSize font-extrabold ${textColor} text-logo`} href={'/'}>
+            <Image src={logo as StaticImageData} alt="logo" className="w-[100px]" />
+          </Link>
+          <div className={`flex gap-spacing-05 ${textColor} text-headerSize`}>
+            <Link href={'#'}>이력서</Link>
+            <Link href={'/recruit'}>채용공고</Link>
+            <Link href={'#'}>기술정보</Link>
+            <Link href={'#'}>학습하기</Link>
+          </div>
+          <div className={`gap-spacing-07 ${textColor} flex items-center`}>
+            <div>
+              <button className="border/10 rounded-radius-04 border px-spacing-06 py-[10px]">
+                로그인
+              </button>
+            </div>
+            <Link href={'/customer-service'}>고객센터</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const isLoggedIn = !!token.accessToken;
 
   return (
     <div className="header">

@@ -60,11 +60,15 @@ const tokenAtom = atom({
 // 액세스 토큰 설정
 const setAccessTokenAtom = atom(null, (get, set, accessToken: string) => {
   setCookie('accessToken', accessToken, { maxAge: 2 * 60 * 60 }); // 2시간 (7200초)
+  const currentToken = get(tokenAtom);
+  set(tokenAtom, { ...currentToken, accessToken }); // atom 상태 업데이트
 });
 
 // 리프레시 토큰 설정
 const setRefreshTokenAtom = atom(null, (get, set, refreshToken: string) => {
   setCookie('refreshToken', refreshToken, { maxAge: 2 * 7 * 24 * 3600 }); // 2주
+  const currentToken = get(tokenAtom);
+  set(tokenAtom, { ...currentToken, refreshToken }); // atom 상태 업데이트
 });
 
 // 토큰 초기화
