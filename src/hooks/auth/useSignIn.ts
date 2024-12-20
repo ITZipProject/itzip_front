@@ -6,7 +6,7 @@ import { join } from '@/api/auth/authServer.action';
 import { errorsAtom, formValuesAtom, isOkAtom, loadingAtom } from '@/atoms/formAtoms';
 import { PASSWORD_MIN_LENGTH, PASSWORD_REGEX, PASSWORD_REGEX_ERROR } from '@/lib/constants';
 import { useModal } from '@/lib/context/ModalContext';
-import { tokenAtom } from '@/store/useTokenStore';
+import { setAccessTokenAtom, setRefreshTokenAtom } from '@/store/useTokenStore';
 import { FormValues } from '@/types/auth';
 
 const formValueSchema = z.object({
@@ -28,7 +28,8 @@ const useSignIn = () => {
   const [isLoading, setIsLoading] = useAtom(loadingAtom);
   const [isOk] = useAtom(isOkAtom);
   const { closeModal } = useModal();
-  const [token, setToken] = useAtom(tokenAtom);
+  const [, setAccessToken] = useAtom(setAccessTokenAtom);
+  const [, setRefreshToken] = useAtom(setRefreshTokenAtom);
 
   const onChangeFormValues = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -58,7 +59,6 @@ const useSignIn = () => {
     const password = formData.get('password') as string;
 
     try {
-      // 폼 유효성 검사
       if (!validateForm(email, password)) {
         return;
       }
@@ -67,11 +67,8 @@ const useSignIn = () => {
 
       if (res.success && res.data) {
         setErrors({});
-        // 토큰 상태 업데이트
-        setToken({
-          accessToken: res.data.accessToken,
-          refreshToken: res.data.refreshToken,
-        });
+        setAccessToken(res.data.accessToken);
+        setRefreshToken(res.data.refreshToken);
         closeModal();
       } else {
         handleLoginError(email, password);

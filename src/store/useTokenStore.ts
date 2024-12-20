@@ -13,23 +13,14 @@ const setCookie = (name: string, value: string, options: CookieOptions = {}) => 
   try {
     const { maxAge, path = '/', secure = true, sameSite = 'strict', domain } = options;
 
-    // 값 인코딩
-    const encodedValue = encodeURIComponent(value);
+    let cookieString = `${name}=${encodeURIComponent(value)}`;
 
-    // 쿠키 옵션 구성
-    const cookieOptions = [
-      `${name}=${encodedValue}`,
-      `path=${path}`,
-      maxAge && `max-age=${maxAge}`,
-      secure && 'secure',
-      `samesite=${sameSite}`,
-      domain && `domain=${domain}`,
-    ]
-      .filter(Boolean)
-      .join('; ');
-
-    // 쿠키 설정
-    document.cookie = cookieOptions;
+    if (path) cookieString += `; path=${path}`;
+    if (maxAge) cookieString += `; max-age=${maxAge}`;
+    if (secure) cookieString += '; secure';
+    if (sameSite) cookieString += `; samesite=${sameSite}`;
+    if (domain) cookieString += `; domain=${domain}`;
+    document.cookie = cookieString;
 
     return true;
   } catch (error) {
@@ -40,18 +31,14 @@ const setCookie = (name: string, value: string, options: CookieOptions = {}) => 
 
 // 쿠키 가져오기 함수
 const getCookie = (name: string): string => {
-  // SSR 체크
   if (typeof window === 'undefined') return '';
 
   try {
-    // 정규식을 사용한 쿠키 파싱
     const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
 
-    // null 체크와 디코딩
     if (match) {
       return decodeURIComponent(match[2]);
     }
-
     return '';
   } catch (error) {
     console.error(`Error getting cookie '${name}':`, error);
@@ -68,6 +55,11 @@ const deleteCookie = (name: string) => {
 const tokenAtom = atom({
   accessToken: getCookie('accessToken'),
   refreshToken: getCookie('refreshToken'),
+});
+
+// 액세스 토큰 설정
+const setAccessTokenAtom = atom(null, (get, set, accessToken: string) => {
+  setCookie('accessToken', accessToken, { maxAge: 2 * 60 * 60 }); // 2시간 (7200초)
 });
 
 // 리프레시 토큰 설정
@@ -93,4 +85,13 @@ const getTokenState = () => {
   };
 };
 
-export { tokenAtom, setRefreshTokenAtom, clearTokenAtom, getTokenState };
+export {
+  tokenAtom,
+  setAccessTokenAtom,
+  setRefreshTokenAtom,
+  clearTokenAtom,
+  getTokenState,
+  setCookie,
+  getCookie,
+  deleteCookie,
+};

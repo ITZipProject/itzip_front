@@ -9,6 +9,34 @@ interface LoginResponse {
   };
 }
 
+export const refreshTokens = async (accessToken: string, refreshToken: string) => {
+  try {
+    const response = await instance.patch(
+      'user/refreshToken',
+      {
+        refreshToken: refreshToken, // request body에 refreshToken 포함
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // Authorization 헤더에 accessToken 포함
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (response.status === 200) {
+      return {
+        accessToken: response.headers.authorization,
+        refreshToken: response.headers.refresh,
+      };
+    }
+    return null;
+  } catch (error) {
+    console.error('Token refresh failed:', error);
+    return null;
+  }
+};
+
 // 쿠키 설정 함수
 const setServerCookie = (name: string, value: string, maxAge: number) => {
   cookies().set(name, value, {
@@ -43,10 +71,6 @@ export const join = async (formData: FormData) => {
       },
     );
     const { data } = result.data;
-
-    // 서버 쿠키 설정
-    setServerCookie('accessToken', data.accessToken, 3600);
-    setServerCookie('refreshToken', data.refreshToken, 2 * 7 * 24 * 3600);
 
     return {
       success: true,

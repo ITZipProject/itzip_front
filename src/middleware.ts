@@ -20,21 +20,17 @@ const checkAuth = (request: NextRequest) => {
   return {
     accessToken,
     refreshToken,
-    isAuthenticated: !!accessToken,
+    isLoggedIn: !!accessToken || !!refreshToken,
   };
 };
 
 export function middleware(request: NextRequest) {
-  const { isAuthenticated } = checkAuth(request);
-  const isPublicPage = publicOnlyUrls[request.nextUrl.pathname];
+  const { isLoggedIn } = checkAuth(request);
+  const pathname = request.nextUrl.pathname;
+  const isPublicPage = publicOnlyUrls[pathname];
 
-  // 비인증 상태에서 보호된 페이지 접근 시도
-  if (!isAuthenticated && !isPublicPage) {
-    return NextResponse.redirect(new URL('/signin', request.url));
-  }
-
-  // 인증 상태에서 로그인/회원가입 페이지 접근 시도
-  if (isAuthenticated && request.nextUrl.pathname === '/signin') {
+  // 비로그인 상태에서 보호된 페이지 접근 시도
+  if (!isLoggedIn && !isPublicPage) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
