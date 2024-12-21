@@ -137,7 +137,7 @@ export default function MyPageContainer() {
   };
 
   return (
-    <div className="flex h-screen w-screen flex-col bg-[#F9FBFC] p-4 space-y-4">
+    <div className="flex h-screen w-screen flex-col bg-[#F9FBFC] p-4 space-y-4 px-[20px]">
       <section className="w-full max-w-[900px] mx-auto shadow-md border-2 py-[20px] px-[30px] rounded-2xl space-y-8">
         <h2 className="font-bold text-[20px]">내 프로필</h2>
         <div className="space-y-4">
@@ -224,7 +224,7 @@ export default function MyPageContainer() {
             )}
           </div>
 
-          <div className="flex flex-row space-x-4 max-w-[500px] justify-between items-center">
+          <div className="flex flex-row space-x-4  justify-between items-center">
             <div className="flex flex-row">
               <h2 className="min-w-[100px]">계정</h2>
               <span>{user?.email}</span>
@@ -254,7 +254,7 @@ export default function MyPageContainer() {
       <section className="w-full max-w-[900px] mx-auto shadow-md border-2 py-[20px] px-[30px] rounded-2xl space-y-4">
         <h2 className="font-bold text-[20px]">기본 정보</h2>
         <div className="space-y-4">
-          <div className="flex flex-row space-x-4 max-w-[500px] justify-between items-center">
+          <div className="flex flex-row space-x-4 justify-between items-center">
             <div className="flex flex-row items-center">
               <h2 className="min-w-[100px]">비밀번호</h2>
               {isEdit.default ? (
@@ -290,10 +290,13 @@ export default function MyPageContainer() {
             )}
           </div>
         </div>
+        <button
+          onClick={() => openModal('alertModal')}
+          className="w-full border border-Grey-200 py-[10px] px-[20px] rounded-xl"
+        >
+          {'로그아웃'}
+        </button>
       </section>
-      <button onClick={() => openModal('alertModal')} className="self-end">
-        {'로그아웃 >'}
-      </button>
     </div>
   );
 }

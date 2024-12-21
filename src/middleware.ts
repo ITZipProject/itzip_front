@@ -12,6 +12,14 @@ const publicOnlyUrls: Routes = {
   '/policy/privacy': true,
 };
 
+// 로그인한 사용자만 접근 가능한 페이지
+const protectedUrls: Routes = {
+  '/profile': true,
+  '/resume': true,
+  '/blog': true,
+  '/study': true,
+};
+
 // 토큰 체크 함수
 const checkAuth = (request: NextRequest) => {
   const accessToken = request.cookies.get('accessToken')?.value;
@@ -20,26 +28,20 @@ const checkAuth = (request: NextRequest) => {
   return {
     accessToken,
     refreshToken,
-    isLoggedIn: !!accessToken || !!refreshToken,
+    isLoggedIn: !!accessToken,
   };
 };
 
 export function middleware(request: NextRequest) {
   const { isLoggedIn } = checkAuth(request);
   const pathname = request.nextUrl.pathname;
-  const isPublicPage = publicOnlyUrls[pathname];
 
-  // 로그인 상태에서 public 페이지 접근 시도 (예: 로그인, 회원가입 페이지)
-  if (isLoggedIn && isPublicPage) {
+  // 보호된 페이지에 비로그인 사용자가 접근하려는 경우
+  if (!isLoggedIn && protectedUrls[pathname]) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
-  // 비로그인 상태에서 보호된 페이지 접근 시도
-  if (!isLoggedIn && !isPublicPage) {
-    return NextResponse.redirect(new URL('/', request.url));
-  }
-
-  // 그 외의 경우는 정상적으로 페이지 접근 허용
+  // 나머지 경우는 정상적으로 페이지 접근 허용
   return NextResponse.next();
 }
 

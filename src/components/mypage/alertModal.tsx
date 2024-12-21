@@ -24,8 +24,20 @@ const AlertModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalProps) =
 
   return (
     <Modal isOpen={true} onClose={() => closeModal()}>
-      <div>정말 로그아웃하시겠어요?</div>
-      <button onClick={handleLogout}>로그아웃 하기</button>
+      <div className="flex items-center justify-between">
+        <h2 className="font-bold text-[20px]">정말 로그아웃하시겠어요?</h2>
+        <div className="flex gap-4">
+          <button className="border-2 p-[10px] rounded-xl" onClick={handleLogout}>
+            네
+          </button>
+          <button
+            className="border-2 p-[10px] rounded-xl border-Blue-500"
+            onClick={() => closeModal()}
+          >
+            아니요
+          </button>
+        </div>
+      </div>
     </Modal>
   );
 };
