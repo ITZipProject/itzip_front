@@ -102,7 +102,7 @@ export default function HeaderBar() {
               </Link>
             )}
           </div>
-          <Link href={'/customer-service'}>고객센터</Link>
+          {/* <Link href={'/customer-service'}>고객센터</Link> */}
         </div>
       </div>
     </div>
