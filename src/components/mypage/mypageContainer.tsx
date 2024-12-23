@@ -5,29 +5,27 @@ import Image from 'next/image';
 import { toast } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 
-import { loadingAtom } from '@/atoms/formAtoms';
 import useUser from '@/hooks/mypage/useUser';
-import { tokenAtom, clearTokenAtom } from '@/store/useTokenStore';
+import { tokenAtom } from '@/store/useTokenStore';
 import profile from '../../../public/profile.png';
-import { checkNickname, editNickname, editPassword } from '@/api/mypage/mypage.action';
 import { useModal } from '@/lib/context/ModalContext';
 
 export default function MyPageContainer() {
   const [token] = useAtom(tokenAtom);
-  const { user } = useUser(token.accessToken ?? '');
-  const [loading] = useAtom(loadingAtom);
+  const { user, checkUserNickname, updateNickname, updatePassword } = useUser(
+    token.accessToken ?? '',
+  );
   const [isEdit, setIsEdit] = useState({
     myProfile: false,
     default: false,
   });
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
-  const [isloading, setLoading] = useState(false);
   const [isOk, setIsOk] = useState({
     nicknameOk: false,
     passwordOk: false,
   });
-  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [, setProfileImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const { openModal } = useModal();
   useEffect(() => {
@@ -63,68 +61,25 @@ export default function MyPageContainer() {
   };
 
   const nicknameCheck = async () => {
-    setLoading(true);
-    try {
-      if (!nickname || !token.accessToken) return;
-      await checkNickname(nickname, token.accessToken);
-      setIsOk((prev) => ({ ...prev, nicknameOk: true }));
-      toast.success('사용 가능한 닉네임입니다');
-    } catch (err) {
-      console.error(err);
-      setIsOk((prev) => ({ ...prev, nicknameOk: false }));
-      toast.error('사용할 수 없는 닉네임입니다');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateUserNickname = async () => {
-    setLoading(true);
-    try {
-      if (!nickname || !token.accessToken) return;
-      await editNickname(nickname, token.accessToken);
-      toast.success('닉네임이 변경되었습니다');
-    } catch (err) {
-      console.error(err);
-      toast.error('닉네임 변경에 실패했습니다');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateUserPassword = async () => {
-    setLoading(true);
-    try {
-      if (!password || !token.accessToken) return;
-      await editPassword(password, token.accessToken);
-      toast.success('비밀번호가 변경되었습니다');
-      setIsEdit((prev) => ({ ...prev, default: false }));
-      setPassword('');
-    } catch (err) {
-      console.error(err);
-      toast.error('비밀번호 변경에 실패했습니다');
-    } finally {
-      setLoading(false);
-    }
+    if (!nickname) return;
+    const isValid = await checkUserNickname(nickname);
+    setIsOk((prev) => ({ ...prev, nicknameOk: isValid }));
   };
 
   const savedProfile = async () => {
-    setLoading(true);
     try {
       if (!token.accessToken) return;
 
       if (nickname && nickname !== user?.nickname && isOk.nicknameOk) {
-        await updateUserNickname();
+        const success = await updateNickname(nickname);
+        if (success) {
+          setIsEdit((prev) => ({ ...prev, myProfile: false }));
+          window.location.reload();
+        }
       }
-
-      toast.success('프로필이 저장되었습니다');
-      setIsEdit((prev) => ({ ...prev, myProfile: false }));
-      window.location.reload();
     } catch (err) {
       console.error(err);
       toast.error('프로필 저장에 실패했습니다');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -132,7 +87,13 @@ export default function MyPageContainer() {
     if (type === 'myProfile') {
       await savedProfile();
     } else {
-      await updateUserPassword();
+      if (password) {
+        const success = await updatePassword(password);
+        if (success) {
+          setIsEdit((prev) => ({ ...prev, default: false }));
+          setPassword('');
+        }
+      }
     }
   };
 
@@ -171,6 +132,7 @@ export default function MyPageContainer() {
                   변경
                 </label>
                 <input
+                  name="profile"
                   type="file"
                   id="profile"
                   accept="image/*"

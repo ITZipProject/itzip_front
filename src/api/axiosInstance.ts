@@ -1,5 +1,10 @@
 import axios from 'axios';
-import { getCookie, setCookie, deleteCookie } from '@/store/useTokenStore';
+import {
+  getCookie,
+  setAccessTokenAtom,
+  setRefreshTokenAtom,
+  clearTokenAtom,
+} from '@/store/useTokenStore';
 import { getDefaultStore } from 'jotai';
 import { tokenAtom } from '@/store/useTokenStore';
 
@@ -38,6 +43,13 @@ instance.interceptors.response.use(
 
       if (accessToken && refreshToken) {
         try {
+          const tokenPayload = JSON.parse(atob(accessToken.split('.')[1]));
+          const currentTime = Math.floor(Date.now() / 1000);
+
+          if (tokenPayload.exp > currentTime) {
+            return instance(originalRequest);
+          }
+
           const response = await instance.patch(
             'user/refreshToken',
             { refreshToken },
@@ -45,34 +57,20 @@ instance.interceptors.response.use(
               headers: {
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
-                accept: '*/*',
               },
             },
           );
-
           if (response.status === 200) {
-            const newAccessToken = response.headers.authorization;
-            const newRefreshToken = response.headers.refresh;
+            const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
 
-            setCookie('accessToken', newAccessToken, { maxAge: 2 * 7 * 24 * 3600 });
-            setCookie('refreshToken', newRefreshToken, { maxAge: 2 * 7 * 24 * 3600 });
-
-            store.set(tokenAtom, {
-              accessToken: newAccessToken,
-              refreshToken: newRefreshToken,
-            });
+            store.set(setAccessTokenAtom, newAccessToken);
+            store.set(setRefreshTokenAtom, newRefreshToken);
 
             originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
             return instance(originalRequest);
           }
         } catch (refreshError) {
-          deleteCookie('accessToken');
-          deleteCookie('refreshToken');
-
-          store.set(tokenAtom, {
-            accessToken: '',
-            refreshToken: '',
-          });
+          store.set(clearTokenAtom);
 
           if (typeof window !== 'undefined') {
             window.location.href = '/';
