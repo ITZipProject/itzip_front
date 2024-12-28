@@ -3,6 +3,7 @@ export interface Job {
   title: string;
   industryName: string;
   locationName: string[];
+  locationCode: string;
   jobName: string[];
   expirationDate: string;
   experienceName: string;
