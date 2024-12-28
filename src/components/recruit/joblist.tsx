@@ -143,7 +143,7 @@ const JobList: React.FC<JobListProps> = ({
         previousLabel={'이전'}
         nextLabel={'다음'}
         breakLabel={'...'}
-        pageCount={totalPages}
+        pageCount={Math.max(totalPages, 1)}
         marginPagesDisplayed={2}
         pageRangeDisplayed={5}
         onPageChange={handlePageChange}
@@ -154,7 +154,7 @@ const JobList: React.FC<JobListProps> = ({
         previousClassName={'px-3 py-2 rounded-lg border'}
         nextClassName={'px-3 py-2 rounded-lg border'}
         disabledClassName={'opacity-50 cursor-not-allowed'}
-        forcePage={currentPage}
+        forcePage={currentPage - 1}
       />
     </div>
   );
