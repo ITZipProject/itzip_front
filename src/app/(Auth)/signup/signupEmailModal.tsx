@@ -7,13 +7,12 @@ import { agreeErrorAtom } from '@/atoms/formAtoms';
 import AgreeCheckboxes from '@/components/auth/agreeCheckbox';
 import ModalBackButton from '@/components/auth/modalBackButton';
 import SmallAsk from '@/components/auth/smallAsk';
+import Button from '@/components/common/Button/Button';
 import Input from '@/components/common/input';
 import { Margin } from '@/components/common/margin';
 import Modal from '@/components/portal/modal';
 import { useSignUp } from '@/hooks/auth/useSignUp';
 import { useModal } from '@/lib/context/ModalContext';
-
-import Button from '@/components/common/Button/Button';
 
 interface SignInModalProps {
   modalId: string;
@@ -67,6 +66,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
 
         {!isOk.emailCheck ? (
           <Button
+            variant="basedButton"
             onClick={() => {
               void checkEmailDuplicate();
             }}
@@ -91,6 +91,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
             )}
             {!isOk.codePost ? (
               <Button
+                variant="basedButton"
                 onClick={() => {
                   void sendAuthCode();
                 }}
@@ -102,6 +103,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
                 {!isOk.codeVerify && (
                   <>
                     <Button
+                      variant="basedButton"
                       onClick={() => {
                         void verifyAuthCode();
                       }}
@@ -109,6 +111,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
                       {isLoading.codeVerify ? '인증코드 확인 중..' : '인증코드 확인하기'}
                     </Button>
                     <Button
+                      variant="basedButton"
                       onClick={() => {
                         void sendAuthCode();
                       }}
@@ -164,7 +167,9 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
           </span>
         )}
         {/* 가입하기 버튼 */}
-        <Button loadingText="가입하는중...">가입하기</Button>
+        <Button variant="basedButton" loadingText="가입하는중...">
+          가입하기
+        </Button>
 
         <div className="flex flex-col items-center">
           <SmallAsk text="이미 회원이신가요?" modalName="LoginModal" />

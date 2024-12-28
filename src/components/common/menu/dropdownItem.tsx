@@ -1,8 +1,8 @@
 'use client';
 
+import { useAtom } from 'jotai';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { useAtom } from 'jotai';
 
 import { useModal } from '@/lib/context/ModalContext';
 import { tokenAtom } from '@/store/useTokenStore';

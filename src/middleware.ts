@@ -5,12 +5,12 @@ interface Routes {
 }
 
 // 로그인이 필요하지 않는 페이지
-const publicOnlyUrls: Routes = {
-  '/': true,
-  '/recruit': true,
-  '/policy/terms': true,
-  '/policy/privacy': true,
-};
+// const publicOnlyUrls: Routes = {
+//   '/': true,
+//   '/recruit': true,
+//   '/policy/terms': true,
+//   '/policy/privacy': true,
+// };
 
 // 로그인한 사용자만 접근 가능한 페이지
 const protectedUrls: Routes = {

@@ -1,13 +1,12 @@
 'use client';
 
 import ModalBackButton from '@/components/auth/modalBackButton';
+import Button from '@/components/common/Button/Button';
 import Input from '@/components/common/input';
 import { Margin } from '@/components/common/margin';
 import Modal from '@/components/portal/modal';
 import useSignIn from '@/hooks/auth/useSignIn';
 import { useModal } from '@/lib/context/ModalContext';
-
-import Button from '@/components/common/Button/Button';
 
 interface SignInModalProps {
   modalId: string;
@@ -55,7 +54,9 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPro
           errors={errors.password}
         />
 
-        <Button loadingText="로그인하는중...">로그인하기</Button>
+        <Button variant="basedButton" loadingText="로그인하는중...">
+          로그인하기
+        </Button>
       </form>
     </Modal>
   );

@@ -1,4 +1,6 @@
+'use client';
 import { useAtom } from 'jotai';
+import Cookies from 'js-cookie';
 import React from 'react';
 import { z } from 'zod';
 
@@ -70,6 +72,12 @@ const useSignIn = () => {
         setAccessToken(res.data.accessToken);
         setRefreshToken(res.data.refreshToken);
         closeModal();
+        Cookies.set('currentToken', 'login token', {
+          expires: 7, // 7일
+          path: '/',
+          secure: true,
+          sameSite: 'strict',
+        });
       } else {
         handleLoginError(email, password);
       }

@@ -12,7 +12,7 @@ interface UserProps {
   imageUrl?: string | null;
 }
 
-export const useUser = (accessToken: string) => {
+export default function useUser(token: string) {
   const [user, setUser] = useState<UserProps>();
   const [, setLoading] = useAtom(loadingAtom);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,20 +21,20 @@ export const useUser = (accessToken: string) => {
   const fetchUser = useCallback(async () => {
     setLoading((prev) => ({ ...prev, user: true }));
     try {
-      const res = await getUser(accessToken);
-      setUser(res.data.data);
+      const res = await getUser(token);
+      setUser(res.data);
     } catch (err) {
-      console.error(err);
+      console.error('fetchUser error : ', err);
     } finally {
       setLoading((prev) => ({ ...prev, user: false }));
     }
-  }, [accessToken, setLoading]);
+  }, [token, setLoading]);
 
   // 닉네임 중복 체크
   const checkUserNickname = async (nickname: string) => {
     setIsLoading(true);
     try {
-      await checkNickname(nickname, accessToken);
+      await checkNickname(nickname, token);
       toast.success('사용 가능한 닉네임입니다');
       return true;
     } catch (err) {
@@ -50,7 +50,7 @@ export const useUser = (accessToken: string) => {
   const updateNickname = async (nickname: string) => {
     setIsLoading(true);
     try {
-      await editNickname(nickname, accessToken);
+      await editNickname(nickname, token);
       toast.success('닉네임이 변경되었습니다');
       await fetchUser(); // 유저 정보 갱신
       return true;
@@ -67,7 +67,7 @@ export const useUser = (accessToken: string) => {
   const updatePassword = async (password: string) => {
     setIsLoading(true);
     try {
-      await editPassword(password, accessToken);
+      await editPassword(password, token);
       toast.success('비밀번호가 변경되었습니다');
       return true;
     } catch (err) {
@@ -91,6 +91,4 @@ export const useUser = (accessToken: string) => {
     updatePassword,
     refreshUser: fetchUser,
   };
-};
-
-export default useUser;
+}

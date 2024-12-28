@@ -59,27 +59,55 @@ const tokenAtom = atom({
 
 // 액세스 토큰 설정
 const setAccessTokenAtom = atom(null, (get, set, accessToken: string) => {
-  setCookie('accessToken', accessToken, { maxAge: 2 * 7 * 24 * 3600 }); // 2주 (7200초)
+  const success = setCookie('accessToken', accessToken, {
+    maxAge: 2 * 7 * 24 * 3600,
+    path: '/',
+    secure: true,
+    sameSite: 'strict',
+  });
+  if (success) {
+    console.log('액세스 토큰 쿠키 저장 성공 (setAccessTokenAtom)');
+  }
+  if (!success) {
+    console.error('액세스 토큰 쿠키 저장 실패');
+    return;
+  }
+
   const currentToken = get(tokenAtom);
-  set(tokenAtom, { ...currentToken, accessToken }); // atom 상태 업데이트
+  set(tokenAtom, { ...currentToken, accessToken });
 });
 
 // 리프레시 토큰 설정
 const setRefreshTokenAtom = atom(null, (get, set, refreshToken: string) => {
-  setCookie('refreshToken', refreshToken, { maxAge: 2 * 7 * 24 * 3600 }); // 2주
+  const success = setCookie('refreshToken', refreshToken, {
+    maxAge: 2 * 7 * 24 * 3600,
+    path: '/',
+    secure: true,
+    sameSite: 'strict',
+  });
+  if (success) {
+    console.log('리프레시 토큰 쿠키 저장 성공 (setRefreshTokenAtom)');
+  }
+  if (!success) {
+    console.error('리프레시 토큰 쿠키 저장 실패');
+    return;
+  }
+
   const currentToken = get(tokenAtom);
-  set(tokenAtom, { ...currentToken, refreshToken }); // atom 상태 업데이트
+  set(tokenAtom, { ...currentToken, refreshToken });
 });
 
 // 토큰 초기화
-const clearTokenAtom = atom(null, (get, set) => {
+const clearTokenAtom = atom(null, () => {
   deleteCookie('accessToken');
   deleteCookie('refreshToken');
+  console.log('토큰 모두 삭제 완료 (clearTokenAtom)');
 });
 
 // 토큰 상태 가져오기
 const getTokenState = () => {
   if (typeof window === 'undefined') {
+    console.log('토큰을 가져옵니다. (getTokenState)');
     return { accessToken: '', refreshToken: '' };
   }
 
