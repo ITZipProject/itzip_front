@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { setAccessTokenAtom } from '@/store/useTokenStore';
+import { tokenAtom } from '@/store/useTokenStore';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAtom } from 'jotai';
@@ -48,7 +48,7 @@ const fetchFilteredQuizzes = async ({
 };
 
 export const useFilteredQuizzes = () => {
-  const [accessToken] = useAtom(setAccessTokenAtom);
+  const [accessToken] = useAtom(tokenAtom);
   const [difficulty, setDifficulty] = useState<number | null>(null);
   const [category, setCategory] = useState<number | ''>('');
   const [sortOrder, setSortOrder] = useState<'NEWEST' | 'OLDEST' | 'RECOMMENDED'>('NEWEST');
@@ -85,7 +85,7 @@ export const useFilteredQuizzes = () => {
         sortOrder,
         page,
         keyword,
-        accessToken,
+        accessToken: accessToken.accessToken,
       });
     },
     staleTime: 1000,

@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { setAccessTokenAtom } from '@/store/useTokenStore';
+import { tokenAtom } from '@/store/useTokenStore';
 import axios, { AxiosError } from 'axios';
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
@@ -11,10 +11,10 @@ export const useSolvedacLinkStatus = () => {
   const [isSolvedacLinked, setIsSolvedacLinked] = useState<boolean | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [accessToken] = useAtom(setAccessTokenAtom);
+  const [token] = useAtom(tokenAtom);
 
   useEffect(() => {
-    if (!accessToken) {
+    if (!token.accessToken) {
       setIsSolvedacLinked(null);
       setLoading(false);
       return;
@@ -26,7 +26,7 @@ export const useSolvedacLinkStatus = () => {
         const response = await axios.get('algorithm/user', {
           baseURL: apiUrl,
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token.accessToken}`,
           },
         });
         console.log('response: ', response);
@@ -53,7 +53,7 @@ export const useSolvedacLinkStatus = () => {
     };
 
     checkSolvedacLinkStatus();
-  }, [accessToken]);
+  }, [token.accessToken]);
 
   return { isSolvedacLinked, loading, error };
 };
