@@ -122,7 +122,7 @@ const JobList: React.FC<JobListProps> = ({
               }}
             >
               <BookmarkIcon
-                className={`size-6 ${bookmarks.has(job.url) ? 'fill-blue-500 text-blue-500' : 'text-gray-400'}`}
+                className={`size-6 ${bookmarks.has(job.url) ? 'fill-blue-700 text-blue-700' : 'text-gray-400'}`}
               />
             </button>
             <h3 className="font-pre-body-01 mb-2 text-center">{job.title}</h3>

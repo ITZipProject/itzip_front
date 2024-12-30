@@ -55,7 +55,7 @@ const Experience: React.FC<ExperienceFilterProps> = ({
           sx={{
             '& .MuiSlider-track': {
               height: 4,
-              backgroundColor: '#2563eb',
+              backgroundColor: '#1d4ed8',
             },
             '& .MuiSlider-rail': {
               height: 4,
@@ -64,9 +64,9 @@ const Experience: React.FC<ExperienceFilterProps> = ({
             '& .MuiSlider-thumb': {
               width: 15,
               height: 15,
-              backgroundColor: '#2563eb',
+              backgroundColor: '#1d4ed8',
               '&:hover, &.Mui-focusVisible': {
-                boxShadow: '0 0 0 8px rgba(37, 99, 235, 0.16)',
+                boxShadow: '0 0 0 8px rgba(29, 78, 216, 0.16)',
               },
             },
           }}
