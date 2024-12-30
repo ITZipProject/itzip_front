@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
 import { useUserAlgorithmStats } from '@/api/algorithm/fetchMyAlgorithmData';
-import { setAccessTokenAtom } from '@/store/useTokenStore';
+import { tokenAtom } from '@/store/useTokenStore';
 import { getTierName } from '@/utils/tierUtils';
 
 const Loading = () => (
@@ -19,14 +19,14 @@ const NoData = () => (
 );
 
 const MyData: React.FC = () => {
-  const [accessToken] = useAtom(setAccessTokenAtom);
+  const [token] = useAtom(tokenAtom);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  const { data, isLoading } = useUserAlgorithmStats(accessToken ?? '');
+  const { data, isLoading } = useUserAlgorithmStats(token.accessToken ?? '');
 
   if (!isClient) {
     return null; // 클라이언트 측에서만 렌더링하도록 함
