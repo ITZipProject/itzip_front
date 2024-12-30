@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { submitPoint } from '@/api/quiz/submitPoint';
 import { QUIZ_CONSTANTS } from '@/constants/quiz';
 import { ratings } from '@/data/QuizData';
-import { accessTokenAtom } from '@/store/useTokenStore';
+import { setAccessTokenAtom } from '@/store/useTokenStore';
 
 interface CorrectModalProps {
   onClose: () => void;
@@ -14,7 +14,7 @@ interface CorrectModalProps {
 
 const CorrectModal: React.FC<CorrectModalProps> = ({ onClose, quizId }) => {
   const [selectedRate, setSelectedRate] = useState<number | null>(null);
-  const [accessToken] = useAtom(accessTokenAtom);
+  const [accessToken] = useAtom(setAccessTokenAtom);
 
   const pointMutation = useMutation({
     mutationFn: submitPoint,

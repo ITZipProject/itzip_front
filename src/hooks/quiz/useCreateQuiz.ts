@@ -7,13 +7,13 @@ import { z } from 'zod';
 
 import { createQuiz } from '@/api/quiz/createQuiz';
 import { quizSchema } from '@/lib/quiz/QuizValidationSchema';
-import { accessTokenAtom } from '@/store/useTokenStore';
+import { setAccessTokenAtom } from '@/store/useTokenStore';
 
 type QuizFormValues = z.infer<typeof quizSchema>;
 
 const useCreateQuiz = () => {
   const queryClient = useQueryClient();
-  const [accessToken] = useAtom(accessTokenAtom);
+  const [accessToken] = useAtom(setAccessTokenAtom);
 
   const methods = useForm<QuizFormValues>({
     resolver: zodResolver(quizSchema),
