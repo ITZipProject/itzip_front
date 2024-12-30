@@ -7,7 +7,6 @@ import { SecondStep } from '@/components/quiz/multiStep/SecondStep';
 import { ThirdStep } from '@/components/quiz/multiStep/ThirdStep';
 import useCreateQuiz from '@/hooks/quiz/useCreateQuiz';
 import useMultiForm from '@/hooks/quiz/useMultiForm';
-import { accessTokenAtom } from '@/store/useTokenStore';
 import { MakeQuizData } from '@/types/quiz/quiz';
 
 interface ModalProps {

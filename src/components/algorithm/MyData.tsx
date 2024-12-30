@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
 import { useUserAlgorithmStats } from '@/api/algorithm/fetchMyAlgorithmData';
-import { accessTokenAtom } from '@/store/useTokenStore';
+import { setAccessTokenAtom } from '@/store/useTokenStore';
 import { getTierName } from '@/utils/tierUtils';
 
 const Loading = () => (
@@ -19,7 +19,7 @@ const NoData = () => (
 );
 
 const MyData: React.FC = () => {
-  const [accessToken] = useAtom(accessTokenAtom);
+  const [accessToken] = useAtom(setAccessTokenAtom);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
