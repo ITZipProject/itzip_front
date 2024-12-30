@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+import instance from '../axiosInstance';
 
 interface ApiResponse<T> {
   data: T;
@@ -15,7 +13,7 @@ interface UserData {
 }
 
 export const getUser = async (accessToken: string): Promise<ApiResponse<UserData>> => {
-  const res = await axios.get<ApiResponse<UserData>>(`${BASE_URL}/user`, {
+  const res = await instance.get<ApiResponse<UserData>>('/user', {
     headers: {
       'No-Auth': true,
       Authorization: `Bearer ${accessToken}`,
@@ -25,7 +23,7 @@ export const getUser = async (accessToken: string): Promise<ApiResponse<UserData
 };
 
 export const checkNickname = async (nickname: string, accessToken: string) => {
-  const res = await axios.get<ApiResponse<boolean>>(`${BASE_URL}/mypage/checkDuplicateNickname`, {
+  const res = await instance.get<ApiResponse<boolean>>('/mypage/checkDuplicateNickname', {
     params: {
       nickname,
     },
@@ -37,8 +35,8 @@ export const checkNickname = async (nickname: string, accessToken: string) => {
 };
 
 export const editNickname = async (nickname: string, accessToken: string) => {
-  const res = await axios.patch<ApiResponse<{ nickname: string }>>(
-    `${BASE_URL}/mypage/nickname`,
+  const res = await instance.patch<ApiResponse<{ nickname: string }>>(
+    '/mypage/nickname',
     { nickname },
     {
       headers: {
@@ -50,8 +48,8 @@ export const editNickname = async (nickname: string, accessToken: string) => {
 };
 
 export const editPassword = async (password: string, accessToken: string) => {
-  const res = await axios.patch<ApiResponse<{ password: string }>>(
-    `${BASE_URL}/mypage/password`,
+  const res = await instance.patch<ApiResponse<{ password: string }>>(
+    '/mypage/password',
     { password },
     {
       headers: {
@@ -66,8 +64,8 @@ export const updateProfileImage = async (file: File, accessToken: string) => {
   const formData = new FormData();
   formData.append('file', file);
 
-  const res = await axios.patch<ApiResponse<{ imageUrl: string }>>(
-    `${BASE_URL}/api/mypage/profileImage`,
+  const res = await instance.patch<ApiResponse<{ imageUrl: string }>>(
+    '/api/mypage/profileImage',
     formData,
     {
       headers: {
@@ -79,11 +77,7 @@ export const updateProfileImage = async (file: File, accessToken: string) => {
   return res.data;
 };
 
-export const logout = async (accessToken: string) => {
-  const res = await axios.delete<ApiResponse<null>>(`${BASE_URL}/user/logout`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+export const logout = async () => {
+  const res = await instance.delete<ApiResponse<null>>('/user/logout');
   return res.data;
 };
