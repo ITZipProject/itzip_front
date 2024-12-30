@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useAtom } from 'jotai';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useAtom } from 'jotai';
+import { useEffect, useState } from 'react';
 
 import { useModal } from '@/lib/context/ModalContext';
 import { tokenAtom } from '@/store/useTokenStore';
@@ -23,7 +23,6 @@ export default function HeaderBar() {
   const isStudyPage = pathname.startsWith('/study');
   const headerBackgroundColor = isStudyPage ? 'bg-stone-800' : 'bg-white';
   const textColor = isStudyPage ? 'text-gray-200' : 'text-headerText';
-  const borderClass = isStudyPage ? '' : 'border border-b-2';
 
   if (!mounted) {
     return (
@@ -32,7 +31,7 @@ export default function HeaderBar() {
           className={`flex h-[70px] w-full items-center justify-between border border-b-2 px-10 ${headerBackgroundColor} *:[516px]:text-8 *:text-14  *:xl:text-16`}
         >
           <Link className={`text-logoSize font-extrabold ${textColor} text-logo`} href={'/'}>
-            <Image src={logo as StaticImageData} alt="logo" className="w-[100px]" />
+            <Image src={logo} alt="logo" className="w-[100px]" />
           </Link>
           <div className={`flex gap-spacing-05 ${textColor} text-headerSize`}>
             <Link href={'#'}>이력서</Link>
@@ -58,12 +57,20 @@ export default function HeaderBar() {
   return (
     <div className="header">
       <div
-        className={`flex h-[70px] w-full items-center justify-between px-10 ${headerBackgroundColor} ${borderClass} *:[516px]:text-8 *:text-14  *:xl:text-16`}
+        className={`flex h-[70px] w-full items-center justify-between px-10 
+          ${pathname?.includes('study') ? 'bg-stone-800' : 'bg-white'}
+          ${pathname?.includes('study') ? '' : 'border border-b-2'}
+          *:[516px]:text-8 *:text-14  *:xl:text-16`}
       >
-        <Link className={`text-logoSize font-extrabold ${textColor} text-logo`} href={'/'}>
-          <Image src={logo as StaticImageData} alt="logo" className="w-[100px]" />
+        <Link
+          className={`text-logoSize font-extrabold ${pathname?.includes('study') ? 'text-gray-200' : 'text-headerText'} text-logo`}
+          href={'/'}
+        >
+          <Image src={logo} alt="logo" className="w-[100px]" />
         </Link>
-        <div className={`flex gap-spacing-05 ${textColor} text-headerSize`}>
+        <div
+          className={`flex gap-spacing-05 ${pathname?.includes('study') ? 'text-gray-200' : 'text-headerText'} text-headerSize`}
+        >
           <Link
             href={isLoggedIn ? '/resume' : '#'}
             onClick={!isLoggedIn ? () => openModal('LoginModal') : undefined}
@@ -86,7 +93,9 @@ export default function HeaderBar() {
             학습하기
           </Link>
         </div>
-        <div className={`gap-spacing-07 ${textColor} flex items-center`}>
+        <div
+          className={`gap-spacing-07 ${pathname?.includes('study') ? 'text-gray-200' : 'text-headerText'} flex items-center`}
+        >
           <div>
             {!isLoggedIn ? (
               <button
