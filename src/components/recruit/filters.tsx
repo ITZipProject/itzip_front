@@ -66,9 +66,9 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters, applyFilters }) 
   return (
     <div>
       <div className="mb-4 flex justify-between px-2">
-        <h2 className="font-pre-heading-03">필터</h2>
+        <h2 className="font-pre-heading-03 py-2">필터</h2>
         <button
-          className="font-pre-heading-03 rounded text-gray-800 hover:bg-blue-300"
+          className="font-pre-body-01 rounded bg-blue-200 px-2 py-1 text-gray-800"
           onClick={resetFilters}
         >
           초기화
