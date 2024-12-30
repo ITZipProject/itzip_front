@@ -7,13 +7,12 @@ import { agreeErrorAtom } from '@/atoms/formAtoms';
 import AgreeCheckboxes from '@/components/auth/agreeCheckbox';
 import ModalBackButton from '@/components/auth/modalBackButton';
 import SmallAsk from '@/components/auth/smallAsk';
+import Button from '@/components/common/Button/Button';
 import Input from '@/components/common/input';
 import { Margin } from '@/components/common/margin';
 import Modal from '@/components/portal/modal';
 import { useSignUp } from '@/hooks/auth/useSignUp';
 import { useModal } from '@/lib/context/ModalContext';
-
-import { AuthButton } from '../auth/authButton';
 
 interface SignInModalProps {
   modalId: string;
@@ -66,14 +65,14 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
         />
 
         {!isOk.emailCheck ? (
-          <AuthButton
-            disabled={isLoading.emailCheck}
+          <Button
+            variant="basedButton"
             onClick={() => {
               void checkEmailDuplicate();
             }}
           >
             {isLoading.emailCheck ? '중복 확인 중..' : '중복 확인하기'}
-          </AuthButton>
+          </Button>
         ) : (
           <>
             {isOk.codeHidden && (
@@ -91,34 +90,35 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
               />
             )}
             {!isOk.codePost ? (
-              <AuthButton
-                disabled={isLoading.codePost}
+              <Button
+                variant="basedButton"
                 onClick={() => {
                   void sendAuthCode();
                 }}
               >
                 {isLoading.codePost ? '인증 코드 보내기 중..' : '인증 코드 보내기'}
-              </AuthButton>
+              </Button>
             ) : (
               <>
                 {!isOk.codeVerify && (
                   <>
-                    <AuthButton
-                      disabled={isLoading.codeVerify}
+                    <Button
+                      variant="basedButton"
                       onClick={() => {
                         void verifyAuthCode();
                       }}
                     >
                       {isLoading.codeVerify ? '인증코드 확인 중..' : '인증코드 확인하기'}
-                    </AuthButton>
-                    <AuthButton
-                      disabled={isLoading.codePost}
+                    </Button>
+                    <Button
+                      variant="basedButton"
                       onClick={() => {
                         void sendAuthCode();
                       }}
                     >
+                      {' '}
                       {isLoading.codePost ? '인증 코드 보내기 중..' : '인증 코드 다시 보내기'}
-                    </AuthButton>
+                    </Button>
                   </>
                 )}
               </>
@@ -167,7 +167,9 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
           </span>
         )}
         {/* 가입하기 버튼 */}
-        <AuthButton disabled={isLoading.createAccount}>가입하기</AuthButton>
+        <Button variant="basedButton" loadingText="가입하는중...">
+          가입하기
+        </Button>
 
         <div className="flex flex-col items-center">
           <SmallAsk text="이미 회원이신가요?" modalName="LoginModal" />

@@ -2,33 +2,36 @@
 
 import { useAtom } from 'jotai';
 import Image from 'next/image';
-import { toast } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 
-import { loadingAtom } from '@/atoms/formAtoms';
+import Button from '@/components/common/Button/Button';
+import Section from '@/components/mypage/Section';
+import Title from '@/components/mypage/Title';
 import useUser from '@/hooks/mypage/useUser';
-import { accessTokenAtom } from '@/store/useTokenStore';
+import { useModal } from '@/lib/context/ModalContext';
+import { tokenAtom } from '@/store/useTokenStore';
+
 import profile from '../../../public/profile.png';
-import { checkNickname, editNickname, editPassword } from '@/api/mypage/mypage.action';
 
 export default function MyPageContainer() {
-  const [accessToken] = useAtom(accessTokenAtom);
-  const { user, userLogout } = useUser(accessToken ?? '');
-  const [loading] = useAtom(loadingAtom);
+  const [token] = useAtom(tokenAtom);
+  const { user, checkUserNickname, updateNickname, updatePassword } = useUser(
+    token.accessToken ?? '',
+  );
   const [isEdit, setIsEdit] = useState({
     myProfile: false,
     default: false,
   });
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
-  const [isloading, setLoading] = useState(false);
   const [isOk, setIsOk] = useState({
     nicknameOk: false,
     passwordOk: false,
   });
-  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [, setProfileImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
+  const { openModal } = useModal();
   useEffect(() => {
     return () => {
       if (previewUrl) {
@@ -62,74 +65,29 @@ export default function MyPageContainer() {
   };
 
   const nicknameCheck = async () => {
-    setLoading(true);
-    try {
-      if (!nickname || !accessToken) return;
-      await checkNickname(nickname, accessToken);
-      setIsOk((prev) => ({ ...prev, nicknameOk: true }));
-      toast.success('사용 가능한 닉네임입니다');
-    } catch (err) {
-      console.error(err);
-      setIsOk((prev) => ({ ...prev, nicknameOk: false }));
-      toast.error('사용할 수 없는 닉네임입니다');
-    } finally {
-      setLoading(false);
-    }
+    if (!nickname) return;
+    const isValid = await checkUserNickname(nickname);
+    setIsOk((prev) => ({ ...prev, nicknameOk: isValid }));
   };
 
-  const updateUserNickname = async () => {
-    setLoading(true);
-    try {
-      if (!nickname || !accessToken) return;
-      await editNickname(nickname, accessToken);
-      toast.success('닉네임이 변경되었습니다');
-    } catch (err) {
-      console.error(err);
-      toast.error('닉네임 변경에 실패했습니다');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateUserPassword = async () => {
-    setLoading(true);
-    try {
-      if (!password || !accessToken) return;
-      await editPassword(password, accessToken);
-      toast.success('비밀번호가 변경되었습니다');
-      setIsEdit((prev) => ({ ...prev, default: false }));
-      setPassword('');
-    } catch (err) {
-      console.error(err);
-      toast.error('비밀번호 변경에 실패했습니다');
-    } finally {
-      setLoading(false);
-    }
+  const handleNicknameCheck = () => {
+    void nicknameCheck();
   };
 
   const savedProfile = async () => {
-    setLoading(true);
     try {
-      if (!accessToken) return;
+      if (!token.accessToken) return;
 
-      // 닉네임 변경
       if (nickname && nickname !== user?.nickname && isOk.nicknameOk) {
-        await updateUserNickname();
+        const success = await updateNickname(nickname);
+        if (success) {
+          setIsEdit((prev) => ({ ...prev, myProfile: false }));
+          window.location.reload();
+        }
       }
-
-      // 이미지 변경
-      // if (profileImage) {
-      //   await updateProfileImage(profileImage, accessToken);
-      // }
-
-      toast.success('프로필이 저장되었습니다');
-      setIsEdit((prev) => ({ ...prev, myProfile: false }));
-      window.location.reload();
     } catch (err) {
       console.error(err);
       toast.error('프로필 저장에 실패했습니다');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -137,20 +95,30 @@ export default function MyPageContainer() {
     if (type === 'myProfile') {
       await savedProfile();
     } else {
-      await updateUserPassword();
+      if (password) {
+        const success = await updatePassword(password);
+        if (success) {
+          setIsEdit((prev) => ({ ...prev, default: false }));
+          setPassword('');
+        }
+      }
     }
   };
 
+  const handleFinishEdit = (type: 'myProfile' | 'default') => {
+    void onFinishEdit(type);
+  };
+
   return (
-    <div className="flex h-screen w-screen flex-col bg-[#F9FBFC] p-4 space-y-4">
-      <section className="w-full max-w-[900px] mx-auto shadow-md border-2 py-[20px] px-[30px] rounded-2xl space-y-8">
-        <h2 className="font-bold text-[20px]">내 프로필</h2>
+    <div className="flex w-screen flex-col space-y-4 bg-[#F9FBFC] p-4 px-spacing-06 *:bg-white">
+      <Section>
+        <Title title="내 프로필" />
         <div className="space-y-4">
-          <div className="flex flex-row space-x-4">
+          <div className="flex flex-row space-x-4 ">
             <h2 className="min-w-[85px]">이미지</h2>
             {isEdit.myProfile ? (
               <div className="flex flex-row space-x-4">
-                <div className="flex w-[100px] h-[100px] gap-4 border-2 border-Blue-200 p-[10px] rounded-xl bg-white justify-center items-center">
+                <div className="flex size-[100px] items-center justify-center gap-4 rounded-xl border-2 border-Blue-200 bg-white p-[10px]">
                   {previewUrl || user?.imageUrl ? (
                     <Image
                       src={previewUrl || user?.imageUrl || '/profile.png'}
@@ -170,12 +138,13 @@ export default function MyPageContainer() {
                   )}
                 </div>
                 <label
-                  className="cursor-pointer border border-Grey-200 py-[10px] px-[20px] rounded-xl h-[40px]"
+                  className="h-spacing-11 cursor-pointer rounded-xl border border-Grey-200 px-spacing-06 py-[10px]"
                   htmlFor="profile"
                 >
                   변경
                 </label>
                 <input
+                  name="profile"
                   type="file"
                   id="profile"
                   accept="image/*"
@@ -184,7 +153,7 @@ export default function MyPageContainer() {
                 />
               </div>
             ) : (
-              <div className="flex w-[200px] h-[200px] gap-4 border-2 border-Blue-200 p-[10px] rounded-xl bg-white justify-center items-center">
+              <div className="flex size-spacing-19 items-center justify-center gap-4 rounded-xl border-2 border-Blue-200 bg-white p-[10px]">
                 {user?.imageUrl ? (
                   <Image
                     src={user.imageUrl}
@@ -206,10 +175,10 @@ export default function MyPageContainer() {
             )}
           </div>
 
-          <div className="flex flex-row space-x-4 max-w-[500px] items-center">
+          <div className="flex flex-row items-center space-x-4 ">
             <h2 className="min-w-[85px]">닉네임</h2>
             {isEdit.myProfile ? (
-              <div className="flex flex-row gap-4 items-center">
+              <div className="flex flex-row items-center gap-4">
                 <input
                   name="nickname"
                   value={nickname}
@@ -217,49 +186,49 @@ export default function MyPageContainer() {
                   placeholder={user?.nickname}
                   className="border-Grey-200"
                 />
-                <button
-                  onClick={nicknameCheck}
-                  className="border border-Grey-200 py-[10px] px-[20px] rounded-xl text-[12px]"
-                >
+
+                <Button onClick={handleNicknameCheck} variant="nonBorderButton">
                   중복 확인
-                </button>
+                </Button>
               </div>
             ) : (
               <span>{user?.nickname}</span>
             )}
           </div>
 
-          <div className="flex flex-row space-x-4 max-w-[500px] justify-between items-center">
-            <div className="flex flex-row">
+          <div className="flex flex-row items-center  justify-between space-x-4 ">
+            <div className="flex flex-row ">
               <h2 className="min-w-[100px]">계정</h2>
               <span>{user?.email}</span>
             </div>
             {isEdit.myProfile ? (
               <div className="space-x-4">
-                <button onClick={() => onCancelEdit('myProfile')}>취소</button>
-                <button
-                  onClick={() => onFinishEdit('myProfile')}
-                  className="border border-Grey-200 py-[10px] px-[20px] rounded-xl"
-                >
+                <Button onClick={() => onCancelEdit('myProfile')} variant="none">
+                  취소
+                </Button>
+                <Button onClick={() => handleFinishEdit('myProfile')} variant="nonBorderButton">
                   저장
-                </button>
+                </Button>
               </div>
             ) : (
-              <button
-                onClick={() => onStartEdit('myProfile')}
-                className="border border-Grey-200 py-[10px] px-[20px] rounded-xl"
-              >
-                설정
-              </button>
+              <>
+                <Button
+                  onClick={() => onStartEdit('myProfile')}
+                  variant="nonBorderButton"
+                  loadingText=""
+                >
+                  설정
+                </Button>
+              </>
             )}
           </div>
         </div>
-      </section>
+      </Section>
 
-      <section className="w-full max-w-[900px] mx-auto shadow-md border-2 py-[20px] px-[30px] rounded-2xl space-y-4">
-        <h2 className="font-bold text-[20px]">기본 정보</h2>
+      <Section>
+        <Title title="기본 정보" />
         <div className="space-y-4">
-          <div className="flex flex-row space-x-4 max-w-[500px] justify-between items-center">
+          <div className="flex flex-row items-center justify-between space-x-4">
             <div className="flex flex-row items-center">
               <h2 className="min-w-[100px]">비밀번호</h2>
               {isEdit.default ? (
@@ -269,7 +238,7 @@ export default function MyPageContainer() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="비밀번호를 입력하세요"
-                  className="border-Grey-200 text-[14px]"
+                  className="border-Grey-200 text-14"
                 />
               ) : (
                 <div className="text-Grey-400">비밀번호 설정</div>
@@ -277,28 +246,28 @@ export default function MyPageContainer() {
             </div>
             {isEdit.default ? (
               <div className="space-x-4">
-                <button onClick={() => onCancelEdit('default')}>취소</button>
-                <button
-                  onClick={() => onFinishEdit('default')}
-                  className="border border-Grey-200 py-[10px] px-[20px] rounded-xl"
-                >
+                <Button variant="none" onClick={() => onCancelEdit('default')}>
+                  취소
+                </Button>
+                <Button variant="nonBorderButton" onClick={() => handleFinishEdit('default')}>
                   저장
-                </button>
+                </Button>
               </div>
             ) : (
-              <button
-                onClick={() => onStartEdit('default')}
-                className="border border-Grey-200 py-[10px] px-[20px] rounded-xl"
-              >
+              <Button variant="nonBorderButton" onClick={() => onStartEdit('default')}>
                 설정
-              </button>
+              </Button>
             )}
           </div>
         </div>
-      </section>
-      <button onClick={userLogout} className="self-end">
-        {'로그아웃 >'}
-      </button>
+        <Button
+          variant="nonBorderButton"
+          onClick={() => openModal('alertModal')}
+          classNames="w-full"
+        >
+          {'로그아웃'}
+        </Button>
+      </Section>
     </div>
   );
 }

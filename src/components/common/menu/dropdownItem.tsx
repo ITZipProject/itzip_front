@@ -5,20 +5,20 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 import { useModal } from '@/lib/context/ModalContext';
-import { accessTokenAtom } from '@/store/useTokenStore';
+import { tokenAtom } from '@/store/useTokenStore';
 
 const DropdownItem = () => {
   const { openModal } = useModal();
-  const [accessToken] = useAtom(accessTokenAtom);
+  const [token] = useAtom(tokenAtom);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    setIsLoggedIn(!!accessToken);
-  }, [accessToken]);
+    setIsLoggedIn(!!token.accessToken);
+  }, [token.accessToken]);
 
   return (
     <>
-      <div className={`text-headerSize flex flex-col  gap-spacing-05`}>
+      <div className={`text-headerSize flex flex-col gap-spacing-05`}>
         <Link
           href={isLoggedIn ? '/resume' : '#'}
           onClick={!isLoggedIn ? () => openModal('LoginModal') : undefined}

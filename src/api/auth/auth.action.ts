@@ -58,5 +58,6 @@ export const createAccount = async (
       },
     },
   );
+  console.log('join____', result);
   return result;
 };

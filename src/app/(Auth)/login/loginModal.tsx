@@ -4,6 +4,7 @@ import Image from 'next/image';
 import React from 'react';
 
 import SmallAsk from '@/components/auth/smallAsk';
+import Button from '@/components/common/Button/Button';
 import { Margin } from '@/components/common/margin';
 import Modal from '@/components/portal/modal';
 import { useModal } from '@/lib/context/ModalContext';
@@ -28,9 +29,14 @@ const LoginModal: React.FC<SignUpModalProps> = ({ modalId }) => {
       </div>
       <div className="space-y-spacing-05 *:flex *:justify-center">
         <Margin height={'48px'} />
-        <button onClick={() => openModal('EmailLoginModal')} className="primary-btn">
+        <Button
+          variant="basedButton"
+          loadingText=""
+          onClick={() => openModal('EmailLoginModal')}
+          className="primary-btn"
+        >
           <span>이메일로 로그인</span>
-        </button>
+        </Button>
 
         <h1 className="text-12 font-[400] text-[#818181]">또는</h1>
 

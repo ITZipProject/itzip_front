@@ -8,6 +8,7 @@ import { ModalProvider } from '@/lib/context/ModalContext';
 import './globals.css';
 // eslint-disable-next-line import/order
 import MobileHeader from '@/components/common/mobileHeader';
+// eslint-disable-next-line import/order
 import { Toaster } from 'react-hot-toast';
 
 // pretendard 함수 관련 에러로 500이 떠서 일단 주석 처리
