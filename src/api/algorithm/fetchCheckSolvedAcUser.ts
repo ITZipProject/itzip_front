@@ -1,10 +1,9 @@
 /* eslint-disable */
 
+import { setAccessTokenAtom } from '@/store/useTokenStore';
 import axios, { AxiosError } from 'axios';
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
-
-import { accessTokenAtom } from '@/store/useTokenStore';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -12,7 +11,7 @@ export const useSolvedacLinkStatus = () => {
   const [isSolvedacLinked, setIsSolvedacLinked] = useState<boolean | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [accessToken] = useAtom(accessTokenAtom);
+  const [accessToken] = useAtom(setAccessTokenAtom);
 
   useEffect(() => {
     if (!accessToken) {

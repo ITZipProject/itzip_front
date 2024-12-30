@@ -7,9 +7,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    env:
+      NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
     steps:
     - uses: actions/checkout@v3
+    
     - name: Login Dockerhub
       env:
         DOCKER_USERNAME: ${{secrets.DOCKERHUB_USERNAME}}
@@ -19,9 +23,11 @@ jobs:
     - name: make .env
       run: | 
         touch .env
-        echo "${{ secrets.SECRET_ENV}}" > .env
+        echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> .env
+        echo "${{ secrets.SECRET_ENV}}" >> .env
+    
     - name: Builder the Docker image
-      run: docker build -t ${{secrets.DOCKERHUB_USERNAME}}/ts-react-18-nextjs-14.2 .
+      run: docker build --build-arg NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} -t ${{secrets.DOCKERHUB_USERNAME}}/ts-react-18-nextjs-14.2 .
 
     - name: taging
       run: docker tag ${{secrets.DOCKERHUB_USERNAME}}/ts-react-18-nextjs-14.2 ${{secrets.DOCKERHUB_USERNAME}}/ts-react-18-nextjs-14.2:latest
@@ -37,7 +43,8 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: 22
         script: |
-          sudo docker-compose -f /home/ubuntu/itzip/docker-compose.yml down
-          sudo docker rmi itzip/ts-react-18-nextjs-14.2:latest
-          sudo docker-compose -f /home/ubuntu/itzip/docker-compose.yml up -d
-          sudo docker system prune -a -f
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > /home/ubuntu/itzip/.env
+          docker-compose -f /home/ubuntu/itzip/docker-compose.yml down
+          docker-compose -f /home/ubuntu/itzip/docker-compose.yml pull
+          docker-compose -f /home/ubuntu/itzip/docker-compose.yml up -d
+          docker system prune -a -f

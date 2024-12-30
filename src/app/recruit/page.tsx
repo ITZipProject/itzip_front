@@ -14,7 +14,8 @@ const RecruitPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
     techName: '',
-    locationName: [] as string[],
+    // locationName: [] as string[],
+    locationCode: '',
     experienceMin: 0,
     experienceMax: 10,
     search: '',
@@ -64,6 +65,7 @@ const RecruitPage: React.FC = () => {
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
+            isLoading={false}
           />
         </div>
       </div>

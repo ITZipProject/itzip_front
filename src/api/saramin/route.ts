@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { Job } from '@/components/recruit/job';
 
-const baseUrl = 'http://3.39.78.0:8080/api';
+const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 interface FetchJobsParams {
   page: number;
@@ -10,6 +10,7 @@ interface FetchJobsParams {
   sort: string;
   techName?: string;
   locationName?: string[];
+  locationCode?: string;
   experienceMin?: number;
   experienceMax?: number;
   search?: string;
@@ -30,9 +31,7 @@ export async function fetchJobs(
   params: FetchJobsParams,
 ): Promise<{ jobs: Job[]; totalPages: number }> {
   try {
-    console.log('Fetching jobs with params:', params);
-    const response = await axios.get<JobResponse>(`${baseUrl}/job-info`, { params });
-    // console.log('API response:', response.data);
+    const response = await axios.get<JobResponse>(`${baseUrl}job-info`, { params });
     return {
       jobs: response.data.data.content,
       totalPages: response.data.data.totalPages,

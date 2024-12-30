@@ -1,12 +1,10 @@
 'use client';
 
-import { BookmarkIcon } from 'lucide-react';
+import { BookmarkIcon, Loader2 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
 
 import { Job } from './job';
-
-// import { fetchJobs } from '@/api/saramin/route';
 
 function cleanLocationNames(locationNames: string[]): string[] {
   const uniqueLocations = new Set(
@@ -20,9 +18,16 @@ interface JobListProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  isLoading: boolean;
 }
 
-const JobList: React.FC<JobListProps> = ({ jobs, currentPage, totalPages, onPageChange }) => {
+const JobList: React.FC<JobListProps> = ({
+  jobs,
+  currentPage,
+  totalPages,
+  onPageChange,
+  isLoading,
+}) => {
   const [sortOrder, setSortOrder] = useState<'latest' | 'oldest' | null>(null);
   const [bookmarks, setBookmarks] = useState<Set<string>>(new Set());
 
@@ -77,6 +82,14 @@ const JobList: React.FC<JobListProps> = ({ jobs, currentPage, totalPages, onPage
     return 0;
   });
 
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center">
+        <Loader2 className="w-8 animate-spin text-blue-500" />
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="mb-4 flex justify-end space-x-4">
@@ -130,7 +143,7 @@ const JobList: React.FC<JobListProps> = ({ jobs, currentPage, totalPages, onPage
         previousLabel={'이전'}
         nextLabel={'다음'}
         breakLabel={'...'}
-        pageCount={totalPages}
+        pageCount={Math.max(totalPages, 1)}
         marginPagesDisplayed={2}
         pageRangeDisplayed={5}
         onPageChange={handlePageChange}
@@ -141,7 +154,7 @@ const JobList: React.FC<JobListProps> = ({ jobs, currentPage, totalPages, onPage
         previousClassName={'px-3 py-2 rounded-lg border'}
         nextClassName={'px-3 py-2 rounded-lg border'}
         disabledClassName={'opacity-50 cursor-not-allowed'}
-        forcePage={currentPage}
+        forcePage={currentPage - 1}
       />
     </div>
   );
