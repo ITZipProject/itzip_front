@@ -5,7 +5,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 
 import { useMyQuizzes } from '@/api/quiz/fetchMyQuizzes';
-import { accessTokenAtom } from '@/store/useTokenStore';
+import { setAccessTokenAtom } from '@/store/useTokenStore';
 import { QuizData } from '@/types/quiz/quiz';
 
 import MyQuizCard from './MyQuizCard';
@@ -14,7 +14,7 @@ import QuizShowModal from './QuizShowModal';
 const MyQuizSection: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedQuiz, setSelectedQuiz] = useState<QuizData | null>(null);
-  const [accessToken] = useAtom(accessTokenAtom);
+  const [accessToken] = useAtom(setAccessTokenAtom);
 
   const { data: quizzes, isLoading, isError } = useMyQuizzes(accessToken ?? '');
 
