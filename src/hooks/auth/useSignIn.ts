@@ -71,9 +71,10 @@ const useSignIn = () => {
         setErrors({});
         setAccessToken(res.data.accessToken);
         setRefreshToken(res.data.refreshToken);
+
         closeModal();
         Cookies.set('currentToken', 'login token', {
-          expires: 7, // 7일
+          expires: 7,
           path: '/',
           secure: true,
           sameSite: 'strict',

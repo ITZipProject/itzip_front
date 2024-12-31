@@ -1,32 +1,42 @@
 'use server';
 
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { getDefaultStore } from 'jotai';
 import { cookies } from 'next/headers';
 
-import { getCookie, clearTokenAtom } from '@/store/useTokenStore';
+import { clearTokenAtom, getToken } from '@/store/useTokenStore';
 
 interface RefreshResponse {
   data: {
-    accessToken: string;
-    refreshToken: string;
+    data: {
+      accessToken: string;
+      refreshToken: string;
+    };
+    message: string;
+    status: number;
   };
-  message: string;
-  status: number;
 }
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
+  timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
-    accept: '*/*',
   },
 });
 
 // Request Interceptor
 instance.interceptors.request.use(
   (config) => {
-    const accessToken = getCookie('accessToken');
+    // 'No-Auth' 헤더가 있으면 인증이 필요없는 요청
+    if (config.headers['No-Auth']) {
+      delete config.headers['No-Auth'];
+      return config;
+    }
+
+    // getToken 함수 사용
+    const { accessToken } = getToken();
+
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
@@ -39,50 +49,49 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    if (!error?.config) {
-      return Promise.reject(error);
-    }
-    const originalRequest = error.config;
+    const originalRequest = error.config as AxiosRequestConfig;
     const store = getDefaultStore();
 
+    // 401 에러 && 토큰 갱신 시도하지 않은 요청
     if (error.response?.status === 401 && !originalRequest.headers?._retry) {
-      originalRequest.headers = originalRequest.headers || {};
-      originalRequest.headers._retry = true;
+      try {
+        originalRequest.headers = originalRequest.headers || {};
+        originalRequest.headers._retry = true;
 
-      const refreshToken = getCookie('refreshToken');
-
-      if (refreshToken) {
-        try {
-          const response = await instance.patch<RefreshResponse>('user/refreshToken', {
-            refreshToken,
-          });
-          if (response.status === 200) {
-            const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-              response.data.data;
-
-            cookies().set('accessToken', newAccessToken, {
-              httpOnly: true,
-              secure: true,
-            });
-            cookies().set('refreshToken', newRefreshToken, {
-              httpOnly: true,
-              secure: true,
-            });
-            cookies().set('currentToken', 'B');
-
-            if (originalRequest.headers) {
-              originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-            }
-            return instance(originalRequest);
-          }
-        } catch (refreshError) {
-          console.error('토큰 갱신 실패:', refreshError);
-          store.set(clearTokenAtom);
-
-          if (typeof window !== 'undefined') {
-            window.location.href = '/';
-          }
+        const { refreshToken } = getToken();
+        if (!refreshToken) {
+          throw new Error('No refresh token');
         }
+
+        // 토큰 갱신 요청
+        const response = await instance.patch<RefreshResponse>(
+          'user/refreshToken',
+          { refreshToken },
+          { headers: { 'No-Auth': true } },
+        );
+
+        if (response.status === 200) {
+          const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data.data;
+
+          // 서버 쿠키 업데이트
+          cookies().set('accessToken', newAccessToken, {
+            httpOnly: true,
+            secure: true,
+          });
+          cookies().set('refreshToken', newRefreshToken, {
+            httpOnly: true,
+            secure: true,
+          });
+
+          // 원래 요청 재시도
+          originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+          return instance(originalRequest);
+        }
+      } catch (error) {
+        // 토큰 갱신 실패 시 로그아웃 처리
+        console.error('토큰 갱신 실패:', error);
+        store.set(clearTokenAtom);
+        return Promise.reject(error);
       }
     }
     return Promise.reject(error);
