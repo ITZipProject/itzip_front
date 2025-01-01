@@ -1,8 +1,9 @@
 'use client';
 
-import { clearTokens, getToken, setTokenCookie, TokenState } from '@/utils/tokenUtils';
 import { atom } from 'jotai';
 import Cookies from 'js-cookie';
+
+import { clearTokens, getToken, setTokenCookie, TokenState } from '@/utils/tokenUtils';
 
 // 초기 토큰 상태 atom
 const tokenAtom = atom<TokenState>(getToken());

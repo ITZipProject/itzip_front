@@ -1,4 +1,5 @@
 import { LoginResponse } from '@/types/auth';
+
 import instance from '../axiosInstance';
 
 // 중첩된 data 구조를 반영하는 API 응답 타입
@@ -56,7 +57,7 @@ export const sendCode = async (email: string) => {
 // 인증 코드 확인 (인증 없이 요청)
 export const checkCode = async (email: string, authCode: string) => {
   try {
-    const result = await instance.get('/user/authEmail', {
+    const result = await instance.get<ApiResponse<boolean>>('/user/authEmail', {
       params: { email, authCode },
       headers: { noAuth: true },
     });
@@ -80,7 +81,7 @@ export const joinAction = async (
   auth_code: string,
 ) => {
   try {
-    const result = await instance.post(
+    const result = await instance.post<ApiResponse<boolean>>(
       '/user/join',
       { email, password, password_check, auth_code },
       {

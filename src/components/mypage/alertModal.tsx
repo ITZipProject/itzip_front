@@ -20,7 +20,7 @@ const AlertModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalProps) =
       <div className="flex items-center justify-between">
         <h2 className="text-20 font-bold">정말 로그아웃하시겠어요?</h2>
         <div className="flex gap-4">
-          <button onClick={() => logout()} className="rounded-xl border-2 p-[10px]">
+          <button onClick={() => void logout()} className="rounded-xl border-2 p-[10px]">
             네
           </button>
           <button

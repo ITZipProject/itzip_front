@@ -1,6 +1,5 @@
 'use client';
 
-import { useAtom } from 'jotai';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -10,7 +9,6 @@ import Section from '@/components/mypage/Section';
 import Title from '@/components/mypage/Title';
 import useUser from '@/hooks/mypage/useUser';
 import { useModal } from '@/lib/context/ModalContext';
-import { tokenAtom } from '@/store/useTokenStore';
 
 import profile from '../../../public/profile.png';
 

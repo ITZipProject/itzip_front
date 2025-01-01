@@ -1,7 +1,8 @@
 'use client';
-import { useEffect } from 'react';
 import { useAtom } from 'jotai';
 import Cookies from 'js-cookie';
+import { useEffect } from 'react';
+
 import { setAccessTokenAtom, setRefreshTokenAtom } from '@/store/useTokenStore';
 
 const TokenSync: React.FC = () => {

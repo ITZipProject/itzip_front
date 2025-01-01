@@ -2,17 +2,17 @@
 
 import { useAtom } from 'jotai';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation'; // 페이지 리디렉션
 import React from 'react';
 import { z } from 'zod';
 
+import { loginAction } from '@/api/auth/auth.action';
+import { logoutAction } from '@/api/mypage/mypage.action';
 import { errorsAtom, formValuesAtom, isOkAtom, loadingAtom } from '@/atoms/formAtoms'; // 상태 관리
 import { PASSWORD_MIN_LENGTH, PASSWORD_REGEX, PASSWORD_REGEX_ERROR } from '@/lib/constants'; // 상수
 import { useModal } from '@/lib/context/ModalContext'; // 모달 컨텍스트
 import { setAccessTokenAtom, setRefreshTokenAtom } from '@/store/useTokenStore'; // 토큰 저장
 import { FormValues } from '@/types/auth'; // 폼 값 타입 정의
-import { loginAction } from '@/api/auth/auth.action';
-import { logoutAction } from '@/api/mypage/mypage.action';
-import { useRouter } from 'next/navigation'; // 페이지 리디렉션
 
 // 폼 유효성 검사 스키마
 const formValueSchema = z.object({

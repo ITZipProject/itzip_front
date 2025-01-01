@@ -2,6 +2,7 @@
 
 import { XCircleIcon } from '@heroicons/react/16/solid';
 import { useAtom } from 'jotai';
+
 import { agreeErrorAtom } from '@/atoms/formAtoms';
 import AgreeCheckboxes from '@/components/auth/agreeCheckbox';
 import ModalBackButton from '@/components/auth/modalBackButton';

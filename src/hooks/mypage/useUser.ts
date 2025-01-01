@@ -14,7 +14,7 @@ interface UserProps {
 
 export default function useUser() {
   const [user, setUser] = useState<UserProps | null>(null); // 초기값을 null로 설정
-  const [loading, setLoading] = useAtom(loadingAtom); // loadingAtom으로 통합
+  const [, setLoading] = useAtom(loadingAtom); // loadingAtom으로 통합
   const [isLoading, setIsLoading] = useState(false); // 내부 isLoading 상태
 
   // 유저 정보 조회
