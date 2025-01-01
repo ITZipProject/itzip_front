@@ -15,7 +15,6 @@ import { tokenAtom } from '@/store/useTokenStore';
 import profile from '../../../public/profile.png';
 
 export default function MyPageContainer() {
-  const [token] = useAtom(tokenAtom);
   const { user, checkUserNickname, updateNickname, updatePassword } = useUser();
   const [isEdit, setIsEdit] = useState({
     myProfile: false,
@@ -30,8 +29,8 @@ export default function MyPageContainer() {
   const [, setProfileImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const { openModal } = useModal();
+
   useEffect(() => {
-    console.log(user);
     return () => {
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
