@@ -16,9 +16,7 @@ import profile from '../../../public/profile.png';
 
 export default function MyPageContainer() {
   const [token] = useAtom(tokenAtom);
-  const { user, checkUserNickname, updateNickname, updatePassword } = useUser(
-    token.accessToken ?? '',
-  );
+  const { user, checkUserNickname, updateNickname, updatePassword } = useUser();
   const [isEdit, setIsEdit] = useState({
     myProfile: false,
     default: false,
@@ -33,6 +31,7 @@ export default function MyPageContainer() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const { openModal } = useModal();
   useEffect(() => {
+    console.log(user);
     return () => {
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
@@ -76,8 +75,6 @@ export default function MyPageContainer() {
 
   const savedProfile = async () => {
     try {
-      if (!token.accessToken) return;
-
       if (nickname && nickname !== user?.nickname && isOk.nicknameOk) {
         const success = await updateNickname(nickname);
         if (success) {
