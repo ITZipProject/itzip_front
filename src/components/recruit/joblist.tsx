@@ -133,8 +133,14 @@ const JobList: React.FC<JobListProps> = ({
             <p className="font-pre-body-04 mb-4 text-center text-gray-600">
               {cleanLocationNames(job.locationName).join(', ')}
             </p>
-            <p className="font-pre-body-04 text-center text-gray-600">
-              만료일: {formatDate(job.expirationDate)}
+            <p className="font-pre-body-02 text-right text-blue-600">
+              {(() => {
+                const today = new Date();
+                const expDate = new Date(job.expirationDate);
+                const diffTime = expDate.getTime() - today.getTime();
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                return `만료까지 D${diffDays > 0 ? ' - ' + diffDays : '+' + Math.abs(diffDays)}`;
+              })()}
             </p>
           </div>
         ))}
