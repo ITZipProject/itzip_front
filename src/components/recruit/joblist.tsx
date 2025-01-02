@@ -53,11 +53,6 @@ const JobList: React.FC<JobListProps> = ({
     onPageChange(selected);
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
-  };
-
   const toggleBookmark = (url: string) => {
     setBookmarks((prevBookmarks) => {
       const newBookmarks = new Set(prevBookmarks);
@@ -122,19 +117,25 @@ const JobList: React.FC<JobListProps> = ({
               }}
             >
               <BookmarkIcon
-                className={`size-6 ${bookmarks.has(job.url) ? 'fill-blue-500 text-blue-500' : 'text-gray-400'}`}
+                className={`size-6 ${bookmarks.has(job.url) ? 'fill-blue-700 text-blue-700' : 'text-gray-400'}`}
               />
             </button>
-            <h3 className="font-pre-body-01 mb-2 text-center">{job.title}</h3>
-            <p className="font-pre-body-02 mb-2 text-center">{job.companyName}</p>
-            <p className="font-pre-body-03 mb-4 text-center text-gray-600">
+            <h3 className="font-pre-body-01 mb-2 text-left">{job.title}</h3>
+            <p className="font-pre-body-02 mb-2 text-left">{job.companyName}</p>
+            <p className="font-pre-body-03 mb-4 text-left text-gray-600">
               {job.jobName.slice(0, 3).join(', ')}
             </p>
-            <p className="font-pre-body-04 mb-4 text-center text-gray-600">
+            <p className="font-pre-body-04 mb-4 text-left text-gray-600">
               {cleanLocationNames(job.locationName).join(', ')}
             </p>
-            <p className="font-pre-body-04 text-center text-gray-600">
-              만료일: {formatDate(job.expirationDate)}
+            <p className="font-pre-body-02 text-right text-blue-600">
+              {(() => {
+                const today = new Date();
+                const expDate = new Date(job.expirationDate);
+                const diffTime = expDate.getTime() - today.getTime();
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                return `D${diffDays > 0 ? ' - ' + diffDays : '+' + Math.abs(diffDays)}`;
+              })()}
             </p>
           </div>
         ))}
