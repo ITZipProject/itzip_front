@@ -7,8 +7,8 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { useModal } from '@/lib/context/ModalContext';
-import { tokenAtom } from '@/store/useTokenStore';
 import logo from 'public/logo.png';
+import { tokenAtom } from '@/store/useTokenStore';
 
 export default function HeaderBar() {
   const pathname = usePathname();
@@ -112,7 +112,7 @@ export default function HeaderBar() {
               </Link>
             )}
           </div>
-          {/* <Link href={'/customer-service'}>고객센터</Link> */}
+          <Link href={'/customer-service'}>고객센터</Link>
         </div>
       </div>
     </div>

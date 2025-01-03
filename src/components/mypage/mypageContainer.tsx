@@ -1,6 +1,5 @@
 'use client';
 
-import { useAtom } from 'jotai';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -10,15 +9,11 @@ import Section from '@/components/mypage/Section';
 import Title from '@/components/mypage/Title';
 import useUser from '@/hooks/mypage/useUser';
 import { useModal } from '@/lib/context/ModalContext';
-import { tokenAtom } from '@/store/useTokenStore';
 
 import profile from '../../../public/profile.png';
 
 export default function MyPageContainer() {
-  const [token] = useAtom(tokenAtom);
-  const { user, checkUserNickname, updateNickname, updatePassword } = useUser(
-    token.accessToken ?? '',
-  );
+  const { user, checkUserNickname, updateNickname, updatePassword } = useUser();
   const [isEdit, setIsEdit] = useState({
     myProfile: false,
     default: false,
@@ -32,6 +27,7 @@ export default function MyPageContainer() {
   const [, setProfileImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const { openModal } = useModal();
+
   useEffect(() => {
     return () => {
       if (previewUrl) {
@@ -76,8 +72,6 @@ export default function MyPageContainer() {
 
   const savedProfile = async () => {
     try {
-      if (!token.accessToken) return;
-
       if (nickname && nickname !== user?.nickname && isOk.nicknameOk) {
         const success = await updateNickname(nickname);
         if (success) {

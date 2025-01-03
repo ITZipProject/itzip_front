@@ -12,29 +12,30 @@ interface UserProps {
   imageUrl?: string | null;
 }
 
-export default function useUser(token: string) {
-  const [user, setUser] = useState<UserProps>();
-  const [, setLoading] = useAtom(loadingAtom);
-  const [isLoading, setIsLoading] = useState(false);
+export default function useUser() {
+  const [user, setUser] = useState<UserProps | null>(null); // 초기값을 null로 설정
+  const [, setLoading] = useAtom(loadingAtom); // loadingAtom으로 통합
+  const [isLoading, setIsLoading] = useState(false); // 내부 isLoading 상태
 
   // 유저 정보 조회
   const fetchUser = useCallback(async () => {
     setLoading((prev) => ({ ...prev, user: true }));
     try {
-      const res = await getUser(token);
-      setUser(res.data);
+      const res = await getUser();
+      setUser(res.data); // 유저 정보를 업데이트
     } catch (err) {
       console.error('fetchUser error : ', err);
+      toast.error('유저 정보를 가져오는 데 실패했습니다. 다시 로그인 해주세요.');
     } finally {
       setLoading((prev) => ({ ...prev, user: false }));
     }
-  }, [token, setLoading]);
+  }, [setLoading]);
 
   // 닉네임 중복 체크
   const checkUserNickname = async (nickname: string) => {
     setIsLoading(true);
     try {
-      await checkNickname(nickname, token);
+      await checkNickname(nickname);
       toast.success('사용 가능한 닉네임입니다');
       return true;
     } catch (err) {
@@ -50,7 +51,7 @@ export default function useUser(token: string) {
   const updateNickname = async (nickname: string) => {
     setIsLoading(true);
     try {
-      await editNickname(nickname, token);
+      await editNickname(nickname);
       toast.success('닉네임이 변경되었습니다');
       await fetchUser(); // 유저 정보 갱신
       return true;
@@ -67,7 +68,7 @@ export default function useUser(token: string) {
   const updatePassword = async (password: string) => {
     setIsLoading(true);
     try {
-      await editPassword(password, token);
+      await editPassword(password);
       toast.success('비밀번호가 변경되었습니다');
       return true;
     } catch (err) {
@@ -81,7 +82,7 @@ export default function useUser(token: string) {
 
   useEffect(() => {
     void fetchUser();
-  }, [fetchUser]);
+  }, [fetchUser]); // 의존성 배열에 fetchUser 추가
 
   return {
     user,

@@ -2,7 +2,7 @@ import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { z } from 'zod';
 
-import { checkCode, checkEmail, createAccount, sendCode } from '@/api/auth/auth.action';
+import { checkCode, checkEmail, joinAction, sendCode } from '@/api/auth/auth.action';
 import { errorsAtom, formValuesAtom, isOkAtom, loadingAtom, messageAtom } from '@/atoms/formAtoms';
 import { PASSWORD_MIN_LENGTH, PASSWORD_REGEX, PASSWORD_REGEX_ERROR } from '@/lib/constants';
 import { useModal } from '@/lib/context/ModalContext';
@@ -56,7 +56,7 @@ export const useSignUp = () => {
     setIsLoading((prev) => ({ ...prev, emailCheck: true }));
     try {
       const res = await checkEmail(formValues.email);
-      if (res.status === 200) {
+      if (res.success) {
         setMessage((prev) => ({ ...prev, email: '사용가능한 이메일 입니다.' }));
         setErrors((prev) => ({ ...prev, email: '' }));
         setIsOk((prev) => ({ ...prev, emailCheck: true }));
@@ -91,7 +91,7 @@ export const useSignUp = () => {
     try {
       const res = await checkCode(formValues.email, formValues.authCode);
 
-      if (res.status === 200) {
+      if (res.success) {
         setIsOk((prev) => ({ ...prev, codeVerify: true }));
         setMessage((prev) => ({ ...prev, authCode: '인증 완료' }));
         setErrors((prev) => ({
@@ -122,13 +122,15 @@ export const useSignUp = () => {
         passwordCheck: formValues.passwordCheck,
         authCode: formValues.authCode,
       });
-      const res = await createAccount(
+
+      // 요청 시 password_check와 auth_code를 사용
+      const res = await joinAction(
         validatedData.email,
         validatedData.password,
         validatedData.passwordCheck,
         validatedData.authCode,
       );
-      if (res.status === 200) {
+      if (res.success) {
         closeModal();
       }
     } catch (error) {

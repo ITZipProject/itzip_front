@@ -17,6 +17,7 @@ import { useModal } from '@/lib/context/ModalContext';
 interface SignInModalProps {
   modalId: string;
 }
+
 const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalProps) => {
   const { openModals, closeModal } = useModal();
   const {
@@ -34,7 +35,6 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
   } = useSignUp();
   const [agreeError] = useAtom(agreeErrorAtom);
 
-  // 모달이 열려 있는 경우에만 렌더링
   if (!openModals.includes(modalId)) return null;
 
   return (
@@ -43,7 +43,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
       <Margin height={'48px'} />
       <form
         onSubmit={(e) => {
-          void signUp(e);
+          void signUp(e); // 회원가입 실행
         }}
         className="w-full space-y-4"
         noValidate
@@ -68,7 +68,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
           <Button
             variant="basedButton"
             onClick={() => {
-              void checkEmailDuplicate();
+              void checkEmailDuplicate(); // 이메일 중복 확인
             }}
           >
             {isLoading.emailCheck ? '중복 확인 중..' : '중복 확인하기'}
@@ -89,11 +89,12 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
                 onClick={() => onClickResetButton('authCode')}
               />
             )}
+
             {!isOk.codePost ? (
               <Button
                 variant="basedButton"
                 onClick={() => {
-                  void sendAuthCode();
+                  void sendAuthCode(); // 인증 코드 전송
                 }}
               >
                 {isLoading.codePost ? '인증 코드 보내기 중..' : '인증 코드 보내기'}
@@ -105,7 +106,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
                     <Button
                       variant="basedButton"
                       onClick={() => {
-                        void verifyAuthCode();
+                        void verifyAuthCode(); // 인증 코드 확인
                       }}
                     >
                       {isLoading.codeVerify ? '인증코드 확인 중..' : '인증코드 확인하기'}
@@ -113,10 +114,9 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
                     <Button
                       variant="basedButton"
                       onClick={() => {
-                        void sendAuthCode();
+                        void sendAuthCode(); // 인증 코드 다시 보내기
                       }}
                     >
-                      {' '}
                       {isLoading.codePost ? '인증 코드 보내기 중..' : '인증 코드 다시 보내기'}
                     </Button>
                   </>
@@ -156,7 +156,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
           errors={errors.passwordCheck}
           messages={message.passwordCheck}
         />
-        {/* 약관 동의 체크박스 */}
+
         <AgreeCheckboxes />
         {agreeError && (
           <span className="text-12 font-[500] text-color-text-warning">
@@ -166,7 +166,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
             </div>
           </span>
         )}
-        {/* 가입하기 버튼 */}
+
         <Button variant="basedButton" loadingText="가입하는중...">
           가입하기
         </Button>
