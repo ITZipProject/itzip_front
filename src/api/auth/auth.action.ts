@@ -102,10 +102,7 @@ export const joinAction = async (
 };
 
 // 로그인 요청 (인증 없이 요청)
-export const loginAction = async (formData: FormData) => {
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
-
+export const loginAction = async (email: string, password: string) => {
   try {
     const res = await instance.post<ApiResponse<LoginResponse>>(
       '/user/login',

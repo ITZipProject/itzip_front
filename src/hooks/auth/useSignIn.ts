@@ -64,10 +64,10 @@ const useSignIn = () => {
   };
 
   // 로그인 처리 함수
-  const signIn = async (formData: FormData) => {
+  const signIn = async () => {
     setIsLoading((prev) => ({ ...prev, auth: true })); // 로딩 상태 시작
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
+    const email = formValues.email;
+    const password = formValues.password;
 
     // 유효성 검사
     if (!validateForm(email, password)) {
@@ -75,7 +75,7 @@ const useSignIn = () => {
     }
 
     try {
-      const res = await loginAction(formData); // 로그인 API 호출
+      const res = await loginAction(email, password); // 로그인 API 호출
       if (res.success && res.data) {
         setErrors({}); // 오류 초기화
         setAccessToken(res.data.accessToken); // 액세스 토큰 저장
@@ -94,6 +94,20 @@ const useSignIn = () => {
       setErrors((prev) => ({ ...prev, email: '서버 오류가 발생했습니다.' })); // 서버 오류 처리
     } finally {
       setIsLoading((prev) => ({ ...prev, auth: false })); // 로딩 상태 종료
+    }
+  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    setIsLoading((prev) => ({ ...prev, submit: true }));
+
+    try {
+      await signIn(); // signIn 함수 호출
+    } catch (err) {
+      console.error('로그인 오류:', err);
+      setErrors({ email: '로그인에 실패했습니다.' }); // 에러 상태 처리
+    } finally {
+      setIsLoading((prev) => ({ ...prev, submit: false }));
     }
   };
 
@@ -139,7 +153,7 @@ const useSignIn = () => {
     errors,
     isLoading,
     isOk,
-    signIn,
+    handleSubmit,
     onClickResetButton,
     onChangeFormValues,
     logout,

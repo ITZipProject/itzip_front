@@ -33,6 +33,7 @@ export type LoadingTypes = {
   logout: boolean;
   userOut: boolean;
   user: boolean;
+  submit: boolean;
 };
 
 export type IsOkTypes = {
