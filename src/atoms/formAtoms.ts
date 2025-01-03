@@ -1,6 +1,14 @@
 import { atom } from 'jotai';
 
-import { AgreeTypes, FormValues, IsOkTypes, LoadingTypes, LoginFormType } from '@/types/auth';
+import {
+  AgreeTypes,
+  FormValues,
+  IsOkTypes,
+  LoadingTypes,
+  LoginFormType,
+  MyPageFormLoadingTypes,
+  MypageFormValuesTypes,
+} from '@/types/auth';
 
 export const formValuesAtom = atom<FormValues>({
   email: '',
@@ -10,6 +18,21 @@ export const formValuesAtom = atom<FormValues>({
   agreeTerms: false,
 });
 
+export const mypageFormValuesAtom = atom<MypageFormValuesTypes>({
+  nickname: '',
+  password: '',
+  image: null,
+});
+
+export const mypageFormLoadingAtom = atom<MyPageFormLoadingTypes>({
+  imageLoading: false,
+  userStateLoading: false,
+  nicknameCheck: false,
+  nicknameUpdate: false,
+  passwordUpdate: false,
+  passwordSave: false,
+  profileSave: false,
+});
 export const errorsAtom = atom<Partial<FormValues>>({
   email: '',
   password: '',

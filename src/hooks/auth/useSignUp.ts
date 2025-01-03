@@ -98,6 +98,11 @@ export const useSignUp = () => {
           ...prev,
           authCode: '',
         }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          authCode: '인증코드가 일치하지 않습니다. 인증번호를 다시한번 확인해주세요.',
+        }));
       }
     } catch (error) {
       setIsOk((prev) => ({ ...prev, codeCheck: false }));

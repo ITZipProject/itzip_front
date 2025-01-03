@@ -1,106 +1,51 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-hot-toast';
+import { useState } from 'react';
 
 import Button from '@/components/common/Button/Button';
 import Section from '@/components/mypage/Section';
 import Title from '@/components/mypage/Title';
+import { useProfileForm } from '@/hooks/mypage/useProfileForm';
 import useUser from '@/hooks/mypage/useUser';
 import { useModal } from '@/lib/context/ModalContext';
 
 import profile from '../../../public/profile.png';
 
 export default function MyPageContainer() {
-  const { user, checkUserNickname, updateNickname, updatePassword } = useUser();
+  const {
+    formValues,
+    previewUrl,
+    handleInputChange,
+    handleImageChange,
+    handleNicknameCheck,
+    savedProfile,
+    savedPassword,
+    onCancelEdit,
+  } = useProfileForm();
+
+  const { user, isLoading } = useUser();
   const [isEdit, setIsEdit] = useState({
     myProfile: false,
     default: false,
   });
-  const [nickname, setNickname] = useState('');
-  const [password, setPassword] = useState('');
-  const [isOk, setIsOk] = useState({
-    nicknameOk: false,
-    passwordOk: false,
-  });
-  const [, setProfileImage] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const { openModal } = useModal();
-
-  useEffect(() => {
-    return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
 
   const onStartEdit = (type: 'myProfile' | 'default') => {
     setIsEdit((prev) => ({ ...prev, [type]: true }));
   };
 
-  const onCancelEdit = (type: 'myProfile' | 'default') => {
+  const onCancelEditHandler = (type: 'myProfile' | 'default') => {
+    onCancelEdit();
     setIsEdit((prev) => ({ ...prev, [type]: false }));
-    setNickname('');
-    setPassword('');
-    setProfileImage(null);
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-      setPreviewUrl(null);
-    }
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setProfileImage(file);
-      const newPreviewUrl = URL.createObjectURL(file);
-      setPreviewUrl(newPreviewUrl);
-    }
-  };
-
-  const nicknameCheck = async () => {
-    if (!nickname) return;
-    const isValid = await checkUserNickname(nickname);
-    setIsOk((prev) => ({ ...prev, nicknameOk: isValid }));
-  };
-
-  const handleNicknameCheck = () => {
-    void nicknameCheck();
-  };
-
-  const savedProfile = async () => {
-    try {
-      if (nickname && nickname !== user?.nickname && isOk.nicknameOk) {
-        const success = await updateNickname(nickname);
-        if (success) {
-          setIsEdit((prev) => ({ ...prev, myProfile: false }));
-          window.location.reload();
-        }
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error('프로필 저장에 실패했습니다');
-    }
   };
 
   const onFinishEdit = async (type: 'myProfile' | 'default') => {
     if (type === 'myProfile') {
       await savedProfile();
     } else {
-      if (password) {
-        const success = await updatePassword(password);
-        if (success) {
-          setIsEdit((prev) => ({ ...prev, default: false }));
-          setPassword('');
-        }
-      }
+      await savedPassword();
     }
-  };
-
-  const handleFinishEdit = (type: 'myProfile' | 'default') => {
-    void onFinishEdit(type);
   };
 
   return (
@@ -143,7 +88,7 @@ export default function MyPageContainer() {
                   id="profile"
                   accept="image/*"
                   hidden
-                  onChange={handleImageChange}
+                  onChange={() => void handleImageChange}
                 />
               </div>
             ) : (
@@ -175,13 +120,17 @@ export default function MyPageContainer() {
               <div className="flex flex-row items-center gap-4">
                 <input
                   name="nickname"
-                  value={nickname}
-                  onChange={(e) => setNickname(e.target.value)}
+                  value={formValues.nickname}
+                  onChange={handleInputChange}
                   placeholder={user?.nickname}
                   className="border-Grey-200"
                 />
 
-                <Button onClick={handleNicknameCheck} variant="nonBorderButton">
+                <Button
+                  onClick={() => void handleNicknameCheck()}
+                  loading={isLoading.nicknameCheck}
+                  variant="nonBorderButton"
+                >
                   중복 확인
                 </Button>
               </div>
@@ -190,17 +139,21 @@ export default function MyPageContainer() {
             )}
           </div>
 
-          <div className="flex flex-row items-center  justify-between space-x-4 ">
+          <div className="flex flex-row items-center justify-between space-x-4 ">
             <div className="flex flex-row ">
               <h2 className="min-w-[100px]">계정</h2>
               <span>{user?.email}</span>
             </div>
             {isEdit.myProfile ? (
               <div className="space-x-4">
-                <Button onClick={() => onCancelEdit('myProfile')} variant="none">
+                <Button onClick={() => onCancelEditHandler('myProfile')} variant="none">
                   취소
                 </Button>
-                <Button onClick={() => handleFinishEdit('myProfile')} variant="nonBorderButton">
+                <Button
+                  onClick={() => void onFinishEdit('myProfile')}
+                  loading={isLoading.profileSave}
+                  variant="nonBorderButton"
+                >
                   저장
                 </Button>
               </div>
@@ -229,8 +182,8 @@ export default function MyPageContainer() {
                 <input
                   type="password"
                   name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formValues.password}
+                  onChange={handleInputChange}
                   placeholder="비밀번호를 입력하세요"
                   className="border-Grey-200 text-14"
                 />
@@ -240,10 +193,10 @@ export default function MyPageContainer() {
             </div>
             {isEdit.default ? (
               <div className="space-x-4">
-                <Button variant="none" onClick={() => onCancelEdit('default')}>
+                <Button variant="none" onClick={() => onCancelEditHandler('default')}>
                   취소
                 </Button>
-                <Button variant="nonBorderButton" onClick={() => handleFinishEdit('default')}>
+                <Button variant="nonBorderButton" onClick={() => void onFinishEdit('default')}>
                   저장
                 </Button>
               </div>

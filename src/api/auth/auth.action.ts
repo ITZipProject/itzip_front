@@ -16,13 +16,13 @@ interface ApiResponse<T> {
 // 이메일 중복 체크 (인증 없이 요청)
 export const checkEmail = async (email: string) => {
   try {
-    const result = await instance.get<ApiResponse<boolean>>('/user/checkDuplicateEmail', {
+    const res = await instance.get<ApiResponse<boolean>>('/user/checkDuplicateEmail', {
       params: { email },
       headers: { noAuth: true },
     });
     return {
       success: true,
-      data: result.data.data,
+      data: res.data.data,
     };
   } catch (err) {
     return {
@@ -35,7 +35,7 @@ export const checkEmail = async (email: string) => {
 // 인증 코드 전송 (인증 없이 요청)
 export const sendCode = async (email: string) => {
   try {
-    const result = await instance.post<ApiResponse<{ message: string }>>(
+    const res = await instance.post<ApiResponse<{ message: string }>>(
       '/user/authEmail',
       { email },
       {
@@ -44,7 +44,7 @@ export const sendCode = async (email: string) => {
     );
     return {
       success: true,
-      data: result.data.data,
+      data: res.data.data,
     };
   } catch (err) {
     return {
@@ -57,13 +57,14 @@ export const sendCode = async (email: string) => {
 // 인증 코드 확인 (인증 없이 요청)
 export const checkCode = async (email: string, authCode: string) => {
   try {
-    const result = await instance.get<ApiResponse<boolean>>('/user/authEmail', {
+    const res = await instance.get<ApiResponse<boolean>>('/user/authEmail', {
       params: { email, authCode },
       headers: { noAuth: true },
     });
+    console.log('checkCode___', res);
     return {
       success: true,
-      data: result.data.data,
+      data: res.data.data,
     };
   } catch (err) {
     return {
@@ -81,7 +82,7 @@ export const joinAction = async (
   auth_code: string,
 ) => {
   try {
-    const result = await instance.post<ApiResponse<boolean>>(
+    const res = await instance.post<ApiResponse<boolean>>(
       '/user/join',
       { email, password, password_check, auth_code },
       {
@@ -90,7 +91,7 @@ export const joinAction = async (
     );
     return {
       success: true,
-      data: result.data.data,
+      data: res.data.data,
     };
   } catch (err) {
     return {
@@ -106,21 +107,21 @@ export const loginAction = async (formData: FormData) => {
   const password = formData.get('password') as string;
 
   try {
-    const result = await instance.post<ApiResponse<LoginResponse>>(
+    const res = await instance.post<ApiResponse<LoginResponse>>(
       '/user/login',
       { email, password },
       { headers: { noAuth: true } },
     );
 
-    if (!result.data.data.accessToken || !result.data.data.refreshToken) {
+    if (!res.data.data.accessToken || !res.data.data.refreshToken) {
       throw new Error('토큰이 없습니다');
     }
 
     return {
       success: true,
       data: {
-        accessToken: result.data.data.accessToken,
-        refreshToken: result.data.data.refreshToken,
+        accessToken: res.data.data.accessToken,
+        refreshToken: res.data.data.refreshToken,
       },
     };
   } catch (err) {
