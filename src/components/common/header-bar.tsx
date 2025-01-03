@@ -1,14 +1,14 @@
 'use client';
 
 import { useAtom } from 'jotai';
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { useModal } from '@/lib/context/ModalContext';
-import logo from 'public/logo.png';
 import { tokenAtom } from '@/store/useTokenStore';
+import logo from 'public/logo.png';
 
 export default function HeaderBar() {
   const pathname = usePathname();
