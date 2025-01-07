@@ -84,7 +84,7 @@ export const joinAction = async (
   try {
     const res = await instance.post<ApiResponse<boolean>>(
       '/user/join',
-      { email, password, password_check, auth_code },
+      { email, password, passwordCheck: password_check, authCode: auth_code },
       {
         headers: { noAuth: true },
       },
