@@ -84,6 +84,7 @@ const useSignIn = () => {
         closeModal();
         Cookies.set('accessToken', res.data.accessToken, { expires: 7, path: '/' });
         Cookies.set('refreshToken', res.data.refreshToken, { expires: 7, path: '/' });
+        toast.success('ITZIP에 오신것을 환영합니다.');
 
         router.push('/');
       } else {
@@ -102,7 +103,6 @@ const useSignIn = () => {
 
     try {
       await signIn();
-      toast.success('ITZIP에 오신것을 환영합니다.');
     } catch (err) {
       console.error('로그인 오류:', err);
       setErrors({ email: '로그인에 실패했습니다.' });
