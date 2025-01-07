@@ -23,7 +23,7 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPro
     <Modal isOpen={true} onClose={() => closeModal()}>
       <ModalBackButton title="이메일로 로그인하기" />
       <Margin height={'48px'} />
-      <form onSubmit={() => void handleSubmit} className="w-full space-y-4" noValidate>
+      <form onSubmit={(e) => void handleSubmit(e)} className="w-full space-y-4" noValidate>
         <Input
           id="email"
           name="email"

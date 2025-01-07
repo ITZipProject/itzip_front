@@ -109,7 +109,6 @@ export const loginAction = async (email: string, password: string) => {
       { email, password },
       { headers: { noAuth: true } },
     );
-
     if (!res.data.data.accessToken || !res.data.data.refreshToken) {
       throw new Error('토큰이 없습니다');
     }
@@ -120,6 +119,7 @@ export const loginAction = async (email: string, password: string) => {
         accessToken: res.data.data.accessToken,
         refreshToken: res.data.data.refreshToken,
       },
+      status: res.status,
     };
   } catch (err) {
     return {
