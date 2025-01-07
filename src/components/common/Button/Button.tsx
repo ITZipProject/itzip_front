@@ -6,10 +6,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loadingText?: string;
   classNames?: string;
   children: ReactNode;
+  loading?: boolean;
   variant: 'basedButton' | 'nonBorderButton' | 'none';
 }
 
-const Button = ({ loadingText, children, classNames, variant, ...rest }: ButtonProps) => {
+const Button = ({ loadingText, children, classNames, variant, loading, ...rest }: ButtonProps) => {
   const { pending } = useFormStatus();
 
   const variantStyles = {
@@ -20,7 +21,11 @@ const Button = ({ loadingText, children, classNames, variant, ...rest }: ButtonP
     none: ``,
   };
   return (
-    <button {...rest} disabled={pending} className={`${variantStyles[variant]} ${classNames} `}>
+    <button
+      {...rest}
+      disabled={pending || loading}
+      className={`${variantStyles[variant]} ${classNames} `}
+    >
       {pending ? loadingText : children}
     </button>
   );

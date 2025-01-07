@@ -14,23 +14,16 @@ interface SignInModalProps {
 
 const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalProps) => {
   const { openModals, closeModal } = useModal();
-  const { formValues, signIn, onChangeFormValues, onClickResetButton, errors, isLoading } =
-    useSignIn();
+  const { formValues, handleSubmit, onChangeFormValues, onClickResetButton, errors } = useSignIn();
 
   // 모달이 열려 있는 경우에만 렌더링
   if (!openModals.includes(modalId)) return null;
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // signIn 호출
-    signIn(new FormData(e.target as HTMLFormElement));
-  };
 
   return (
     <Modal isOpen={true} onClose={() => closeModal()}>
       <ModalBackButton title="이메일로 로그인하기" />
       <Margin height={'48px'} />
-      <form onSubmit={handleSubmit} className="w-full space-y-4" noValidate>
+      <form onSubmit={(e) => void handleSubmit(e)} className="w-full space-y-4" noValidate>
         <Input
           id="email"
           name="email"
