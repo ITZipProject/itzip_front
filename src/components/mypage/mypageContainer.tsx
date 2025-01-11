@@ -11,6 +11,7 @@ import useUser from '@/hooks/mypage/useUser';
 import { useModal } from '@/lib/context/ModalContext';
 
 import profile from '../../../public/profile.png';
+import { FiRefreshCw } from 'react-icons/fi';
 
 export default function MyPageContainer() {
   const {
@@ -43,15 +44,29 @@ export default function MyPageContainer() {
   const onFinishEdit = async (type: 'myProfile' | 'default') => {
     if (type === 'myProfile') {
       await savedProfile();
+      setIsEdit((prev) => ({ ...prev, [type]: false }));
     } else {
       await savedPassword();
+      setIsEdit((prev) => ({ ...prev, [type]: false }));
     }
+  };
+
+  const handleRefreshButton = () => {
+    window.location.reload();
   };
 
   return (
     <div className="flex w-screen flex-col space-y-4 bg-[#F9FBFC] p-4 px-spacing-06 *:bg-white">
       <Section>
-        <Title title="내 프로필" />
+        <div className="flex justify-between items-center">
+          <Title title="내 프로필" />
+          <button
+            onClick={handleRefreshButton}
+            className="p-1 border rounded-full transition-transform duration-300 ease-in-out transform group"
+          >
+            <FiRefreshCw className="size-4 group-hover:animate-spin text-Grey-300" />
+          </button>
+        </div>
         <div className="space-y-4">
           <div className="flex flex-row space-x-4 ">
             <h2 className="min-w-[85px]">이미지</h2>
@@ -159,11 +174,7 @@ export default function MyPageContainer() {
               </div>
             ) : (
               <>
-                <Button
-                  onClick={() => onStartEdit('myProfile')}
-                  variant="nonBorderButton"
-                  loadingText=""
-                >
+                <Button onClick={() => onStartEdit('myProfile')} variant="nonBorderButton">
                   설정
                 </Button>
               </>

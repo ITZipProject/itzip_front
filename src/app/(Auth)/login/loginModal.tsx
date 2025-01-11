@@ -31,7 +31,6 @@ const LoginModal: React.FC<SignUpModalProps> = ({ modalId }) => {
         <Margin height={'48px'} />
         <Button
           variant="basedButton"
-          loadingText=""
           onClick={() => openModal('EmailLoginModal')}
           className="primary-btn"
         >

@@ -82,8 +82,7 @@ const useSignIn = () => {
         setRefreshToken(res.data.refreshToken);
 
         closeModal();
-        Cookies.set('accessToken', res.data.accessToken, { expires: 7, path: '/' });
-        Cookies.set('refreshToken', res.data.refreshToken, { expires: 7, path: '/' });
+        Cookies.set('test token', 'test login token', { expires: 7, path: '/' });
         toast.success('ITZIP에 오신것을 환영합니다.');
 
         router.push('/');
@@ -114,8 +113,7 @@ const useSignIn = () => {
   // 로그아웃 함수
   const logout = async () => {
     try {
-      const res = await logoutAction();
-      console.log('로그아웃 성공:', res);
+      await logoutAction();
 
       // 쿠키 삭제
       Cookies.remove('accessToken');

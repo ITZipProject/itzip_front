@@ -1,9 +1,7 @@
-'use client';
-
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getDefaultStore } from 'jotai';
-
 import { tokenAtom, setAccessTokenAtom, setRefreshTokenAtom } from '@/store/useTokenStore';
+import Cookies from 'js-cookie';
 import { setTokenCookie } from '@/utils/tokenUtils';
 
 // 토큰 상태 타입 정의
@@ -55,7 +53,8 @@ instance.interceptors.request.use(
 
 // 응답 인터셉터: 토큰 갱신 처리
 instance.interceptors.response.use(
-  (response) => response,
+  (response: AxiosResponse) => response,
+
   async (error: AxiosError) => {
     const originalRequest = error.config as CustomRequestConfig;
 
@@ -70,24 +69,47 @@ instance.interceptors.response.use(
         }
 
         // refresh token을 사용해 토큰 갱신 API 호출
-        const response = await instance.post<TokenResponse>('/user/refreshToken', {
-          refreshToken: refreshToken,
-        });
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data.data;
+        const response = await instance.patch<TokenResponse>(
+          '/user/refreshToken',
+          {
+            refreshToken,
+          },
+          { headers: { noAuth: true } },
+        );
 
+        const { accessToken, refreshToken: newRefreshToken } = response.data.data;
         // 새 토큰을 쿠키와 상태에 저장
-        setTokenCookie('accessToken', newAccessToken);
+        setTokenCookie('accessToken', accessToken);
         setTokenCookie('refreshToken', newRefreshToken);
 
         // Jotai 상태에 새 토큰 값 설정
-        store.set(setAccessTokenAtom, newAccessToken);
+        store.set(setAccessTokenAtom, accessToken);
         store.set(setRefreshTokenAtom, newRefreshToken);
 
+        // 쿠키에 새 토큰 값 저장
+        Cookies.set('test token', 'test refresh token', { expires: 7, path: '/' });
+
         // 원래 요청을 새로운 토큰으로 재시도
+        originalRequest.headers = originalRequest.headers || {};
+        originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+
+        // 원래의 요청을 새로운 토큰으로 다시 시도
         return instance(originalRequest);
       } catch (err) {
         console.error('Token refresh failed', err);
-        return Promise.reject(err);
+
+        // 토큰 갱신 실패 시, 상태를 초기화하고 로그아웃 처리
+        store.set(setAccessTokenAtom, null);
+        store.set(setRefreshTokenAtom, null);
+
+        // 쿠키에서 토큰을 제거합니다.
+        Cookies.remove('accessToken');
+        Cookies.remove('refreshToken');
+
+        // 사용자에게 알리고, 홈 화면으로 리다이렉트
+        window.location.href = '/';
+
+        return Promise.reject(err); // 에러 처리
       }
     }
 

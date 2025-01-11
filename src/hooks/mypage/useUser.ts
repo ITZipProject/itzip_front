@@ -6,6 +6,7 @@ import { toast } from 'react-hot-toast';
 
 import { getUser, checkNickname, editNickname, editPassword } from '@/api/mypage/mypage.action';
 import { mypageFormLoadingAtom } from '@/atoms/formAtoms';
+import { clearTokenAtom } from '@/store/useTokenStore';
 
 interface UserProps {
   email: string;
@@ -16,20 +17,22 @@ interface UserProps {
 export default function useUser() {
   const [user, setUser] = useState<UserProps | null>(null);
   const [isLoading, setLoading] = useAtom(mypageFormLoadingAtom);
-
+  const [, clearTokens] = useAtom(clearTokenAtom);
   // 유저 정보 조회
   const fetchUser = useCallback(async () => {
+    if (user) return; // 이미 로드된 경우 다시 요청하지 않음
     setLoading((prev) => ({ ...prev, userStateLoading: true }));
     try {
       const res = await getUser();
-      setUser(res.data);
+      setUser(res.data); // 상태 업데이트
     } catch (err) {
       console.error('fetchUser error : ', err);
       toast.error('유저 정보를 가져오는 데 실패했습니다. 다시 로그인 해주세요.');
+      clearTokens();
     } finally {
       setLoading((prev) => ({ ...prev, userStateLoading: false }));
     }
-  }, [setLoading]);
+  }, [user, setLoading]);
 
   // 닉네임 중복 체크
   const checkUserNickname = async (nickname: string) => {

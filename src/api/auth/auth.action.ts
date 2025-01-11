@@ -1,6 +1,10 @@
 import { LoginResponse } from '@/types/auth';
 
 import instance from '../axiosInstance';
+import axios from 'axios';
+import { setAccessTokenAtom, setRefreshTokenAtom } from '@/store/useTokenStore';
+import { getDefaultStore } from 'jotai';
+import Cookies from 'js-cookie';
 
 // 중첩된 data 구조를 반영하는 API 응답 타입
 interface ApiResponse<T> {
@@ -12,6 +16,33 @@ interface ApiResponse<T> {
     refreshToken?: string;
   };
 }
+interface TokenResponse {
+  data: {
+    accessToken: string;
+    refreshToken: string;
+  };
+}
+export const refreshToken = async (refreshToken: string) => {
+  const store = getDefaultStore();
+  const response = await instance.patch<TokenResponse>(
+    '/user/refreshToken',
+    {
+      refreshToken,
+    },
+    {
+      headers: {
+        noAuth: true,
+      },
+    },
+  );
+  const { accessToken, refreshToken: newRefreshToken } = response.data.data;
+
+  // Jotai 상태에 새 토큰 값 설정
+  store.set(setAccessTokenAtom, accessToken);
+  store.set(setRefreshTokenAtom, newRefreshToken);
+  Cookies.set('test token', 'test refresh token', { expires: 7, path: '/' });
+  console.log('res', setAccessTokenAtom);
+};
 
 // 이메일 중복 체크 (인증 없이 요청)
 export const checkEmail = async (email: string) => {
