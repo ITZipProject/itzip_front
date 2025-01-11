@@ -14,7 +14,7 @@ interface UseFilteredQuizzesProps {
   sortOrder: 'NEWEST' | 'OLDEST' | 'RECOMMENDED';
   page: number;
   keyword: string;
-  accessToken: string;
+  accessToken: string | null;
 }
 
 const fetchFilteredQuizzes = async ({
@@ -85,7 +85,7 @@ export const useFilteredQuizzes = () => {
         sortOrder,
         page,
         keyword,
-        accessToken: accessToken.accessToken,
+        accessToken: accessToken.accessToken as string,
       });
     },
     staleTime: 1000,
