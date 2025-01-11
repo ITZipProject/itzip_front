@@ -17,10 +17,11 @@ const TokenSync: React.FC = () => {
     if (accessToken && refreshToken) {
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
+      console.log('갱신 완료', accessToken, refreshToken);
     }
   }, [setAccessToken, setRefreshToken]);
 
-  return null; // UI는 필요 없으므로 null 반환
+  return null;
 };
 
 export default TokenSync;

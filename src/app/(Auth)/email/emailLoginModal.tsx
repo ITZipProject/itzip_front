@@ -54,9 +54,7 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPro
           errors={errors.password}
         />
 
-        <Button variant="basedButton" loadingText="로그인하는중...">
-          로그인하기
-        </Button>
+        <Button variant="basedButton">로그인하기</Button>
       </form>
     </Modal>
   );

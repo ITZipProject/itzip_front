@@ -1,16 +1,16 @@
 'use client';
 import React, { ButtonHTMLAttributes, ReactNode } from 'react';
 import { useFormStatus } from 'react-dom';
+import LoadingSpinner from '../\bLoadingSpinner/LoadingSpinner';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  loadingText?: string;
   classNames?: string;
   children: ReactNode;
   loading?: boolean;
   variant: 'basedButton' | 'nonBorderButton' | 'none';
 }
 
-const Button = ({ loadingText, children, classNames, variant, loading, ...rest }: ButtonProps) => {
+const Button = ({ children, classNames, variant, loading, ...rest }: ButtonProps) => {
   const { pending } = useFormStatus();
 
   const variantStyles = {
@@ -26,7 +26,7 @@ const Button = ({ loadingText, children, classNames, variant, loading, ...rest }
       disabled={pending || loading}
       className={`${variantStyles[variant]} ${classNames} `}
     >
-      {pending ? loadingText : children}
+      {pending ? <LoadingSpinner /> : children}
     </button>
   );
 };

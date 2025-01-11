@@ -67,11 +67,12 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
         {!isOk.emailCheck ? (
           <Button
             variant="basedButton"
+            loading={isLoading.emailCheck}
             onClick={() => {
               void checkEmailDuplicate(); // 이메일 중복 확인
             }}
           >
-            {isLoading.emailCheck ? '중복 확인 중..' : '중복 확인하기'}
+            중복 확인하기
           </Button>
         ) : (
           <>
@@ -93,11 +94,12 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
             {!isOk.codePost ? (
               <Button
                 variant="basedButton"
+                loading={isLoading.codePost}
                 onClick={() => {
                   void sendAuthCode(); // 인증 코드 전송
                 }}
               >
-                {isLoading.codePost ? '인증 코드 보내기 중..' : '인증 코드 보내기'}
+                인증 코드 보내기
               </Button>
             ) : (
               <>
@@ -105,19 +107,21 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
                   <>
                     <Button
                       variant="basedButton"
+                      loading={isLoading.codeVerify}
                       onClick={() => {
                         void verifyAuthCode(); // 인증 코드 확인
                       }}
                     >
-                      {isLoading.codeVerify ? '인증코드 확인 중..' : '인증코드 확인하기'}
+                      인증코드 확인하기
                     </Button>
                     <Button
                       variant="basedButton"
+                      loading={isLoading.codePost}
                       onClick={() => {
                         void sendAuthCode(); // 인증 코드 다시 보내기
                       }}
                     >
-                      {isLoading.codePost ? '인증 코드 보내기 중..' : '인증 코드 다시 보내기'}
+                      인증 코드 다시 보내기
                     </Button>
                   </>
                 )}
@@ -167,9 +171,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
           </span>
         )}
 
-        <Button variant="basedButton" loadingText="가입하는중...">
-          가입하기
-        </Button>
+        <Button variant="basedButton">가입하기</Button>
 
         <div className="flex flex-col items-center">
           <SmallAsk text="이미 회원이신가요?" modalName="LoginModal" />
