@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useAtom } from 'jotai';
 import React, { useState } from 'react';
 
-import { accessTokenAtom } from '@/store/useTokenStore';
+import { tokenAtom } from '@/store/useTokenStore';
 import { QuizData, ModalProps, SubmitAnswerParams } from '@/types/quiz/quiz';
 
 interface QuizAnswerResponse {
@@ -31,7 +31,7 @@ const QuizShowModal: React.FC<ModalProps & QuizData> = ({
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isCorrectModalOpen, setIsCorrectModalOpen] = useState(false);
   const [isIncorrectModalOpen, setIsIncorrectModalOpen] = useState(false);
-  const [accessToken] = useAtom(accessTokenAtom);
+  const [token] = useAtom(tokenAtom);
   const queryClient = useQueryClient();
 
   const submitAnswer = async ({ quizId, answer }: SubmitAnswerParams) => {
@@ -43,7 +43,7 @@ const QuizShowModal: React.FC<ModalProps & QuizData> = ({
       },
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token.accessToken}`,
         },
       },
     );

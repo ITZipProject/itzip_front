@@ -2,7 +2,7 @@ import { useAtom } from 'jotai';
 import React, { useState, useEffect } from 'react';
 
 import { useFetchAlgorithmData } from '@/api/algorithm/fetchAlgorithm';
-import { accessTokenAtom } from '@/store/useTokenStore';
+import { tokenAtom } from '@/store/useTokenStore';
 
 interface MainProps {
   tagId?: number;
@@ -11,9 +11,9 @@ interface MainProps {
 }
 
 const Main: React.FC<MainProps> = ({ tagId, displayName, resetTag }) => {
-  const [accessToken] = useAtom(accessTokenAtom);
+  const [token] = useAtom(tokenAtom);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
-  const { data, isLoading, isError } = useFetchAlgorithmData(accessToken ?? '', tagId);
+  const { data, isLoading, isError } = useFetchAlgorithmData(token.accessToken ?? '', tagId);
 
   useEffect(() => {
     if (!isLoading) {

@@ -8,6 +8,22 @@ export type FormValues = {
   agreeTerms: boolean;
 };
 
+export type MypageFormValuesTypes = {
+  nickname: string;
+  password: string;
+  image?: File | string | null;
+};
+
+export type MyPageFormLoadingTypes = {
+  imageLoading: boolean;
+  userStateLoading: boolean;
+  nicknameCheck: boolean;
+  nicknameUpdate: boolean;
+  passwordUpdate: boolean;
+  passwordSave: boolean;
+  profileSave: boolean;
+};
+
 export type LoadingTypes = {
   emailCheck: boolean;
   codePost: boolean;
@@ -17,6 +33,7 @@ export type LoadingTypes = {
   logout: boolean;
   userOut: boolean;
   user: boolean;
+  submit: boolean;
 };
 
 export type IsOkTypes = {

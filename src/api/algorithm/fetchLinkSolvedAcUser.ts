@@ -1,19 +1,18 @@
 /* eslint-disable */
+import { tokenAtom } from '@/store/useTokenStore';
 import axios, { AxiosError } from 'axios';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
-
-import { accessTokenAtom } from '@/store/useTokenStore';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export const useSolvedacLink = (username: string | null) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [accessToken] = useAtom(accessTokenAtom);
+  const [token] = useAtom(tokenAtom);
 
   const linkSolvedAcUser = async () => {
-    if (!username || !accessToken) {
+    if (!username || !token.accessToken) {
       setError('아이디를 입력하거나 로그인 상태를 확인해주세요.');
       return;
     }
@@ -26,7 +25,7 @@ export const useSolvedacLink = (username: string | null) => {
         {
           baseURL: apiUrl,
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token.accessToken}`,
           },
           params: { username }, // 쿼리 파라미터로 username 전달
         },

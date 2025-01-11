@@ -1,70 +1,41 @@
+'use client';
+
 import { atom } from 'jotai';
-import { atomWithStorage } from 'jotai/utils';
+import Cookies from 'js-cookie';
 
-const accessTokenAtom = atomWithStorage<string | null>('accessToken', null);
-const refreshTokenAtom = atomWithStorage<string | null>('refreshToken', null);
+import { clearTokens, getToken, setTokenCookie, TokenState } from '@/utils/tokenUtils';
 
-const setCookie = (name: string, value: string, maxAge?: number) => {
-  document.cookie = `${name}=${value}; path=/; ${maxAge ? `max-age=${maxAge};` : ''}samesite=strict`;
-};
+// 초기 토큰 상태 atom
+const tokenAtom = atom<TokenState>(getToken());
 
-const setAccessTokenAtom = atom(null, (get, set, accessToken: string) => {
-  set(accessTokenAtom, accessToken);
-  setCookie('accessToken', accessToken, 3600);
-});
-
-const setRefreshTokenAtom = atom(null, (get, set, refreshToken: string) => {
-  set(refreshTokenAtom, refreshToken);
-  setCookie('refreshToken', refreshToken, 2 * 7 * 24 * 3600);
-});
-
-const clearTokenAtom = atom(null, (get, set) => {
-  // atom 초기화
-  set(accessTokenAtom, null);
-  set(refreshTokenAtom, null);
-
-  // localStorage 직접 제거
-  if (typeof window !== 'undefined') {
-    localStorage.clear(); // 모든 항목 제거
-    // 또는
-    localStorage.removeItem('jotai-storage-accessToken'); // jotai가 사용하는 실제 키
-    localStorage.removeItem('jotai-storage-refreshToken');
+// 토큰 설정 atom: 액세스 토큰 설정
+const setAccessTokenAtom = atom(null, (get, set, accessToken: string | null) => {
+  // 액세스 토큰이 있을 경우 쿠키에 저장, 없으면 쿠키에서 삭제
+  if (accessToken) {
+    setTokenCookie('accessToken', accessToken);
+  } else {
+    Cookies.remove('accessToken', { path: '/' });
   }
-
-  // 쿠키 제거
-  setCookie('accessToken', '', 0);
-  setCookie('refreshToken', '', 0);
+  const currentState = get(tokenAtom);
+  set(tokenAtom, { ...currentState, accessToken });
 });
 
-const getTokenState = () => {
-  // SSR 대응
-  if (typeof window === 'undefined') {
-    return { accessToken: '', refreshToken: '' };
+// 토큰 설정 atom: 리프레시 토큰 설정
+const setRefreshTokenAtom = atom(null, (get, set, refreshToken: string | null) => {
+  // 리프레시 토큰이 있을 경우 쿠키에 저장, 없으면 쿠키에서 삭제
+  if (refreshToken) {
+    setTokenCookie('refreshToken', refreshToken);
+  } else {
+    Cookies.remove('refreshToken', { path: '/' });
   }
+  const currentState = get(tokenAtom);
+  set(tokenAtom, { ...currentState, refreshToken });
+});
 
-  const cookies = document.cookie.split(';').reduce(
-    (acc, curr) => {
-      const [key, value] = curr.trim().split('=');
-      acc[key] = value;
-      return acc;
-    },
-    {} as Record<string, string>,
-  );
+// 토큰 초기화 atom: 쿠키와 상태 모두 초기화
+const clearTokenAtom = atom(null, (_get, set) => {
+  clearTokens(); // 쿠키에서 토큰 제거
+  set(tokenAtom, { accessToken: null, refreshToken: null }); // 상태도 초기화
+});
 
-  const accessToken = cookies.accessToken || '';
-  const refreshToken = cookies.refreshToken || '';
-
-  return {
-    accessToken,
-    refreshToken,
-  };
-};
-
-export {
-  accessTokenAtom,
-  refreshTokenAtom,
-  setAccessTokenAtom,
-  setRefreshTokenAtom,
-  clearTokenAtom,
-  getTokenState,
-};
+export { tokenAtom, setAccessTokenAtom, setRefreshTokenAtom, clearTokenAtom };

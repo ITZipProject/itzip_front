@@ -14,7 +14,8 @@ const RecruitPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
     techName: '',
-    locationName: [] as string[],
+    // locationName: [] as string[],
+    locationCode: '',
     experienceMin: 0,
     experienceMax: 10,
     search: '',
@@ -55,7 +56,7 @@ const RecruitPage: React.FC = () => {
         <h1 className="font-pre-heading-01">&nbsp;둘러보기</h1>
       </div>
       <div className="flex space-x-4">
-        <div className="w-spacing-19 shrink-0">
+        <div className="sticky top-4 mt-10 max-h-screen w-spacing-19 shrink-0 overflow-y-auto transition-all duration-700 ease-in-out">
           <Filters filters={filters} setFilters={setFilters} applyFilters={applyFilters} />
         </div>
         <div className="grow">

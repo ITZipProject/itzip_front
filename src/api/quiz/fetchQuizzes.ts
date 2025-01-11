@@ -1,11 +1,10 @@
 /* eslint-disable */
+import { tokenAtom } from '@/store/useTokenStore';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAtom } from 'jotai';
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
-
-import { accessTokenAtom } from '@/store/useTokenStore';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -15,7 +14,7 @@ interface UseFilteredQuizzesProps {
   sortOrder: 'NEWEST' | 'OLDEST' | 'RECOMMENDED';
   page: number;
   keyword: string;
-  accessToken: string;
+  accessToken: string | null;
 }
 
 const fetchFilteredQuizzes = async ({
@@ -49,7 +48,7 @@ const fetchFilteredQuizzes = async ({
 };
 
 export const useFilteredQuizzes = () => {
-  const [accessToken] = useAtom(accessTokenAtom);
+  const [accessToken] = useAtom(tokenAtom);
   const [difficulty, setDifficulty] = useState<number | null>(null);
   const [category, setCategory] = useState<number | ''>('');
   const [sortOrder, setSortOrder] = useState<'NEWEST' | 'OLDEST' | 'RECOMMENDED'>('NEWEST');
@@ -86,7 +85,7 @@ export const useFilteredQuizzes = () => {
         sortOrder,
         page,
         keyword,
-        accessToken,
+        accessToken: accessToken.accessToken as string,
       });
     },
     staleTime: 1000,

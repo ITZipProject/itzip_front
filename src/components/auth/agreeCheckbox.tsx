@@ -1,12 +1,12 @@
 import { useAtom } from 'jotai';
 
 import { agreeAtom, allCheckedAtom, agreeErrorAtom } from '@/atoms/formAtoms';
+import Link from 'next/link';
 
 const AgreeCheckboxes: React.FC = () => {
   const [isChecked, setIsChecked] = useAtom(agreeAtom);
   const [allChecked, setAllChecked] = useAtom(allCheckedAtom);
   const [, setAgreeError] = useAtom(agreeErrorAtom);
-
   const onChangeAllCheckbox = () => {
     const newCheckedStatus = !allChecked;
     setAllChecked(newCheckedStatus);
@@ -45,7 +45,7 @@ const AgreeCheckboxes: React.FC = () => {
           onChange={onChangeAllCheckbox}
           className="size-spacing-05 border border-[##C6C6C6] outline-none ring-0"
         />
-        <label htmlFor="all" className="ml-[9px] text-Grey-500">
+        <label htmlFor="all" className="ml-[9px] text-Grey-500 cursor-pointer">
           다음 약관에 모두 동의합니다.
         </label>
       </div>
@@ -59,12 +59,13 @@ const AgreeCheckboxes: React.FC = () => {
           required
           className="size-spacing-05 border border-[##C6C6C6] outline-none ring-0"
         />
-        <label htmlFor="service" className="ml-[9px] text-Grey-500">
-          <span>(필수)</span>
-          <span> ITZIP 이용약관</span>
-          <span>에 동의합니다</span>
+        <label htmlFor="service" className="ml-[9px] text-Grey-500 hover:underline cursor-pointer">
+          <Link href="/policy/terms" target="_blank" rel="noopener noreferrer">
+            <span>(필수) ITZIP 이용약관에 동의합니다.</span>
+          </Link>
         </label>
       </div>
+
       <div>
         <input
           id="private"
@@ -75,10 +76,10 @@ const AgreeCheckboxes: React.FC = () => {
           required
           className="size-spacing-05 border border-[##C6C6C6] outline-none ring-0 "
         />
-        <label htmlFor="private" className="ml-[9px] text-Grey-500">
-          <span>(필수)</span>
-          <span> 개인정보 수집 및 이용</span>
-          <span>에 동의합니다</span>
+        <label htmlFor="service" className="ml-[9px] text-Grey-500 hover:underline cursor-pointer">
+          <Link href="/policy/privacy" target="_blank" rel="noopener noreferrer">
+            <span>(필수) 개인정보 수집 및 이용에 동의합니다.</span>
+          </Link>
         </label>
       </div>
     </div>

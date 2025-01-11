@@ -1,13 +1,12 @@
 'use client';
 
 import ModalBackButton from '@/components/auth/modalBackButton';
+import Button from '@/components/common/Button/Button';
 import Input from '@/components/common/input';
 import { Margin } from '@/components/common/margin';
 import Modal from '@/components/portal/modal';
 import useSignIn from '@/hooks/auth/useSignIn';
 import { useModal } from '@/lib/context/ModalContext';
-
-import { AuthButton } from '../auth/authButton';
 
 interface SignInModalProps {
   modalId: string;
@@ -15,8 +14,7 @@ interface SignInModalProps {
 
 const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalProps) => {
   const { openModals, closeModal } = useModal();
-  const { isLoading, formValues, signIn, onChangeFormValues, onClickResetButton, errors } =
-    useSignIn();
+  const { formValues, handleSubmit, onChangeFormValues, onClickResetButton, errors } = useSignIn();
 
   // 모달이 열려 있는 경우에만 렌더링
   if (!openModals.includes(modalId)) return null;
@@ -25,7 +23,7 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPro
     <Modal isOpen={true} onClose={() => closeModal()}>
       <ModalBackButton title="이메일로 로그인하기" />
       <Margin height={'48px'} />
-      <form noValidate action={signIn as unknown as string} className="w-full space-y-4">
+      <form onSubmit={(e) => void handleSubmit(e)} className="w-full space-y-4" noValidate>
         <Input
           id="email"
           name="email"
@@ -56,7 +54,9 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPro
           errors={errors.password}
         />
 
-        <AuthButton disabled={isLoading.join}>로그인하기</AuthButton>
+        <Button variant="basedButton" loadingText="로그인하는중...">
+          로그인하기
+        </Button>
       </form>
     </Modal>
   );

@@ -6,8 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { IoIosMenu } from 'react-icons/io';
 
-import logo from 'public/logo.svg';
-
+import logo from 'public/logo.png';
 import DropdownItem from './menu/dropdownItem';
 import Dropdown from '../portal/dropdown';
 
@@ -18,6 +17,7 @@ export default function MobileHeader() {
   const handleDropdownButton = () => {
     setIsShow(!isShow);
   };
+
   const isStudyPage = pathname.startsWith('/study');
   const headerBackgroundColor = isStudyPage ? 'bg-stone-800' : 'bg-white';
 
@@ -27,12 +27,11 @@ export default function MobileHeader() {
         className={`flex h-[70px] w-full items-center justify-between border border-b-2 px-10 ${headerBackgroundColor} *:[516px]:text-8 *:text-14  *:xl:text-16`}
       >
         <Link href={'/'}>
-          <Image src={logo as StaticImageData} alt="logo" className="size-20" />
+          <Image src={logo as StaticImageData} alt="logo" className="w-[100px]" />
         </Link>
 
         <div className={`flex items-center gap-spacing-07`}>
           <div>
-            {/* <DropdownItem hidden={isShow} /> */}
             <Dropdown
               isOpen={isShow}
               onClose={handleDropdownButton}
