@@ -31,7 +31,7 @@ export async function fetchJobs(
   params: FetchJobsParams,
 ): Promise<{ jobs: Job[]; totalPages: number }> {
   try {
-    const response = await axios.get<JobResponse>(`${baseUrl}job-info`, { params });
+    const response = await axios.get<JobResponse>(`${baseUrl}/job-info`, { params });
     return {
       jobs: response.data.data.content,
       totalPages: response.data.data.totalPages,
