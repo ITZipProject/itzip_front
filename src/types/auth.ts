@@ -1,5 +1,7 @@
 //회원가입
 
+import { StaticImageData } from 'next/image';
+
 export type FormValues = {
   email: string;
   password: string;
@@ -11,7 +13,7 @@ export type FormValues = {
 export type MypageFormValuesTypes = {
   nickname: string;
   password: string;
-  image?: File | string | null;
+  image?: File | string | null | StaticImageData;
 };
 
 export type MyPageFormLoadingTypes = {
