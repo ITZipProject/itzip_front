@@ -48,7 +48,7 @@ export const updateProfileImage = async (file: File) => {
   formData.append('file', file);
 
   const res = await instance.patch<ApiResponse<{ imageUrl: string }>>(
-    '/api/mypage/profileImage',
+    '/mypage/profileImage',
     formData,
     {
       headers: {

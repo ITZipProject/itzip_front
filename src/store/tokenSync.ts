@@ -17,7 +17,6 @@ const TokenSync: React.FC = () => {
     if (accessToken && refreshToken) {
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
-      console.log('갱신 완료', accessToken, refreshToken);
     }
   }, [setAccessToken, setRefreshToken]);
 

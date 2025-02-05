@@ -24,7 +24,12 @@ export default function useUser() {
     setLoading((prev) => ({ ...prev, userStateLoading: true }));
     try {
       const res = await getUser();
-      setUser(res.data); // 상태 업데이트
+      setUser({
+        email: res.data.email,
+        nickname: res.data.nickname,
+        imageUrl: res.data.imageUrl || null,
+      });
+      // 상태 업데이트
     } catch (err) {
       console.error('fetchUser error : ', err);
       toast.error('유저 정보를 가져오는 데 실패했습니다. 다시 로그인 해주세요.');

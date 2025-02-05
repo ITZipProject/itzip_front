@@ -16,13 +16,14 @@ import { FiRefreshCw } from 'react-icons/fi';
 export default function MyPageContainer() {
   const {
     formValues,
-    previewUrl,
     handleInputChange,
-    handleImageChange,
     handleNicknameCheck,
     savedProfile,
     savedPassword,
     onCancelEdit,
+    uploadImage,
+    handleImageChange,
+    previewUrl,
   } = useProfileForm();
 
   const { user, isLoading } = useUser();
@@ -71,14 +72,15 @@ export default function MyPageContainer() {
           <div className="flex flex-row space-x-4 ">
             <h2 className="min-w-[85px]">이미지</h2>
             {isEdit.myProfile ? (
-              <div className="flex flex-row space-x-4">
-                <div className="flex size-[100px] items-center justify-center gap-4 rounded-xl border-2 border-Blue-200 bg-white p-[10px]">
-                  {previewUrl || user?.imageUrl ? (
+              <div className="flex flex-col space-y-4 justify-center">
+                <div className="flex size-spacing-19 items-center justify-center gap-4 rounded-xl  bg-white p-[10px] border-2 border-Blue-200 w-[300px] h-[300px]">
+                  {/* 편집 모드 */}
+                  {previewUrl ? (
                     <Image
                       src={previewUrl || user?.imageUrl || '/profile.png'}
                       alt="profileImage"
-                      width={100}
-                      height={100}
+                      width={200}
+                      height={200}
                       className="object-cover"
                     />
                   ) : (
@@ -91,30 +93,40 @@ export default function MyPageContainer() {
                     />
                   )}
                 </div>
-                <label
-                  className="h-spacing-11 cursor-pointer rounded-xl border border-Grey-200 px-spacing-06 py-[10px]"
-                  htmlFor="profile"
-                >
-                  변경
-                </label>
-                <input
-                  name="profile"
-                  type="file"
-                  id="profile"
-                  accept="image/*"
-                  hidden
-                  onChange={() => void handleImageChange}
-                />
+                <div className="flex flex-col space-y-2">
+                  <label
+                    className="flex border border-Grey-200 py-[10px] px-[20px] rounded-xl text-[12px] justify-center items-center hover:border-Blue-200 transition-colors"
+                    htmlFor="profile"
+                  >
+                    이미지 선택
+                  </label>
+                  <input
+                    name="profile"
+                    type="file"
+                    id="profile"
+                    accept="image/*"
+                    hidden
+                    onChange={handleImageChange}
+                  />
+                  <Button
+                    classNames="hover:bg-Blue-200 transition-colors"
+                    variant="nonBorderButton"
+                    onClick={uploadImage}
+                  >
+                    변경하기
+                  </Button>
+                </div>
               </div>
             ) : (
-              <div className="flex size-spacing-19 items-center justify-center gap-4 rounded-xl border-2 border-Blue-200 bg-white p-[10px]">
+              // 편집 모드 x
+              <div className="flex size-spacing-19 items-center justify-center gap-4 rounded-xl  bg-white p-[10px] border-2 border-Blue-200 w-[300px] h-[300px]">
                 {user?.imageUrl ? (
                   <Image
                     src={user.imageUrl}
                     alt="profileImage"
                     width={200}
                     height={200}
-                    className="object-cover"
+                    className="object-cover rounded-xl  w-full h-full"
                   />
                 ) : (
                   <Image

@@ -1,5 +1,4 @@
 import { atom } from 'jotai';
-
 import {
   AgreeTypes,
   FormValues,

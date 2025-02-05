@@ -26,7 +26,7 @@ const Button = ({ children, classNames, variant, loading, ...rest }: ButtonProps
       disabled={pending || loading}
       className={`${variantStyles[variant]} ${classNames} `}
     >
-      {pending ? <LoadingSpinner /> : children}
+      {pending || loading ? <LoadingSpinner /> : children}
     </button>
   );
 };

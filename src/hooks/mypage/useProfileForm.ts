@@ -12,7 +12,6 @@ export function useProfileForm() {
   const [formValues, setFormValues] = useAtom(mypageFormValuesAtom);
 
   const [, setIsLoading] = useAtom(mypageFormLoadingAtom);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isOk, setIsOk] = useState({
     nicknameOk: false,
     passwordOk: false,
@@ -24,40 +23,45 @@ export function useProfileForm() {
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 이미지 변경 처리
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (!file.type.startsWith('image/')) {
-        toast.error('이미지 파일만 업로드 가능합니다.');
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>): Promise<File | null> => {
+    return new Promise((resolve) => {
+      const file = e.target.files?.[0];
+      if (!file) {
+        resolve(null);
         return;
       }
 
-      // 이미지 상태 업데이트
-      setFormValues((prev) => ({ ...prev, image: file }));
+      // 업로드를 위한 File 객체 저장
+      setImageFile(file);
 
-      // 새로운 미리보기 URL 생성
-      const newPreviewUrl = URL.createObjectURL(file);
-      setPreviewUrl(newPreviewUrl);
-      setIsLoading((prev) => ({ ...prev, imageLoading: true }));
+      // 미리보기를 위한 URL 생성
+      const fileReader = new FileReader();
+      fileReader.onload = (e) => {
+        const result = e.target?.result as string;
+        setPreviewUrl(result); // 미리보기용 URL 저장
+        resolve(file); // API 호출용 File 객체 반환
+      };
+      fileReader.readAsDataURL(file);
+    });
+  };
+
+  const uploadImage = async () => {
+    if (imageFile) {
       try {
-        // 이미지 업로드 API 호출
-        const res = await updateProfileImage(file);
-
-        const { imageUrl } = res.data;
-
-        setFormValues((prev) => ({ ...prev, image: imageUrl }));
-
-        toast.success('이미지 업로드 성공');
-      } catch (err) {
-        console.error('이미지 업로드 실패', err);
-        toast.error('이미지 업로드에 실패했습니다.');
-      } finally {
-        setIsLoading((prev) => ({ ...prev, imageLoading: false }));
+        const response = await updateProfileImage(imageFile);
+        console.log(response);
+        // 성공 처리
+        toast.success('이미지 변경이 완료되었습니다.');
+      } catch (error) {
+        // 에러 처리
+        console.log(error);
+        toast.error('이미지 변경에 문제가 발생하였습니다. 다시 시도해주세요.');
       }
     }
   };
-
   // 닉네임 중복 체크
   const handleNicknameCheck = async () => {
     if (!formValues.nickname) return;
@@ -114,7 +118,7 @@ export function useProfileForm() {
   return {
     formValues,
     setFormValues,
-    previewUrl,
+    previewUrl, // 미리보기 URL 상태
     setPreviewUrl,
     isOk,
     setIsOk,
@@ -124,5 +128,6 @@ export function useProfileForm() {
     savedProfile,
     savedPassword,
     onCancelEdit,
+    uploadImage,
   };
 }
