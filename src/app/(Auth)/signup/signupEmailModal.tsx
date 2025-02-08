@@ -7,12 +7,13 @@ import { agreeErrorAtom } from '@/atoms/formAtoms';
 import AgreeCheckboxes from '@/components/auth/agreeCheckbox';
 import ModalBackButton from '@/components/auth/modalBackButton';
 import SmallAsk from '@/components/auth/smallAsk';
-import Button from '@/components/common/Button/Button';
 import Input from '@/components/common/input';
 import { Margin } from '@/components/common/margin';
 import Modal from '@/components/portal/modal';
 import { useSignUp } from '@/hooks/auth/useSignUp';
 import { useModal } from '@/lib/context/ModalContext';
+import { Button } from '@/components/ui/button';
+import InputOTPSection from '@/components/auth/inputOTP';
 
 interface SignInModalProps {
   modalId: string;
@@ -48,26 +49,27 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
         className="w-full space-y-4"
         noValidate
       >
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          labelTitle="email"
-          title="이메일"
-          value={formValues.email}
-          onChange={onChangeFormValues}
-          placeholder="ID@example.com"
-          required
-          minLength={2}
-          onClick={() => onClickResetButton('email')}
-          errors={errors.email}
-          messages={message.email}
-        />
-
+        {!isOk.codeVerify && (
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            labelTitle="email"
+            title="이메일을 입력해주세요."
+            value={formValues.email}
+            onChange={onChangeFormValues}
+            placeholder="ID@example.com"
+            required
+            minLength={2}
+            onClick={() => onClickResetButton('email')}
+            errors={errors.email}
+            messages={message.email}
+          />
+        )}
         {!isOk.emailCheck ? (
           <Button
-            variant="basedButton"
-            loading={isLoading.emailCheck}
+            variant="default"
+            className="h-[50px] w-full"
             onClick={() => {
               void checkEmailDuplicate(); // 이메일 중복 확인
             }}
@@ -76,15 +78,15 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
           </Button>
         ) : (
           <>
-            {isOk.codeHidden && (
+            {!isOk.codeVerify && (
               <Input
                 name="authCode"
                 type="text"
                 labelTitle="authCode"
-                title="인증코드"
+                title="입력한 이메일로 전송된 인증코드를 입력해주세요."
                 value={formValues.authCode}
                 onChange={onChangeFormValues}
-                placeholder="인증코드를 입력해주세요."
+                placeholder="000000"
                 errors={errors.authCode}
                 messages={message.authCode}
                 onClick={() => onClickResetButton('authCode')}
@@ -93,8 +95,8 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
 
             {!isOk.codePost ? (
               <Button
-                variant="basedButton"
-                loading={isLoading.codePost}
+                variant="default"
+                className="h-[50px] w-full"
                 onClick={() => {
                   void sendAuthCode(); // 인증 코드 전송
                 }}
@@ -106,8 +108,8 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
                 {!isOk.codeVerify && (
                   <>
                     <Button
-                      variant="basedButton"
-                      loading={isLoading.codeVerify}
+                      variant="default"
+                      className="h-[50px] w-full"
                       onClick={() => {
                         void verifyAuthCode(); // 인증 코드 확인
                       }}
@@ -115,8 +117,8 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
                       인증코드 확인하기
                     </Button>
                     <Button
-                      variant="basedButton"
-                      loading={isLoading.codePost}
+                      variant="default"
+                      className="h-[50px] w-full"
                       onClick={() => {
                         void sendAuthCode(); // 인증 코드 다시 보내기
                       }}
@@ -130,48 +132,54 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
           </>
         )}
 
-        <Input
-          id="password"
-          name="password"
-          type="password"
-          labelTitle="password"
-          title="비밀번호"
-          placeholder="비밀번호를 입력해주세요."
-          value={formValues.password}
-          onChange={onChangeFormValues}
-          required
-          onClick={() => onClickResetButton('password')}
-          errors={errors.password}
-          messages={message.password}
-        />
+        {isOk.codeVerify && (
+          <>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              labelTitle="password"
+              title="비밀번호를 입력해주세요."
+              placeholder="Aa1234"
+              value={formValues.password}
+              onChange={onChangeFormValues}
+              required
+              onClick={() => onClickResetButton('password')}
+              errors={errors.password}
+              messages={message.password}
+            />
 
-        <Input
-          id="passwordCheck"
-          name="passwordCheck"
-          labelTitle="passwordCheck"
-          title="비밀번호 확인"
-          type="password"
-          placeholder="비밀번호를 입력해주세요."
-          value={formValues.passwordCheck}
-          onChange={onChangeFormValues}
-          required
-          minLength={2}
-          onClick={() => onClickResetButton('passwordCheck')}
-          errors={errors.passwordCheck}
-          messages={message.passwordCheck}
-        />
+            <Input
+              id="passwordCheck"
+              name="passwordCheck"
+              labelTitle="passwordCheck"
+              title="비밀번호 확인"
+              type="password"
+              placeholder="비밀번호를 입력해주세요."
+              value={formValues.passwordCheck}
+              onChange={onChangeFormValues}
+              required
+              minLength={2}
+              onClick={() => onClickResetButton('passwordCheck')}
+              errors={errors.passwordCheck}
+              messages={message.passwordCheck}
+            />
 
-        <AgreeCheckboxes />
-        {agreeError && (
-          <span className="text-12 font-[500] text-color-text-warning">
-            <div className="mt-2 flex items-center gap-[4.5px]">
-              <XCircleIcon className="size-[19px]" />
-              {agreeError}
-            </div>
-          </span>
+            <AgreeCheckboxes />
+            {agreeError && (
+              <span className="text-12 font-[500] text-color-text-warning">
+                <div className="mt-2 flex items-center gap-[4.5px]">
+                  <XCircleIcon className="size-[19px]" />
+                  {agreeError}
+                </div>
+              </span>
+            )}
+
+            <Button variant="default" className="h-[50px] w-full">
+              <span className="text-[14px] font-[600] ">가입하기</span>
+            </Button>
+          </>
         )}
-
-        <Button variant="basedButton">가입하기</Button>
 
         <div className="flex flex-col items-center">
           <SmallAsk text="이미 회원이신가요?" modalName="LoginModal" />

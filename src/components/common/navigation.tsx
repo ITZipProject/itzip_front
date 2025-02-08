@@ -7,14 +7,7 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '../ui/navigation-menu';
-import {
-  BarChart3Icon,
-  BellIcon,
-  LogOutIcon,
-  MessageCircleIcon,
-  SettingsIcon,
-  UserIcon,
-} from 'lucide-react';
+import { LogOutIcon, UserIcon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -58,7 +51,7 @@ const menus = [
 export default function Navigation({}: {}) {
   const { openModal } = useModal();
   const [token] = useAtom(tokenAtom);
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
 
   const isLoggedIn = !!token.accessToken;
   const [mounted, setMounted] = useState(false);

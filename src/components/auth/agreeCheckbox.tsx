@@ -36,16 +36,16 @@ const AgreeCheckboxes: React.FC = () => {
   };
 
   return (
-    <div className="*:p-spacing-04">
+    <div className="*:p-[16px]">
       <div>
         <input
           id="all"
           type="checkbox"
           checked={allChecked}
           onChange={onChangeAllCheckbox}
-          className="size-spacing-05 border border-[##C6C6C6] outline-none ring-0"
+          className="size-[16px] border border-[##C6C6C6] outline-none ring-0"
         />
-        <label htmlFor="all" className="ml-[9px] text-Grey-500 cursor-pointer">
+        <label htmlFor="all" className="ml-[9px] text-neutral-900 cursor-pointer">
           다음 약관에 모두 동의합니다.
         </label>
       </div>
@@ -57,9 +57,12 @@ const AgreeCheckboxes: React.FC = () => {
           checked={isChecked.service}
           onChange={onChangeCheckbox}
           required
-          className="size-spacing-05 border border-[##C6C6C6] outline-none ring-0"
+          className="size-[16px] border border-[##C6C6C6] outline-none ring-0"
         />
-        <label htmlFor="service" className="ml-[9px] text-Grey-500 hover:underline cursor-pointer">
+        <label
+          htmlFor="service"
+          className="ml-[9px] text-neutral-900 hover:underline cursor-pointer"
+        >
           <Link href="/policy/terms" target="_blank" rel="noopener noreferrer">
             <span>(필수) ITZIP 이용약관에 동의합니다.</span>
           </Link>
@@ -74,9 +77,12 @@ const AgreeCheckboxes: React.FC = () => {
           checked={isChecked.private}
           onChange={onChangeCheckbox}
           required
-          className="size-spacing-05 border border-[##C6C6C6] outline-none ring-0 "
+          className="size-[16px] border border-[##C6C6C6] outline-none ring-0 "
         />
-        <label htmlFor="service" className="ml-[9px] text-Grey-500 hover:underline cursor-pointer">
+        <label
+          htmlFor="service"
+          className="ml-[9px] text-neutral-900 hover:underline cursor-pointer"
+        >
           <Link href="/policy/privacy" target="_blank" rel="noopener noreferrer">
             <span>(필수) 개인정보 수집 및 이용에 동의합니다.</span>
           </Link>

@@ -67,10 +67,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
         {/* pretendard.className */}
         <ModalProvider>
           {!shouldHideHeaderAndFooter && (
-            <div>
+            <>
               <MobileHeader />
               <Navigation />
-            </div>
+            </>
           )}
           {/* {!shouldHideHeaderAndFooter && <SmallHeader />} */}
 

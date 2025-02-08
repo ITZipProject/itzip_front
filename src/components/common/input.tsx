@@ -28,9 +28,9 @@ export default function Input({
         )}
         <input
           id={name || labelTitle}
-          className={`rounded-radius-03 border-none px-[10px] py-spacing-05 ring-1 ring-Grey-400 
-          transition placeholder:text-Grey-600 focus:outline-none focus:ring-2 focus:ring-Blue-400
-          disabled:bg-Grey-100 disabled:text-Grey-500 ${errors && 'ring-[#E46969]'} ${messages && 'ring-green-400'}`}
+          className={`rounded-md border-none px-[10px] py-[14px] ring-1 ring-gray-400 
+          transition placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary
+          disabled:bg-gray-100 disabled:text-gray-500 ${errors && 'ring-[#E46969]'} ${messages && 'ring-green-400'}`}
           name={name}
           {...rest}
         />
@@ -38,8 +38,8 @@ export default function Input({
         {onClick && (
           <button
             type="button"
-            className="hover:bg-Grey-10 absolute right-spacing-02 top-3 rounded-full 
-            p-1 opacity-0 transition-opacity duration-300 hover:opacity-100"
+            className=" absolute right-2 top-1/2  rounded-full 
+            p-1 opacity-0 transition-opacity duration-300 hover:opacity-100 hover:bg-red-200"
             onClick={onClick}
             aria-label="입력값 초기화"
           >
@@ -49,7 +49,7 @@ export default function Input({
       </div>
       <Margin height={'9px'} />
       {errors && (
-        <span className="text-12 font-[500] text-color-text-warning">
+        <span className="text-[12px] font-[500] text-[#E46969]">
           <div className="mt-2 flex items-center gap-[4.5px]">
             <XCircleIcon className="size-[19px]" />
             {errors}
@@ -57,7 +57,7 @@ export default function Input({
         </span>
       )}
       {messages && (
-        <span className="text-12 font-[500] text-green-400">
+        <span className="text-[12px] font-[500] text-green-400">
           <div className="mt-2 flex items-center gap-[4.5px]">
             <FaCheckCircle className="size-[19px]" />
             {messages}
