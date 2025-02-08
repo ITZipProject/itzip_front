@@ -11,6 +11,7 @@ import MobileHeader from '@/components/common/mobileHeader';
 // eslint-disable-next-line import/order
 import { Toaster } from 'react-hot-toast';
 import TokenSync from '@/store/tokenSync';
+import Navigation from '@/components/common/navigation';
 
 // pretendard 함수 관련 에러로 500이 떠서 일단 주석 처리
 interface RootLayoutProps {
@@ -68,7 +69,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           {!shouldHideHeaderAndFooter && (
             <div>
               <MobileHeader />
-              <HeaderBar />
+              <Navigation />
             </div>
           )}
           {/* {!shouldHideHeaderAndFooter && <SmallHeader />} */}
