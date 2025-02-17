@@ -23,6 +23,21 @@ interface TokenResponse {
   };
 }
 
+// 토큰 갱신 상태 관리를 위한 변수들
+let isRefreshing = false;
+let refreshSubscribers: ((token: string) => void)[] = [];
+
+// 대기 중인 요청들을 처리하는 함수
+const onRefreshed = (accessToken: string) => {
+  refreshSubscribers.forEach((callback) => callback(accessToken));
+  refreshSubscribers = [];
+};
+
+// 토큰 갱신 요청을 구독하는 함수
+const addRefreshSubscriber = (callback: (token: string) => void) => {
+  refreshSubscribers.push(callback);
+};
+
 // axios 인스턴스 생성
 const instance = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
@@ -62,54 +77,63 @@ instance.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      try {
-        const refreshToken = store.get(tokenAtom)?.refreshToken;
-        if (!refreshToken) {
-          throw new Error('No refresh token found');
+      if (!isRefreshing) {
+        isRefreshing = true;
+
+        try {
+          const refreshToken = store.get(tokenAtom)?.refreshToken;
+          if (!refreshToken) {
+            throw new Error('No refresh token found');
+          }
+
+          // refresh token을 사용해 토큰 갱신 API 호출
+          const response = await instance.patch<TokenResponse>(
+            '/user/refreshToken',
+            {
+              refreshToken,
+              rotate: true,
+            },
+            { headers: { noAuth: true } },
+          );
+
+          const { accessToken, refreshToken: newRefreshToken } = response.data.data;
+
+          // 새로운 리프레시 토큰도 함께 저장
+          setTokenCookie('accessToken', accessToken);
+          setTokenCookie('refreshToken', newRefreshToken);
+
+          store.set(setAccessTokenAtom, accessToken);
+          store.set(setRefreshTokenAtom, newRefreshToken);
+
+          onRefreshed(accessToken);
+
+          // headers 초기화 및 토큰 설정
+          originalRequest.headers = originalRequest.headers || {};
+          originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+          return instance(originalRequest);
+        } catch (err) {
+          // 토큰 회전 실패 시 보안을 위해 즉시 로그아웃
+          store.set(setAccessTokenAtom, null);
+          store.set(setRefreshTokenAtom, null);
+          Cookies.remove('accessToken');
+          Cookies.remove('refreshToken');
+
+          window.location.href = '/';
+          return Promise.reject(err);
+        } finally {
+          isRefreshing = false;
         }
-
-        // refresh token을 사용해 토큰 갱신 API 호출
-        const response = await instance.patch<TokenResponse>(
-          '/user/refreshToken',
-          {
-            refreshToken,
-          },
-          { headers: { noAuth: true } },
-        );
-
-        const { accessToken, refreshToken: newRefreshToken } = response.data.data;
-        // 새 토큰을 쿠키와 상태에 저장
-        setTokenCookie('accessToken', accessToken);
-        setTokenCookie('refreshToken', newRefreshToken);
-
-        // Jotai 상태에 새 토큰 값 설정
-        store.set(setAccessTokenAtom, accessToken);
-        store.set(setRefreshTokenAtom, newRefreshToken);
-
-        // 쿠키에 새 토큰 값 저장
-        Cookies.set('test token', 'test refresh token', { expires: 7, path: '/' });
-
-        // 원래 요청을 새로운 토큰으로 재시도
-        originalRequest.headers = originalRequest.headers || {};
-        originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
-
-        // 원래의 요청을 새로운 토큰으로 다시 시도
-        return instance(originalRequest);
-      } catch (err) {
-        console.error('Token refresh failed', err);
-
-        // 토큰 갱신 실패 시, 상태를 초기화하고 로그아웃 처리
-        store.set(setAccessTokenAtom, null);
-        store.set(setRefreshTokenAtom, null);
-
-        // 쿠키에서 토큰을 제거합니다.
-        Cookies.remove('accessToken');
-        Cookies.remove('refreshToken');
-
-        // 사용자에게 알리고, 홈 화면으로 리다이렉트
-        window.location.href = '/';
-
-        return Promise.reject(err); // 에러 처리
+      } else {
+        // 토큰 갱신 중일 때의 요청 처리
+        return new Promise((resolve) => {
+          addRefreshSubscriber((token: string) => {
+            if (!originalRequest.headers) {
+              originalRequest.headers = {};
+            }
+            originalRequest.headers['Authorization'] = `Bearer ${token}`;
+            resolve(instance(originalRequest));
+          });
+        });
       }
     }
 
