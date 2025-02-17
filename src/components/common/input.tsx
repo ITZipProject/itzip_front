@@ -28,7 +28,7 @@ export default function Input({
         )}
         <input
           id={name || labelTitle}
-          className={`rounded-md border-none px-[10px] py-[14px] ring-1 ring-gray-400 
+          className={`rounded-md border-0 px-[10px] py-[14px] ring-1 ring-gray-400 
           transition placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary
           disabled:bg-gray-100 disabled:text-gray-500 ${errors && 'ring-[#E46969]'} ${messages && 'ring-green-400'}`}
           name={name}

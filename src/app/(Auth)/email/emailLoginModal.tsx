@@ -5,6 +5,7 @@ import Input from '@/components/common/input';
 import { Margin } from '@/components/common/margin';
 import Modal from '@/components/portal/modal';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import useSignIn from '@/hooks/auth/useSignIn';
 import { useModal } from '@/lib/context/ModalContext';
 
@@ -53,7 +54,7 @@ const EmailLoginModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPro
           onClick={() => onClickResetButton('password')}
           errors={errors.password}
         />
-
+        <Separator />
         <Button variant="default" className="h-[50px] w-full">
           <span className="text-[14px] font-[600] ">로그인하기</span>
         </Button>

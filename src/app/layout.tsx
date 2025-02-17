@@ -74,7 +74,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           )}
           {/* {!shouldHideHeaderAndFooter && <SmallHeader />} */}
 
-          <main className={shouldHideHeaderAndFooter ? 'mt-[58px]' : ''}>{children}</main>
+          <main className={shouldHideHeaderAndFooter ? 'mt-[58px]' : 'mt-[70px]'}>{children}</main>
           {!shouldHideHeaderAndFooter && <Footer />}
           <Modals />
           <Toaster

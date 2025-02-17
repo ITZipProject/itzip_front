@@ -57,7 +57,7 @@ export default function MyPageContainer() {
   };
 
   return (
-    <div className="flex w-screen flex-col space-y-4 bg-[#F9FBFC] p-4 px-spacing-06 *:bg-white pt-[80px]">
+    <div className="flex w-screen flex-col space-y-4  p-4 px-[20px] *:bg-white">
       <Section>
         <div className="flex justify-between items-center">
           <Title title="내 프로필" />
