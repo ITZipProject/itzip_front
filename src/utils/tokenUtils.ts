@@ -15,12 +15,13 @@ export const getToken = (): TokenState => {
 };
 
 // 토큰 쿠키 관리 함수
-export const setTokenCookie = (name: string, value: string, expiresDays: number = 7) => {
+export const setTokenCookie = (name: string, value: string) => {
   Cookies.set(name, value, {
-    expires: expiresDays, // 기본 7일, 필요시 다른 값으로 설정
-    secure: typeof window !== 'undefined' && window.location.protocol === 'https:', // HTTPS에서만 secure 쿠키 설정
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
-    path: '/', // 쿠키 경로 설정 (전체 경로에서 유효)
+    path: '/',
+    expires: name === 'accessToken' ? 1 / 24 : 7, // accessToken은 1시간, refreshToken은 7일
   });
 };
 

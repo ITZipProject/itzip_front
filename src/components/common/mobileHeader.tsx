@@ -1,54 +1,70 @@
 'use client';
 
-import Image, { StaticImageData } from 'next/image';
+import { Separator } from '../ui/separator';
+import { Button } from '../ui/button';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
-import { IoIosMenu } from 'react-icons/io';
-
+import Image from 'next/image';
 import logo from 'public/logo.png';
-import DropdownItem from './menu/dropdownItem';
-import Dropdown from '../portal/dropdown';
+import { useAtom } from 'jotai';
+import { tokenAtom } from '@/store/useTokenStore';
+import { useModal } from '@/lib/context/ModalContext';
+import { useEffect, useState } from 'react';
+import useUser from '@/hooks/mypage/useUser';
 
-export default function MobileHeader() {
-  const pathname = usePathname();
-  const [isShow, setIsShow] = useState(false);
+import ProfileDropdownMenu from './dropdownMenu/profileDropdownMenu';
+import NavigationDropdownMenu from './dropdownMenu/navigationDropdownMenu';
+const menus = [
+  {
+    name: '이력서',
+    to: '/resume',
+  },
+  {
+    name: '채용공고',
+    to: '/recruit',
+  },
+  {
+    name: '기술정보',
+    to: '/blog',
+  },
+  {
+    name: '학습하기',
+    to: '/study',
+  },
+];
 
-  const handleDropdownButton = () => {
-    setIsShow(!isShow);
-  };
+export default function MobileHeader({}) {
+  const { openModal } = useModal();
+  const [mounted, setMounted] = useState(false);
+  const [token] = useAtom(tokenAtom);
+  const { user, isLoading } = useUser();
 
-  const isStudyPage = pathname.startsWith('/study');
-  const headerBackgroundColor = isStudyPage ? 'bg-stone-800' : 'bg-white';
+  const isLoggedIn = !!token.accessToken;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
-    <header className="mobileHeader">
-      <div
-        className={`flex h-[70px] w-full items-center justify-between border border-b-2 px-10 ${headerBackgroundColor} *:[516px]:text-8 *:text-14  *:xl:text-16`}
-      >
-        <Link href={'/'}>
-          <Image src={logo as StaticImageData} alt="logo" className="w-[100px]" />
-        </Link>
-
-        <div className={`flex items-center gap-spacing-07`}>
-          <div>
-            <Dropdown
-              isOpen={isShow}
-              onClose={handleDropdownButton}
-              trigger={
-                <button
-                  onClick={handleDropdownButton}
-                  className={`border/10 rounded-radius-04 border px-spacing-06 py-[5px] ${isShow && 'rounded-b-none'}`}
-                >
-                  <IoIosMenu size={30} />
-                </button>
-              }
-            >
-              <DropdownItem />
-            </Dropdown>
-          </div>
+    <div className="mobileHeader">
+      <nav className=" h-[70px] w-full flex px-10 items-center justify-between fixed top-0 left-0 right-0 z-50 bg-background border-b border-gray-200">
+        <NavigationDropdownMenu />
+        <div className="flex items-center">
+          <Link href={'/'}>
+            <Image src={logo} alt="logo" className="w-[100px]" />
+          </Link>
         </div>
-      </div>
-    </header>
+        {isLoggedIn ? (
+          <div className="flex items-center gap-4">
+            <ProfileDropdownMenu user={user} />
+          </div>
+        ) : (
+          <div>
+            <Button asChild variant="outline" onClick={() => openModal('LoginModal')}>
+              <span>로그인</span>
+            </Button>
+          </div>
+        )}
+      </nav>
+    </div>
   );
 }

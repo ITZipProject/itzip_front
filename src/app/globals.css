@@ -3,6 +3,29 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84.2% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84.2% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84.2% 4.9%;
+    --primary: 248 96% 56%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 248 96% 95%;
+    --secondary-foreground: 248 96% 56%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 248 96% 56%;
+    --radius: 0.75rem;
+  }
+
   html {
     font-family:
       var(--font-pretendard),
@@ -25,22 +48,37 @@
 
 @layer components {
   .primary-btn {
-    @apply py-[16px]  items-center w-full transition-colors rounded-[12px] bg-color-button-primary hover:bg-color-button-primary-hover active:bg-color-button-primary-pressed focus:bg-color-button-primary-focus disabled:bg-color-button-disabled *:text-white *:font-[600] text-[14px];
+    @apply py-[16px] items-center w-full transition-colors rounded-[12px] 
+    bg-primary hover:bg-primary/90 active:bg-primary/80 focus:bg-primary/70 
+    disabled:bg-muted *:text-primary-foreground *:font-[600] text-[14px];
   }
+
   .secondary-btn {
-    @apply py-[7px] px-[127px] transition-colors rounded-[12px] bg-color-button-secondary *:text-[#3733ED] hover:bg-color-button-secondary-hover active:bg-color-button-secondary-pressed focus:bg-color-button-secondary-focus disabled:bg-color-button-disabled
-    *:disabled:text-[#FFFFFF];
+    @apply py-[7px] px-[127px] transition-colors rounded-[12px] 
+    bg-secondary *:text-primary hover:bg-secondary/90 
+    active:bg-secondary/80 focus:bg-secondary/70 
+    disabled:bg-muted *:disabled:text-muted-foreground;
   }
+
   .fourth-btn {
-    @apply py-[7px] px-[127px] transition-colors rounded-[12px] border bg-color-button-fourth hover:border-color-button-fourth-hover active:border-color-button-fourth-pressed focus:border-color-button-fourth-focus disabled:border-color-disabled *:disabled:text-[#D9D9D9];
+    @apply py-[7px] px-[127px] transition-colors rounded-[12px] border 
+    bg-background hover:bg-accent active:bg-accent/80 
+    focus:bg-accent/70 disabled:bg-muted 
+    *:disabled:text-muted-foreground;
   }
+
   .primary-icon-btn {
-    @apply w-full transition-colors rounded-[12px] flex items-center bg-color-button-primary hover:bg-color-button-primary-hover active:bg-color-button-primary-pressed focus:bg-color-button-primary-focus disabled:bg-color-button-disabled *:disabled:text-[#FFFFFF] *:text-[#FFFFFF];
+    @apply w-full transition-colors rounded-[12px] flex items-center 
+    bg-primary hover:bg-primary/90 active:bg-primary/80 
+    focus:bg-primary/70 disabled:bg-muted 
+    *:disabled:text-muted-foreground *:text-primary-foreground;
   }
 
   .fourth-icon-btn {
-    @apply border bg-color-button-fourth hover:border-color-button-fourth-hover active:border-color-button-fourth-pressed focus:border-color-button-fourth-focus
-    focus:text-[##3733ED] disabled:border-color-disabled *:disabled:text-[#D9D9D9] *:text-[#000000];
+    @apply border bg-background hover:bg-accent 
+    active:bg-accent/80 focus:bg-accent/70 
+    focus:text-primary disabled:bg-muted 
+    *:disabled:text-muted-foreground *:text-foreground;
   }
 }
 

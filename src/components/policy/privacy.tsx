@@ -221,7 +221,7 @@ const Privacy = () => {
     setOpenSections((prev) => ({ ...prev, [index]: !prev[index] }));
   };
   return (
-    <ul className=" max-w-[1024px] mx-auto p-[20px] space-y-4 ">
+    <ul className=" max-w-[1024px] mx-auto p-[20px] space-y-4 mt-[70px]">
       <div>
         <div className="font-bold">개인정보취급방침</div>
       </div>
