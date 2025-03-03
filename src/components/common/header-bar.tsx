@@ -33,7 +33,7 @@ export default function HeaderBar() {
           <Link className={`text-logoSize font-extrabold ${textColor} text-logo`} href={'/'}>
             <Image src={logo} alt="logo" className="w-[100px]" />
           </Link>
-          <div className={`flex gap-spacing-05 ${textColor} text-headerSize`}>
+          <div className={`gap-spacing-05 flex ${textColor} text-headerSize`}>
             <Link href={'#'}>이력서</Link>
             <Link href={'/recruit'}>채용공고</Link>
             <Link href={'#'}>기술정보</Link>
@@ -41,7 +41,7 @@ export default function HeaderBar() {
           </div>
           <div className={`gap-spacing-07 ${textColor} flex items-center`}>
             <div>
-              <button className="border/10 rounded-radius-04 border px-spacing-06 py-[10px]">
+              <button className="border/10 px-spacing-06 rounded-radius-04 border py-[10px]">
                 로그인
               </button>
             </div>
@@ -69,7 +69,7 @@ export default function HeaderBar() {
           <Image src={logo} alt="logo" className="w-[100px]" />
         </Link>
         <div
-          className={`flex gap-spacing-05 ${pathname?.includes('study') ? 'text-gray-200' : 'text-headerText'} text-headerSize`}
+          className={`gap-spacing-05 flex ${pathname?.includes('study') ? 'text-gray-200' : 'text-headerText'} text-headerSize`}
         >
           <Link
             href={isLoggedIn ? '/resume' : '#'}
@@ -100,13 +100,13 @@ export default function HeaderBar() {
             {!isLoggedIn ? (
               <button
                 onClick={() => openModal('LoginModal')}
-                className="border/10 rounded-radius-04 border px-spacing-06 py-[10px]"
+                className="border/10 px-spacing-06 rounded-radius-04 border py-[10px]"
               >
                 로그인
               </button>
             ) : (
               <Link href="/profile">
-                <button className="border/10 rounded-radius-04 border px-spacing-06 py-[10px]">
+                <button className="border/10 px-spacing-06 rounded-radius-04 border py-[10px]">
                   마이페이지
                 </button>
               </Link>

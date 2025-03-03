@@ -1,42 +1,43 @@
 'use client';
 
-import { Separator } from '../ui/separator';
-import { Button } from '../ui/button';
-import Link from 'next/link';
-import Image from 'next/image';
-import logo from 'public/logo.png';
 import { useAtom } from 'jotai';
-import { tokenAtom } from '@/store/useTokenStore';
-import { useModal } from '@/lib/context/ModalContext';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import useUser from '@/hooks/mypage/useUser';
 
-import ProfileDropdownMenu from './dropdownMenu/profileDropdownMenu';
+import useUser from '@/hooks/mypage/useUser';
+import { useModal } from '@/lib/context/ModalContext';
+import { tokenAtom } from '@/store/useTokenStore';
+import logo from 'public/logo.png';
+
 import NavigationDropdownMenu from './dropdownMenu/navigationDropdownMenu';
-const menus = [
-  {
-    name: '이력서',
-    to: '/resume',
-  },
-  {
-    name: '채용공고',
-    to: '/recruit',
-  },
-  {
-    name: '기술정보',
-    to: '/blog',
-  },
-  {
-    name: '학습하기',
-    to: '/study',
-  },
-];
+import ProfileDropdownMenu from './dropdownMenu/profileDropdownMenu';
+import { Button } from '../ui/button';
+
+// const menus = [
+//   {
+//     name: '이력서',
+//     to: '/resume',
+//   },
+//   {
+//     name: '채용공고',
+//     to: '/recruit',
+//   },
+//   {
+//     name: '기술정보',
+//     to: '/blog',
+//   },
+//   {
+//     name: '학습하기',
+//     to: '/study',
+//   },
+// ];
 
 export default function MobileHeader({}) {
   const { openModal } = useModal();
-  const [mounted, setMounted] = useState(false);
+  const [, setMounted] = useState(false);
   const [token] = useAtom(tokenAtom);
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
 
   const isLoggedIn = !!token.accessToken;
 
@@ -46,7 +47,7 @@ export default function MobileHeader({}) {
 
   return (
     <div className="mobileHeader">
-      <nav className=" h-[70px] w-full flex px-10 items-center justify-between fixed top-0 left-0 right-0 z-50 bg-background border-b border-gray-200">
+      <nav className=" fixed inset-x-0 top-0 z-50 flex h-[70px] w-full items-center justify-between border-b border-gray-200 bg-background px-10">
         <NavigationDropdownMenu />
         <div className="flex items-center">
           <Link href={'/'}>

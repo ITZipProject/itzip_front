@@ -44,7 +44,7 @@ const MyData: React.FC = () => {
   const tierName = getTierName(tier);
 
   return (
-    <div className="flex w-[335px] flex-col items-center justify-center gap-8 rounded-3xl border border-zinc-600 bg-Grey-800 p-5 sm:h-[300px] md:w-spacing-20 lg:h-[300px] lg:w-spacing-21">
+    <div className="bg-Grey-800 md:w-spacing-20 lg:w-spacing-21 flex w-[335px] flex-col items-center justify-center gap-8 rounded-3xl border border-zinc-600 p-5 sm:h-[300px] lg:h-[300px]">
       <div className="rounded-full bg-white p-4">
         <Image
           src={profileImageUrl || '/defaultProfileImage.jpg'}

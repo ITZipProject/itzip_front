@@ -1,10 +1,10 @@
+import { getDefaultStore } from 'jotai';
+import Cookies from 'js-cookie';
+
+import { setAccessTokenAtom, setRefreshTokenAtom } from '@/store/useTokenStore';
 import { LoginResponse } from '@/types/auth';
 
 import instance from '../axiosInstance';
-import axios from 'axios';
-import { setAccessTokenAtom, setRefreshTokenAtom } from '@/store/useTokenStore';
-import { getDefaultStore } from 'jotai';
-import Cookies from 'js-cookie';
 
 // 중첩된 data 구조를 반영하는 API 응답 타입
 interface ApiResponse<T> {

@@ -1,7 +1,8 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getDefaultStore } from 'jotai';
-import { tokenAtom, setAccessTokenAtom, setRefreshTokenAtom } from '@/store/useTokenStore';
 import Cookies from 'js-cookie';
+
+import { tokenAtom, setAccessTokenAtom, setRefreshTokenAtom } from '@/store/useTokenStore';
 import { setTokenCookie } from '@/utils/tokenUtils';
 
 // 토큰 상태 타입 정의

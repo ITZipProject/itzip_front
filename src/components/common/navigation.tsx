@@ -1,13 +1,19 @@
 'use client';
 
-import { Separator } from '../ui/separator';
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from '../ui/navigation-menu';
+import { useAtom } from 'jotai';
 import { LogOutIcon, UserIcon } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
+import useUser from '@/hooks/mypage/useUser';
+import { useModal } from '@/lib/context/ModalContext';
+import { tokenAtom } from '@/store/useTokenStore';
+import defaultProfile from 'public/defaultProfileImage.jpg';
+import logo from 'public/logo.png';
+
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Button } from '../ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,17 +23,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Button } from '../ui/button';
-import Link from 'next/link';
-import Image from 'next/image';
-import logo from 'public/logo.png';
-import { useAtom } from 'jotai';
-import { tokenAtom } from '@/store/useTokenStore';
-import { useModal } from '@/lib/context/ModalContext';
-import { useEffect, useState } from 'react';
-import useUser from '@/hooks/mypage/useUser';
-import defaultProfile from 'public/defaultProfileImage.jpg';
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from '../ui/navigation-menu';
+import { Separator } from '../ui/separator';
 
 const menus = [
   {
@@ -48,13 +50,13 @@ const menus = [
   },
 ];
 
-export default function Navigation({}: {}) {
+export default function Navigation({}: object) {
   const { openModal } = useModal();
   const [token] = useAtom(tokenAtom);
   const { user } = useUser();
 
   const isLoggedIn = !!token.accessToken;
-  const [mounted, setMounted] = useState(false);
+  const [, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -62,12 +64,12 @@ export default function Navigation({}: {}) {
 
   return (
     <div className="header">
-      <nav className=" h-[70px] w-full flex px-20 items-center justify-between fixed top-0 left-0 right-0 z-50 bg-background border-b border-gray-200">
+      <nav className=" fixed inset-x-0 top-0 z-50 flex h-[70px] w-full items-center justify-between border-b border-gray-200 bg-background px-20">
         <div className="flex items-center">
           <Link href={'/'}>
             <Image src={logo} alt="logo" className="w-[100px]" />
           </Link>
-          <Separator orientation="vertical" className="h-6 mx-4" />
+          <Separator orientation="vertical" className="mx-4 h-6" />
           <NavigationMenu>
             <NavigationMenuList>
               {menus.map((menu) => (
@@ -87,7 +89,7 @@ export default function Navigation({}: {}) {
                 <Avatar>
                   <AvatarImage
                     src={user?.imageUrl || ''}
-                    className="border-2 rounded-full size-[40px]"
+                    className="size-[40px] rounded-full border-2"
                   />
                   <AvatarFallback>
                     <Image src={defaultProfile} alt="defaultProfile" className="w-[100px]" />
@@ -103,15 +105,15 @@ export default function Navigation({}: {}) {
                 <DropdownMenuGroup>
                   <DropdownMenuItem asChild className="cursor-pointer">
                     <Link href="/profile">
-                      <UserIcon className="size-4 mr-2" />
+                      <UserIcon className="mr-2 size-4" />
                       마이페이지
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild className="cursor-pointer w-full flex justify-start">
+                <DropdownMenuItem asChild className="flex w-full cursor-pointer justify-start">
                   <Button variant="ghost" onClick={() => openModal('alertModal')}>
-                    <LogOutIcon className="size-4 mr-2" />
+                    <LogOutIcon className="mr-2 size-4" />
                     로그아웃
                   </Button>
                 </DropdownMenuItem>

@@ -55,7 +55,7 @@ const Main: React.FC<MainProps> = ({ tagId, displayName, resetTag }) => {
         </button>
       </div>
       <div className="w-full">
-        <div className="bg-gray-100 flex justify-between border-b border-zinc-600 p-5">
+        <div className="flex justify-between border-b border-zinc-600 bg-gray-100 p-5">
           <h3 className="text-gray-400">문제 번호</h3>
           <h3 className="text-gray-400">제목</h3>
           <h3 className="text-gray-400">푼 사람 수</h3>
@@ -64,7 +64,7 @@ const Main: React.FC<MainProps> = ({ tagId, displayName, resetTag }) => {
           data.map((problem) => (
             <div
               key={problem.problemId}
-              className="bg-gray-800 hover:bg-gray-700 flex cursor-pointer justify-between rounded-md p-5 shadow-sm transition-colors hover:scale-105 hover:shadow-lg"
+              className="flex cursor-pointer justify-between rounded-md bg-gray-800 p-5 shadow-sm transition-colors hover:scale-105 hover:bg-gray-700 hover:shadow-lg"
               onClick={() => handleClickProblem(problem.problemId)}
             >
               <p className="text-gray-400">{problem.problemId}</p>

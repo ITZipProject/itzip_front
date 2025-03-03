@@ -104,7 +104,7 @@ const SchoolSearch: FC<ISchoolSearchProps> = ({ isOpen, onRequestClose }) => {
             <div
               key={index}
               onClick={() => setSchoolName(school)}
-              className="hover:bg-gray-50 cursor-pointer rounded-lg p-3 transition duration-200"
+              className="cursor-pointer rounded-lg p-3 transition duration-200 hover:bg-gray-50"
             >
               {school}
             </div>
@@ -116,7 +116,7 @@ const SchoolSearch: FC<ISchoolSearchProps> = ({ isOpen, onRequestClose }) => {
           <button
             type="button"
             onClick={onRequestClose}
-            className="hover:bg-gray-100 rounded-lg px-4 py-2 text-gray-600 transition duration-200"
+            className="rounded-lg px-4 py-2 text-gray-600 transition duration-200 hover:bg-gray-100"
           >
             취소
           </button>
