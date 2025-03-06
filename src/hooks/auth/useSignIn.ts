@@ -81,8 +81,11 @@ const useSignIn = () => {
         setAccessToken(res.data.accessToken);
         setRefreshToken(res.data.refreshToken);
 
+        // 실제 토큰을 쿠키에 저장
+        Cookies.set('accessToken', res.data.accessToken, { expires: 1, path: '/' });
+        Cookies.set('refreshToken', res.data.refreshToken, { expires: 7, path: '/' });
+
         closeModal();
-        Cookies.set('test token', 'test login token', { expires: 7, path: '/' });
         toast.success('ITZIP에 오신것을 환영합니다.');
 
         router.push('/');
