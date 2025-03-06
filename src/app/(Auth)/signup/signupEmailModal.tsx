@@ -10,10 +10,9 @@ import SmallAsk from '@/components/auth/smallAsk';
 import Input from '@/components/common/input';
 import { Margin } from '@/components/common/margin';
 import Modal from '@/components/portal/modal';
+import { Button } from '@/components/ui/button';
 import { useSignUp } from '@/hooks/auth/useSignUp';
 import { useModal } from '@/lib/context/ModalContext';
-import { Button } from '@/components/ui/button';
-import InputOTPSection from '@/components/auth/inputOTP';
 
 interface SignInModalProps {
   modalId: string;
@@ -25,7 +24,6 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
     formValues,
     errors,
     message,
-    isLoading,
     isOk,
     onClickResetButton,
     onChangeFormValues,
@@ -167,7 +165,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
 
             <AgreeCheckboxes />
             {agreeError && (
-              <span className="text-12 font-[500] text-color-text-warning">
+              <span className="text-color-text-warning text-12 font-[500]">
                 <div className="mt-2 flex items-center gap-[4.5px]">
                   <XCircleIcon className="size-[19px]" />
                   {agreeError}
@@ -176,7 +174,7 @@ const SignUpEmailModal: React.FC<SignInModalProps> = ({ modalId }: SignInModalPr
             )}
 
             <Button variant="default" className="h-[50px] w-full">
-              <span className="text-[14px] font-[600] ">가입하기</span>
+              <span className="text-14 font-[600] ">가입하기</span>
             </Button>
           </>
         )}
