@@ -2,6 +2,8 @@
 
 import axios from 'axios';
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 type SearchSchoolApiProps = {
   searchValue: string | undefined;
   schoolType: string | undefined;
@@ -9,8 +11,10 @@ type SearchSchoolApiProps = {
 
 async function SearchSchoolApi({ searchValue, schoolType }: SearchSchoolApiProps) {
   try {
+    console.log('API 요청 파라미터:', { searchValue, schoolType });
+    
     const response = await axios.get(
-      `https://00f935c6-42a5-448a-8871-ff95c8a2f12a.mock.pstmn.io/schoolsearch`,
+      `${apiUrl}/school`,
       {
         params: {
           searchValue: searchValue,
@@ -19,11 +23,12 @@ async function SearchSchoolApi({ searchValue, schoolType }: SearchSchoolApiProps
       },
     );
 
+    console.log('API 응답 데이터:', response.data);
     const data = response.data;
 
     return data;
   } catch (error) {
-    console.error('Failed to fetch data:', error);
+    console.error('API 요청 실패:', error);
     throw new Error('Failed to fetch data');
   }
 }

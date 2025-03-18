@@ -2,15 +2,25 @@
 
 import axios from 'axios';
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 async function AdminResumeApi() {
   try {
+    console.log('Fetching resume data from:', `${apiUrl}/resume`);
     const response = await axios.get(
-      `https://00f935c6-42a5-448a-8871-ff95c8a2f12a.mock.pstmn.io/resume`,
+      `${apiUrl}/resume`
     );
+    console.log('Resume API Response:', response.data);
     const data = response.data;
     return data;
-  } catch (error) {
-    console.error('Failed to fetch data:', error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Resume API Error:', {
+        message: error.message,
+        status: (error as any).response?.status,
+        data: (error as any).response?.data
+      });
+    }
     throw new Error('Failed to fetch data');
   }
 }

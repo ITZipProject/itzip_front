@@ -51,6 +51,7 @@ const CreateResumeForm: React.FunctionComponent = () => {
       try {
         const data = await createResumeApi({ defaultData, educationData, careerData });
         router.push(`/resume/${data.resumeId}`);
+        console.log('이력서 데이터:', data);
       } catch (error) {
         console.error(error);
       }
